@@ -1,6 +1,10 @@
 # Progetto ISPW
 
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=gabriele-monti_Progetto-ISPW)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+---
+
+# SonarQube
+
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
 
