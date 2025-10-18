@@ -1,1 +1,25 @@
 # Progetto ISPW
+
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=gabriele-monti_Progetto-ISPW)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=bugs)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=coverage)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
+
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
