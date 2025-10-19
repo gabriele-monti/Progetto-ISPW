@@ -28,6 +28,10 @@ public final class Macronutrients {
         return new Macronutrients(protein, carbohydrates, fat);
     }
 
+    public static Macronutrients zero(){
+        return new Macronutrients(0,0,0);
+    }
+
     public double protein() {return protein;}
     public double carbohydrates() {return carbohydrates;}
     public double fat() {return fat;}
@@ -35,6 +39,19 @@ public final class Macronutrients {
     // Calcolo kcal
     public double kcal(){
         return  4 * protein + 4 * carbohydrates + 9 * fat;
+    }
+
+    public Macronutrients scale(double ratio){
+        if(!Double.isFinite(ratio) || ratio < 0){
+            throw new IllegalArgumentException("Il rapporto deve essere maggiore di 0!");
+        }
+        return new Macronutrients(protein * ratio, carbohydrates * ratio, fat * ratio);
+    }
+
+    // Somma macronutrienti
+    public Macronutrients plus(Macronutrients other){
+        Objects.requireNonNull(other, "Non puoi sommare macronutrienti 'null'");
+        return new Macronutrients(this.protein + other.protein, this.carbohydrates + other.carbohydrates, this.fat + other.fat);
     }
 
     @Override

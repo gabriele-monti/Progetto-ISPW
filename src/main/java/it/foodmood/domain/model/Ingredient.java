@@ -31,6 +31,11 @@ public final class Ingredient {
         return macro.kcal() * qt.ratioToBase();
     }
 
+    public Macronutrients macroFor(Quantity qt){
+        Objects.requireNonNull(qt, "La quantità non può essere nulla!");
+        return macro.scale(qt.ratioToBase());
+    }
+
     public boolean isAllergenic() {return !allergens.isEmpty();}
 
     public boolean contains(Allergen allergen) {return allergens.contains(allergen);}
