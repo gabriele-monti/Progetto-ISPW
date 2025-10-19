@@ -17,7 +17,7 @@ import it.foodmood.domain.valueobject.Money;
 import it.foodmood.domain.valueobject.Quantity;
 import it.foodmood.domain.valueobject.Unit;
 
-public class DishTest {
+class DishTest {
     @Test
     void testDish(){
         Ingredient latte = Ingredient.of("Latte", Macronutrients.of(4,5,3.5), Set.of(Allergen.MILK));

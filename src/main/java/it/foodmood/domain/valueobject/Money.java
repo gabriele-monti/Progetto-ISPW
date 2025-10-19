@@ -3,7 +3,7 @@ package it.foodmood.domain.valueobject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public final class Money implements Comparable<Money> {
+public final class Money {
     private final BigDecimal amount;
 
     private Money(BigDecimal amount){
@@ -42,11 +42,6 @@ public final class Money implements Comparable<Money> {
         }
         BigDecimal result = this.amount.divide(BigDecimal.valueOf(divisor), 2, RoundingMode.HALF_UP);
         return new Money(result);
-    }
-
-    @Override
-    public int compareTo(Money other){
-        return amount.compareTo(other.amount);
     }
 
     @Override

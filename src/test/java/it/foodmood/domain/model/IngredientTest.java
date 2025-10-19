@@ -10,7 +10,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class IngredientTest {
+class IngredientTest {
     @Test
     void testIngredientCreation(){
         Macronutrients macro = Macronutrients.of(10,5,2);
