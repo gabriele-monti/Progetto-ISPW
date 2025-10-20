@@ -2,6 +2,7 @@ package it.foodmood.domain.valueobject;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 public final class Money {
     private final BigDecimal amount;
@@ -42,6 +43,18 @@ public final class Money {
         }
         BigDecimal result = this.amount.divide(BigDecimal.valueOf(divisor), 2, RoundingMode.HALF_UP);
         return new Money(result);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(!(o instanceof Money m)) return false;
+        return amount.compareTo(m.amount) == 0;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(amount);
     }
 
     @Override

@@ -67,8 +67,9 @@ public final class Quantity implements Comparable<Quantity>{
     }
 
     private void requireSameUnit(Quantity other){
+        Objects.requireNonNull(other, "La quantità da confrontare non può essere nulla");
         if(other == null || this.unit != other.unit){
-            throw new IllegalArgumentException("Unità incompatibili!");
+            throw new IllegalArgumentException("Unità incompatibili: " + this.unit + "vs" + other.unit);
         }
     }
 

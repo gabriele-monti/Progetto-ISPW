@@ -102,7 +102,6 @@ public final class Dish {
         }
 
         public Builder price(Money price){
-            Objects.requireNonNull(price, "Il prezzo non può essere nullo");
             this.price = price;
             return this;
         }

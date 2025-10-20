@@ -42,7 +42,7 @@ public final class Macronutrients {
     }
 
     public Macronutrients scale(double ratio){
-        if(!Double.isFinite(ratio) || ratio < 0){
+        if(!Double.isFinite(ratio) || ratio <= 0){
             throw new IllegalArgumentException("Il rapporto deve essere maggiore di 0!");
         }
         return new Macronutrients(protein * ratio, carbohydrates * ratio, fat * ratio);

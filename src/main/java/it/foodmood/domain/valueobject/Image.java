@@ -25,4 +25,16 @@ public final class Image{
     public static Optional<Image> optional(URI uri){
         return Optional.ofNullable(uri).map(Image::of);
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(!(o instanceof Image image)) return false;
+        return Objects.equals(this.uri, image.uri);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(uri);
+    }
 }
