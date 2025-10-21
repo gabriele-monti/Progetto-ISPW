@@ -4,7 +4,9 @@ public class IngredientBean {
     
     private String name;
 
-    public IngredientBean(){}
+    public IngredientBean(){
+        // Costruttore vuoto
+    }
 
     // Getter
 

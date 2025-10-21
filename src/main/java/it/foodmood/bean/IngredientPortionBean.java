@@ -5,7 +5,9 @@ public class IngredientPortionBean {
     private double quantity;
     private String unit;
 
-    public IngredientPortionBean(){}
+    public IngredientPortionBean(){
+        // Costruttore vuoto
+    }
 
     // Getter
 

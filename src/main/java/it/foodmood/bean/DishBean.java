@@ -56,7 +56,7 @@ public class DishBean {
         this.courseType = courseType.trim().toUpperCase();
     }
 
-    public void SetDietCategory(String dietCategory){
+    public void setDietCategory(String dietCategory){
         if(!isValidEnumString(dietCategory)){
             throw new IllegalArgumentException("Categoria dietetica non valida");
         }
@@ -111,7 +111,7 @@ public class DishBean {
             URI.create(uri);
             return true;
         } catch (IllegalArgumentException e) {
-            return false;
+            throw new IllegalArgumentException("Formato URI non valido.", e);
         }
     }
 }
