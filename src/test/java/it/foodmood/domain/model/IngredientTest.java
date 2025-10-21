@@ -1,13 +1,14 @@
 package it.foodmood.domain.model;
 
-import it.foodmood.domain.valueobject.Allergen;
-import it.foodmood.domain.valueobject.Macronutrients;
-import it.foodmood.domain.valueobject.Quantity;
-import it.foodmood.domain.valueobject.Unit;
-
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+
+import it.foodmood.domain.value.Allergen;
+import it.foodmood.domain.value.Macronutrients;
+import it.foodmood.domain.value.Quantity;
+import it.foodmood.domain.value.Unit;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class IngredientTest {

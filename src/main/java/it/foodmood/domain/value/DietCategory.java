@@ -1,4 +1,4 @@
-package it.foodmood.domain.valueobject;
+package it.foodmood.domain.value;
 
 /*
  * Categoria dietetica del piatto o del prodotto commerciale

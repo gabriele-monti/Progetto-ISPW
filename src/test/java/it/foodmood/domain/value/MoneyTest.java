@@ -1,4 +1,4 @@
-package it.foodmood.domain.valueobject;
+package it.foodmood.domain.value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

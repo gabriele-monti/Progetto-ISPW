@@ -1,15 +1,15 @@
 package it.foodmood.domain.model;
 
-import it.foodmood.domain.valueobject.Allergen;
-import it.foodmood.domain.valueobject.CourseType;
-import it.foodmood.domain.valueobject.DietCategory;
-import it.foodmood.domain.valueobject.IngredientPortion;
-import it.foodmood.domain.valueobject.Macronutrients;
-import it.foodmood.domain.valueobject.Money;
-import it.foodmood.domain.valueobject.Image;
-
 import java.util.*;
 import java.util.stream.Collectors;
+
+import it.foodmood.domain.value.Allergen;
+import it.foodmood.domain.value.CourseType;
+import it.foodmood.domain.value.DietCategory;
+import it.foodmood.domain.value.Image;
+import it.foodmood.domain.value.IngredientPortion;
+import it.foodmood.domain.value.Macronutrients;
+import it.foodmood.domain.value.Money;
 
 public final class Dish {
     private final String name;
@@ -24,6 +24,7 @@ public final class Dish {
         if(builder.name == null || builder.name.isBlank()){
             throw new IllegalArgumentException("Il nome non può essere vuoto!");
         }
+        
         if(builder.ingredients == null || builder.ingredients.isEmpty()){
             throw new IllegalArgumentException("Deve esserci almeno un ingrediente!");
         }
@@ -102,7 +103,7 @@ public final class Dish {
         }
 
         public Builder price(Money price){
-            this.price = price;
+            this.price = Objects.requireNonNull(price, "Il prezzo non può essere nullo");
             return this;
         }
 

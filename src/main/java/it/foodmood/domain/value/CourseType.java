@@ -1,4 +1,4 @@
-package it.foodmood.domain.valueobject;
+package it.foodmood.domain.value;
 
 /*
  * Tipologia della portata nel menù

@@ -1,10 +1,10 @@
 package it.foodmood.domain.model;
 
-import it.foodmood.domain.valueobject.Allergen;
-import it.foodmood.domain.valueobject.Macronutrients;
-import it.foodmood.domain.valueobject.Quantity;
-
 import java.util.*;
+
+import it.foodmood.domain.value.Allergen;
+import it.foodmood.domain.value.Macronutrients;
+import it.foodmood.domain.value.Quantity;
 
 public final class Ingredient {
     private final String name;

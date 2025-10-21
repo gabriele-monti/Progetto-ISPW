@@ -1,4 +1,4 @@
-package it.foodmood.domain.valueobject;
+package it.foodmood.domain.value;
 
 /*
  * Elenco ufficiale dei 14 allergeni da dichiarare secondo (Reg. UE 1169/2011 + D.Lgs. 231/2017)

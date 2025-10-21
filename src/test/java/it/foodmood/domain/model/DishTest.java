@@ -11,15 +11,15 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import it.foodmood.domain.valueobject.Allergen;
-import it.foodmood.domain.valueobject.CourseType;
-import it.foodmood.domain.valueobject.DietCategory;
-import it.foodmood.domain.valueobject.Image;
-import it.foodmood.domain.valueobject.IngredientPortion;
-import it.foodmood.domain.valueobject.Macronutrients;
-import it.foodmood.domain.valueobject.Money;
-import it.foodmood.domain.valueobject.Quantity;
-import it.foodmood.domain.valueobject.Unit;
+import it.foodmood.domain.value.Allergen;
+import it.foodmood.domain.value.CourseType;
+import it.foodmood.domain.value.DietCategory;
+import it.foodmood.domain.value.Image;
+import it.foodmood.domain.value.IngredientPortion;
+import it.foodmood.domain.value.Macronutrients;
+import it.foodmood.domain.value.Money;
+import it.foodmood.domain.value.Quantity;
+import it.foodmood.domain.value.Unit;
 
 class DishTest {
     @Test
