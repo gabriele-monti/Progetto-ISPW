@@ -72,5 +72,4 @@ public final class Macronutrients {
     public String toString(){
         return "Proteine: %.1fg, Carboidrati: %.1fg, Grassi: %.1fg (per %dg/ml)".formatted(protein, carbohydrates, fat, BASE_AMOUNT);
     }
-
 }
