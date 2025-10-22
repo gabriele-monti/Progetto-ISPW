@@ -2,12 +2,12 @@ package it.foodmood.bean;
 
 import java.util.Locale;
 
-public class MacronutriensBean {
+public class MacronutrientsBean {
     private Double protein;
     private Double carbohydrates;
     private Double fat;
 
-    public MacronutriensBean(){
+    public MacronutrientsBean(){
         // Costruttore vuoto
     }
 
@@ -20,24 +20,24 @@ public class MacronutriensBean {
 
     // Setter
     public void setProtein(Double protein){
-        if(protein == null && !isNonNegative(protein)){
+        if(protein == null || !isNonNegative(protein)){
             throw new IllegalArgumentException("Le proteine devono essere >= 0");
         }
         this.protein = normalize(protein);
     }
 
     public void setCarbohydrates(Double carbohydrates){
-        if(carbohydrates == null && !isNonNegative(carbohydrates)){
+        if(carbohydrates == null || !isNonNegative(carbohydrates)){
             throw new IllegalArgumentException("I carboidrati devono essere >= 0");
         }
-        this.protein = normalize(carbohydrates);
+        this.carbohydrates = normalize(carbohydrates);
     }
 
     public void setFat(Double fat){
-        if(fat == null && !isNonNegative(fat)){
+        if(fat == null || !isNonNegative(fat)){
             throw new IllegalArgumentException("I grassi devono essere >= 0");
         }
-        this.protein = normalize(fat);
+        this.fat = normalize(fat);
     }
 
     public boolean isEmpty(){

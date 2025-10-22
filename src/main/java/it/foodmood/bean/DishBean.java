@@ -82,9 +82,16 @@ public class DishBean {
     }
 
     public void setIngredients(List<IngredientPortionBean> ingredients){
-        this.ingredients = (ingredients != null)
-            ? new ArrayList<>(ingredients)
-            : new ArrayList<>(); 
+        if(ingredients == null){
+            this.ingredients = new ArrayList<>();
+            return;
+        }
+        for(IngredientPortionBean i : ingredients){
+            if(i == null){
+                throw new IllegalArgumentException("La lista contiene ingredienti nulli!");
+            }
+        }
+        this.ingredients = new ArrayList<>(ingredients);
     }
 
     public void addIngredient(IngredientPortionBean ingredient){

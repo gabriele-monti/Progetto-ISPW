@@ -7,7 +7,7 @@ import java.util.List;
 public class IngredientBean {
     
     private String name;
-    private MacronutriensBean macronutrients;
+    private MacronutrientsBean macronutrients;
     private List<String> allergens = new ArrayList<>();
 
     public IngredientBean(){
@@ -17,7 +17,7 @@ public class IngredientBean {
     // Getter
     public String getName() {return name;}
 
-    public MacronutriensBean getMacronutrients(){ return macronutrients;}
+    public MacronutrientsBean getMacronutrients(){ return macronutrients;}
 
     public List<String> getAllergens() {return Collections.unmodifiableList(allergens);}
 
@@ -29,7 +29,7 @@ public class IngredientBean {
         this.name = name.trim().toUpperCase();
     }
 
-    public void setMacronutrients(MacronutriensBean macronutriens){
+    public void setMacronutrients(MacronutrientsBean macronutriens){
         this.macronutrients = macronutriens;
     }
 
