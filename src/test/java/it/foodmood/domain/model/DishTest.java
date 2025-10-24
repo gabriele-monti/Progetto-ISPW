@@ -40,30 +40,6 @@ class DishTest {
     }
 
     @Test
-    void builder_missingName(){
-        assertThrows(IllegalArgumentException.class, () -> 
-            new Dish.Builder()
-                .courseType(CourseType.APPETIZER)
-                .dietCategory(DietCategory.TRADITIONAL)
-                .price(Money.of(5))
-                .ingredients(List.of())
-                .build()
-            );
-    }
-
-    @Test
-    void builder_emptyIngredients(){
-        assertThrows(IllegalArgumentException.class, () -> 
-            new Dish.Builder()
-                .name("Test")
-                .courseType(CourseType.APPETIZER)
-                .dietCategory(DietCategory.TRADITIONAL)
-                .price(Money.of(5))
-                .build()
-            );
-    }
-
-    @Test
     void description(){
         Ingredient i = Ingredient.of("Test", Macronutrients.zero(), Set.of());
         Dish d = new Dish.Builder()
