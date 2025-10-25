@@ -8,6 +8,8 @@ import com.zaxxer.hikari.HikariDataSource;
 public final class ConnectionPool {
     private static volatile HikariDataSource dataSource;
 
+    private static final int MAX_POOL_SIZE = 10;
+
     // Costruttore privato per impedire new ConnectionPoll()
     private ConnectionPool() {}
 
@@ -22,7 +24,7 @@ public final class ConnectionPool {
                 config.setJdbcUrl(url);
                 config.setUsername(user);
                 config.setPassword(pass);
-                config.setMaximumPoolSize(5);
+                config.setMaximumPoolSize(MAX_POOL_SIZE);
                 dataSource = new HikariDataSource(config);
 
                 Runtime.getRuntime().addShutdownHook(new Thread(ConnectionPool::shutdown));
@@ -51,4 +53,7 @@ public final class ConnectionPool {
         }
     }
 
+    public static boolean isInitialized(){
+        return dataSource != null;
+    }
 }

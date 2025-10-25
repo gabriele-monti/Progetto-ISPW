@@ -8,8 +8,10 @@ import java.util.Optional;
 import it.foodmood.domain.model.Dish;
 import it.foodmood.persistence.ConnectionProvider;
 import it.foodmood.persistence.dao.DishDAO;
+import it.foodmood.persistence.exception.PersistenceException;
 
 public class JdbcDishDAO implements DishDAO {
+    
     private final ConnectionProvider provider;
 
     public JdbcDishDAO(ConnectionProvider provider){
@@ -20,7 +22,7 @@ public class JdbcDishDAO implements DishDAO {
     public void save(Dish dish){
         try (Connection conn = provider.getConnection()){
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     }
 
@@ -29,7 +31,7 @@ public class JdbcDishDAO implements DishDAO {
         try (Connection conn = provider.getConnection()){
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     }
 
@@ -38,15 +40,15 @@ public class JdbcDishDAO implements DishDAO {
         try (Connection conn = provider.getConnection()){
             return List.of();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     }
 
     @Override
-    public void deleteByID(String id){
+    public void deleteById(String id){
         try (Connection conn = provider.getConnection()){
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     }
 
@@ -55,16 +57,16 @@ public class JdbcDishDAO implements DishDAO {
         try (Connection conn = provider.getConnection()){
             return List.of();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     }
 
     @Override
-    public List<Dish> findByDietCatogory(String dietCategory){
+    public List<Dish> findByDietCategory(String dietCategory){
         try (Connection conn = provider.getConnection()){
             return List.of();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     }
 }

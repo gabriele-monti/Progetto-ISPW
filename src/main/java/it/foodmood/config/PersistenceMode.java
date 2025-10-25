@@ -20,15 +20,15 @@ public enum PersistenceMode {
         return key;
     }
 
-    public static PersistenceMode from(String value){
+    public static PersistenceMode fromValue(String value){
         if(value == null){
             return DEMO;
         }
 
-        String persistence = value.toLowerCase().trim();
+        String normalized = value.toLowerCase().trim();
 
         for (PersistenceMode mode : values()) {
-            if(mode.key.equals(persistence)){
+            if(mode.key.equals(normalized)){
                 return mode;
             }
         }

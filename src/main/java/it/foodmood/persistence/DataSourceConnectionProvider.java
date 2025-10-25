@@ -15,6 +15,9 @@ public final class DataSourceConnectionProvider implements ConnectionProvider {
     private final DataSource dataSource;
 
     public DataSourceConnectionProvider(DataSource dataSource){
+        if(dataSource == null){
+            throw new IllegalArgumentException("DataSource non può essere null.");
+        }
         this.dataSource = dataSource;
     }
     

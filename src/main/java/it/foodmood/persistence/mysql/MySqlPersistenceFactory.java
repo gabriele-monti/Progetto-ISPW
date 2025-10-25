@@ -7,6 +7,10 @@ import it.foodmood.persistence.DataSourceConnectionProvider;
 import it.foodmood.persistence.PersistenceFactory;
 import it.foodmood.persistence.dao.DishDAO;
 
+/*
+ * Implementazione concreta della factory per la persistenza su MySQL
+ */
+
 public class MySqlPersistenceFactory implements PersistenceFactory {
     
     // DAO concreti
