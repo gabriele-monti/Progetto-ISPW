@@ -23,7 +23,7 @@ public final class Dish {
     
     private Dish (Builder builder){
 
-        this.id =(builder.id == null && !builder.id.isBlank()) ? builder.id : UUID.randomUUID().toString(); 
+        this.id =(builder.id != null && !builder.id.isBlank()) ? builder.id : UUID.randomUUID().toString(); 
 
         if(builder.name == null || builder.name.isBlank()){
             throw new IllegalArgumentException("Il nome non può essere vuoto!");

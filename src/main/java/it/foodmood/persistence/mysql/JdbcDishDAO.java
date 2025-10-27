@@ -1,9 +1,12 @@
 package it.foodmood.persistence.mysql;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.sql.CallableStatement;
 
 import it.foodmood.domain.model.Dish;
 import it.foodmood.persistence.ConnectionProvider;
@@ -11,6 +14,15 @@ import it.foodmood.persistence.dao.DishDAO;
 import it.foodmood.persistence.exception.PersistenceException;
 
 public class JdbcDishDAO implements DishDAO {
+        
+    private static final String CALL_SAVE_DISH = "{CALL save_dish(?,?,?,?,?,?,?)}";
+    private static final String CALL_GET_DISH_BY_ID = "{CALL get_dish_by_id(?)}";
+    private static final String CALL_GET_ALL_DISHES = "{CALL get_all_dishes()}";
+    private static final String CALL_GET_DISHES_BY_COURSE = "{CALL get_dishes_by_course_type(?)}";
+    private static final String CALL_GET_DISHES_BY_DIET = "{CALL get_dishes_by_diet(?)}";
+    private static final String CALL_DELETE_DISH_BY_ID = "{CALL delete_dish_by_id(?)}";
+
+
     
     private final ConnectionProvider provider;
 
@@ -20,7 +32,10 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public void save(Dish dish){
-        try (Connection conn = provider.getConnection()){
+        try (Connection conn = provider.getConnection();
+            CallableStatement cs = conn.prepareCall(CALL_SAVE_DISH)){
+                bindDish(cs,dish);
+                cs.execute();
         } catch (SQLException e) {
             throw new PersistenceException(e);
         }
@@ -28,7 +43,10 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public Optional<Dish> findById(String id){
-        try (Connection conn = provider.getConnection()){
+        try (Connection conn = provider.getConnection();
+            CallableStatement cs = conn.prepareCall(CALL_GET_DISH_BY_ID)){
+                cs.setString(1, id);
+                // Da continuare
             return Optional.empty();
         } catch (SQLException e) {
             throw new PersistenceException(e);
@@ -37,7 +55,13 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public List<Dish> findAll(){
-        try (Connection conn = provider.getConnection()){
+        try (Connection conn = provider.getConnection();
+            CallableStatement cs = conn.prepareCall(CALL_GET_ALL_DISHES);
+                ResultSet rs = cs.executeQuery()){
+                    // List<Dish> out = new ArrayList<>();
+                    while (rs.next()) {
+                        // Da implementare
+                    }
             return List.of();
         } catch (SQLException e) {
             throw new PersistenceException(e);
@@ -46,7 +70,10 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public void deleteById(String id){
-        try (Connection conn = provider.getConnection()){
+        try (Connection conn = provider.getConnection();
+            CallableStatement cs = conn.prepareCall(CALL_DELETE_DISH_BY_ID)){
+                cs.setString(1, id);
+                cs.execute();
         } catch (SQLException e) {
             throw new PersistenceException(e);
         }
@@ -54,7 +81,9 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public List<Dish> findByCategory(String category){
-        try (Connection conn = provider.getConnection()){
+        try (Connection conn = provider.getConnection();
+            CallableStatement cs = conn.prepareCall(CALL_GET_DISHES_BY_COURSE)){
+            cs.setString(1, category);
             return List.of();
         } catch (SQLException e) {
             throw new PersistenceException(e);
@@ -63,10 +92,23 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public List<Dish> findByDietCategory(String dietCategory){
-        try (Connection conn = provider.getConnection()){
+        try (Connection conn = provider.getConnection();
+            CallableStatement cs = conn.prepareCall(CALL_GET_DISHES_BY_DIET)){
+            cs.setString(1, dietCategory);
             return List.of();
         } catch (SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    // Associazione dei campi dell'entita Piatto ai parametri della store procedures
+    private void bindDish(CallableStatement cs, Dish dish) throws SQLException{
+        cs.setString(1, dish.getId());
+        cs.setString(2, dish.getName());
+        cs.setString(3, dish.getDescription().orElse(null));
+        cs.setString(4, dish.getCourseType().name());
+        cs.setString(5, dish.getDietCategory().name());
+        cs.setBigDecimal(6, dish.getPrice().amount());
+        cs.setString(7, dish.getImage().map(img -> img.uri().toString()).orElse(null));
     }
 }
