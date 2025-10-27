@@ -19,7 +19,7 @@ public final class ApplicationConfig {
             Properties p = new Properties();
             p.load(in);
             return new ApplicationConfig(p);
-        } catch (IOException e){
+        } catch (IOException _){
             throw new IllegalStateException("Errore durante la lettura del file 'application.properties'.");
         }
     }

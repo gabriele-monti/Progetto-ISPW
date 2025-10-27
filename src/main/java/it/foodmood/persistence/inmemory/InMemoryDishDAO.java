@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import it.foodmood.domain.model.Dish;
 import it.foodmood.persistence.dao.DishDAO;
@@ -54,7 +53,7 @@ public class InMemoryDishDAO implements DishDAO{
 
         String normalized = category.trim().toUpperCase();
 
-        return storage.values().stream().filter(dish -> dish.getCourseType().name().equals(normalized)).collect(Collectors.toList());    
+        return storage.values().stream().filter(dish -> dish.getCourseType().name().equals(normalized)).toList();    
     }
 
     @Override
@@ -65,6 +64,6 @@ public class InMemoryDishDAO implements DishDAO{
 
         String normalized = dietCategory.trim().toUpperCase();
 
-        return storage.values().stream().filter(dish -> dish.getDietCategory().name().equals(normalized)).collect(Collectors.toList());    
+        return storage.values().stream().filter(dish -> dish.getDietCategory().name().equals(normalized)).toList();    
     }
 }
