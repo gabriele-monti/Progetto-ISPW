@@ -8,6 +8,7 @@ import java.util.Objects;
 
 public class DishBean {
     
+    private String id;
     private String name;
     private String description;
     private String courseType;
@@ -21,6 +22,8 @@ public class DishBean {
     public DishBean(){this.ingredients = new ArrayList<>();}
 
     // Getter
+
+    public String getId() {return id;}
 
     public String getName(){ return name;}
 
@@ -37,6 +40,10 @@ public class DishBean {
     public List<IngredientPortionBean> getIngredients(){ return new  ArrayList<>(ingredients);}
 
     // Setter + validazione sintattica
+
+    public void setId(String id){
+        this.id = id;
+    }
 
     public void setName(String name){
         if(!isValidName(name)){

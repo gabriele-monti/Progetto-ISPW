@@ -12,6 +12,7 @@ import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.domain.value.Money;
 
 public final class Dish {
+    private final String id;
     private final String name;
     private final String description;
     private final CourseType courseType;
@@ -21,6 +22,9 @@ public final class Dish {
     private final Money price;
     
     private Dish (Builder builder){
+
+        this.id =(builder.id == null && !builder.id.isBlank()) ? builder.id : UUID.randomUUID().toString(); 
+
         if(builder.name == null || builder.name.isBlank()){
             throw new IllegalArgumentException("Il nome non può essere vuoto!");
         }
@@ -38,19 +42,21 @@ public final class Dish {
         this.price = Objects.requireNonNull(builder.price, "Prezzo obbligatorio");
     }
 
-    public String name() {return name; }
+    public String getId() {return id;}
 
-    public Optional<String> description() {return Optional.ofNullable(description); }
+    public String getName() {return name; }
 
-    public CourseType courseType() {return courseType; }
+    public Optional<String> getDescription() {return Optional.ofNullable(description); }
 
-    public DietCategory dietCategory() {return dietCategory; }
+    public CourseType getCourseType() {return courseType; }
 
-    public List<IngredientPortion> ingredients() {return ingredients; }
+    public DietCategory getDietCategory() {return dietCategory; }
 
-    public Optional<Image> image() {return Optional.ofNullable(image); }
+    public List<IngredientPortion> getIngredients() {return ingredients; }
 
-    public Money price() {return price; }
+    public Optional<Image> getImage() {return Optional.ofNullable(image); }
+
+    public Money getPrice() {return price; }
 
     public Macronutrients totalMacronutrients(){
         return ingredients.stream().map(portion -> portion.ingredient().macroFor(portion.quantity())).reduce(Macronutrients.zero(), Macronutrients::plus);
@@ -74,6 +80,7 @@ public final class Dish {
     }
 
     public static class Builder{
+        private String id;
         private String name;
         private CourseType courseType;
         private DietCategory dietCategory;
@@ -81,33 +88,38 @@ public final class Dish {
         private List<IngredientPortion> ingredients = new ArrayList<>();
         private String description;
         private Image image;
+
+        public Builder setId(String id){
+            this.id = id;
+            return this;
+        }
         
-        public Builder name(String name){
+        public Builder setName(String name){
             this.name = name;
             return this;
         }
 
-        public Builder description(String description){
+        public Builder setDescription(String description){
             this.description = description;
             return this;
         }
 
-        public Builder courseType(CourseType courseType){
+        public Builder setCourseType(CourseType courseType){
             this.courseType = courseType;
             return this;
         }
 
-        public Builder dietCategory(DietCategory dietCategory){
+        public Builder setDietCategory(DietCategory dietCategory){
             this.dietCategory = dietCategory;
             return this;
         }
 
-        public Builder price(Money price){
+        public Builder setPrice(Money price){
             this.price = Objects.requireNonNull(price, "Il prezzo non può essere nullo");
             return this;
         }
 
-        public Builder image(Image image){
+        public Builder setImage(Image image){
             this.image = image;
             return this;
         }
@@ -118,7 +130,7 @@ public final class Dish {
             return this;
         }
 
-        public Builder ingredients(List<IngredientPortion> ingredients){
+        public Builder setIngredients(List<IngredientPortion> ingredients){
             Objects.requireNonNull(ingredients, "La lista degli ingredienti non può essere nulla");
             this.ingredients = new ArrayList<>(ingredients);
             return this;
@@ -133,12 +145,12 @@ public final class Dish {
     public boolean equals(Object o){
         if (this == o) return true;
         if(!(o instanceof Dish dish)) return false;
-        return name.equals(dish.name);
+        return id.equals(dish.id);
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(name);
+        return Objects.hash(id);
     }
 
     @Override
