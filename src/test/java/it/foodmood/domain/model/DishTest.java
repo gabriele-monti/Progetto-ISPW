@@ -30,9 +30,9 @@ class DishTest {
         IngredientPortion ip2 = IngredientPortion.of(biscotti, Quantity.of(500, Unit.GRAM));
         List<IngredientPortion> ingredients = List.of(ip1, ip2);
 
-        Dish colazione = new Dish.Builder().name("Colazione").description("Latte e biscotti").courseType(CourseType.BEVERAGE).dietCategory(DietCategory.TRADITIONAL).price(Money.of(4.50)).ingredients(ingredients).build();
+        Dish colazione = new Dish.Builder().setName("Colazione").setDescription("Latte e biscotti").setCourseType(CourseType.BEVERAGE).setDietCategory(DietCategory.TRADITIONAL).setPrice(Money.of(4.50)).setIngredients(ingredients).build();
 
-        assertEquals("Colazione", colazione.name());
+        assertEquals("Colazione", colazione.getName());
         assertTrue(colazione.isAllergenic());
         assertTrue(colazione.allergens().contains(Allergen.MILK));
         assertTrue(colazione.containsAllergen(Allergen.GLUTEN));
@@ -43,16 +43,16 @@ class DishTest {
     void description(){
         Ingredient i = Ingredient.of("Test", Macronutrients.zero(), Set.of());
         Dish d = new Dish.Builder()
-            .name("Test")
-            .description("Descrizione")
-            .courseType(CourseType.APPETIZER)
-            .dietCategory(DietCategory.TRADITIONAL)
-            .price(Money.of(10))
+            .setName("Test")
+            .setDescription("Descrizione")
+            .setCourseType(CourseType.APPETIZER)
+            .setDietCategory(DietCategory.TRADITIONAL)
+            .setPrice(Money.of(10))
             .addIngredient(IngredientPortion.of(i, Quantity.grams(50)))
             .build();
 
-        assertTrue(d.description().isPresent());
-        assertEquals("Descrizione", d.description().get());
+        assertTrue(d.getDescription().isPresent());
+        assertEquals("Descrizione", d.getDescription().get());
     }
 
     @Test
@@ -63,37 +63,42 @@ class DishTest {
         Ingredient i = Ingredient.of("Test", Macronutrients.zero(), Set.of());
         Image img = Image.of(uri);
         Dish d = new Dish.Builder()
-            .name("Test")
-            .description("Descrizione")
-            .courseType(CourseType.APPETIZER)
-            .dietCategory(DietCategory.TRADITIONAL)
-            .price(Money.of(10))
-            .image(img)
+            .setName("Test")
+            .setDescription("Descrizione")
+            .setCourseType(CourseType.APPETIZER)
+            .setDietCategory(DietCategory.TRADITIONAL)
+            .setPrice(Money.of(10))
+            .setImage(img)
             .addIngredient(IngredientPortion.of(i, Quantity.grams(50)))
             .build();
 
-        assertTrue(d.image().isPresent());
-        assertEquals(img, d.image().get());
+        assertTrue(d.getImage().isPresent());
+        assertEquals(img, d.getImage().get());
     }
 
     @Test
-    void equals_sameName(){
+    void equals_sameId(){
         Ingredient i = Ingredient.of("Test", Macronutrients.zero(), Set.of());
+
+        String sameId = "dish-123";
+
         Dish d1 = new Dish.Builder()
-            .name("Test")
-            .description("Descrizione")
-            .courseType(CourseType.APPETIZER)
-            .dietCategory(DietCategory.TRADITIONAL)
-            .price(Money.of(10))
+            .setId(sameId)
+            .setName("Test")
+            .setDescription("Descrizione")
+            .setCourseType(CourseType.APPETIZER)
+            .setDietCategory(DietCategory.TRADITIONAL)
+            .setPrice(Money.of(10))
             .addIngredient(IngredientPortion.of(i, Quantity.grams(50)))
             .build();
 
         Dish d2 = new Dish.Builder()
-            .name("Test")
-            .description("Descrizione")
-            .courseType(CourseType.APPETIZER)
-            .dietCategory(DietCategory.TRADITIONAL)
-            .price(Money.of(10))
+            .setId(sameId)
+            .setName("Test")
+            .setDescription("Descrizione")
+            .setCourseType(CourseType.APPETIZER)
+            .setDietCategory(DietCategory.TRADITIONAL)
+            .setPrice(Money.of(10))
             .addIngredient(IngredientPortion.of(i, Quantity.grams(50)))
             .build();
 
@@ -105,11 +110,11 @@ class DishTest {
     void containsAllergen_withNull(){
         Ingredient i = Ingredient.of("Test", Macronutrients.zero(), Set.of());
         Dish d1 = new Dish.Builder()
-            .name("Test")
-            .description("Descrizione")
-            .courseType(CourseType.APPETIZER)
-            .dietCategory(DietCategory.TRADITIONAL)
-            .price(Money.of(10))
+            .setName("Test")
+            .setDescription("Descrizione")
+            .setCourseType(CourseType.APPETIZER)
+            .setDietCategory(DietCategory.TRADITIONAL)
+            .setPrice(Money.of(10))
             .addIngredient(IngredientPortion.of(i, Quantity.grams(50)))
             .build();
         assertThrows(NullPointerException.class, () -> d1.containsAllergen(null));

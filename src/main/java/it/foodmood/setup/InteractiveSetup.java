@@ -32,7 +32,7 @@ public final class InteractiveSetup {
             System.out.println("Seleziona interfaccia: ");
             System.out.println(" 1) CLI");
             System.out.println(" 2) GUI");
-            System.out.println("Scelta [1,2]: ");
+            System.out.print("Scelta: ");
             String input = scanner.nextLine().trim();
             if("1".equals(input)) return UiMode.CLI;
             if("2".equals(input)) return UiMode.GUI;
@@ -45,7 +45,7 @@ public final class InteractiveSetup {
             System.out.println("Seleziona persistenza: ");
             System.out.println(" 1) DEMO (In-Memory)");
             System.out.println(" 2) FULL (MySQL)");
-            System.out.println("Scelta [1,2]: ");
+            System.out.print("Scelta: ");
             String input = scanner.nextLine().trim();
             if("1".equals(input)) return PersistenceMode.DEMO;
             if("2".equals(input)) return PersistenceMode.FULL;
