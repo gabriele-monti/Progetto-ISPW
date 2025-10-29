@@ -67,8 +67,8 @@ public final class Main {
             ApplicationBootstrap bootstrap = BootstrapFactory.create(startup.getUiMode());
             bootstrap.start(environment);
 
-        } catch (Exception e){
-            System.err.println("Errore durante l'avvio dell'applicazione: " + e.getMessage());
+        } catch (Exception _){
+            System.err.println("Errore durante l'avvio dell'applicazione.");
             System.exit(1);
         } finally {
             if(ConnectionPool.isInitialized()){

@@ -8,6 +8,8 @@ import it.foodmood.infrastructure.io.OutputWriter;
 
 public final class InteractiveSetup {
 
+    private InteractiveSetup(){}
+
     public static StartupEnvironment askUser(InputReader in, OutputWriter out){
         UiMode ui = askUiMode(in, out);
         PersistenceMode pm = askPersistenceMode(in, out);

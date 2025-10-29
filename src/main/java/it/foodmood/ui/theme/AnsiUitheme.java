@@ -9,12 +9,6 @@ public final class AnsiUitheme implements UiTheme {
     private static final String INFO = "\u001B[37m";
     private static final String BOLD = "\u001B[1m";
 
-
-    @Override
-    public String primary(String theme){
-        return theme;
-    }
-
     @Override
     public String error(String text){
         return ERROR + text  + RESET;
