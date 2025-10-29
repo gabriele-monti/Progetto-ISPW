@@ -1,19 +1,24 @@
 package it.foodmood;
 
-import java.util.Scanner;
-
 import it.foodmood.config.ApplicationConfig;
 import it.foodmood.config.PersistenceConfig;
 import it.foodmood.config.PersistenceMode;
 import it.foodmood.infrastructure.bootstrap.ApplicationBootstrap;
 import it.foodmood.infrastructure.bootstrap.BootstrapFactory;
 import it.foodmood.infrastructure.bootstrap.UiMode;
+import it.foodmood.infrastructure.io.InputReader;
+import it.foodmood.infrastructure.io.OutputWriter;
+import it.foodmood.infrastructure.io.console.ConsoleInputReader;
+import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
+import it.foodmood.persistence.ConnectionPool;
 import it.foodmood.persistence.PersistenceFactory;
 import it.foodmood.setup.InteractiveSetup;
 
 public final class Main {
     
     public static void main(String[] args) {
+        OutputWriter out = new ConsoleOutputWriter();
+
         try{
             // 1. Configurazione
             ApplicationConfig fileConfig = ApplicationConfig.loadFromClasspath();
@@ -23,8 +28,8 @@ public final class Main {
             StartupEnvironment startup;
 
             if(interactive){
-                try(Scanner scan = new Scanner(System.in)){
-                    startup = InteractiveSetup.askUser(scan);
+                try(InputReader in = new ConsoleInputReader()){
+                    startup = InteractiveSetup.askUser(in, out);
                 }
             } else {
                 String cliArg = (args.length > 0) ? args[0] : null;
@@ -36,36 +41,39 @@ public final class Main {
                 startup = new StartupEnvironment.Builder()
                               .uiMode(uiMode)
                               .persistenceMode(persistenceMode)
-                              .db(fileConfig.getDbUrl(), fileConfig.getDbUser(), fileConfig.getDbPass())
                               .build();
             }
 
             // 3. Inizializzazione della persistenza
 
             if(startup.getPersistenceMode() == PersistenceMode.FULL){
-                PersistenceConfig.initializeDatabase(startup.getDbUrl(), startup.getDbUser(), startup.getDbPass());
-                System.out.println("Database inizializzato correttamente\nURL: " + startup.getDbUrl());
+                String dbUrl = fileConfig.getDbUrl();
+                String dbUser = fileConfig.getDbUser();
+                String dbPass = fileConfig.getDbPass();
+
+                PersistenceConfig.initializeDatabase(dbUrl, dbUser, dbPass);
+                out.println("Database inizializzato correttamente\nURL: " + dbUrl);
             } else {
-                System.out.println("Modalità demo inizializzata correttamente.\nApplicazione in memoria volatile.\n\n");
+                out.println("Modalità demo inizializzata correttamente.\nApplicazione in memoria volatile.\n\n");
             }
             
             // 4. Costruzione con factory
             PersistenceFactory factory = PersistenceConfig.factory(startup.getPersistenceMode());
 
+            // 5. Costruzione dell'ambiente dell'applicazione
             ApplicationEnvironment environment = new ApplicationEnvironment(fileConfig, factory);
 
+            // 6. Bootstrap e avvio
             ApplicationBootstrap bootstrap = BootstrapFactory.create(startup.getUiMode());
             bootstrap.start(environment);
-
-            // 3. Interfaccia utente
-
-            // 4. Costruzione del ambiente software
-
-            // 5. Bootstrap Factory dal pattern GoF
 
         } catch (Exception e){
             System.err.println("Errore durante l'avvio dell'applicazione: " + e.getMessage());
             System.exit(1);
+        } finally {
+            if(ConnectionPool.isInitialized()){
+                ConnectionPool.shutdown();
+            }
         }
     }
 }

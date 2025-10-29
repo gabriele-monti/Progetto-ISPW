@@ -46,8 +46,13 @@ public final class ConnectionPool {
         if(source != null){
             synchronized(ConnectionPool.class){
                 if(dataSource != null){
-                    dataSource.close();
-                    dataSource = null;
+                    try {
+                        if(!dataSource.isClosed()){
+                            dataSource.close();    
+                        }
+                    } finally {
+                        dataSource = null;
+                    }
                 }
             }
         }
