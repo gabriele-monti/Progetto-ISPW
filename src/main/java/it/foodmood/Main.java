@@ -32,7 +32,7 @@ public final class Main {
                     startup = InteractiveSetup.askUser(in, out);
                 }
             } else {
-                String cliArg = (args.length > 0) ? args[0] : null;
+                String cliArg = (args.length > 1) ? args[0] : null;
                 String envArg = System.getenv("FOODMOOD_UI");
                 UiMode uiMode = UiMode.parse(cliArg != null ? cliArg : envArg, UiMode.GUI);
 
@@ -64,7 +64,8 @@ public final class Main {
             ApplicationEnvironment environment = new ApplicationEnvironment(fileConfig, factory);
 
             // 6. Bootstrap e avvio
-            ApplicationBootstrap bootstrap = BootstrapFactory.create(startup.getUiMode());
+            BootstrapFactory bootstrapFactory = new BootstrapFactory(out);
+            ApplicationBootstrap bootstrap = bootstrapFactory.create(startup.getUiMode());
             bootstrap.start(environment);
 
         } catch (Exception _){
