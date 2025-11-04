@@ -10,9 +10,11 @@ import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
 import it.foodmood.infrastructure.io.console.ConsoleInputReader;
 import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
-import it.foodmood.persistence.ConnectionPool;
+import it.foodmood.infrastructure.util.ConnectionVerifier;
 import it.foodmood.persistence.PersistenceFactory;
 import it.foodmood.setup.InteractiveSetup;
+import it.foodmood.ui.cli.ConsoleView;
+import it.foodmood.ui.theme.AnsiUitheme;
 
 public final class Main {
     
@@ -27,12 +29,13 @@ public final class Main {
             boolean interactive = (args == null || args.length == 0);
             StartupEnvironment startup;
 
-            if(interactive){
-                try(InputReader in = new ConsoleInputReader()){
-                    startup = InteractiveSetup.askUser(in, out);
+            if(interactive) {
+                try (InputReader in = new ConsoleInputReader()) {
+                    ConsoleView ui = new ConsoleView(in, out, new AnsiUitheme());
+                    startup = InteractiveSetup.askUser(in, out, ui);
                 }
             } else {
-                String cliArg = (args.length > 1) ? args[0] : null;
+                String cliArg = (args.length > 0) ? args[0] : null;
                 String envArg = System.getenv("FOODMOOD_UI");
                 UiMode uiMode = UiMode.parse(cliArg != null ? cliArg : envArg, UiMode.GUI);
 
@@ -47,12 +50,21 @@ public final class Main {
             // 3. Inizializzazione della persistenza
 
             if(startup.getPersistenceMode() == PersistenceMode.FULL){
-                String dbUrl = fileConfig.getDbUrl();
-                String dbUser = fileConfig.getDbUser();
-                String dbPass = fileConfig.getDbPass();
+                final String dbUrl = fileConfig.getDbUrl();
+                final String dbUser = fileConfig.getDbUser();
+                final String dbPass = fileConfig.getDbPass();
 
                 PersistenceConfig.initializeDatabase(dbUrl, dbUser, dbPass);
-                out.println("Database inizializzato correttamente\nURL: " + dbUrl);
+
+                boolean connected =  ConnectionVerifier.verifyWithRetry(PersistenceConfig.getProvider(), 5, 5);
+
+                if(connected) {
+                    out.println("Connessione al database verificata con successo!");
+                    out.println("Database inizializzato correttamente\nURL: " + dbUrl);
+                } else {
+                    out.println("Impossibile stabilire la connessione al database!");
+                    System.exit(1);
+                }
             } else {
                 out.println("Modalità demo inizializzata correttamente.\nApplicazione in memoria volatile.\n\n");
             }
@@ -68,13 +80,9 @@ public final class Main {
             ApplicationBootstrap bootstrap = bootstrapFactory.create(startup.getUiMode());
             bootstrap.start(environment);
 
-        } catch (Exception _){
-            System.err.println("Errore durante l'avvio dell'applicazione.");
+        } catch (Exception e){
+            System.err.println("Errore durante l'avvio dell'applicazione: " + e.getMessage());
             System.exit(1);
-        } finally {
-            if(ConnectionPool.isInitialized()){
-                ConnectionPool.shutdown();
-            }
         }
     }
 }

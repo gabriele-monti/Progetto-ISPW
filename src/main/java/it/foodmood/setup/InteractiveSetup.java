@@ -5,21 +5,24 @@ import it.foodmood.config.PersistenceMode;
 import it.foodmood.infrastructure.bootstrap.UiMode;
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
+import it.foodmood.ui.core.UserInterface;
 
 public final class InteractiveSetup {
 
     private InteractiveSetup(){}
 
-    public static StartupEnvironment askUser(InputReader in, OutputWriter out){
-        UiMode ui = askUiMode(in, out);
+    public static StartupEnvironment askUser(InputReader in, OutputWriter out, UserInterface ui){
+        ui.clearScreen();
+        UiMode uiMode = askUiMode(in, out);
         PersistenceMode pm = askPersistenceMode(in, out);
 
-        return new StartupEnvironment.Builder().uiMode(ui).persistenceMode(pm).build();
+        return new StartupEnvironment.Builder().uiMode(uiMode).persistenceMode(pm).build();
     }
 
     private static UiMode askUiMode(InputReader in, OutputWriter out){
         while(true){
-            out.println("Seleziona interfaccia: ");
+            out.println("Benvenuto nella configurazione di FoodMood");
+            out.println("Selezionare l'interfaccia grafica: ");
             out.println(" 1) CLI");
             out.println(" 2) GUI");
             out.print("Scelta: ");
@@ -32,7 +35,7 @@ public final class InteractiveSetup {
 
     private static PersistenceMode askPersistenceMode(InputReader in, OutputWriter out){
         while(true){
-            out.println("Seleziona persistenza: ");
+            out.println("\nSelezionare modalità di persistenza: ");
             out.println(" 1) DEMO (In-Memory)");
             out.println(" 2) FULL (MySQL)");
             out.print("Scelta: ");

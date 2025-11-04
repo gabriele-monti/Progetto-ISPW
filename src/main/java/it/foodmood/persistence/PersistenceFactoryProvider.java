@@ -9,10 +9,10 @@ public class PersistenceFactoryProvider {
     private PersistenceFactoryProvider(){}
 
     // Restituisce la factory appropriata per la modalità di persistenza
-    public static PersistenceFactory getFactory(PersistenceMode mode){
+    public static PersistenceFactory getFactory(PersistenceMode mode, ConnectionProvider provider){
         return switch (mode){
-            case DEMO -> new InMemoryPersistenceFactory();
-            case FULL -> new MySqlPersistenceFactory(ConnectionPool.getDataSource());
+            case DEMO -> InMemoryPersistenceFactory.getInstance();
+            case FULL -> MySqlPersistenceFactory.getInstance(provider);
         };
     }
 }

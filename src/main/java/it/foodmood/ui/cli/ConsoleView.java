@@ -30,7 +30,7 @@ public final class ConsoleView implements UserInterface{
 
     @Override
     public void showWarning(String warning){
-        out.println(theme.success(warning));
+        out.println(theme.warning(warning));
     }
 
     @Override
@@ -50,9 +50,9 @@ public final class ConsoleView implements UserInterface{
 
    @Override
    public void waitForEnter(String prompt){
-        String messagge = (prompt == null || prompt.isBlank()) ? "Premi INVIO per continuare" : prompt;
+        String message = (prompt == null || prompt.isBlank()) ? "Premi INVIO per continuare" : prompt;
 
-        out.print(theme.info(messagge));
+        out.print(theme.info(message));
         in.readLine();
    }
 
