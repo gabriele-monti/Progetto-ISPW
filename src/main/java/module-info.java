@@ -5,6 +5,5 @@ module it.foodmood {
 
     // Database
     requires java.sql;
-    // requires com.zaxxer.hikari;
 
 }

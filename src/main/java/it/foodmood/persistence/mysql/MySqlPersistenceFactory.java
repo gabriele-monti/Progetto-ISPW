@@ -12,25 +12,24 @@ public final class MySqlPersistenceFactory implements PersistenceFactory {
 
     private static volatile MySqlPersistenceFactory instance;
 
-    public static synchronized MySqlPersistenceFactory getInstance(ConnectionProvider provider){
-        if(instance == null){
-            if(provider == null){
-                throw new IllegalArgumentException("Connection provider non può essere nullo.");
-            }
-            instance = new MySqlPersistenceFactory(provider);
-        }
-        return instance;
-    }
-    
-    // DAO concreti
-
+    private final ConnectionProvider provider;
     private final DishDAO dishDAO;
 
-    // Costruttore riceve il DataSource già inizializzato dal ConnectionPool
-
     private MySqlPersistenceFactory(ConnectionProvider provider){
-        // Costruzione dei DAO conreti
+        this.provider = provider;
         this.dishDAO = new JdbcDishDAO(provider);
+    }
+
+    public static synchronized MySqlPersistenceFactory getInstance(ConnectionProvider provider){
+        if(provider == null){
+            throw new IllegalArgumentException("Il provider non può essere nullo.");
+        }
+        if(instance == null){
+            instance = new MySqlPersistenceFactory(provider);
+        } else if (instance.provider != provider){
+            throw new IllegalStateException("Factory già inizializzata con un altro provider.");
+        }
+        return instance;
     }
 
     @Override

@@ -15,11 +15,12 @@ public final class InMemoryPersistenceFactory implements PersistenceFactory {
         return FactoryHolder.instance;
     }
 
+    private static class DishDaoHolder{
+        private static final DishDAO instance = new InMemoryDishDAO();
+    }
+
     @Override
     public DishDAO getDishDAO(){
-        class DishDaoHolder{
-            static final DishDAO instance = new InMemoryDishDAO();
-        }
         return DishDaoHolder.instance;
     }
     

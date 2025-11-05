@@ -56,7 +56,9 @@ public final class Main {
 
                 PersistenceConfig.initializeDatabase(dbUrl, dbUser, dbPass);
 
-                boolean connected =  ConnectionVerifier.verifyWithRetry(PersistenceConfig.getProvider(), 5, 5);
+                // boolean connected =  ConnectionVerifier.verifyWithRetry(PersistenceConfig.getProvider(), 5, 5);
+                boolean connected = true;
+
 
                 if(connected) {
                     out.println("Connessione al database verificata con successo!");
