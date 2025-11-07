@@ -3,6 +3,7 @@ package it.foodmood;
 import it.foodmood.config.ApplicationConfig;
 import it.foodmood.config.PersistenceConfig;
 import it.foodmood.config.PersistenceMode;
+import it.foodmood.config.PersistenceSettings;
 import it.foodmood.infrastructure.bootstrap.ApplicationBootstrap;
 import it.foodmood.infrastructure.bootstrap.BootstrapFactory;
 import it.foodmood.infrastructure.bootstrap.UiMode;
@@ -11,7 +12,7 @@ import it.foodmood.infrastructure.io.OutputWriter;
 import it.foodmood.infrastructure.io.console.ConsoleInputReader;
 import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.infrastructure.util.ConnectionVerifier;
-import it.foodmood.persistence.PersistenceFactory;
+import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.setup.InteractiveSetup;
 import it.foodmood.ui.cli.ConsoleView;
 import it.foodmood.ui.theme.AnsiUitheme;
@@ -23,7 +24,7 @@ public final class Main {
 
         try{
             // 1. Configurazione
-            ApplicationConfig fileConfig = ApplicationConfig.loadFromClasspath();
+            ApplicationConfig fileConfig = ApplicationConfig.fromClasspath();
 
             // 2. Scelta runtime
             boolean interactive = (args == null || args.length == 0);
@@ -48,16 +49,19 @@ public final class Main {
             }
 
             // 3. Inizializzazione della persistenza
+            PersistenceSettings settings;
+            PersistenceConfig persistenceConfig;
 
             if(startup.getPersistenceMode() == PersistenceMode.FULL){
                 final String dbUrl = fileConfig.getDbUrl();
                 final String dbUser = fileConfig.getDbUser();
                 final String dbPass = fileConfig.getDbPass();
 
-                PersistenceConfig.initializeDatabase(dbUrl, dbUser, dbPass);
+                settings = new PersistenceSettings(PersistenceMode.FULL, dbUrl, dbUser, dbPass);
+                persistenceConfig = new PersistenceConfig(settings);
 
-                // boolean connected =  ConnectionVerifier.verifyWithRetry(PersistenceConfig.getProvider(), 5, 5);
-                boolean connected = true;
+                boolean connected =  ConnectionVerifier.verifyWithRetry(persistenceConfig.provider(), 5, 5);
+                // boolean connected = true;
 
 
                 if(connected) {
@@ -69,13 +73,17 @@ public final class Main {
                 }
             } else {
                 out.println("Modalità demo inizializzata correttamente.\nApplicazione in memoria volatile.\n\n");
+                
+                settings = new PersistenceSettings(PersistenceMode.DEMO, null, null, null);
+                persistenceConfig = new PersistenceConfig(settings);
             }
             
             // 4. Costruzione con factory
-            PersistenceFactory factory = PersistenceConfig.factory(startup.getPersistenceMode());
+            DaoFactory.init(settings.mode());
+            DaoFactory daoFactory = DaoFactory.getInstance();
 
             // 5. Costruzione dell'ambiente dell'applicazione
-            ApplicationEnvironment environment = new ApplicationEnvironment(fileConfig, factory);
+            ApplicationEnvironment environment = new ApplicationEnvironment(fileConfig, daoFactory);
 
             // 6. Bootstrap e avvio
             BootstrapFactory bootstrapFactory = new BootstrapFactory(out);

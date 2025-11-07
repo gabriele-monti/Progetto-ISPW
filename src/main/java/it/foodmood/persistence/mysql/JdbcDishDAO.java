@@ -5,14 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+
 import java.sql.CallableStatement;
 
 import it.foodmood.domain.model.Dish;
-import it.foodmood.persistence.ConnectionProvider;
-import it.foodmood.persistence.dao.DishDAO;
+import it.foodmood.persistence.DriverManagerConnection;
+import it.foodmood.persistence.dao.DishDao;
 import it.foodmood.persistence.exception.PersistenceException;
 
-public class JdbcDishDAO implements DishDAO {
+public class JdbcDishDao implements DishDao {
         
     private static final String CALL_SAVE_DISH = "{CALL save_dish(?,?,?,?,?,?,?)}";
     private static final String CALL_GET_DISH_BY_ID = "{CALL get_dish_by_id(?)}";
@@ -21,17 +22,19 @@ public class JdbcDishDAO implements DishDAO {
     private static final String CALL_GET_DISHES_BY_DIET = "{CALL get_dishes_by_diet(?)}";
     private static final String CALL_DELETE_DISH_BY_ID = "{CALL delete_dish_by_id(?)}";
 
+    // Unica istanza di dao del piatto che usa jdbc
+    private static JdbcDishDao instance = null;
 
-    
-    private final ConnectionProvider provider;
-
-    public JdbcDishDAO(ConnectionProvider provider){
-        this.provider = provider;
+    public static synchronized JdbcDishDao getInstance(){
+        if(instance == null){
+            instance = new JdbcDishDao();
+        }
+        return instance;
     }
 
     @Override
     public void save(Dish dish){
-        try (Connection conn = provider.getConnection();
+        try (Connection conn = DriverManagerConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(CALL_SAVE_DISH)){
                 bindDish(cs,dish);
                 cs.execute();
@@ -42,7 +45,7 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public Optional<Dish> findById(String id){
-        try (Connection conn = provider.getConnection();
+        try (Connection conn = DriverManagerConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(CALL_GET_DISH_BY_ID)){
                 cs.setString(1, id);
                 // Da continuare
@@ -54,7 +57,7 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public List<Dish> findAll(){
-        try (Connection conn = provider.getConnection();
+        try (Connection conn = DriverManagerConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(CALL_GET_ALL_DISHES);
                 ResultSet rs = cs.executeQuery()){
                     // List<Dish> out = new ArrayList<>();
@@ -69,7 +72,7 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public void deleteById(String id){
-        try (Connection conn = provider.getConnection();
+        try (Connection conn = DriverManagerConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(CALL_DELETE_DISH_BY_ID)){
                 cs.setString(1, id);
                 cs.execute();
@@ -80,7 +83,7 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public List<Dish> findByCategory(String category){
-        try (Connection conn = provider.getConnection();
+        try (Connection conn = DriverManagerConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(CALL_GET_DISHES_BY_COURSE)){
             cs.setString(1, category);
             return List.of();
@@ -91,7 +94,7 @@ public class JdbcDishDAO implements DishDAO {
 
     @Override
     public List<Dish> findByDietCategory(String dietCategory){
-        try (Connection conn = provider.getConnection();
+        try (Connection conn = DriverManagerConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(CALL_GET_DISHES_BY_DIET)){
             cs.setString(1, dietCategory);
             return List.of();

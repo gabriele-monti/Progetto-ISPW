@@ -1,31 +1,26 @@
 package it.foodmood.config;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
-public final class ApplicationConfig {
+public final class ApplicationConfig implements AppConfig{
+
     private final Properties properties;
 
     private ApplicationConfig(Properties properties) {
         this.properties = properties;
     }
 
-    public static ApplicationConfig loadFromClasspath(){
-        try(InputStream in =Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties")){
-            if (in == null) {
-                throw new IllegalStateException("Il file 'application.properties' non trovato.");
-            }
-            Properties p = new Properties();
-            p.load(in);
-            return new ApplicationConfig(p);
-        } catch (IOException _){
-            throw new IllegalStateException("Errore durante la lettura del file 'application.properties'.");
-        }
+    public static ApplicationConfig fromClasspath(){
+        return fromClasspath(new ClasspathPropertiesLoader());
     }
 
+    public static ApplicationConfig fromClasspath(PropertiesLoader loader){
+        return new ApplicationConfig(loader.load("application.properties"));
+    }
+
+    @Override
     public PersistenceMode getPersistenceMode(){
-        String mode = properties.getProperty("app.persistence.mode", "demo");
+        String mode = properties.getProperty(Keys.MODE, "demo").trim();
         return PersistenceMode.fromValue(mode);
     }
 
@@ -37,8 +32,17 @@ public final class ApplicationConfig {
         return s.trim();
     }
 
-    public String getDbUrl(){ return require("db.url");}
-    public String getDbUser(){ return require("db.user");}
-    public String getDbPass(){ return require("db.pass");}
+    public String getDbUrl() { return require(Keys.DB_URL); }
+    public String getDbUser(){ return require(Keys.DB_USER);}
+    public String getDbPass(){ return require(Keys.DB_PASS);}
+
+    @Override
+    public PersistenceSettings toSettings(){
+        return new PersistenceSettings( 
+            getPersistenceMode(), 
+            getDbUrl(), 
+            getDbUser(), 
+            getDbPass());
+    }
 
 }

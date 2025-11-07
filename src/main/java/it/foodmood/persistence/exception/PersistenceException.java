@@ -1,7 +1,7 @@
 package it.foodmood.persistence.exception;
 
 /*
- * Eccezioni per tutti gli errori di persistenza (DAO, DB, ...)
+ * Eccezioni per tutti gli errori di persistenza (Dao, DB, ...)
  * Sono uncheked in quanto non gestite dal chiamante
  */
 
