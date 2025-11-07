@@ -16,6 +16,9 @@ public abstract class DaoFactory {
                         break;
                     case DEMO:
                         instance = new InMemoryDaoFactory();
+                        break;
+                    default: 
+                        instance = new InMemoryDaoFactory();
                 }
             }
         }

@@ -20,7 +20,7 @@ public final class Image{
         return new Image(uri); 
     }
 
-    public URI uri() { return uri; }
+    public URI getUri() { return uri; }
 
     public static Optional<Image> optional(URI uri){
         return Optional.ofNullable(uri).map(Image::of);

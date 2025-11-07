@@ -22,16 +22,16 @@ public final class Ingredient {
         return new Ingredient(name, macro, allergens);
     }
 
-    public String name () {return name;}
-    public Macronutrients macro() {return macro;}
-    public Set<Allergen> allergens() {return allergens;}
+    public String getName() {return name;}
+    public Macronutrients getMacro() {return macro;}
+    public Set<Allergen> getAllergens() {return allergens;}
 
     // GRASP: Information Expert -> kcal per la quantità usata
     public double kcalFor(Quantity qt){
         return macro.kcal() * qt.ratioToBase();
     }
 
-    public Macronutrients macroFor(Quantity qt){
+    public Macronutrients getmacroFor(Quantity qt){
         Objects.requireNonNull(qt, "La quantità non può essere nulla!");
         return macro.scale(qt.ratioToBase());
     }

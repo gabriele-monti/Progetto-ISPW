@@ -22,7 +22,7 @@ public final class Money {
         return new Money(amount);
     }
 
-    public BigDecimal amount() { return amount;}
+    public BigDecimal getAmount() { return amount;}
 
     public Money add(Money other){
         return new Money(this.amount.add(other.amount));

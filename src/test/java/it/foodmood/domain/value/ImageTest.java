@@ -17,8 +17,8 @@ class ImageTest {
         URI uri = url.toURI();
         Image img = Image.of(uri);
 
-        assertEquals(uri, img.uri());
-        assertEquals("test.png", Paths.get(img.uri()).getFileName().toString());
+        assertEquals(uri, img.getUri());
+        assertEquals("test.png", Paths.get(img.getUri()).getFileName().toString());
     }
 
     @Test
@@ -30,6 +30,6 @@ class ImageTest {
     void of_fileUri(){
         URI uri = Paths.get("src/test/resources/img/test/test.png").toUri();
         Image img = Image.of(uri);
-        assertEquals(uri, img.uri());
+        assertEquals(uri, img.getUri());
     }
 }

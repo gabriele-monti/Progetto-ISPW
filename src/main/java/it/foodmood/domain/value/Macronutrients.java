@@ -32,9 +32,9 @@ public final class Macronutrients {
         return new Macronutrients(0,0,0);
     }
 
-    public double protein() {return protein;}
-    public double carbohydrates() {return carbohydrates;}
-    public double fat() {return fat;}
+    public double getProtein() {return protein;}
+    public double getCarbohydrates() {return carbohydrates;}
+    public double getFat() {return fat;}
 
     // Calcolo kcal
     public double kcal(){

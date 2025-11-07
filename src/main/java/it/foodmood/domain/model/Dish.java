@@ -59,7 +59,7 @@ public final class Dish {
     public Money getPrice() {return price; }
 
     public Macronutrients totalMacronutrients(){
-        return ingredients.stream().map(portion -> portion.ingredient().macroFor(portion.quantity())).reduce(Macronutrients.zero(), Macronutrients::plus);
+        return ingredients.stream().map(portion -> portion.getIngredient().getmacroFor(portion.getQuantity())).reduce(Macronutrients.zero(), Macronutrients::plus);
     }
 
     public double totalKcal(){
@@ -67,7 +67,7 @@ public final class Dish {
     }
 
     public Set<Allergen> allergens(){
-        return ingredients.stream().flatMap(portion -> portion.ingredient().allergens().stream()).collect(Collectors.toUnmodifiableSet());
+        return ingredients.stream().flatMap(portion -> portion.getIngredient().getAllergens().stream()).collect(Collectors.toUnmodifiableSet());
     }
 
     public boolean isAllergenic(){

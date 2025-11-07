@@ -3,7 +3,6 @@ package it.foodmood.config;
 import java.util.Objects;
 
 import it.foodmood.persistence.ConnectionProvider;
-import it.foodmood.persistence.DriverManagerConnection;
 
 public final class PersistenceConfig {
 
@@ -14,8 +13,8 @@ public final class PersistenceConfig {
         this.settings = Objects.requireNonNull(settings, "Settings non può essere nullo.");
 
         if(settings.mode() == PersistenceMode.FULL){
-            DriverManagerConnection.init(settings.url(), settings.user(), settings.pass());
-            this.provider = DriverManagerConnection.getInstance();
+            JdbcConnectionManager.init(settings.url(), settings.user(), settings.pass());
+            this.provider = JdbcConnectionManager.getInstance();
         } else {
             this.provider = null;
         }

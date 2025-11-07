@@ -44,8 +44,8 @@ class IngredientPortionTest {
         IngredientPortion ip1 = IngredientPortion.of(latte, q1);
         IngredientPortion ip2 = ip1.withQuantity(q2);
 
-        assertEquals(q2, ip2.quantity());
-        assertEquals(latte, ip2.ingredient());
+        assertEquals(q2, ip2.getQuantity());
+        assertEquals(latte, ip2.getIngredient());
         assertNotEquals(ip1, ip2);
     }
 

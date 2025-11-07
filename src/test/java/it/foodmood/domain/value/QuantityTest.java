@@ -27,22 +27,22 @@ class QuantityTest {
     @Test
     void createGramQuantity(){
         Quantity q = Quantity.grams(150);
-        assertEquals(150, q.amount());
-        assertEquals(Unit.GRAM, q.unit());
+        assertEquals(150, q.getAmount());
+        assertEquals(Unit.GRAM, q.getUnit());
     }
 
     @Test
     void createMilliliterQuantity(){
         Quantity q = Quantity.milliliters(250);
-        assertEquals(250, q.amount());
-        assertEquals(Unit.MILLILITER, q.unit());
+        assertEquals(250, q.getAmount());
+        assertEquals(Unit.MILLILITER, q.getUnit());
     }
 
     @Test
     void multiplyAmount(){
         Quantity q = Quantity.grams(100);
         Quantity scaled = q.scale(2.5);
-        assertEquals(250, scaled.amount());
+        assertEquals(250, scaled.getAmount());
     }
 
     @Test
@@ -58,7 +58,7 @@ class QuantityTest {
         Quantity q1 = Quantity.grams(100);
         Quantity q2 = Quantity.grams(50);
         Quantity result = q1.plus(q2);
-        assertEquals(150, result.amount());
+        assertEquals(150, result.getAmount());
     }
 
     @Test
@@ -66,7 +66,7 @@ class QuantityTest {
         Quantity q1 = Quantity.grams(100);
         Quantity q2 = Quantity.grams(50);
         Quantity result = q1.minus(q2);
-        assertEquals(50, result.amount());
+        assertEquals(50, result.getAmount());
     }
 
     @Test

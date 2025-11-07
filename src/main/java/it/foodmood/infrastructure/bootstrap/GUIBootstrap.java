@@ -2,7 +2,7 @@ package it.foodmood.infrastructure.bootstrap;
 
 import java.util.Objects;
 
-import it.foodmood.ApplicationEnvironment;
+import it.foodmood.config.ApplicationEnvironment;
 import it.foodmood.infrastructure.io.OutputWriter;
 
 public class GUIBootstrap implements ApplicationBootstrap {

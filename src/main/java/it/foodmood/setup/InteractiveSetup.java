@@ -1,7 +1,7 @@
 package it.foodmood.setup;
 
-import it.foodmood.StartupEnvironment;
 import it.foodmood.config.PersistenceMode;
+import it.foodmood.config.StartupEnvironment;
 import it.foodmood.infrastructure.bootstrap.UiMode;
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;

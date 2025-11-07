@@ -22,9 +22,9 @@ public final class IngredientPortion{
         return new IngredientPortion(ingredient, quantity);
     }
 
-    public Ingredient ingredient() {return ingredient;}
+    public Ingredient getIngredient() {return ingredient;}
 
-    public Quantity quantity() {return quantity;}
+    public Quantity getQuantity() {return quantity;}
 
     public IngredientPortion withQuantity(Quantity newQuantity){
         return of(this.ingredient, Objects.requireNonNull(newQuantity, "La nuova quantità non può essere nulla"));
@@ -44,6 +44,6 @@ public final class IngredientPortion{
 
     @Override
     public String toString(){
-        return quantity + " x " + ingredient.name();
+        return quantity + " x " + ingredient.getName();
     }
 }

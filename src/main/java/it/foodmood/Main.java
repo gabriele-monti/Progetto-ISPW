@@ -1,9 +1,11 @@
 package it.foodmood;
 
 import it.foodmood.config.ApplicationConfig;
+import it.foodmood.config.ApplicationEnvironment;
 import it.foodmood.config.PersistenceConfig;
 import it.foodmood.config.PersistenceMode;
 import it.foodmood.config.PersistenceSettings;
+import it.foodmood.config.StartupEnvironment;
 import it.foodmood.infrastructure.bootstrap.ApplicationBootstrap;
 import it.foodmood.infrastructure.bootstrap.BootstrapFactory;
 import it.foodmood.infrastructure.bootstrap.UiMode;

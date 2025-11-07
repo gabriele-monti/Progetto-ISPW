@@ -1,6 +1,5 @@
-package it.foodmood;
+package it.foodmood.config;
 
-import it.foodmood.config.PersistenceMode;
 import it.foodmood.infrastructure.bootstrap.UiMode;
 
 public final class StartupEnvironment {

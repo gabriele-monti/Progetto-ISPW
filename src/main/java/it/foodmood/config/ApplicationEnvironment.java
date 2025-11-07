@@ -1,6 +1,5 @@
-package it.foodmood;
+package it.foodmood.config;
 
-import it.foodmood.config.ApplicationConfig;
 import it.foodmood.persistence.dao.DaoFactory;
 
 public record ApplicationEnvironment(ApplicationConfig config, DaoFactory daoFactory) {

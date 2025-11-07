@@ -29,8 +29,8 @@ public final class Quantity implements Comparable<Quantity>{
         return new Quantity(amount, Unit.MILLILITER);
     }
 
-    public double amount() {return amount;}
-    public Unit unit() {return unit;}
+    public double getAmount() {return amount;}
+    public Unit getUnit() {return unit;}
 
     // Metodo per moltiplicare la quantità per un fattore (es. dimezza, raddoppia, ...)
     public Quantity scale(double factor){

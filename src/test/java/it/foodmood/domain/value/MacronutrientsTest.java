@@ -27,9 +27,9 @@ class MacronutrientsTest {
     @Test
     void createZeroMacros(){
         Macronutrients m = Macronutrients.zero();
-        assertEquals(0, m.protein());
-        assertEquals(0, m.carbohydrates());
-        assertEquals(0, m.fat());
+        assertEquals(0, m.getProtein());
+        assertEquals(0, m.getCarbohydrates());
+        assertEquals(0, m.getFat());
         assertEquals(0, m.kcal());
     }
 
@@ -46,9 +46,9 @@ class MacronutrientsTest {
         Macronutrients m2 = Macronutrients.of(10,25,8);
         Macronutrients result = m1.plus(m2);
 
-        assertEquals(20, result.protein());
-        assertEquals(35, result.carbohydrates());
-        assertEquals(18, result.fat());
+        assertEquals(20, result.getProtein());
+        assertEquals(35, result.getCarbohydrates());
+        assertEquals(18, result.getFat());
     }
 
     @Test

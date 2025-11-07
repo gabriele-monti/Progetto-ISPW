@@ -18,8 +18,8 @@ class IngredientTest {
         Set<Allergen> allergens = Set.of(Allergen.MILK);
         Ingredient ingredient = Ingredient.of("Latte", macro, allergens);
 
-        assertEquals("Latte", ingredient.name());
-        assertEquals(macro, ingredient.macro());
+        assertEquals("Latte", ingredient.getName());
+        assertEquals(macro, ingredient.getMacro());
         assertTrue(ingredient.isAllergenic());
         assertTrue(ingredient.contains(Allergen.MILK));
     }
