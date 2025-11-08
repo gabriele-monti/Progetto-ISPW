@@ -5,5 +5,4 @@ public interface AppConfig {
     String getDbUrl();
     String getDbUser();
     String getDbPass();
-    PersistenceSettings toSettings();
 }

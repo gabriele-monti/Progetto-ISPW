@@ -15,7 +15,7 @@ public final class ApplicationConfig implements AppConfig{
     }
 
     public static ApplicationConfig fromClasspath(PropertiesLoader loader){
-        return new ApplicationConfig(loader.load("application.properties"));
+        return new ApplicationConfig(loader.load("database.properties"));
     }
 
     @Override
@@ -35,14 +35,5 @@ public final class ApplicationConfig implements AppConfig{
     public String getDbUrl() { return require(Keys.DB_URL); }
     public String getDbUser(){ return require(Keys.DB_USER);}
     public String getDbPass(){ return require(Keys.DB_PASS);}
-
-    @Override
-    public PersistenceSettings toSettings(){
-        return new PersistenceSettings( 
-            getPersistenceMode(), 
-            getDbUrl(), 
-            getDbUser(), 
-            getDbPass());
-    }
 
 }

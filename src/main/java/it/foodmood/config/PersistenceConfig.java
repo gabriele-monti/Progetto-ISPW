@@ -20,11 +20,11 @@ public final class PersistenceConfig {
         }
     }
 
-    public PersistenceSettings settings(){
+    public PersistenceSettings getSettings(){
         return settings;
     }
 
-    public ConnectionProvider provider(){
+    public ConnectionProvider getProvider(){
         if(provider == null){
             throw new IllegalStateException("Provider non inizializzato.");
         }

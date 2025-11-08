@@ -62,7 +62,7 @@ public final class Main {
                 settings = new PersistenceSettings(PersistenceMode.FULL, dbUrl, dbUser, dbPass);
                 persistenceConfig = new PersistenceConfig(settings);
 
-                boolean connected =  ConnectionVerifier.verifyWithRetry(persistenceConfig.provider(), 5, 5);
+                boolean connected =  ConnectionVerifier.verifyWithRetry(persistenceConfig.getProvider(), 5, 5);
                 // boolean connected = true;
 
 

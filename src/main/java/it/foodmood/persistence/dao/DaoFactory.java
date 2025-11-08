@@ -4,23 +4,19 @@ import it.foodmood.config.PersistenceMode;
 
 public abstract class DaoFactory {
 
-    private static volatile DaoFactory instance = null;
+    private static DaoFactory instance;
 
-    public static void init(PersistenceMode mode){
+    public static synchronized void init(PersistenceMode mode){
         if(instance != null) return; // DaoFactory già inizializzata
-        synchronized (DaoFactory.class){
-            if(instance == null){
-                switch (mode) {
-                    case FULL:
-                        instance = new JdbcDaoFactory();
-                        break;
-                    case DEMO:
-                        instance = new InMemoryDaoFactory();
-                        break;
-                    default: 
-                        instance = new InMemoryDaoFactory();
-                }
-            }
+        switch(mode){
+            case FULL:
+                instance = new JdbcDaoFactory();
+                break;
+            case DEMO:
+                instance = new InMemoryDaoFactory();
+                break;
+            default: 
+                instance = new InMemoryDaoFactory();
         }
     }
 

@@ -18,11 +18,9 @@ public class DishBean {
     private List<IngredientPortionBean> ingredients;
 
     // Costruttore
-
     public DishBean(){this.ingredients = new ArrayList<>();}
 
     // Getter
-
     public String getId() {return id;}
 
     public String getName(){ return name;}
