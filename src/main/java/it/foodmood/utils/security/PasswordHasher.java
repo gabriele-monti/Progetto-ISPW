@@ -1,4 +1,4 @@
-package it.foodmood.ui.utils.security;
+package it.foodmood.utils.security;
 
 import java.security.SecureRandom;
 import java.util.Base64;

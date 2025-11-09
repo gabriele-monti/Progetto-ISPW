@@ -11,7 +11,7 @@ public class Credential {
         this.passwordHash = passwordHash;
     }
 
-    public UUID getAccountId(){
+    public UUID getUserId(){
         return userId;
     }
 

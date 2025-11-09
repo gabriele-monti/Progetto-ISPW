@@ -1,7 +1,8 @@
 package it.foodmood.domain.model;
 
-import it.foodmood.ui.utils.security.PasswordHasher;
 import org.junit.jupiter.api.Test;
+
+import it.foodmood.utils.security.PasswordHasher;
 
 import static org.junit.jupiter.api.Assertions.*;
 

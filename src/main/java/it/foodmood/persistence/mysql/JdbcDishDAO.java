@@ -23,7 +23,7 @@ public class JdbcDishDao implements DishDao {
     private static final String CALL_DELETE_DISH_BY_ID = "{CALL delete_dish_by_id(?)}";
 
     // Unica istanza di dao del piatto che usa jdbc
-    private static JdbcDishDao instance = null;
+    private static JdbcDishDao instance;
 
     public static synchronized JdbcDishDao getInstance(){
         if(instance == null){
