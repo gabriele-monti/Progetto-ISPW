@@ -1,4 +1,4 @@
-package it.foodmood.domain.model;
+package it.foodmood.domain.value;
 
 public enum Role {
     CUSTOMER,

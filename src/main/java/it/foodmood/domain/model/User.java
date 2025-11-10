@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import it.foodmood.domain.value.Email;
 import it.foodmood.domain.value.Person;
+import it.foodmood.domain.value.Role;
 
 public final class User {
 

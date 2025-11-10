@@ -1,12 +1,50 @@
-// package it.foodmood.utils;
+package it.foodmood.utils;
 
-// public class Session {
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Objects;
+import java.util.UUID;
 
-//     private final String name;
-//     private final String token;
-//     private final String role; // Role role
-//     private long time;
+import it.foodmood.domain.value.Role;
 
-//     private static final long DURATION = 50L * 60 * 1000;
+public class Session {
 
-// }
+    private final String userId; 
+    private final String token;
+    private final Role role;
+    private Instant expiryTime;
+
+    private static final Duration DURATION = Duration.ofMinutes(50);
+
+    public Session(String userId, Role role){
+        this.userId = Objects.requireNonNull(userId);
+        this.role = Objects.requireNonNull(role);;
+        this.token = UUID.randomUUID().toString();
+        this.expiryTime = Instant.now().plus(DURATION);
+    }
+
+    public String getIdUser(){
+        return userId;
+    }
+
+    public String getToken(){
+        return token;
+    }
+
+    public Role getRole(){
+        return role;
+    }
+
+    public Instant getExpiryTime(){
+        return expiryTime;
+    }
+
+    public boolean isExpired(){
+        return Instant.now().isAfter(expiryTime);
+    }
+
+    public void refresh(){
+        this.expiryTime = Instant.now().plus(DURATION);
+    }
+
+}

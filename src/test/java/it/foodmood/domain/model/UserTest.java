@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import it.foodmood.domain.value.Email;
 import it.foodmood.domain.value.Person;
+import it.foodmood.domain.value.Role;
 import it.foodmood.utils.security.PasswordHasher;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,6 @@ class UserTest {
         assertEquals("Cognome", user.getPerson().lastName());
         assertEquals("nome.cognome@foodmood.it", user.getEmail().email());
         assertEquals(Role.CUSTOMER, user.getRole());
-
 
         assertTrue(hasher.verify(password, credential.getPasswordHash()));
         assertFalse(hasher.verify("password", credential.getPasswordHash()));

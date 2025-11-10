@@ -1,6 +1,6 @@
 package it.foodmood.utils;
 
-import it.foodmood.domain.model.Role;
+import it.foodmood.domain.value.Role;
 
 public final class RoleConverter {
 

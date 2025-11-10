@@ -4,22 +4,23 @@ import it.foodmood.utils.Validator;
 
 public class LoginBean {
     private String email;
-    private String password;
+    private char[] password;
 
-    private LoginBean(){}
+    public LoginBean(){}
 
     public String getEmail(){
         return email;
     }
 
-    public String getPassword(){
+    public char[] getPassword(){
         return password;
     }
 
-    public void setPassword(String password){
+    public void setPassword(char[] password){
         this.password = password;
     }
 
+    // validazione sintattica
     public void setEmail(String email){
         if(Validator.isValidEmail(email)){
             this.email = email;

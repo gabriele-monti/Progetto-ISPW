@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 import it.foodmood.persistence.dao.CrudDao;
 
 public abstract class AbstractInMemoryCrudDao <T, I> implements CrudDao<T,I> {
-    protected final Map<I, T> storage = new ConcurrentHashMap<>();
+    protected final Map<I, T> storage = new HashMap<>();
 
     protected abstract I getId(T entity);
 
