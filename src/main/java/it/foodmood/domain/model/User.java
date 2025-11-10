@@ -3,47 +3,57 @@ package it.foodmood.domain.model;
 import java.util.Objects;
 import java.util.UUID;
 
-public abstract class User {
+import it.foodmood.domain.value.Email;
+import it.foodmood.domain.value.Person;
+
+public final class User {
 
     private final UUID id;
-    private String name;
-    private String surname;
-    private String email;
+    private Person person;
+    private Email email;
+    private Role role;
 
-    // Costruttore protected, solo le sottoclassi possono creare istanze
-    protected User(String name, String surname, String email) {
+    public User(Person person, Email email,Role role) {
         this.id = UUID.randomUUID();
-        this.name = Objects.requireNonNull(name, "Il nome non può essere nullo.");
-        this.surname = Objects.requireNonNull(surname, "Il cognome non può essere nullo.");
-        this.email = Objects.requireNonNull(email, "Email non può essere nulla.");
+        this.person = Objects.requireNonNull(person, "L'utente è obbligatorio.");
+        this.email = Objects.requireNonNull(email, "L'email è obbligatoria.");
+        this.role = Objects.requireNonNull(role, "Ruolo obbligatorio");
     }
 
-    public String getName() {
-        return name;
+    public Person getPerson() {
+        return person;
     }
 
-    public String getSurname() {
-        return surname;
+    public Email getEmail() {
+        return email;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public String getEmail(){
-        return email;
+    public Role getRole(){
+        return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    // metodi di aggiornamento
+    public void changePerson(Person newPerson){
+        this.person = Objects.requireNonNull(newPerson);
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void changeEmail(Email newEmail){
+        this.email = Objects.requireNonNull(newEmail);
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void changeRole(Role newRole){
+        this.role = Objects.requireNonNull(newRole);
     }
 
+    @Override
+    public String toString(){
+        return "Utente {id = " + id +
+                ", " + person +
+                ", email = " + email + 
+                ", ruolo = " + role + " }";
+    }
 }

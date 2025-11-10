@@ -1,5 +1,5 @@
 package it.foodmood.domain.model;
 
-public class Waiter{
-
+public class Guest {
+    
 }

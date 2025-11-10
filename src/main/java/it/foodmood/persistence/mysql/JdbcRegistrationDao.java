@@ -13,9 +13,9 @@ import it.foodmood.persistence.exception.PersistenceException;
 
 public class JdbcRegistrationDao implements RegistrationDao {
     
-    private static final String CALL_SAVE_USER = "{CALL save_user(?,?,?,?)}";
+    private static final String CALL_INSERT_USER = "{CALL insert_user(?,?,?,?)}";
     private static final String CALL_SAVE_CREDENTIAL = "{CALL save_credential(?,?)}";
-    private static final String CALL_EXISTS_BY_EMAIL= "{CALL existsByEmail(?)}";
+    private static final String CALL_EXISTS_BY_EMAIL= "{CALL exists_by_email(?)}";
 
     private static JdbcRegistrationDao instance;
 
@@ -30,11 +30,12 @@ public class JdbcRegistrationDao implements RegistrationDao {
     public void saveUser(User user){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            try(CallableStatement cs = conn.prepareCall(CALL_SAVE_USER)){
+            try(CallableStatement cs = conn.prepareCall(CALL_INSERT_USER)){
                 cs.setString(1, user.getId().toString());
-                cs.setString(2, user.getName());
-                cs.setString(3, user.getSurname());
-                cs.setString(4, user.getEmail());
+                cs.setString(2, user.getPerson().firstName());
+                cs.setString(3, user.getPerson().lastName());
+                cs.setString(4, user.getEmail().email());
+                cs.setString(4, user.getRole().name());
                 cs.execute();
             }
         } catch (SQLException e) {
