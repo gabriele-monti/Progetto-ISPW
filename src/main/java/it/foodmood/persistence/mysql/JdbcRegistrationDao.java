@@ -13,7 +13,7 @@ import it.foodmood.persistence.exception.PersistenceException;
 
 public class JdbcRegistrationDao implements RegistrationDao {
     
-    private static final String CALL_INSERT_USER = "{CALL insert_user(?,?,?,?)}";
+    private static final String CALL_INSERT_USER = "{CALL save_user(?,?,?,?)}";
     private static final String CALL_SAVE_CREDENTIAL = "{CALL save_credential(?,?)}";
     private static final String CALL_EXISTS_BY_EMAIL= "{CALL exists_by_email(?)}";
 

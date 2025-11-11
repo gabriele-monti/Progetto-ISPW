@@ -7,15 +7,24 @@ import it.foodmood.domain.value.Email;
 import it.foodmood.domain.value.Person;
 import it.foodmood.domain.value.Role;
 
-public final class User {
+public abstract class User {
 
     private final UUID id;
     private Person person;
     private Email email;
-    private Role role;
+    private final Role role;
 
-    public User(Person person, Email email,Role role) {
+    // Costruttore protected per farlo instanziare solo dalle sottoclassi, per creare un nuovo utente
+    protected User(Person person, Email email, Role role) {
         this.id = UUID.randomUUID();
+        this.person = Objects.requireNonNull(person, "L'utente è obbligatorio.");
+        this.email = Objects.requireNonNull(email, "L'email è obbligatoria.");
+        this.role = Objects.requireNonNull(role, "Ruolo obbligatorio");
+    }
+
+    // Costruttore per ricreare l'utente dalla persistenza
+    protected User(UUID id, Person person, Email email, Role role) {
+        this.id = Objects.requireNonNull(id);
         this.person = Objects.requireNonNull(person, "L'utente è obbligatorio.");
         this.email = Objects.requireNonNull(email, "L'email è obbligatoria.");
         this.role = Objects.requireNonNull(role, "Ruolo obbligatorio");
@@ -37,6 +46,10 @@ public final class User {
         return role;
     }
 
+    public boolean hasRole(Role role){
+        return this.role.equals(role);
+    }
+
     // metodi di aggiornamento
     public void changePerson(Person newPerson){
         this.person = Objects.requireNonNull(newPerson);
@@ -46,15 +59,21 @@ public final class User {
         this.email = Objects.requireNonNull(newEmail);
     }
 
-    public void changeRole(Role newRole){
-        this.role = Objects.requireNonNull(newRole);
+    @Override
+    public boolean equals(Object object){
+        if(this == object) return true;
+        if(!(object instanceof User)) return false;
+        User user = (User) object;
+        return id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode(){
+        return id.hashCode();
     }
 
     @Override
     public String toString(){
-        return "Utente {id = " + id +
-                ", " + person +
-                ", email = " + email + 
-                ", ruolo = " + role + " }";
+        return String.format("User { id = %s, %s , email = %s , role = %s }", id, person, email, role);
     }
 }

@@ -28,4 +28,7 @@ public abstract class DaoFactory {
     }
     
     public abstract DishDao getDishDao();
+    
+    public abstract UserDao getUserDao();
+
 }

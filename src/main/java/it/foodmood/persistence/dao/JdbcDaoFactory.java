@@ -12,4 +12,11 @@ public final class JdbcDaoFactory extends DaoFactory {
     public DishDao getDishDao(){ 
         return JdbcDishDao.getInstance();
     }
+
+    @Override
+    public UserDao getUserDao(){ 
+        return JdbcUserDao.getInstance();
+    }
+
+
 }
