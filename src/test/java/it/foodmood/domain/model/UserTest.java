@@ -14,7 +14,7 @@ class UserTest {
 
     @Test
     void createCustomerUser(){
-        String password = "userPass";
+        char[] password = "userPass".toCharArray();
         String passwordHash = hasher.hash(password);
 
         // Creo il cliente
@@ -28,6 +28,6 @@ class UserTest {
         assertEquals(Role.CUSTOMER, user.getRole());
 
         assertTrue(hasher.verify(password, credential.getPasswordHash()));
-        assertFalse(hasher.verify("password", credential.getPasswordHash()));
+        assertFalse(hasher.verify("password".toCharArray(), credential.getPasswordHash()));
     }
 }

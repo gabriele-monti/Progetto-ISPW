@@ -14,8 +14,8 @@ public final class Validator {
         return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
 
-    public static boolean isValidPassword(String password){
-        return password != null && PASSWORD_PATTERN.matcher(password).matches();
+    public static boolean isValidPassword(char[] password){
+        return password != null && PASSWORD_PATTERN.matcher(new String(password)).matches();
     }
 
 }

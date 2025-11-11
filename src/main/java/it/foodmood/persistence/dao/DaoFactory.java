@@ -20,7 +20,7 @@ public abstract class DaoFactory {
         }
     }
 
-    public static DaoFactory getInstance(){
+    public static synchronized DaoFactory getInstance(){
         if(instance == null){
             throw new IllegalStateException("DaoFactory non inizializzata. Chiama DaoFactory.init(mode)");
         }
@@ -30,5 +30,7 @@ public abstract class DaoFactory {
     public abstract DishDao getDishDao();
     
     public abstract UserDao getUserDao();
+
+    public abstract CredentialDao getCredentialDao();
 
 }

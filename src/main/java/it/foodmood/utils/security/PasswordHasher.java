@@ -8,14 +8,14 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class PasswordHasher {
     
-    public String hash(String password){
+    public String hash(char[] password){
         try{
             // Genero un salt
             byte[] salt = new byte[16];
             new SecureRandom().nextBytes(salt);
 
             // Calcolo hash
-            PBEKeySpec specification = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+            PBEKeySpec specification = new PBEKeySpec(password, salt, 65536, 256);
             byte[] hash = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(specification).getEncoded();
 
             // Ritorno "salt:hash" in base 64
@@ -25,7 +25,7 @@ public class PasswordHasher {
         }
     }
 
-    public boolean verify(String password, String storedHash){
+    public boolean verify(char[] password, String storedHash){
         try {
             // estrazione salt e hash originale
             String[] parts = storedHash.split(":");
@@ -33,7 +33,7 @@ public class PasswordHasher {
             byte[] originalHash = Base64.getDecoder().decode(parts[1]);
 
             // ricalcolo hash con password fornita
-            PBEKeySpec specification = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+            PBEKeySpec specification = new PBEKeySpec(password, salt, 65536, 256);
             byte[] hash = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(specification).getEncoded();
 
             // confronto

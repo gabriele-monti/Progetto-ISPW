@@ -9,21 +9,21 @@ import it.foodmood.domain.value.Role;
 
 public class Session {
 
-    private final String userId; 
+    private final UUID userId; 
     private final String token;
     private final Role role;
     private Instant expiryTime;
 
     private static final Duration DURATION = Duration.ofMinutes(50);
 
-    public Session(String userId, Role role){
+    public Session(UUID userId, Role role){
         this.userId = Objects.requireNonNull(userId);
-        this.role = Objects.requireNonNull(role);;
+        this.role = Objects.requireNonNull(role);
         this.token = UUID.randomUUID().toString();
         this.expiryTime = Instant.now().plus(DURATION);
     }
 
-    public String getIdUser(){
+    public UUID getUserId(){
         return userId;
     }
 

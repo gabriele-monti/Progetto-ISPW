@@ -21,26 +21,30 @@ public final class SessionManager {
     }
 
     public Session createSession(User user){
-        Session session = new Session(user.getId().toString() ,user.getRole());
+        Session session = new Session(user.getId() ,user.getRole());
         sessions.put(session.getToken(), session);
         return session;
     }
 
     public Session getSessionByToken(String token) {
         Session session = sessions.get(token);
-        if(session == null){
-            return null;
-        }
-        if(session.isExpired()){
+        if(session == null || session.isExpired()){
             sessions.remove(token);
             return null;
         }
+        // Rinnovo la sessione solo in caso di attività reale
         session.refresh();
         return session;
     }
 
     public boolean validToken(String token) {
-        return getSessionByToken(token) != null;
+        Session session = sessions.get(token);
+        if(session == null || session.isExpired()){
+            sessions.remove(token);
+            return false;
+        }
+        // verifica solo se il token è valido, senza nessun rinnovo
+        return true;
     }
 
     public void terminateSession(String token) {

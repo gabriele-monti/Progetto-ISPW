@@ -1,9 +1,8 @@
 package it.foodmood.bean;
 
+import java.util.Arrays;
 import java.util.Objects;
 
-import it.foodmood.domain.value.Role;
-import it.foodmood.utils.RoleConverter;
 import it.foodmood.utils.Validator;
 
 public class RegistrationBean {
@@ -11,8 +10,7 @@ public class RegistrationBean {
     private String name;
     private String surname;
     private String email;
-    private String password;
-    private Role role;
+    private char[] password;
 
     public RegistrationBean(){
         // Costruttore vuoto
@@ -30,12 +28,8 @@ public class RegistrationBean {
         return email;
     }
 
-    public String getPassword(){
+    public char[] getPassword(){
         return password;
-    }
-
-    public Role getRole(){
-        return role;
     }
 
     public void setName(String name){
@@ -54,15 +48,12 @@ public class RegistrationBean {
         }
     }
 
-    public void setPassword(String password){
+    public void setPassword(char[] password){
         if(Validator.isValidPassword(password)){
             this.password = password; 
         } else {
+            Arrays.fill(password, '\0');
             throw new IllegalArgumentException("Password non valida.");
         }
-    }
-
-    public void setRole(String role){
-        this.role = RoleConverter.fromString(role);
     }
 }

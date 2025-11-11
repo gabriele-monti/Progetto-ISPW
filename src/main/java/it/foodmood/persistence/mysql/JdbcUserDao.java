@@ -124,16 +124,16 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmail(Email email){
+    public User findByEmail(Email email){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try(CallableStatement cs = conn.prepareCall(CALL_GET_USERS_BY_EMAIL)){
                 cs.setString(1, email.email());
                 try(ResultSet rs = cs.executeQuery()){
                     if(rs.next()){
-                        return Optional.of(mapUser(rs));
+                        return mapUser(rs);
                     }
-                    return Optional.empty();
+                    return null;
                 }
             }
         } catch (SQLException e) {
