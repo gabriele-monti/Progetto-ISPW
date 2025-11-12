@@ -23,7 +23,7 @@ public class CustomerRegistrationController {
         try{
             // 1) Verifico se l'email è già registrata
             Email email = new Email(registrationBean.getEmail());
-            if(userDao.findByEmail(email) != null){
+            if(userDao.findByEmail(email).isPresent()){
                 throw new RegistrationException("Email già registrata.");
             }
 
