@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import it.foodmood.bean.AuthenticationBean;
 import it.foodmood.bean.LoginBean;
+import it.foodmood.config.UserMode;
 import it.foodmood.domain.model.Credential;
 import it.foodmood.domain.model.User;
 import it.foodmood.domain.value.Email;
@@ -23,33 +24,39 @@ public class LoginController {
     private final PasswordHasher passwordHasher = new PasswordHasher();
 
 
-    public AuthenticationBean loginUser(LoginBean loginBean) throws AuthenticationException{
+    public AuthenticationBean loginUser(LoginBean loginBean, UserMode mode) throws AuthenticationException{
         
         // 1) Verifichiamo l'esistenza dell'utente
         Email email = new Email(loginBean.getEmail());
-        User user = userDao.findByEmail(email);
-        if(user == null){
-            throw new AuthenticationException("Email o password non valide.");
-        }
+        User user = userDao.findByEmail(email).orElseThrow(() -> new AuthenticationException("Credenziali errate"));
 
         // 2) Carichiamo le credenziali
         Credential credential = credentialDao.findByUserId(user.getId());
         if(credential == null || credential.getPasswordHash() == null){
-            throw new AuthenticationException("Email o password non valide.");
+            throw new AuthenticationException("Credenziali errate.");
         }
 
         // 3) Verifica della password
-        boolean valid = passwordHasher.verify(loginBean.getPassword(), credential.getPasswordHash());
+        boolean isValidPassword = passwordHasher.verify(loginBean.getPassword(), credential.getPasswordHash());
+        
+        // 4) Pulizia password in memoria
         char[] password = loginBean.getPassword();
         if(password != null){
             Arrays.fill(password, '\0');
         }
 
-        if(!valid){
-            throw new AuthenticationException("Email o password non valide.");
+        if(!isValidPassword){
+            throw new AuthenticationException("Credenziali errate.");
         }
 
-        // 4) Creo la sessione per l'utente
+        // 5) Autorizzazione: il ruolo richiesto deve combaciare con la modalità dell'app
+        boolean isAutorized = user.hasRole(mode.requireRole());
+
+        if(!isAutorized){
+            throw new AuthenticationException("Credenziali errate.");
+        }
+
+        // 5) Creo la sessione per l'utente
         Session session = SessionManager.getInstance().createSession(user);
         return new AuthenticationBean(session.getToken(), user.getRole());
     }

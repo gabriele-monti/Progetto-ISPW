@@ -23,11 +23,11 @@ import it.foodmood.utils.RoleConverter;
 
 public class JdbcUserDao implements UserDao {
             
-    private static final String CALL_INSERT_USER = "{CALL save_user(?,?,?,?,?)}";
+    private static final String CALL_INSERT_USER = "{CALL insert_user(?,?,?,?,?)}";
     private static final String CALL_GET_USER_BY_ID = "{CALL get_user_by_id(?)}";
     private static final String CALL_GET_ALL_USERS = "{CALL get_all_users()}";
     private static final String CALL_GET_USERS_BY_ROLE = "{CALL get_users_by_role(?)}";
-    private static final String CALL_GET_USERS_BY_EMAIL = "{CALL get_users_by_email(?)}";
+    private static final String CALL_GET_USER_BY_EMAIL = "{CALL get_user_by_email(?)}";
     private static final String CALL_DELETE_USER_BY_ID = "{CALL delete_user_by_id(?)}";
 
     private static JdbcUserDao instance;
@@ -40,7 +40,7 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public void save(User user){
+    public void insert(User user){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try(CallableStatement cs = conn.prepareCall(CALL_INSERT_USER)){
@@ -124,16 +124,16 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User findByEmail(Email email){
+    public Optional<User> findByEmail(Email email){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            try(CallableStatement cs = conn.prepareCall(CALL_GET_USERS_BY_EMAIL)){
+            try(CallableStatement cs = conn.prepareCall(CALL_GET_USER_BY_EMAIL)){
                 cs.setString(1, email.email());
                 try(ResultSet rs = cs.executeQuery()){
                     if(rs.next()){
-                        return mapUser(rs);
+                        return Optional.of(mapUser(rs));
                     }
-                    return null;
+                    return Optional.empty();
                 }
             }
         } catch (SQLException e) {

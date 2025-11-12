@@ -18,7 +18,7 @@ class UserTest {
         String passwordHash = hasher.hash(password);
 
         // Creo il cliente
-        Customer user = new Customer(new Person("Nome", "Cognome"), new Email("nome.cognome@foodmood.it"));
+        User user = new Customer(new Person("Nome", "Cognome"), new Email("nome.cognome@foodmood.it"));
         
         Credential credential = new Credential(user.getId(), passwordHash);
 

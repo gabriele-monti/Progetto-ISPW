@@ -15,7 +15,7 @@ import it.foodmood.persistence.exception.PersistenceException;
 
 public class JdbcDishDao implements DishDao {
         
-    private static final String CALL_SAVE_DISH = "{CALL save_dish(?,?,?,?,?,?,?)}";
+    private static final String CALL_SAVE_DISH = "{CALL insert_dish(?,?,?,?,?,?,?)}";
     private static final String CALL_GET_DISH_BY_ID = "{CALL get_dish_by_id(?)}";
     private static final String CALL_GET_ALL_DISHES = "{CALL get_all_dishes()}";
     private static final String CALL_GET_DISHES_BY_COURSE = "{CALL get_dishes_by_course_type(?)}";
@@ -33,7 +33,7 @@ public class JdbcDishDao implements DishDao {
     }
 
     @Override
-    public void save(Dish dish){
+    public void insert(Dish dish){
         try {
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try (CallableStatement cs = conn.prepareCall(CALL_SAVE_DISH)){

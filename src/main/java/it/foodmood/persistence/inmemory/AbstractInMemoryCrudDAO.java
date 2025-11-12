@@ -14,7 +14,7 @@ public abstract class AbstractInMemoryCrudDao <T, I> implements CrudDao<T,I> {
     protected abstract I getId(T entity);
 
     @Override
-    public void save(T entity){
+    public void insert(T entity){
         Objects.requireNonNull(entity, "L'entità non può essere nulla.");
         I id = Objects.requireNonNull(getId(entity), "L'ID non può essere nullo.");
         storage.put(id, entity);

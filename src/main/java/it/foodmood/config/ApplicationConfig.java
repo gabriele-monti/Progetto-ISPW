@@ -15,13 +15,20 @@ public final class ApplicationConfig implements AppConfig{
     }
 
     public static ApplicationConfig fromClasspath(PropertiesLoader loader){
-        return new ApplicationConfig(loader.load("database.properties"));
+        return new ApplicationConfig(loader.load("application.properties"));
     }
 
     @Override
     public PersistenceMode getPersistenceMode(){
-        String mode = properties.getProperty(Keys.MODE, "demo").trim();
-        return PersistenceMode.fromValue(mode);
+        String persistenceMode = properties.getProperty(Keys.PERSISTENCE_MODE, "demo").trim();
+        return PersistenceMode.fromValue(persistenceMode);
+    }
+
+
+    @Override
+    public UserMode getUserMode(){
+        String userMode = properties.getProperty(Keys.USER_MODE, "customer").trim();
+        return UserMode.fromValue(userMode);
     }
 
     private String require(String key){

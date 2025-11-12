@@ -18,7 +18,7 @@ public class InMemoryDishDao implements DishDao {
     }
 
     @Override
-    public void save(Dish entity){
+    public void insert(Dish entity){
         //Timplementare
         throw new UnsupportedOperationException("Non ancora imlementato");
     }

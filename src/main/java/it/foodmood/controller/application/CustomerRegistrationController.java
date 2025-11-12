@@ -5,7 +5,6 @@ import java.util.Arrays;
 import it.foodmood.bean.RegistrationBean;
 import it.foodmood.domain.model.Credential;
 import it.foodmood.domain.model.Customer;
-import it.foodmood.domain.model.User;
 import it.foodmood.domain.value.Email;
 import it.foodmood.domain.value.Person;
 import it.foodmood.exception.RegistrationException;
@@ -14,7 +13,7 @@ import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.UserDao;
 import it.foodmood.utils.security.PasswordHasher;
 
-public class RegisterController {
+public class CustomerRegistrationController {
     
     private final UserDao userDao = DaoFactory.getInstance().getUserDao();
     private final CredentialDao credentialDao = DaoFactory.getInstance().getCredentialDao();
@@ -30,25 +29,34 @@ public class RegisterController {
 
             // 2) Creazione del dominio
             Person person = new Person(registrationBean.getName(), registrationBean.getSurname());
-            User newUser = new Customer(person, email);
+            Customer newUser = new Customer(person, email);
 
-            // 3) Hash della password
+            // 3) Verifica delle password
+            if(!Arrays.equals(registrationBean.getPassword(), registrationBean.getConfirmPassword())){
+                throw new RegistrationException("Le password non coincidono.");
+            }
+
+            // 4) Hash della password
             String hashedPassword = passwordHasher.hash(registrationBean.getPassword());
 
-            // 4) Creazione credenziali
+            // 5) Creazione credenziali
             Credential credential = new Credential(newUser.getId(), hashedPassword);
 
-            // 5) Salvataggio in persistenza
-            userDao.save(newUser);
+            // 6) Salvataggio in persistenza
+            userDao.insert(newUser);
             credentialDao.saveCredential(credential);
 
         } catch (Exception e){
             throw new RegistrationException("Errore durante la registrazione.");
         } finally {
-            // 7 Pulizia della password in memoria
-            char[] passw = registrationBean.getPassword();
-            if(passw != null){
-                Arrays.fill(passw, '\0');
+            // 8 Pulizia della password in memoria
+            char[] password = registrationBean.getPassword();
+            char[] confirmPassword = registrationBean.getPassword();
+            if(password != null){
+                Arrays.fill(password, '\0');
+            }
+            if(confirmPassword != null){
+                Arrays.fill(confirmPassword, '\0');
             }
         }
     }
