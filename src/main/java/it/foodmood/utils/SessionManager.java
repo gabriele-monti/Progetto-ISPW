@@ -5,7 +5,6 @@ import it.foodmood.domain.model.User;
 public final class SessionManager {
 
     private static SessionManager instance;
-
     private Session currentSession;
 
     private SessionManager(){

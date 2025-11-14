@@ -24,7 +24,6 @@ public final class ApplicationConfig implements AppConfig{
         return PersistenceMode.fromValue(persistenceMode);
     }
 
-
     @Override
     public UserMode getUserMode(){
         String userMode = properties.getProperty(Keys.USER_MODE, "customer").trim();

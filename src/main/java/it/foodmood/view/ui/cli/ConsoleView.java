@@ -6,7 +6,7 @@ import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
 import it.foodmood.view.ui.theme.UiTheme;
 
-public abstract class ConsoleView implements CliUserInterface{
+public class ConsoleView implements CliUserInterface{
     private final InputReader in;
     private final OutputWriter out;
     private final UiTheme theme;

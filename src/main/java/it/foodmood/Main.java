@@ -6,6 +6,7 @@ import it.foodmood.config.PersistenceConfig;
 import it.foodmood.config.PersistenceMode;
 import it.foodmood.config.PersistenceSettings;
 import it.foodmood.config.StartupEnvironment;
+import it.foodmood.config.UserMode;
 import it.foodmood.infrastructure.bootstrap.ApplicationBootstrap;
 import it.foodmood.infrastructure.bootstrap.BootstrapFactory;
 import it.foodmood.infrastructure.bootstrap.UiMode;
@@ -16,27 +17,30 @@ import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.infrastructure.util.ConnectionVerifier;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.setup.InteractiveSetup;
+import it.foodmood.view.ui.LoginView;
+import it.foodmood.view.ui.UiFactory;
 import it.foodmood.view.ui.cli.ConsoleView;
-import it.foodmood.view.ui.theme.AnsiUitheme;
+import it.foodmood.view.ui.theme.AnsiUiTheme;
 
 public final class Main {
     
     public static void main(String[] args) {
+        InputReader in = ConsoleInputReader.getInstance();
         OutputWriter out = new ConsoleOutputWriter();
+        AnsiUiTheme theme = new AnsiUiTheme();
 
         try{
             // 1. Configurazione
             ApplicationConfig fileConfig = ApplicationConfig.fromClasspath();
+            UserMode userMode = fileConfig.getUserMode();
 
             // 2. Scelta runtime
             boolean interactive = (args == null || args.length == 0);
             StartupEnvironment startup;
 
             if(interactive) {
-                try (InputReader in = new ConsoleInputReader()) {
-                    ConsoleView ui = new ConsoleView(in, out, new AnsiUitheme());
-                    startup = InteractiveSetup.askUser(in, out, ui);
-                }
+                ConsoleView ui = new ConsoleView(in, out, theme);
+                startup = InteractiveSetup.askUser(in, out, ui);
             } else {
                 String cliArg = (args.length > 0) ? args[0] : null;
                 String envArg = System.getenv("FOODMOOD_UI");
@@ -44,11 +48,10 @@ public final class Main {
 
                 PersistenceMode persistenceMode = fileConfig.getPersistenceMode();
 
-                startup = new StartupEnvironment.Builder()
-                              .uiMode(uiMode)
-                              .persistenceMode(persistenceMode)
-                              .build();
+                startup = new StartupEnvironment(uiMode, persistenceMode);
             }
+
+            UiFactory.init(startup.getUiMode(), userMode);
 
             // 3. Inizializzazione della persistenza
             PersistenceSettings settings;
@@ -86,6 +89,9 @@ public final class Main {
 
             // 5. Costruzione dell'ambiente dell'applicazione
             ApplicationEnvironment environment = new ApplicationEnvironment(fileConfig, daoFactory);
+
+            LoginView loginView = UiFactory.getInstance().createLoginView();
+            loginView.show();
 
             // 6. Bootstrap e avvio
             BootstrapFactory bootstrapFactory = new BootstrapFactory(out);

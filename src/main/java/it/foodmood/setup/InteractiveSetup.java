@@ -5,18 +5,18 @@ import it.foodmood.config.StartupEnvironment;
 import it.foodmood.infrastructure.bootstrap.UiMode;
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
-import it.foodmood.view.ui.core.UserInterface;
+import it.foodmood.view.ui.cli.CliUserInterface;
 
 public final class InteractiveSetup {
 
     private InteractiveSetup(){}
 
-    public static StartupEnvironment askUser(InputReader in, OutputWriter out, UserInterface ui){
+    public static StartupEnvironment askUser(InputReader in, OutputWriter out, CliUserInterface ui){
         ui.clearScreen();
         UiMode uiMode = askUiMode(in, out);
         PersistenceMode pm = askPersistenceMode(in, out);
 
-        return new StartupEnvironment.Builder().uiMode(uiMode).persistenceMode(pm).build();
+        return new StartupEnvironment(uiMode, pm);
     }
 
     private static UiMode askUiMode(InputReader in, OutputWriter out){

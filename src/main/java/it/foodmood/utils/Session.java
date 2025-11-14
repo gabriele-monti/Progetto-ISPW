@@ -10,7 +10,6 @@ import it.foodmood.domain.value.Role;
 public class Session {
 
     private final UUID userId; 
-    private final String token;
     private final Role role;
     private Instant expiryTime;
 
@@ -19,16 +18,11 @@ public class Session {
     public Session(UUID userId, Role role){
         this.userId = Objects.requireNonNull(userId);
         this.role = Objects.requireNonNull(role);
-        this.token = UUID.randomUUID().toString();
         this.expiryTime = Instant.now().plus(DURATION);
     }
 
     public UUID getUserId(){
         return userId;
-    }
-
-    public String getToken(){
-        return token;
     }
 
     public Role getRole(){

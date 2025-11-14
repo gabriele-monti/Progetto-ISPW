@@ -6,7 +6,7 @@ public final class StartupEnvironment {
     private final UiMode uiMode;
     private final PersistenceMode persistenceMode;
 
-    private StartupEnvironment(UiMode uiMode, PersistenceMode persistenceMode){
+    public StartupEnvironment(UiMode uiMode, PersistenceMode persistenceMode){
         if(uiMode == null || persistenceMode == null){
             throw new IllegalArgumentException("Interfaccia utente e modalità di persistenza obbligatori.");
         }

@@ -2,7 +2,6 @@ package it.foodmood.controller.application;
 
 import java.util.Arrays;
 
-import it.foodmood.bean.AuthenticationBean;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.config.UserMode;
 import it.foodmood.domain.model.Credential;
@@ -12,7 +11,6 @@ import it.foodmood.exception.AuthenticationException;
 import it.foodmood.persistence.dao.CredentialDao;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.UserDao;
-import it.foodmood.utils.Session;
 import it.foodmood.utils.SessionManager;
 import it.foodmood.utils.security.PasswordHasher;
 
@@ -29,7 +27,7 @@ public class LoginController {
         this.passwordHasher = new PasswordHasher();
     }
 
-    public AuthenticationBean login(LoginBean loginBean, UserMode mode) throws AuthenticationException{
+    public void login(LoginBean loginBean, UserMode mode) throws AuthenticationException{
         
         // 1) Verifichiamo l'esistenza dell'utente
         Email email = new Email(loginBean.getEmail());
@@ -62,7 +60,6 @@ public class LoginController {
         }
 
         // 5) Creo la sessione per l'utente
-        Session session = SessionManager.getInstance().createSession(user);
-        return new AuthenticationBean(session.getToken(), user.getRole());
+        SessionManager.getInstance().createSession(user);
     }
 }

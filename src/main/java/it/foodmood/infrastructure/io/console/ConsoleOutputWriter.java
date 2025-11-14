@@ -12,4 +12,23 @@ public final class ConsoleOutputWriter implements OutputWriter {
     public void println(String s){
         System.out.println(s);
     }
+
+    @Override
+    public void displayTitle(String title) {
+        final int WIDTH = 80;
+
+        String text = title.toUpperCase();
+        int padding = (WIDTH - text.length()) / 2;
+
+        String leftpaces = " ".repeat(Math.max(padding, 0));
+        String titleRow = String.format("║%s%s%s║", leftpaces,text, " ".repeat(WIDTH - leftpaces.length() - text.length()));
+
+        String topBorder = "╔" + "═".repeat(WIDTH) + "╗";
+        String bottomBorder = "╚" + "═".repeat(WIDTH) + "╝";
+
+        System.out.println(topBorder);
+        System.out.println(titleRow);
+        System.out.println(bottomBorder);
+    }
+
 }

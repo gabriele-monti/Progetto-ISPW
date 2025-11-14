@@ -13,11 +13,14 @@ public final class InMemoryDaoFactory extends DaoFactory {
     
     @Override
     public UserDao getUserDao(){
-        return InMemoryUserDao.getInstance();
+        throw new UnsupportedOperationException("Non ancora implementato");
+        
+        // return InMemoryUserDao.getInstance();
     }   
 
     @Override
     public CredentialDao getCredentialDao(){
-        return InMemoryCredentialDao.getInstance();
+        throw new UnsupportedOperationException("Non ancora implementato");
+        // return InMemoryCredentialDao.getInstance();
     }   
 }

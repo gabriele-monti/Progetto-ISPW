@@ -1,6 +1,6 @@
 package it.foodmood.view.ui.theme;
 
-public final class AnsiUitheme implements UiTheme {
+public final class AnsiUiTheme implements UiTheme {
 
     private static final String RESET = "\u001B[0m";
     private static final String ERROR = "\u001B[31m";
@@ -8,6 +8,8 @@ public final class AnsiUitheme implements UiTheme {
     private static final String SUCCESS = "\u001B[32m";
     private static final String INFO = "\u001B[37m";
     private static final String BOLD = "\u001B[1m";
+
+    public AnsiUiTheme(){}
 
     @Override
     public String error(String text){
