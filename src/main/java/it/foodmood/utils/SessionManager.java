@@ -1,16 +1,15 @@
 package it.foodmood.utils;
 
-import java.util.HashMap;
-
 import it.foodmood.domain.model.User;
 
 public final class SessionManager {
 
     private static SessionManager instance;
-    private final HashMap<String, Session> sessions;
+
+    private Session currentSession;
 
     private SessionManager(){
-        this.sessions = new HashMap <>();
+        // costruttore vuoto
     }
 
     public static synchronized SessionManager getInstance(){
@@ -21,37 +20,27 @@ public final class SessionManager {
     }
 
     public Session createSession(User user){
-        Session session = new Session(user.getId() ,user.getRole());
-        sessions.put(session.getToken(), session);
-        return session;
+        this.currentSession = new Session(user.getId() ,user.getRole());
+        return currentSession;
     }
 
-    public Session getSessionByToken(String token) {
-        Session session = sessions.get(token);
-        if(session == null || session.isExpired()){
-            sessions.remove(token);
+    public Session getCurrentSession(){
+        if(currentSession == null){
             return null;
         }
-        // Rinnovo la sessione solo in caso di attività reale
-        session.refresh();
-        return session;
-    }
-
-    public boolean validToken(String token) {
-        Session session = sessions.get(token);
-        if(session == null || session.isExpired()){
-            sessions.remove(token);
-            return false;
+        if(currentSession.isExpired()){
+            currentSession = null;
+            return null;
         }
-        // verifica solo se il token è valido, senza nessun rinnovo
-        return true;
+        currentSession.refresh();
+        return currentSession;
     }
 
-    public void terminateSession(String token) {
-        sessions.remove(token);
+    public boolean isUserLoggedIn(){
+        return getCurrentSession() != null;
     }
 
-    public void cleanupExpiredSessions() {
-        sessions.values().removeIf(Session::isExpired);
+    public void terminateCurrentSession() {
+        currentSession = null;
     }
 }

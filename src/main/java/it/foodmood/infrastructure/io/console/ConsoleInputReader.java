@@ -1,20 +1,25 @@
 package it.foodmood.infrastructure.io.console;
 
-import java.util.Objects;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import it.foodmood.infrastructure.io.InputReader;
 
 public final class ConsoleInputReader implements InputReader {
-    private final Scanner scanner;
+    private static ConsoleInputReader instance;
+    private final BufferedReader bufferedReader;
     private boolean closed;
 
-    public ConsoleInputReader(){
-        this(new Scanner(System.in));
+    private ConsoleInputReader(){
+        this.bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public ConsoleInputReader(Scanner scanner){
-        this.scanner = Objects.requireNonNull(scanner, "scanner");
+    public static synchronized ConsoleInputReader getInstance(){
+        if(instance == null){
+            instance = new ConsoleInputReader();
+        }
+        return instance;
     }
 
     @Override
@@ -22,11 +27,19 @@ public final class ConsoleInputReader implements InputReader {
         if(closed){
             throw new IllegalStateException("Input da tastiera chiuso.");
         }
-        return scanner.nextLine();
+        try{
+            return bufferedReader.readLine();
+        } catch (IOException e){
+            throw new RuntimeException("Errore nella lettura da console", e);
+        }
     }
 
     @Override
     public void close(){
         closed = true;
+    }
+
+    public boolean isClosed(){
+        return closed;
     }
 }

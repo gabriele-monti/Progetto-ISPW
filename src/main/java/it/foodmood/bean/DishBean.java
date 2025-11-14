@@ -123,7 +123,7 @@ public class DishBean {
             URI.create(uri);
             return true;
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Formato URI non valido.", e);
+            return false;
         }
     }
 }

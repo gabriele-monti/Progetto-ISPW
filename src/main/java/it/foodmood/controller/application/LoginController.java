@@ -19,12 +19,17 @@ import it.foodmood.utils.security.PasswordHasher;
 
 public class LoginController {
 
-    private final UserDao userDao = DaoFactory.getInstance().getUserDao();
-    private final CredentialDao credentialDao = DaoFactory.getInstance().getCredentialDao();
-    private final PasswordHasher passwordHasher = new PasswordHasher();
+    private final UserDao userDao;
+    private final CredentialDao credentialDao;
+    private final PasswordHasher passwordHasher;
 
+    public LoginController(){
+        this.userDao = DaoFactory.getInstance().getUserDao();
+        this.credentialDao = DaoFactory.getInstance().getCredentialDao();
+        this.passwordHasher = new PasswordHasher();
+    }
 
-    public AuthenticationBean loginUser(LoginBean loginBean, UserMode mode) throws AuthenticationException{
+    public AuthenticationBean login(LoginBean loginBean, UserMode mode) throws AuthenticationException{
         
         // 1) Verifichiamo l'esistenza dell'utente
         Email email = new Email(loginBean.getEmail());

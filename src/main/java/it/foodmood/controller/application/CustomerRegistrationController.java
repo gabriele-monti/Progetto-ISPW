@@ -47,11 +47,11 @@ public class CustomerRegistrationController {
             credentialDao.saveCredential(credential);
 
         } catch (Exception e){
-            throw new RegistrationException("Errore durante la registrazione.");
+            throw new RegistrationException("Errore durante la registrazione: ", e);
         } finally {
             // 8 Pulizia della password in memoria
             char[] password = registrationBean.getPassword();
-            char[] confirmPassword = registrationBean.getPassword();
+            char[] confirmPassword = registrationBean.getConfirmPassword();
             if(password != null){
                 Arrays.fill(password, '\0');
             }

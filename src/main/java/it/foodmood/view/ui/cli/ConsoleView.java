@@ -1,16 +1,16 @@
-package it.foodmood.ui.cli;
+package it.foodmood.view.ui.cli;
 
 import java.util.Objects;
 
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
-import it.foodmood.ui.core.UserInterface;
-import it.foodmood.ui.theme.UiTheme;
+import it.foodmood.view.ui.theme.UiTheme;
 
-public final class ConsoleView implements UserInterface{
+public abstract class ConsoleView implements CliUserInterface{
     private final InputReader in;
     private final OutputWriter out;
     private final UiTheme theme;
+    private final String CLEAR_CONSOLE = "\033[H\033[J";
 
     public ConsoleView(InputReader in, OutputWriter out, UiTheme theme){
         this.in = Objects.requireNonNull(in);
@@ -48,17 +48,16 @@ public final class ConsoleView implements UserInterface{
         out.println(theme.bold(title));
     }
 
-   @Override
-   public void waitForEnter(String prompt){
+    @Override
+    public void waitForEnter(String prompt){
         String message = (prompt == null || prompt.isBlank()) ? "Premi INVIO per continuare" : prompt;
 
         out.print(theme.info(message));
         in.readLine();
-   }
+    }
 
-   @Override
-   public void clearScreen(){
-       final String CLEAR_CONSOLE = "\033[H\033[J";
-       out.print(CLEAR_CONSOLE);
-   }
+    @Override
+    public void clearScreen(){
+        out.print(CLEAR_CONSOLE);
+    }
 }

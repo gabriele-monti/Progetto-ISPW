@@ -38,17 +38,17 @@ public class RegistrationBean {
     }
 
     public void setName(String name){
-        this.name = Objects.requireNonNull(name, "Il nome non deve essere vuoto").trim();
-        if(this.name.isEmpty()){
+        if(name == null || name.isBlank()){
             throw new IllegalArgumentException("Il nome non deve essere vuoto");
         }
+        this.name = name.trim();
     }
 
     public void setSurname(String surname){
-        this.surname = Objects.requireNonNull(surname, "Il cognome non deve essere vuoto").trim();
-        if(this.surname.isEmpty()){
+        if(surname == null || surname.isBlank()){
             throw new IllegalArgumentException("Il cognome non deve essere vuoto");
         }
+        this.surname = surname.trim();
     }
 
     public void setEmail(String email){

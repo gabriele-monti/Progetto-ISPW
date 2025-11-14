@@ -5,7 +5,7 @@ import it.foodmood.config.StartupEnvironment;
 import it.foodmood.infrastructure.bootstrap.UiMode;
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
-import it.foodmood.ui.core.UserInterface;
+import it.foodmood.view.ui.core.UserInterface;
 
 public final class InteractiveSetup {
 

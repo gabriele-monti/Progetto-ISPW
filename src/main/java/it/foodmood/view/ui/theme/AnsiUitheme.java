@@ -1,4 +1,4 @@
-package it.foodmood.ui.theme;
+package it.foodmood.view.ui.theme;
 
 public final class AnsiUitheme implements UiTheme {
 

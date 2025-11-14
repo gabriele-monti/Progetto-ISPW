@@ -16,8 +16,8 @@ import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.infrastructure.util.ConnectionVerifier;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.setup.InteractiveSetup;
-import it.foodmood.ui.cli.ConsoleView;
-import it.foodmood.ui.theme.AnsiUitheme;
+import it.foodmood.view.ui.cli.ConsoleView;
+import it.foodmood.view.ui.theme.AnsiUitheme;
 
 public final class Main {
     
