@@ -19,7 +19,7 @@ public class CustomerRegistrationController {
     private final CredentialDao credentialDao = DaoFactory.getInstance().getCredentialDao();
     private final PasswordHasher passwordHasher = new PasswordHasher();
 
-    public void registerUser(RegistrationBean registrationBean) throws RegistrationException{
+    public void registration(RegistrationBean registrationBean) throws RegistrationException{
         try{
             // 1) Verifico se l'email è già registrata
             Email email = new Email(registrationBean.getEmail());
@@ -46,8 +46,10 @@ public class CustomerRegistrationController {
             userDao.insert(newUser);
             credentialDao.saveCredential(credential);
 
-        } catch (Exception e){
-            throw new RegistrationException("Errore durante la registrazione: ", e);
+        } catch (RegistrationException e){
+            throw e;
+        }catch (Exception e){
+            e.printStackTrace();
         } finally {
             // 8 Pulizia della password in memoria
             char[] password = registrationBean.getPassword();

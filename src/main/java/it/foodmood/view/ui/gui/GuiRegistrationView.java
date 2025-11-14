@@ -1,12 +1,12 @@
 package it.foodmood.view.ui.gui;
 
-import it.foodmood.view.boundary.LoginBoundary;
-import it.foodmood.view.ui.LoginView;
+import it.foodmood.view.boundary.RegistrationBoundary;
+import it.foodmood.view.ui.RegistrationView;
 
-public class GuiLoginView implements LoginView {
-    private final LoginBoundary boundary;
+public class GuiRegistrationView implements RegistrationView {
+    private final RegistrationBoundary boundary;
 
-    public GuiLoginView(LoginBoundary boundary){
+    public GuiRegistrationView(RegistrationBoundary boundary){
         this.boundary = boundary;
     }
 
@@ -27,7 +27,7 @@ public class GuiLoginView implements LoginView {
 
 
     @Override
-    public void onLoginSuccess(){
+    public void onRegistrationSuccess(){
         throw new UnsupportedOperationException("GUI LOGIN SUCCESS");
     }
 }

@@ -52,7 +52,7 @@ public class CliLoginView implements LoginView {
 
     @Override
     public void displaySuccess(String message){
-        out.println(theme.error("Errore: " + message));
+        out.println(theme.success(message));
     }
 
     @Override

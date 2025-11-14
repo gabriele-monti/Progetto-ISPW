@@ -12,6 +12,7 @@ public abstract class UiFactory {
     // protected UiFactory() {}
 
     public abstract LoginView createLoginView();
+    public abstract RegistrationView createRegistrationView();
 
         public static synchronized void init(UiMode uiMode, UserMode userMode){
         if(instance != null) return; 

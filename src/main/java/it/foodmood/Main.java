@@ -17,6 +17,7 @@ import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.infrastructure.util.ConnectionVerifier;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.setup.InteractiveSetup;
+import it.foodmood.view.ui.RegistrationView;
 import it.foodmood.view.ui.LoginView;
 import it.foodmood.view.ui.UiFactory;
 import it.foodmood.view.ui.cli.ConsoleView;
@@ -90,7 +91,16 @@ public final class Main {
             // 5. Costruzione dell'ambiente dell'applicazione
             ApplicationEnvironment environment = new ApplicationEnvironment(fileConfig, daoFactory);
 
+            RegistrationView registrationView = UiFactory.getInstance().createRegistrationView();
             LoginView loginView = UiFactory.getInstance().createLoginView();
+
+            out.print("Hai già un account? (s/n): ");
+            String response = in.readLine();
+
+            if("n".equalsIgnoreCase(response.trim())){
+                registrationView.show();
+            }
+
             loginView.show();
 
             // 6. Bootstrap e avvio

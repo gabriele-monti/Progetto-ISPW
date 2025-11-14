@@ -22,8 +22,12 @@ public class LoginBean {
 
     // validazione sintattica
     public void setEmail(String email){
-        if(Validator.isValidEmail(email)){
-            this.email = email.trim().toLowerCase();
+        if(email == null){
+            throw new IllegalArgumentException("Email non valida");
+        }
+        String cleaned = email.trim();
+        if(Validator.isValidEmail(cleaned)){
+            this.email = cleaned.toLowerCase();
         } else {
             throw new IllegalArgumentException("Email non valida");
         }
