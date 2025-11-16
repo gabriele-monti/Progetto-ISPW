@@ -1,8 +1,6 @@
 package it.foodmood.view.ui.gui;
 
 import it.foodmood.config.UserMode;
-import it.foodmood.view.boundary.LoginBoundary;
-import it.foodmood.view.boundary.RegistrationBoundary;
 import it.foodmood.view.ui.LoginView;
 import it.foodmood.view.ui.RegistrationView;
 import it.foodmood.view.ui.UiFactory;
@@ -17,13 +15,11 @@ public final class GuiFactory extends UiFactory{
     
     @Override
     public LoginView createLoginView(){
-        LoginBoundary boundary = new LoginBoundary(userMode);
-        return new GuiLoginView(boundary);
+        throw new UnsupportedOperationException("GUI non ancora implementata");
     }  
 
     @Override
     public RegistrationView createRegistrationView(){
-        RegistrationBoundary boundary = new RegistrationBoundary();
-        return new GuiRegistrationView(boundary);
+        throw new UnsupportedOperationException("GUI non ancora implementata");
     }  
 }

@@ -5,14 +5,13 @@ import it.foodmood.config.StartupEnvironment;
 import it.foodmood.infrastructure.bootstrap.UiMode;
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
-import it.foodmood.view.ui.cli.CliUserInterface;
 
 public final class InteractiveSetup {
 
     private InteractiveSetup(){}
 
-    public static StartupEnvironment askUser(InputReader in, OutputWriter out, CliUserInterface ui){
-        ui.clearScreen();
+    public static StartupEnvironment askUser(InputReader in, OutputWriter out){
+        clearScreen(out);
         UiMode uiMode = askUiMode(in, out);
         PersistenceMode pm = askPersistenceMode(in, out);
 
@@ -44,6 +43,10 @@ public final class InteractiveSetup {
             if("2".equals(input)) return PersistenceMode.FULL;
             out.println("Scelta non valida.\n");
         }
+    }
+
+    private static void clearScreen(OutputWriter out){
+        out.print("\033[H\033[2J");
     }
 
 }

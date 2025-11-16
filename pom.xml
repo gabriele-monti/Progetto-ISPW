@@ -11,7 +11,7 @@
 
   <properties>
     <maven.compiler.release>23</maven.compiler.release>
-    <javafx.version>23</javafx.version>
+    <javafx.version>23.0.1</javafx.version>
     <app.name>FoodMood</app.name>
     <main.class>it.foodmood.Main</main.class>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
