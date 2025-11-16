@@ -55,7 +55,7 @@
       </VBox>
       <AnchorPane GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="50.0" layoutY="50.0" maxWidth="550.0" minWidth="400.0" spacing="20.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="60.0">
+            <VBox alignment="TOP_CENTER" layoutX="50.0" layoutY="50.0" maxWidth="550.0" minWidth="400.0" spacing="20.0" styleClass="vbox-login" stylesheets="@../css/login.css" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="60.0">
                <children>
                   <VBox alignment="CENTER" spacing="10.0" VBox.vgrow="NEVER">
                      <children>
@@ -88,7 +88,7 @@
                                     <Font name="Arial Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <HBox alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0">
+                              <HBox alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0" styleClass="credentials">
                                  <children>
                                     <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="50.0">
                                        <children>
@@ -118,7 +118,7 @@
                                     <Font name="Arial Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <HBox alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0">
+                              <HBox alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0" styleClass="credentials">
                                  <children>
                                     <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="50.0">
                                        <children>
@@ -148,7 +148,7 @@
                                     </StackPane>
                                     <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="50.0">
                                        <children>
-                                          <ImageView fx:id="ivToggle" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="ivToggle" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onTogglePasswordClicked" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../icons/eye_hidden.png" />
                                              </image>
@@ -195,7 +195,7 @@
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Button fx:id="btnCreateAccount" maxWidth="1.7976931348623157E308" minHeight="50.0" prefHeight="50.0" text="Crea nuovo account" textAlignment="CENTER">
+                        <Button fx:id="btnCreateAccount" maxWidth="1.7976931348623157E308" minHeight="50.0" prefHeight="50.0" styleClass="registerBtn" text="Crea nuovo account" textAlignment="CENTER">
                            <font>
                               <Font name="Arial Bold" size="20.0" />
                            </font>
