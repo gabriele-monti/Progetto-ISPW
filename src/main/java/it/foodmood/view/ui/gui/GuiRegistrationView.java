@@ -51,7 +51,8 @@ public class GuiRegistrationView implements RegistrationView {
     private TextField tfSurname;
 
     private RegistrationBoundary boundary;
-    private GuiNavigator navigator;
+
+    private GuiFactory factory;
 
     private boolean passwordVisible = false;
     private boolean confirmPasswordVisible = false;
@@ -64,8 +65,8 @@ public class GuiRegistrationView implements RegistrationView {
         this.boundary = boundary;
     }
 
-    public void setNavigator(GuiNavigator navigator){
-        this.navigator = navigator;
+    public void setFactory(GuiFactory factory){
+        this.factory = factory;
     }
 
     @FXML
@@ -156,9 +157,7 @@ public class GuiRegistrationView implements RegistrationView {
 
     @FXML
     private void onBackToLoginClicked(){
-        if(navigator != null){
-            navigator.goTo(GuiPages.LOGIN);
-        }
+        factory.showLoginView();
     }
 
 
@@ -180,6 +179,6 @@ public class GuiRegistrationView implements RegistrationView {
 
     @Override
     public void onRegistrationSuccess(){
-        navigator.goTo(GuiPages.LOGIN);
+        factory.showLoginView();
     }
 }

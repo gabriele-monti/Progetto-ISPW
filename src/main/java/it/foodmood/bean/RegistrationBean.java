@@ -1,7 +1,6 @@
 package it.foodmood.bean;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 import it.foodmood.utils.Validator;
 
@@ -64,16 +63,21 @@ public class RegistrationBean {
     }
 
     public void setPassword(char[] password){
+        if(password == null || password.length == 0){
+            throw new IllegalArgumentException("La password è obbligatoria");
+        }
         if(Validator.isValidPassword(password)){
             this.password = password; 
         } else {
             Arrays.fill(password, '\0');
-            throw new IllegalArgumentException("Password non valida.");
+            throw new IllegalArgumentException("La password deve contenere almeno 8 caratteri, una lettera maiuscola, una minuscola e un numero");
         }
     }
 
     public void setConfirmPassword(char[] confirmPassword){
-        Objects.requireNonNull(confirmPassword, "Conferma password obbligatoria.");
+        if(confirmPassword == null || confirmPassword.length == 0){
+            throw new IllegalArgumentException("La conferma password è obbligatoria");
+        }
         this.confirmPassword = confirmPassword;
     }
 }

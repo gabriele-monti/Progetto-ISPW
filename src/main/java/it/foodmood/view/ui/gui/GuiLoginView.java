@@ -36,7 +36,8 @@ public class GuiLoginView implements LoginView {
     private TextField tfPasswordVisible;
 
     private LoginBoundary boundary;
-    private GuiNavigator navigator;
+
+    private GuiFactory factory;
 
     private boolean passwordVisible = false;
 
@@ -48,8 +49,8 @@ public class GuiLoginView implements LoginView {
         this.boundary = boundary;
     }
 
-    public void setNavigator(GuiNavigator navigator){
-        this.navigator = navigator;
+    public void setFactory(GuiFactory factory){
+        this.factory = factory;
     }
 
     @FXML
@@ -139,6 +140,6 @@ public class GuiLoginView implements LoginView {
 
     @FXML
     private void onCreateAccountClicked(){
-        navigator.goTo(GuiPages.REGISTRATION);
+        factory.showRegistrationView();
     }
 }

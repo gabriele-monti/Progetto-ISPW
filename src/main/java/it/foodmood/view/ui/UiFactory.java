@@ -3,7 +3,7 @@ package it.foodmood.view.ui;
 import it.foodmood.config.UserMode;
 import it.foodmood.view.ui.cli.CliFactory;
 import it.foodmood.view.ui.gui.GuiFactory;
-import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 public abstract class UiFactory {
     private static UiFactory instance;
@@ -16,9 +16,9 @@ public abstract class UiFactory {
         instance = new CliFactory(userMode);
     }
 
-    public static synchronized void initGui(Stage stage, UserMode userMode){
+    public static synchronized void initGui(Scene scene, UserMode userMode){
         if(instance != null) return; 
-        instance = new GuiFactory(stage, userMode);
+        instance = new GuiFactory(scene, userMode);
     }
 
     public static synchronized UiFactory getInstance(){

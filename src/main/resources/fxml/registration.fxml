@@ -105,9 +105,9 @@
                                                 <Font name="Arial Bold" size="14.0" />
                                              </font>
                                           </Label>
-                                          <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="50.0" styleClass="credentials">
+                                          <HBox alignment="CENTER_LEFT" minWidth="280.0" prefHeight="50.0" styleClass="credentials">
                                              <children>
-                                                <TextField fx:id="tfName" maxWidth="1.7976931348623157E308" minHeight="50.0" prefHeight="50.0" promptText="Inserisci nome" styleClass="text-field" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="tfName" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="-Infinity" prefHeight="50.0" promptText="Inserisci nome" styleClass="text-field" HBox.hgrow="ALWAYS">
                                                    <cursor>
                                                       <Cursor fx:constant="TEXT" />
                                                    </cursor>
@@ -129,9 +129,9 @@
                                                 <Font name="Arial Bold" size="14.0" />
                                              </font>
                                           </Label>
-                                          <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="50.0" styleClass="credentials">
+                                          <HBox alignment="CENTER_LEFT" minWidth="280.0" prefHeight="50.0" styleClass="credentials">
                                              <children>
-                                                <TextField fx:id="tfSurname" maxWidth="1.7976931348623157E308" minHeight="50.0" prefHeight="50.0" promptText="Inserisci cognome" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="tfSurname" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="-Infinity" prefHeight="50.0" promptText="Inserisci cognome" HBox.hgrow="ALWAYS">
                                                    <cursor>
                                                       <Cursor fx:constant="TEXT" />
                                                    </cursor>
