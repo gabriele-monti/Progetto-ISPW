@@ -1,30 +1,29 @@
 package it.foodmood.view.ui;
 
 import it.foodmood.config.UserMode;
-import it.foodmood.infrastructure.bootstrap.UiMode;
 import it.foodmood.view.ui.cli.CliFactory;
 import it.foodmood.view.ui.gui.GuiFactory;
-
+import javafx.stage.Stage;
 
 public abstract class UiFactory {
     private static UiFactory instance;
 
-    // protected UiFactory() {}
-
     public abstract LoginView createLoginView();
     public abstract RegistrationView createRegistrationView();
 
-        public static synchronized void init(UiMode uiMode, UserMode userMode){
+    public static synchronized void initCli(UserMode userMode){
         if(instance != null) return; 
-        instance = switch(uiMode){
-            case CLI -> new CliFactory(userMode);
-            case GUI -> new GuiFactory(userMode);
-        };
+        instance = new CliFactory(userMode);
+    }
+
+    public static synchronized void initGui(Stage stage, UserMode userMode){
+        if(instance != null) return; 
+        instance = new GuiFactory(stage, userMode);
     }
 
     public static synchronized UiFactory getInstance(){
         if(instance == null){
-            throw new IllegalStateException("UiFactory non inizializzata. Chiama init(uiMode) prima.");
+            throw new IllegalStateException("UiFactory non inizializzata.");
         }
         return instance;
     }

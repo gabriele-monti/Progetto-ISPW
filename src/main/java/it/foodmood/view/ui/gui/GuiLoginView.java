@@ -36,6 +36,7 @@ public class GuiLoginView implements LoginView {
     private TextField tfPasswordVisible;
 
     private LoginBoundary boundary;
+    private GuiNavigator navigator;
 
     private boolean passwordVisible = false;
 
@@ -45,6 +46,10 @@ public class GuiLoginView implements LoginView {
 
     public void setBoundary(LoginBoundary boundary){
         this.boundary = boundary;
+    }
+
+    public void setNavigator(GuiNavigator navigator){
+        this.navigator = navigator;
     }
 
     @FXML
@@ -130,5 +135,10 @@ public class GuiLoginView implements LoginView {
     public void onLoginSuccess(){
         // fai qualcosa
         errorMessageLabel.setText("LOGIN RIUSCITO");
+    }
+
+    @FXML
+    private void onCreateAccountClicked(){
+        navigator.goTo(GuiPages.REGISTRATION);
     }
 }

@@ -1,7 +1,8 @@
 package it.foodmood.view.ui.gui;
 
 public enum GuiPages {
-    LOGIN("/fxml/login.fxml");
+    LOGIN("/fxml/login.fxml"),
+    REGISTRATION("/fxml/registration.fxml");
 
     private final String path;
 

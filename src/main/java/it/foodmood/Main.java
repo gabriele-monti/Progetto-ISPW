@@ -5,7 +5,6 @@ import it.foodmood.config.ApplicationEnvironment;
 import it.foodmood.config.PersistenceConfig;
 import it.foodmood.config.StartupConfigurator;
 import it.foodmood.config.StartupEnvironment;
-import it.foodmood.config.UserMode;
 import it.foodmood.infrastructure.bootstrap.ApplicationBootstrap;
 import it.foodmood.infrastructure.bootstrap.BootstrapFactory;
 import it.foodmood.infrastructure.bootstrap.UiMode;
@@ -16,7 +15,6 @@ import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.infrastructure.util.ConnectionVerifier;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.setup.InteractiveSetup;
-import it.foodmood.view.ui.UiFactory;
 import it.foodmood.config.PersistenceMode;
 import it.foodmood.config.PersistenceSettings;
 
@@ -28,7 +26,6 @@ public final class Main{
         try{
             // 1) Config dal file
             ApplicationConfig fileConfig = ApplicationConfig.fromClasspath();
-            UserMode userMode = fileConfig.getUserMode();
 
             // 2) Scelta UI e Persistenza
             StartupEnvironment startup;
@@ -80,8 +77,6 @@ public final class Main{
 
             // 5) Costruzione dell'ambiente dell'applicazione
             ApplicationEnvironment environment = new ApplicationEnvironment(fileConfig, daoFactory);
-
-            UiFactory.init(uiMode, userMode);
 
             // 6) Bootstrap e avvio
             BootstrapFactory bootstrapFactory = new BootstrapFactory();

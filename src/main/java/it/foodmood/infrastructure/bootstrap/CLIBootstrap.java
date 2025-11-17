@@ -24,6 +24,8 @@ public class CLIBootstrap implements ApplicationBootstrap{
     public void start(ApplicationEnvironment environment){
         out.println("Avvio software in modalità: command line\n");
 
+        UiFactory.initCli(environment.config().getUserMode());
+
         RegistrationView registrationView = UiFactory.getInstance().createRegistrationView();
         LoginView loginView = UiFactory.getInstance().createLoginView();
 

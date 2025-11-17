@@ -53,13 +53,13 @@ public class RegistrationBean {
 
     public void setEmail(String email){
         if(email == null){
-            throw new IllegalArgumentException("Email non valida");
+            throw new IllegalArgumentException("E-mail non deve essere vuota");
         }
         String cleaned = email.trim();
         if(Validator.isValidEmail(cleaned)){
             this.email = cleaned.toLowerCase();
         } else {
-            throw new IllegalArgumentException("Email non valida");
+            throw new IllegalArgumentException("Formato e-mail non valido");
         }
     }
 

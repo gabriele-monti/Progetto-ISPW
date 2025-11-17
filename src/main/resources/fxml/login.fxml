@@ -195,7 +195,7 @@
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Button fx:id="btnCreateAccount" maxWidth="1.7976931348623157E308" minHeight="50.0" prefHeight="50.0" styleClass="registerBtn" text="Crea nuovo account" textAlignment="CENTER">
+                        <Button fx:id="btnCreateAccount" maxWidth="1.7976931348623157E308" minHeight="50.0" onAction="#onCreateAccountClicked" prefHeight="50.0" styleClass="registerBtn" text="Crea nuovo account" textAlignment="CENTER">
                            <font>
                               <Font name="Arial Bold" size="20.0" />
                            </font>
