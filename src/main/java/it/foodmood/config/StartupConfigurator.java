@@ -16,12 +16,24 @@ public final class StartupConfigurator {
      */
 
      public static StartupEnvironment fromArgsAndEnvironment(String[] args, ApplicationConfig config){
-        String cliArg = (args != null && args.length > 0) ? args[0] : null;
-        String envArg = System.getenv("FOODMOOD_UI");
+        String cliUi = (args != null && args.length > 0) ? args[0] : null;
+        String cliPersistence = (args != null && args.length > 1) ? args[1] : null;
+        
+        String envUi = System.getenv("FOODMOOD_UI");
+        String envPersistence = System.getenv("FOODMOOD_PERSISTENCE");
 
-        UiMode uiMode = UiMode.parse(cliArg != null ? cliArg : envArg, UiMode.GUI);
+        UiMode uiMode = UiMode.parse(cliUi != null ? cliUi : envUi, UiMode.GUI);
 
-        PersistenceMode persistenceMode = config.getPersistenceMode();
+
+        PersistenceMode persistenceMode;
+
+        if(cliPersistence != null){
+            persistenceMode = PersistenceMode.fromValue(cliPersistence);
+        } else if (envPersistence != null){
+            persistenceMode = PersistenceMode.fromValue(envPersistence);
+        } else {
+            persistenceMode = config.getPersistenceMode();
+        }
         
         return new StartupEnvironment(uiMode, persistenceMode);
      }

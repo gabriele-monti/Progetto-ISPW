@@ -1,5 +1,23 @@
 # Progetto ISPW
 
+## Avvio
+
+gui demo
+
+gui full
+
+mvn clean compile exec:java -Dexec.args="gui full"
+
+cli full
+
+cli demo
+
+
+Avvio tramite JAR
+mvn clean package
+java -jar target/foodmood.jar gui full
+
+
 ---
 
 # SonarQube
