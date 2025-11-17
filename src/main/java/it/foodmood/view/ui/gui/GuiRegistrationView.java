@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class GuiRegistrationView implements RegistrationView {
+public class GuiRegistrationView extends BaseGui implements RegistrationView {
 
     @FXML
     private Button btnBackToLogin;
@@ -163,22 +163,11 @@ public class GuiRegistrationView implements RegistrationView {
 
     @Override
     public void show(){
-        throw new UnsupportedOperationException("GUI non ancora implementata");
     }
-
-    @Override
-    public void displayError(String message){
-        System.err.println("GUI ERROR: " + message);
-    }
-
-    @Override
-    public void displaySuccess(String message){
-        throw new UnsupportedOperationException("GUI non ancora implementata");
-    }
-
 
     @Override
     public void onRegistrationSuccess(){
+        showInfo("Account creato con successo!");
         factory.showLoginView();
     }
 }

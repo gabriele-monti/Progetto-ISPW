@@ -21,10 +21,11 @@ public class FoodMoodGui extends Application {
 
         UserMode userMode = environment.config().getUserMode();
 
-        Scene scene = new Scene(new StackPane(), 1440, 810);
+        StackPane root = new StackPane();
+        Scene scene = new Scene(root, 1440, 810);
 
         stage.setScene(scene);
-        stage.setFullScreen(true);
+        stage.setFullScreen(false);
         stage.setResizable(false);
         stage.show();
 
@@ -38,7 +39,7 @@ public class FoodMoodGui extends Application {
 
     @Override
     public void stop(){
-        System.out.print("\\033[H\\033[J");
+        System.out.print("\033[H\033[J");
         System.out.println("Grazie per aver utilizzato FoodMood, a presto!\n");
         System.exit(0);
     }

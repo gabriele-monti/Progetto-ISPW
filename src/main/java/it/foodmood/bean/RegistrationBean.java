@@ -70,7 +70,7 @@ public class RegistrationBean {
             this.password = password; 
         } else {
             Arrays.fill(password, '\0');
-            throw new IllegalArgumentException("La password deve contenere almeno 8 caratteri, una lettera maiuscola, una minuscola e un numero");
+            throw new IllegalArgumentException("Password non valida: deve avere almeno 8 caratteri, una maiuscola, una minuscola e un numero");
         }
     }
 

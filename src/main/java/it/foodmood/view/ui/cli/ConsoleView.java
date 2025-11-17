@@ -4,17 +4,21 @@ import java.util.Objects;
 
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
+import it.foodmood.infrastructure.io.console.ConsoleInputReader;
+import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.view.ui.theme.UiTheme;
 
-public class ConsoleView implements CliUserInterface{
-    private final InputReader in;
-    private final OutputWriter out;
-    private final UiTheme theme;
-    private final String CLEAR_CONSOLE = "\033[H\033[J";
+public abstract class ConsoleView implements CliUserInterface{
 
-    public ConsoleView(InputReader in, OutputWriter out, UiTheme theme){
-        this.in = Objects.requireNonNull(in);
-        this.out = Objects.requireNonNull(out);
+    protected final InputReader in;
+    protected final OutputWriter out;
+    protected final UiTheme theme;
+
+    private static final String CLEAR_CONSOLE = "\033[H\033[J";
+
+    protected ConsoleView(InputReader in, OutputWriter out, UiTheme theme){
+        this.in = ConsoleInputReader.getInstance();
+        this.out = new ConsoleOutputWriter();
         this.theme = Objects.requireNonNull(theme);
     }
 
@@ -45,7 +49,7 @@ public class ConsoleView implements CliUserInterface{
     
     @Override
     public void showTitle(String title){
-        out.println(theme.bold(title));
+        out.displayTitle(title);
     }
 
     @Override
@@ -59,5 +63,18 @@ public class ConsoleView implements CliUserInterface{
     @Override
     public void clearScreen(){
         out.print(CLEAR_CONSOLE);
+    }
+
+    protected String askInput(String prompt){
+        while(true){
+            out.print(prompt);
+            String input = in.readLine();
+
+            if(input == null || input.isBlank()){
+                showError("Il campo non può essere vuoto");
+                continue;
+            }
+            return input.trim();
+        }
     }
 }

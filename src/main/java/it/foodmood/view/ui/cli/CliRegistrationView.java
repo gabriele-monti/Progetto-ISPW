@@ -8,66 +8,74 @@ import it.foodmood.view.boundary.RegistrationBoundary;
 import it.foodmood.view.ui.RegistrationView;
 import it.foodmood.view.ui.theme.UiTheme;
 
-public class CliRegistrationView implements RegistrationView{
-    private final String TITLE = "REGISTRAZIONE";
+public class CliRegistrationView extends ConsoleView implements RegistrationView{
+    
+    private static final String TITLE = "REGISTRAZIONE";
 
-    private final InputReader in;
-    private final OutputWriter out;
-    private final UiTheme theme;
     private final RegistrationBoundary boundary;
 
     public CliRegistrationView(InputReader in, OutputWriter out, UiTheme theme, RegistrationBoundary boundary){
-        this.in = in;
-        this.out = out;
-        this.theme = theme;
+        super(in, out, theme);
         this.boundary = boundary;
     }
 
     @Override
     public void show(){
-        out.displayTitle(TITLE);
+        showTitle(TITLE);
 
         RegistrationBean registrationBean = new RegistrationBean();
 
-        out.print("Nome: ");
-        registrationBean.setName(in.readLine());
+        String name = askInput("Nome: ");
+        registrationBean.setName(name);
 
-        out.print("Cognome: ");
-        registrationBean.setSurname(in.readLine());
+        String surname = askInput("Cognome: ");
+        registrationBean.setSurname(surname);
 
-        out.print("Email: ");
-        registrationBean.setEmail(in.readLine());
+        String email;
 
-        out.print("Password: ");
-        String password = in.readLine();
-        registrationBean.setPassword(password.toCharArray());
+        while(true){
+            email = askInput("Email: ");
+            try {
+                registrationBean.setEmail(email);
+                break;
+            } catch (Exception e) {
+                showError(e.getMessage());
+            }
+        }
 
-        out.print("Conferma password: ");
-        String confirmPassword = in.readLine();
-        registrationBean.setConfirmPassword(confirmPassword.toCharArray());
+        String password;
+        String confirmPassword;
+
+        while(true){
+            password = askInput("Password: ");
+            confirmPassword = askInput("Conferma password: ");
+
+            if(!password.equals(confirmPassword)){
+                showError("Le password non coincidono. Riprova.");
+                continue;
+            }
+
+            try {
+                registrationBean.setPassword(password.toCharArray());
+                registrationBean.setConfirmPassword(confirmPassword.toCharArray());
+                break;
+            } catch (Exception e) {
+                showError(e.getMessage());
+            }
+        }
 
         try {
             boundary.registration(registrationBean);
             onRegistrationSuccess();
         } catch (RegistrationException e) {
             e.printStackTrace();
-            displayError(e.getMessage());
+            showError(e.getMessage());
         }
     }
 
     @Override
-    public void displayError(String message){
-        out.println(theme.error("Errore: " + message));
-    }
-
-    @Override
-    public void displaySuccess(String message){
-        out.println(theme.success(message));
-    }
-
-    @Override
     public void onRegistrationSuccess(){
-        displaySuccess("Registrazione effettuata con successo!");
+        showSuccess("Registrazione effettuata con successo!");
     }
 }
 

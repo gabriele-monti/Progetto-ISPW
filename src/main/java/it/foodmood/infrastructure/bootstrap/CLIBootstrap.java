@@ -29,6 +29,7 @@ public class CLIBootstrap implements ApplicationBootstrap{
         RegistrationView registrationView = UiFactory.getInstance().createRegistrationView();
         LoginView loginView = UiFactory.getInstance().createLoginView();
 
+        out.print("\033[H\033[J");
         out.print("Hai già un account? (s/n): ");
         String response = in.readLine();
         if("n".equalsIgnoreCase(response.trim())){

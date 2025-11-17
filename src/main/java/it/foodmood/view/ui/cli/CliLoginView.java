@@ -8,53 +8,39 @@ import it.foodmood.view.boundary.LoginBoundary;
 import it.foodmood.view.ui.LoginView;
 import it.foodmood.view.ui.theme.UiTheme;
 
-public class CliLoginView implements LoginView {
+public class CliLoginView extends ConsoleView implements LoginView {
 
-    private final String TITLE = "LOGIN";
+    private static final String TITLE = "LOGIN";
 
-    private final InputReader in;
-    private final OutputWriter out;
-    private final UiTheme theme;
     private final LoginBoundary boundary;
 
     public CliLoginView(InputReader in, OutputWriter out, UiTheme theme, LoginBoundary boundary){
-        this.in = in;
-        this.out = out;
-        this.theme = theme;
+        super(in, out, theme);
         this.boundary = boundary;
     }
 
     @Override
     public void show(){
-        out.displayTitle(TITLE);
+        showTitle(TITLE);
 
         LoginBean loginBean = new LoginBean();
 
-        out.print("Email: ");
-        loginBean.setEmail(in.readLine());
+        String email = askInput("Email: ");
+        loginBean.setEmail(email);
 
-        out.print("Password: ");
-        String password = in.readLine();
+        String password = askInput("Password: ");
         loginBean.setPassword(password.toCharArray());
 
         try {
             boundary.login(loginBean);
             onLoginSuccess();
         } catch (AuthenticationException e) {
-            displayError(e.getMessage());
+            showError(e.getMessage());
         }
-    }
-
-    public void displayError(String message){
-        out.println(theme.error("Errore: " + message));
-    }
-
-    public void displaySuccess(String message){
-        out.println(theme.success(message));
     }
 
     @Override
     public void onLoginSuccess(){
-        displaySuccess("Login effettuato con successo!");
+        showSuccess("Login effettuato con successo!");
     }
 }

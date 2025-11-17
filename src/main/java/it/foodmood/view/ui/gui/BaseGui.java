@@ -6,11 +6,6 @@ import javafx.scene.control.Alert;
 
 public abstract class BaseGui {
     
-    protected final GuiNavigator navigator;
-
-    protected BaseGui(GuiNavigator navigator){
-        this.navigator = navigator;
-    }
 
     // @FXML
     // public void logout(){
@@ -18,13 +13,19 @@ public abstract class BaseGui {
     //     navigator.goToLogin();
     // }
 
-    protected void changePage(GuiPages page){
-        navigator.goTo(page);
-    }
+    // protected void changePage(GuiPages page){
+    //     navigator.goTo(page);
+    // }
 
     protected void showError(String message){
         new Alert(Alert.AlertType.ERROR, message).showAndWait();
     }
 
-
+    protected void showInfo(String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Informazione");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
