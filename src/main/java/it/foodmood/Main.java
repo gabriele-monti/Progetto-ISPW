@@ -84,7 +84,6 @@ public final class Main{
             bootstrap.start(environment);
         } catch (Exception e){
             System.err.println("Errore durante l'avvio dell'applicazione: " + e.getMessage());
-            e.printStackTrace();
             System.exit(1);
         }
     }

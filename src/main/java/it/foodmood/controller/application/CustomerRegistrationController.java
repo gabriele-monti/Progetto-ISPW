@@ -48,8 +48,6 @@ public class CustomerRegistrationController {
 
         } catch (RegistrationException e){
             throw e;
-        }catch (Exception e){
-            e.printStackTrace();
         } finally {
             // 8 Pulizia della password in memoria
             char[] password = registrationBean.getPassword();

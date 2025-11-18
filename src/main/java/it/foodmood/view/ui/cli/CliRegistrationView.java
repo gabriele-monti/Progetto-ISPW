@@ -68,7 +68,6 @@ public class CliRegistrationView extends ConsoleView implements RegistrationView
             boundary.registration(registrationBean);
             onRegistrationSuccess();
         } catch (RegistrationException e) {
-            e.printStackTrace();
             showError(e.getMessage());
         }
     }

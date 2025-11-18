@@ -21,6 +21,7 @@
     -fx-effect: dropshadow(gaussian, rgba(88, 129, 87, 0.2), 8, 0.2, 0, 2);
 }
 
+/* NOSONAR */
 .loginBtn:pressed {
     -fx-background-color: linear-gradient(to bottom, #6b8a60, #588157); 
     -fx-text-fill: #ffffff;
