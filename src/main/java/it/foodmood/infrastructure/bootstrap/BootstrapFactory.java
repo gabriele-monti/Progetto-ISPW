@@ -4,8 +4,8 @@ public final class BootstrapFactory {
 
     public ApplicationBootstrap create(UiMode mode){
         return switch(mode){
-            case CLI -> new CLIBootstrap();
-            case GUI -> new GUIBootstrap();
+            case CLI -> new CliBootstrap();
+            case GUI -> new GuiBootstrap();
         };
     }
 }

@@ -10,12 +10,12 @@ import it.foodmood.view.ui.LoginView;
 import it.foodmood.view.ui.RegistrationView;
 import it.foodmood.view.ui.UiFactory;
 
-public class CLIBootstrap implements ApplicationBootstrap{
+public class CliBootstrap implements ApplicationBootstrap{
 
     private final InputReader in;
     private final OutputWriter out;
 
-    public CLIBootstrap(){
+    public CliBootstrap(){
         this.in = ConsoleInputReader.getInstance();
         this.out = new ConsoleOutputWriter();
     }

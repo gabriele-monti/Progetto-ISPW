@@ -22,7 +22,14 @@ mvn clean compile
 Esempio per avviare il software in modalità GUI e persistenza MYSQL
 
 ```bash
-mvn exec: java -Dexec.args="gui full"
+mvn exec:java -Dexec.args="cli full"
+```
+```bash
+java -Dexec.mainClass="it.foodmood.Main"
+```
+
+```bash
+mvn javafx:run
 ```
 
 Altri esempi
