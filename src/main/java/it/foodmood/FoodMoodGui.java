@@ -32,9 +32,6 @@ public class FoodMoodGui extends Application {
         UiFactory.initGui(scene, userMode);
 
         UiFactory.getInstance().createLoginView();
-
-        // LoginView loginView = UiFactory.getInstance().createLoginView();
-        // loginView.show();
     }
 
     @Override

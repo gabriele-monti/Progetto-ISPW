@@ -21,21 +21,43 @@ public class CliLoginView extends ConsoleView implements LoginView {
 
     @Override
     public void show(){
-        showTitle(TITLE);
+        while(true){
+            showTitle(TITLE);
 
-        LoginBean loginBean = new LoginBean();
+            LoginBean loginBean = new LoginBean();
 
-        String email = askInput("Email: ");
-        loginBean.setEmail(email);
+            String email;
+            String password;
 
-        String password = askInput("Password: ");
-        loginBean.setPassword(password.toCharArray());
+            while(true){
+                email = askInput("Email: ");
+                try {
+                    loginBean.setEmail(email);
+                    break;
+                } catch (Exception e) {
+                    showError(e.getMessage());
+                }
+            }
 
-        try {
-            boundary.login(loginBean);
-            onLoginSuccess();
-        } catch (AuthenticationException e) {
-            showError(e.getMessage());
+            while(true){
+                password = askInput("Password: ");
+                try {
+                    loginBean.setPassword(password.toCharArray());
+                    break;
+                } catch (Exception e) {
+                    showError(e.getMessage());
+                }
+            }
+
+            try {
+                boundary.login(loginBean);
+                onLoginSuccess();
+                break;
+            } catch (AuthenticationException e) {
+                clearScreen();
+                showError(e.getMessage());
+                showInfo("Riprova\n");
+            }
         }
     }
 

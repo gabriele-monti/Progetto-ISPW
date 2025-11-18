@@ -141,7 +141,7 @@
                                           </PasswordField>
                                           <TextField fx:id="tfPasswordVisible" managed="false" promptText="Inserisci la tua password" styleClass="text-field" visible="false">
                                              <font>
-                                                <Font name="Arial Bold" size="15.0" />
+                                                <Font name="Arial" size="15.0" />
                                              </font>
                                           </TextField>
                                        </children>

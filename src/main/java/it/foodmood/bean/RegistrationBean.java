@@ -40,14 +40,14 @@ public class RegistrationBean {
         if(name == null || name.isBlank()){
             throw new IllegalArgumentException("Il nome non deve essere vuoto");
         }
-        this.name = name.trim();
+        this.name = name.trim().toUpperCase();
     }
 
     public void setSurname(String surname){
         if(surname == null || surname.isBlank()){
             throw new IllegalArgumentException("Il cognome non deve essere vuoto");
         }
-        this.surname = surname.trim();
+        this.surname = surname.trim().toUpperCase();
     }
 
     public void setEmail(String email){
