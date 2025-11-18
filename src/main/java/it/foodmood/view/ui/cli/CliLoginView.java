@@ -15,7 +15,7 @@ public class CliLoginView extends ConsoleView implements LoginView {
     private final LoginBoundary boundary;
 
     public CliLoginView(InputReader in, OutputWriter out, UiTheme theme, LoginBoundary boundary){
-        super(in, out, theme);
+        super(theme);
         this.boundary = boundary;
     }
 

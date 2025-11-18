@@ -9,9 +9,9 @@ import it.foodmood.persistence.ConnectionProvider;
 
 public final class JdbcConnectionManager implements ConnectionProvider{
     
-    private static volatile JdbcConnectionManager instance;
+    private static JdbcConnectionManager instance;
     
-    private Connection connection = null;
+    private Connection connection;
     
     private final String url;
     private final String user;
@@ -25,7 +25,7 @@ public final class JdbcConnectionManager implements ConnectionProvider{
         Runtime.getRuntime().addShutdownHook(new Thread(this::closeSafely, "jdbc-shutdown-hook"));
     }
 
-    public static synchronized JdbcConnectionManager init(String url, String user, String password){
+    public static JdbcConnectionManager init(String url, String user, String password){
         if(instance == null){
             instance = new JdbcConnectionManager(url, user, password);
         } else if(!instance.url.equals(url) || !instance.user.equals(user) || !instance.password.equals(password)) {
@@ -43,7 +43,7 @@ public final class JdbcConnectionManager implements ConnectionProvider{
     }
 
     @Override
-    public synchronized Connection getConnection() throws SQLException{
+    public Connection getConnection() throws SQLException{
         if(connection == null || connection.isClosed()){
             Connection conn = DriverManager.getConnection(url, user, password);
             conn.setAutoCommit(true);

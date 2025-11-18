@@ -39,8 +39,8 @@ public final class Main{
                 startup = StartupConfigurator.fromArgsAndEnvironment(args, fileConfig);
             }
 
-            UiMode uiMode = startup.getUiMode();
-            PersistenceMode persistenceMode = startup.getPersistenceMode();
+            UiMode uiMode = startup.uiMode();
+            PersistenceMode persistenceMode = startup.persistenceMode();
 
             // 3) Inizializzazione della persistenza
             PersistenceSettings settings;
@@ -55,7 +55,6 @@ public final class Main{
                 persistenceConfig = new PersistenceConfig(settings);
 
                 boolean connected =  ConnectionVerifier.verifyWithRetry(persistenceConfig.getProvider(), 5, 5);
-                // boolean connected = true;
                 
                 if(connected) {
                     out.println("Connessione al database verificata con successo!");

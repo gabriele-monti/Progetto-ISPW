@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class GuiRegistrationView extends BaseGui implements RegistrationView {
@@ -51,11 +50,10 @@ public class GuiRegistrationView extends BaseGui implements RegistrationView {
     private TextField tfSurname;
 
     private RegistrationBoundary boundary;
-
     private GuiFactory factory;
 
-    private boolean passwordVisible = false;
-    private boolean confirmPasswordVisible = false;
+    private PasswordToggleController passwordToggleController;
+    private PasswordToggleController confirmPasswordToggleController;
 
     public GuiRegistrationView(){
         // costruttore vuooto
@@ -71,59 +69,18 @@ public class GuiRegistrationView extends BaseGui implements RegistrationView {
 
     @FXML
     private void initialize(){
-        // password
-        tfPasswordVisible.setVisible(false);
-        tfPasswordVisible.setManaged(false);
-        tfPasswordVisible.managedProperty().bind(tfPasswordVisible.visibleProperty());
-        pfPassword.managedProperty().bind(pfPassword.visibleProperty());
-        tfPasswordVisible.textProperty().bindBidirectional(pfPassword.textProperty());
-
-        // conferma password
-        tfConfirmPasswordVisible.setVisible(false);
-        tfConfirmPasswordVisible.setManaged(false);
-        tfConfirmPasswordVisible.managedProperty().bind(tfConfirmPasswordVisible.visibleProperty());
-        pfConfirmPassword.managedProperty().bind(pfConfirmPassword.visibleProperty());
-        tfConfirmPasswordVisible.textProperty().bindBidirectional(pfConfirmPassword.textProperty());
-        updateToggleIcon();
-    }
-
-    private void updateToggleIcon(){
-        String iconPass = passwordVisible ? "eye.png" : "eye_hidden.png";
-        String iconConf = confirmPasswordVisible ? "eye.png" : "eye_hidden.png";
-
-        var urlPass = getClass().getResource("/icons/" + iconPass);
-        var urlConf = getClass().getResource("/icons/" + iconConf);
-
-        if(urlPass != null){
-            ivTogglePassword.setImage(new Image(urlPass.toExternalForm()));
-        }
-        if(urlConf != null){
-            ivToggleConfirmPassword.setImage(new Image(urlConf.toExternalForm()));
-        }
+        passwordToggleController = new PasswordToggleController(pfPassword, pfConfirmPassword, ivToggleConfirmPassword);
+        confirmPasswordToggleController = new PasswordToggleController(pfPassword, pfConfirmPassword, ivToggleConfirmPassword);
     }
 
     @FXML
     private void onTogglePasswordClicked(){
-        setPasswordVisible(!passwordVisible);
+        passwordToggleController.toggle();
     }
 
     @FXML
     private void onToggleConfirmPasswordClicked(){
-        setConfirmPasswordVisible(!confirmPasswordVisible);
-    }
-
-    private void setPasswordVisible(boolean visible){
-        passwordVisible = visible;
-        tfPasswordVisible.setVisible(visible);
-        pfPassword.setVisible(!visible);
-        updateToggleIcon();
-    }
-
-    private void setConfirmPasswordVisible(boolean visible){
-        confirmPasswordVisible = visible;
-        tfConfirmPasswordVisible.setVisible(visible);
-        pfConfirmPassword.setVisible(!visible);
-        updateToggleIcon();
+        confirmPasswordToggleController.toggle();
     }
 
     @FXML
@@ -163,6 +120,7 @@ public class GuiRegistrationView extends BaseGui implements RegistrationView {
 
     @Override
     public void show(){
+        // comment
     }
 
     @Override

@@ -46,8 +46,6 @@ public class CustomerRegistrationController {
             userDao.insert(newUser);
             credentialDao.saveCredential(credential);
 
-        } catch (RegistrationException e){
-            throw e;
         } finally {
             // 8 Pulizia della password in memoria
             char[] password = registrationBean.getPassword();

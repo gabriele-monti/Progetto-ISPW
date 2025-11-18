@@ -6,7 +6,9 @@ public class LoginBean {
     private String email;
     private char[] password;
 
-    public LoginBean(){}
+    public LoginBean(){
+        // Costruttore vuoto
+    }
 
     public String getEmail(){
         return email;

@@ -16,7 +16,7 @@ public abstract class ConsoleView implements CliUserInterface{
 
     private static final String CLEAR_CONSOLE = "\033[H\033[J";
 
-    protected ConsoleView(InputReader in, OutputWriter out, UiTheme theme){
+    protected ConsoleView(UiTheme theme){
         this.in = ConsoleInputReader.getInstance();
         this.out = new ConsoleOutputWriter();
         this.theme = Objects.requireNonNull(theme);

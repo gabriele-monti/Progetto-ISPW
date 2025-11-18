@@ -20,8 +20,8 @@ public class PasswordHasher {
 
             // Ritorno "salt:hash" in base 64
             return Base64.getEncoder().encodeToString(salt) + ":" + Base64.getEncoder().encodeToString(hash);
-        } catch (Exception e) {
-            throw new RuntimeException("Errore nel calcolo dell'hash della password.", e);
+        } catch (Exception _) {
+            throw new RuntimeException("Errore nel calcolo dell'hash della password.");
         }
     }
 
@@ -47,7 +47,7 @@ public class PasswordHasher {
 
             return hashCompare == 0;
             
-        } catch (Exception e) {
+        } catch (Exception _) {
             return false;
         }
     }

@@ -2,8 +2,6 @@ package it.foodmood.view.ui.gui;
 
 import javafx.scene.control.Alert;
 
-// import javafx.fxml.FXML;
-
 public abstract class BaseGui {
 
     protected void showError(String message){

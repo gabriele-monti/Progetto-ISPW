@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import it.foodmood.infrastructure.io.InputReader;
 
 public final class ConsoleInputReader implements InputReader {
-    private static ConsoleInputReader instance;
+
     private final BufferedReader bufferedReader;
     private boolean closed;
 
@@ -15,11 +15,12 @@ public final class ConsoleInputReader implements InputReader {
         this.bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public static synchronized ConsoleInputReader getInstance(){
-        if(instance == null){
-            instance = new ConsoleInputReader();
-        }
-        return instance;
+    private static class Holder{
+        private static final ConsoleInputReader instance = new ConsoleInputReader();
+    }
+
+    public static ConsoleInputReader getInstance(){
+        return Holder.instance;
     }
 
     @Override
@@ -29,8 +30,8 @@ public final class ConsoleInputReader implements InputReader {
         }
         try{
             return bufferedReader.readLine();
-        } catch (IOException e){
-            throw new RuntimeException("Errore nella lettura da console", e);
+        } catch (IOException _){
+            throw new RuntimeException("Errore nella lettura da console");
         }
     }
 

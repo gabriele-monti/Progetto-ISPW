@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
 
 public class GuiLoginView implements LoginView {
 
@@ -36,10 +35,9 @@ public class GuiLoginView implements LoginView {
     private TextField tfPasswordVisible;
 
     private LoginBoundary boundary;
-
     private GuiFactory factory;
 
-    private boolean passwordVisible = false;
+    private PasswordToggleController toggleController;
 
     public GuiLoginView(){
         // costruttore vuoto richiesto da fxmlloader
@@ -55,49 +53,12 @@ public class GuiLoginView implements LoginView {
 
     @FXML
     private void initialize(){
-        tfPasswordVisible.setVisible(false);
-        tfPasswordVisible.setManaged(false);
-
-        tfPasswordVisible.managedProperty().bind(tfPasswordVisible.visibleProperty());
-        pfPassword.managedProperty().bind(pfPassword.visibleProperty());
-
-        tfPasswordVisible.textProperty().bindBidirectional(pfPassword.textProperty());
-
-        updateToggleIcon();
+        toggleController = new PasswordToggleController(pfPassword, pfPassword, ivToggle);
     }
 
     @FXML
     private void onTogglePasswordClicked(){
-        setPasswordVisible(!passwordVisible);
-    }
-
-    private void setPasswordVisible(boolean visible){
-        this.passwordVisible = visible;
-
-        tfPasswordVisible.setVisible(visible);
-        pfPassword.setVisible(!visible);
-
-        updateToggleIcon();
-
-        if(visible){
-            tfPasswordVisible.requestFocus();;
-            tfPasswordVisible.positionCaret(tfPasswordVisible.getText().length());
-        } else {
-            pfPassword.requestFocus();
-            pfPassword.positionCaret(pfPassword.getText().length());
-        }
-    }
-
-    private void updateToggleIcon(){
-        String iconName = passwordVisible ? "eye.png" : "eye_hidden.png";
-        String path = "/icons/" + iconName;
-        var url = getClass().getResource(path);
-        if(url == null){
-            System.err.print("Icona non trovata: " + path);
-            return;
-        }
-        Image img = new Image(url.toExternalForm());
-        ivToggle.setImage(img);
+        toggleController.toggle();
     }
 
     @FXML
@@ -130,6 +91,7 @@ public class GuiLoginView implements LoginView {
 
     @Override
     public void show(){
+        // comment
     }
 
     @Override

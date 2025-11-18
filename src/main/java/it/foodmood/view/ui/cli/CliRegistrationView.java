@@ -15,7 +15,7 @@ public class CliRegistrationView extends ConsoleView implements RegistrationView
     private final RegistrationBoundary boundary;
 
     public CliRegistrationView(InputReader in, OutputWriter out, UiTheme theme, RegistrationBoundary boundary){
-        super(in, out, theme);
+        super(theme);
         this.boundary = boundary;
     }
 
@@ -45,8 +45,9 @@ public class CliRegistrationView extends ConsoleView implements RegistrationView
 
         String password;
         String confirmPassword;
+        Boolean validPassword = false;
 
-        while(true){
+        while(!validPassword){
             password = askInput("Password: ");
             confirmPassword = askInput("Conferma password: ");
 
@@ -58,7 +59,7 @@ public class CliRegistrationView extends ConsoleView implements RegistrationView
             try {
                 registrationBean.setPassword(password.toCharArray());
                 registrationBean.setConfirmPassword(confirmPassword.toCharArray());
-                break;
+                validPassword = true;
             } catch (Exception e) {
                 showError(e.getMessage());
             }

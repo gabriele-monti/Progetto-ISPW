@@ -122,7 +122,7 @@ public class DishBean {
         try {
             URI.create(uri);
             return true;
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             return false;
         }
     }

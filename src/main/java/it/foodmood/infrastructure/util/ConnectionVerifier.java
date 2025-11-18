@@ -35,7 +35,7 @@ public final class ConnectionVerifier {
     private static void sleep(int seconds){
         try {
             Thread.sleep(seconds * 1000L);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException _) {
             Thread.currentThread().interrupt();
         }
     }
