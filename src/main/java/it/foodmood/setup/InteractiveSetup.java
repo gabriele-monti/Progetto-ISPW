@@ -15,7 +15,8 @@ public final class InteractiveSetup extends ConsoleView {
 
     public StartupEnvironment askUser(){
         clearScreen();
-        showInfo(theme.bold("Benvenuto nella configurazione di FoodMood\n"));
+        showTitle("FoodMood");
+        showInfo("\nBenvenuto procedi con la configurazione del software\n");
         UiMode uiMode = askUiMode();
         PersistenceMode pm = askPersistenceMode();
 
@@ -24,10 +25,10 @@ public final class InteractiveSetup extends ConsoleView {
 
     private UiMode askUiMode(){
         while(true){
-            out.displayTitle("Seleziona Interfaccia");
+            showTitle("Seleziona Interfaccia");
             showInfo(theme.success("1. CLI ") + theme.info("-> Interfaccia a riga di comando"));
             showInfo(theme.success("2. GUI ") + theme.info("-> Interfaccia grafica"));
-            out.print("\nScelta: ");
+            showInfo("\nScelta: ");
             String input = in.readLine().trim();
             if("1".equals(input)) return UiMode.CLI;
             if("2".equals(input)) return UiMode.GUI;
@@ -40,10 +41,10 @@ public final class InteractiveSetup extends ConsoleView {
         while(true){
             showTitle("Seleziona Modalità di Persistenza");
             showInfo("\nLa modalità determina dove vengono salvati i dati\n");
-            showInfo(theme.success("1. DEMO        ") + theme.info("-> Nessun salvataggio (in-memory)"));
-            showInfo(theme.success("2. FILESYSTEM  ") + theme.info("-> CSV locali in /data/csv/"));
-            showInfo(theme.success("3. FULL        ") + theme.info("-> Database MySQL)"));
-            out.print("\nScelta: ");
+            showInfo(theme.success("1. DEMO        ") + theme.info("-> Nessun salvataggio, dati in memoria volatile"));
+            showInfo(theme.success("2. FILESYSTEM  ") + theme.info("-> Salvataggio in file CSV locali (cartella /data/csv/ )"));
+            showInfo(theme.success("3. FULL        ") + theme.info("-> Salvataggio completo tramite database MySQL"));
+            showInfo("\nScelta: ");
             String input = in.readLine().trim();
             if("1".equals(input)) return PersistenceMode.DEMO;
             if("2".equals(input)) return PersistenceMode.FILESYSTEM;

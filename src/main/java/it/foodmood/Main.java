@@ -22,6 +22,8 @@ public final class Main{
     
     public static void main(String[] args){
         OutputWriter out = new ConsoleOutputWriter();
+        UiTheme theme = new AnsiUiTheme();
+
 
         try{
             // 1) Config dal file
@@ -33,7 +35,6 @@ public final class Main{
             boolean interactive = (args == null || args.length == 0);
 
             if(interactive){
-                UiTheme theme = new AnsiUiTheme();
                 InteractiveSetup setup = new InteractiveSetup(theme);
                 startup = setup.askUser();
             } else {
@@ -44,37 +45,43 @@ public final class Main{
             PersistenceMode persistenceMode = startup.persistenceMode();
 
             // 3) Inizializzazione della persistenza
-            PersistenceSettings settings;
-            PersistenceConfig persistenceConfig;
+            PersistenceSettings settings = null;
+            PersistenceConfig persistenceConfig = null;
 
-            if(persistenceMode == PersistenceMode.FULL){
-                final String dbUrl = fileConfig.getDbUrl();
-                final String dbUser = fileConfig.getDbUser();
-                final String dbPass = fileConfig.getDbPass();
+            switch(persistenceMode){
+                case FULL -> {
+                    final String dbUrl = fileConfig.getDbUrl();
+                    final String dbUser = fileConfig.getDbUser();
+                    final String dbPass = fileConfig.getDbPass();
 
-                settings = new PersistenceSettings(PersistenceMode.FULL, dbUrl, dbUser, dbPass);
-                persistenceConfig = new PersistenceConfig(settings);
+                    settings = new PersistenceSettings(PersistenceMode.FULL, dbUrl, dbUser, dbPass);
+                    persistenceConfig = new PersistenceConfig(settings);
 
-                boolean connected =  ConnectionVerifier.verifyWithRetry(persistenceConfig.getProvider(), 5, 5);
-                
-                if(connected) {
-                    out.println("Connessione al database verificata con successo!");
-                    out.println("Database inizializzato correttamente\nURL: " + dbUrl);
-                } else {
-                    out.println("Impossibile stabilire la connessione al database!");
-                    System.exit(1);
+                    boolean connected =  ConnectionVerifier.verifyWithRetry(persistenceConfig.getProvider(), 5, 5);
+
+                    if(connected) {
+                        out.println(theme.success("Connessione al database verificata con successo!"));
+                        out.println(theme.success("Database inizializzato correttamente\nURL: ") + dbUrl + "\n");
+                    } else {
+                        out.println(theme.error("Impossibile stabilire la connessione al database!"));
+                        out.println(theme.warning("Verifica la configurazione del database e riprova.\n"));
+                        System.exit(1);
+                    }
                 }
-            } else if(persistenceMode == PersistenceMode.FILESYSTEM){
-                settings = new PersistenceSettings(PersistenceMode.FILESYSTEM, null, null, null);
-                persistenceConfig = new PersistenceConfig(settings);
-                out.println("Modalità filesystem inizializzata correttamente.\n Peristenza su file csv.\n\n");
-            } else {
-                settings = new PersistenceSettings(PersistenceMode.DEMO, null, null, null);
-                persistenceConfig = new PersistenceConfig(settings);
-                out.println("Modalità demo inizializzata correttamente.\nApplicazione in memoria volatile.\n\n");
 
-            }
-            
+                case FILESYSTEM -> {
+                    settings = new PersistenceSettings(PersistenceMode.FILESYSTEM, null, null, null);
+                    persistenceConfig = new PersistenceConfig(settings);
+                    out.println(theme.success("Modalità filesystem inizializzata correttamente.\n Peristenza su file CSV.\n\n"));
+                }
+
+                case DEMO -> {
+                    settings = new PersistenceSettings(PersistenceMode.DEMO, null, null, null);
+                    persistenceConfig = new PersistenceConfig(settings);
+                    out.println(theme.success("Modalità demo inizializzata correttamente.\nApplicazione in memoria volatile.\n\n"));
+                }
+            }     
+
             // 4) Costruzione con factory
             DaoFactory.init(settings.mode());
             DaoFactory daoFactory = DaoFactory.getInstance();

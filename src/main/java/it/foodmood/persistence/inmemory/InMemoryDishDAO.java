@@ -8,7 +8,7 @@ import it.foodmood.persistence.dao.DishDao;
 
 public class InMemoryDishDao implements DishDao {
 
-    private static InMemoryDishDao instance = null;
+    private static InMemoryDishDao instance;
 
     public static synchronized InMemoryDishDao getInstance(){
         if(instance == null){

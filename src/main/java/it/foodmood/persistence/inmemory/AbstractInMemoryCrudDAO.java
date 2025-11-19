@@ -2,22 +2,20 @@ package it.foodmood.persistence.inmemory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.HashMap;
 
 import it.foodmood.persistence.dao.CrudDao;
 
 public abstract class AbstractInMemoryCrudDao <T, I> implements CrudDao<T,I> {
+    
     protected final Map<I, T> storage = new HashMap<>();
 
     protected abstract I getId(T entity);
 
     @Override
     public void insert(T entity){
-        Objects.requireNonNull(entity, "L'entità non può essere nulla.");
-        I id = Objects.requireNonNull(getId(entity), "L'ID non può essere nullo.");
-        storage.put(id, entity);
+        storage.put(getId(entity), entity);
     }
 
     @Override
@@ -36,5 +34,4 @@ public abstract class AbstractInMemoryCrudDao <T, I> implements CrudDao<T,I> {
         if (id == null) return;
         storage.remove(id);
     }
-    
 }
