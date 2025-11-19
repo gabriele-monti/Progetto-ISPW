@@ -53,7 +53,7 @@ public class GuiLoginView implements LoginView {
 
     @FXML
     private void initialize(){
-        toggleController = new PasswordToggleController(pfPassword, pfPassword, ivToggle);
+        toggleController = new PasswordToggleController(pfPassword, tfPasswordVisible, ivToggle);
     }
 
     @FXML

@@ -9,12 +9,12 @@ import it.foodmood.infrastructure.bootstrap.ApplicationBootstrap;
 import it.foodmood.infrastructure.bootstrap.BootstrapFactory;
 import it.foodmood.infrastructure.bootstrap.UiMode;
 import it.foodmood.infrastructure.io.OutputWriter;
-import it.foodmood.infrastructure.io.InputReader;
-import it.foodmood.infrastructure.io.console.ConsoleInputReader;
 import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.infrastructure.util.ConnectionVerifier;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.setup.InteractiveSetup;
+import it.foodmood.view.ui.theme.AnsiUiTheme;
+import it.foodmood.view.ui.theme.UiTheme;
 import it.foodmood.config.PersistenceMode;
 import it.foodmood.config.PersistenceSettings;
 
@@ -33,8 +33,9 @@ public final class Main{
             boolean interactive = (args == null || args.length == 0);
 
             if(interactive){
-                InputReader in = ConsoleInputReader.getInstance();
-                startup = InteractiveSetup.askUser(in, out);
+                UiTheme theme = new AnsiUiTheme();
+                InteractiveSetup setup = new InteractiveSetup(theme);
+                startup = setup.askUser();
             } else {
                 startup = StartupConfigurator.fromArgsAndEnvironment(args, fileConfig);
             }
@@ -63,11 +64,15 @@ public final class Main{
                     out.println("Impossibile stabilire la connessione al database!");
                     System.exit(1);
                 }
+            } else if(persistenceMode == PersistenceMode.FILESYSTEM){
+                settings = new PersistenceSettings(PersistenceMode.FILESYSTEM, null, null, null);
+                persistenceConfig = new PersistenceConfig(settings);
+                out.println("Modalità filesystem inizializzata correttamente.\n Peristenza su file csv.\n\n");
             } else {
-                out.println("Modalità demo inizializzata correttamente.\nApplicazione in memoria volatile.\n\n");
-                
                 settings = new PersistenceSettings(PersistenceMode.DEMO, null, null, null);
                 persistenceConfig = new PersistenceConfig(settings);
+                out.println("Modalità demo inizializzata correttamente.\nApplicazione in memoria volatile.\n\n");
+
             }
             
             // 4) Costruzione con factory

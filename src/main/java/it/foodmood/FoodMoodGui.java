@@ -36,7 +36,7 @@ public class FoodMoodGui extends Application {
 
     @Override
     public void stop(){
-        System.out.print("\033[H\033[J");
+        // System.out.print("\033[H\033[J");
         System.out.println("Grazie per aver utilizzato FoodMood, a presto!\n");
         System.exit(0);
     }

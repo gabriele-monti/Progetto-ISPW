@@ -3,50 +3,53 @@ package it.foodmood.setup;
 import it.foodmood.config.PersistenceMode;
 import it.foodmood.config.StartupEnvironment;
 import it.foodmood.infrastructure.bootstrap.UiMode;
-import it.foodmood.infrastructure.io.InputReader;
-import it.foodmood.infrastructure.io.OutputWriter;
+import it.foodmood.view.ui.cli.ConsoleView;
+import it.foodmood.view.ui.theme.UiTheme;
 
-public final class InteractiveSetup {
 
-    private InteractiveSetup(){}
+public final class InteractiveSetup extends ConsoleView {
 
-    public static StartupEnvironment askUser(InputReader in, OutputWriter out){
-        clearScreen(out);
-        UiMode uiMode = askUiMode(in, out);
-        PersistenceMode pm = askPersistenceMode(in, out);
+    public InteractiveSetup(UiTheme theme){
+        super(theme);
+    }
+
+    public StartupEnvironment askUser(){
+        clearScreen();
+        showInfo(theme.bold("Benvenuto nella configurazione di FoodMood\n"));
+        UiMode uiMode = askUiMode();
+        PersistenceMode pm = askPersistenceMode();
 
         return new StartupEnvironment(uiMode, pm);
     }
 
-    private static UiMode askUiMode(InputReader in, OutputWriter out){
+    private UiMode askUiMode(){
         while(true){
-            out.println("Benvenuto nella configurazione di FoodMood");
-            out.println("Selezionare l'interfaccia grafica: ");
-            out.println(" 1) CLI");
-            out.println(" 2) GUI");
-            out.print("Scelta: ");
+            out.displayTitle("Seleziona Interfaccia");
+            showInfo(theme.success("1. CLI ") + theme.info("-> Interfaccia a riga di comando"));
+            showInfo(theme.success("2. GUI ") + theme.info("-> Interfaccia grafica"));
+            out.print("\nScelta: ");
             String input = in.readLine().trim();
             if("1".equals(input)) return UiMode.CLI;
             if("2".equals(input)) return UiMode.GUI;
-            out.println("Scelta non valida.\n");
+            clearScreen();
+            showWarning("Scelta non valida.\n");
         }
     }
 
-    private static PersistenceMode askPersistenceMode(InputReader in, OutputWriter out){
+    private PersistenceMode askPersistenceMode(){
         while(true){
-            out.println("\nSelezionare modalità di persistenza: ");
-            out.println(" 1) DEMO (In-Memory)");
-            out.println(" 2) FULL (MySQL)");
-            out.print("Scelta: ");
+            showTitle("Seleziona Modalità di Persistenza");
+            showInfo("\nLa modalità determina dove vengono salvati i dati\n");
+            showInfo(theme.success("1. DEMO        ") + theme.info("-> Nessun salvataggio (in-memory)"));
+            showInfo(theme.success("2. FILESYSTEM  ") + theme.info("-> CSV locali in /data/csv/"));
+            showInfo(theme.success("3. FULL        ") + theme.info("-> Database MySQL)"));
+            out.print("\nScelta: ");
             String input = in.readLine().trim();
             if("1".equals(input)) return PersistenceMode.DEMO;
-            if("2".equals(input)) return PersistenceMode.FULL;
-            out.println("Scelta non valida.\n");
+            if("2".equals(input)) return PersistenceMode.FILESYSTEM;
+            if("3".equals(input)) return PersistenceMode.FULL;
+            clearScreen();
+            showWarning("Scelta non valida.\n");
         }
     }
-
-    private static void clearScreen(OutputWriter out){
-        out.print("\033[H\033[2J");
-    }
-
 }

@@ -27,7 +27,7 @@ public class LoginController {
         this.passwordHasher = new PasswordHasher();
     }
 
-    public void login(LoginBean loginBean, UserMode mode) throws AuthenticationException{
+    public User login(LoginBean loginBean, UserMode mode) throws AuthenticationException{
         
         // 1) Verifichiamo l'esistenza dell'utente
         Email email = new Email(loginBean.getEmail());
@@ -61,5 +61,7 @@ public class LoginController {
 
         // 5) Creo la sessione per l'utente
         SessionManager.getInstance().createSession(user);
+
+        return user;
     }
 }

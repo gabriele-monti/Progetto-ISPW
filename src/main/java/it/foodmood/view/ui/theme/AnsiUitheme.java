@@ -4,7 +4,7 @@ public final class AnsiUiTheme implements UiTheme {
 
     private static final String RESET = "\u001B[0m";
     private static final String ERROR = "\u001B[31m";
-    private static final String WARNING = "\u001B[33m";
+    private static final String WARNING = "\u001B[38;5;208m";
     private static final String SUCCESS = "\u001B[32m";
     private static final String INFO = "\u001B[37m";
     private static final String BOLD = "\u001B[1m";

@@ -69,8 +69,8 @@ public class GuiRegistrationView extends BaseGui implements RegistrationView {
 
     @FXML
     private void initialize(){
-        passwordToggleController = new PasswordToggleController(pfPassword, pfConfirmPassword, ivToggleConfirmPassword);
-        confirmPasswordToggleController = new PasswordToggleController(pfPassword, pfConfirmPassword, ivToggleConfirmPassword);
+        passwordToggleController = new PasswordToggleController(pfPassword, tfPasswordVisible, ivTogglePassword);
+        confirmPasswordToggleController = new PasswordToggleController(pfConfirmPassword, tfConfirmPasswordVisible, ivToggleConfirmPassword);
     }
 
     @FXML

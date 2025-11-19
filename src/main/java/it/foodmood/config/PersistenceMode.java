@@ -2,7 +2,8 @@ package it.foodmood.config;
 
 public enum PersistenceMode {
     DEMO("demo","Modalità dimostrativa, con persistenza in memoria volatile."),
-    FULL("full","Modalità completa, con persistenza su database MySQL");
+    FULL("full","Modalità completa, con persistenza su database MySQL."),
+    FILESYSTEM("filesystem", "Modalità dimostrativa, con persistenza su file system locale.");
 
     private final String key;
     private final String description;

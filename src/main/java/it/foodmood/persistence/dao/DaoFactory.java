@@ -15,6 +15,9 @@ public abstract class DaoFactory {
             case DEMO:
                 instance = new InMemoryDaoFactory();
                 break;
+            case FILESYSTEM:
+                instance = new FileSystemDaoFactory();
+                break;
             default: 
                 instance = new InMemoryDaoFactory();
         }
