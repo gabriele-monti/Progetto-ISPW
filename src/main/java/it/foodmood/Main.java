@@ -72,7 +72,7 @@ public final class Main{
                 case FILESYSTEM -> {
                     settings = new PersistenceSettings(PersistenceMode.FILESYSTEM, null, null, null);
                     persistenceConfig = new PersistenceConfig(settings);
-                    out.println(theme.success("Modalità filesystem inizializzata correttamente.\n Peristenza su file CSV.\n\n"));
+                    out.println(theme.success("Modalità filesystem inizializzata correttamente.\nPeristenza su file CSV.\n\n"));
                 }
 
                 case DEMO -> {
@@ -94,7 +94,7 @@ public final class Main{
             ApplicationBootstrap bootstrap = bootstrapFactory.create(uiMode);
             bootstrap.start(environment);
         } catch (Exception e){
-            System.err.println("Errore durante l'avvio dell'applicazione: " + e.getMessage());
+            System.err.println(theme.error("Errore durante l'avvio dell'applicazione: " + e.getMessage()));
             System.exit(1);
         }
     }

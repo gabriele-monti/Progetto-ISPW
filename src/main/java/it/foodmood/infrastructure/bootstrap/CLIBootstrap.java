@@ -1,22 +1,17 @@
 package it.foodmood.infrastructure.bootstrap;
 
-
 import it.foodmood.config.ApplicationEnvironment;
-import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
-import it.foodmood.infrastructure.io.console.ConsoleInputReader;
 import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
-import it.foodmood.view.ui.LoginView;
-import it.foodmood.view.ui.RegistrationView;
 import it.foodmood.view.ui.UiFactory;
+import it.foodmood.view.ui.cli.CliNavigator;
+import it.foodmood.view.ui.cli.CliNavigatorFactory;
 
 public class CliBootstrap implements ApplicationBootstrap{
 
-    private final InputReader in;
     private final OutputWriter out;
 
     public CliBootstrap(){
-        this.in = ConsoleInputReader.getInstance();
         this.out = new ConsoleOutputWriter();
     }
     
@@ -24,17 +19,12 @@ public class CliBootstrap implements ApplicationBootstrap{
     public void start(ApplicationEnvironment environment){
         out.println("Avvio software in modalità: command line\n");
 
-        UiFactory.initCli(environment.config().getUserMode());
+        var mode = environment.config().getUserMode();
 
-        RegistrationView registrationView = UiFactory.getInstance().createRegistrationView();
-        LoginView loginView = UiFactory.getInstance().createLoginView();
+        UiFactory.initCli(mode);
+        UiFactory cliFactory = UiFactory.getInstance();
+        CliNavigator navigator = CliNavigatorFactory.create(mode, cliFactory);
 
-        out.print("\033[H\033[J");
-        out.print("Hai già un account? (s/n): ");
-        String response = in.readLine();
-        if("n".equalsIgnoreCase(response.trim())){
-            registrationView.show();
-        }
-        loginView.show();
+        navigator.start();
     }
 }

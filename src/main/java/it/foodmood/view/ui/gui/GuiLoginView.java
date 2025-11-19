@@ -3,7 +3,6 @@ package it.foodmood.view.ui.gui;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.exception.AuthenticationException;
 import it.foodmood.view.boundary.LoginBoundary;
-import it.foodmood.view.ui.LoginView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,7 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
-public class GuiLoginView implements LoginView {
+public class GuiLoginView {
 
     @FXML
     private Button btnCreateAccount;
@@ -80,24 +79,13 @@ public class GuiLoginView implements LoginView {
             loginBean.setPassword(password.toCharArray());
 
             boundary.login(loginBean);
-            onLoginSuccess();
+            errorMessageLabel.setText("LOGIN RIUSCITO");
 
         } catch (IllegalArgumentException e){
             errorMessageLabel.setText(e.getMessage());
         } catch (AuthenticationException e) {
             errorMessageLabel.setText(e.getMessage());
         }
-    }
-
-    @Override
-    public void show(){
-        // comment
-    }
-
-    @Override
-    public void onLoginSuccess(){
-        // fai qualcosa
-        errorMessageLabel.setText("LOGIN RIUSCITO");
     }
 
     @FXML

@@ -103,8 +103,7 @@ public class GuiRegistrationView extends BaseGui implements RegistrationView {
             registrationBean.setConfirmPassword(confirmPassword.toCharArray());
 
             boundary.registration(registrationBean);
-            onRegistrationSuccess();
-
+            factory.showLoginView();
         } catch (IllegalArgumentException e){
             errorMessageLabel.setText(e.getMessage());
         } catch (RegistrationException e) {
@@ -114,18 +113,12 @@ public class GuiRegistrationView extends BaseGui implements RegistrationView {
 
     @FXML
     private void onBackToLoginClicked(){
-        factory.showLoginView();
+        factory.showLoginView(); // DA RIVEDERE
     }
 
 
     @Override
     public void show(){
         // comment
-    }
-
-    @Override
-    public void onRegistrationSuccess(){
-        showInfo("Account creato con successo!");
-        factory.showLoginView();
     }
 }

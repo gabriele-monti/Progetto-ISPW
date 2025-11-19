@@ -17,7 +17,7 @@ public final class ConsoleOutputWriter implements OutputWriter {
     public void displayTitle(String title) {
         final int WIDTH = 80;
 
-        String text = title;
+        String text = title.toUpperCase();
         int padding = (WIDTH - text.length()) / 2;
 
         String leftpaces = " ".repeat(Math.max(padding, 0));

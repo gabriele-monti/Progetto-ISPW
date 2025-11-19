@@ -8,8 +8,8 @@ import javafx.scene.Scene;
 public abstract class UiFactory {
     private static UiFactory instance;
 
-    public abstract LoginView createLoginView();
-    public abstract RegistrationView createRegistrationView();
+    public abstract void showLoginView();
+    public abstract void showRegistrationView();
 
     public static synchronized void initCli(UserMode userMode){
         if(instance != null) return; 

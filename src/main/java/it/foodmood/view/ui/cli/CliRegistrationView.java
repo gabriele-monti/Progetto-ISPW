@@ -2,11 +2,8 @@ package it.foodmood.view.ui.cli;
 
 import it.foodmood.bean.RegistrationBean;
 import it.foodmood.exception.RegistrationException;
-import it.foodmood.infrastructure.io.InputReader;
-import it.foodmood.infrastructure.io.OutputWriter;
 import it.foodmood.view.boundary.RegistrationBoundary;
 import it.foodmood.view.ui.RegistrationView;
-import it.foodmood.view.ui.theme.UiTheme;
 
 public class CliRegistrationView extends ConsoleView implements RegistrationView{
     
@@ -14,8 +11,7 @@ public class CliRegistrationView extends ConsoleView implements RegistrationView
 
     private final RegistrationBoundary boundary;
 
-    public CliRegistrationView(InputReader in, OutputWriter out, UiTheme theme, RegistrationBoundary boundary){
-        super(theme);
+    public CliRegistrationView(RegistrationBoundary boundary){
         this.boundary = boundary;
     }
 
@@ -67,15 +63,10 @@ public class CliRegistrationView extends ConsoleView implements RegistrationView
 
         try {
             boundary.registration(registrationBean);
-            onRegistrationSuccess();
+            showSuccess("Registrazione effettuata con successo!");
         } catch (RegistrationException e) {
             showError(e.getMessage());
         }
-    }
-
-    @Override
-    public void onRegistrationSuccess(){
-        showSuccess("Registrazione effettuata con successo!");
     }
 }
 

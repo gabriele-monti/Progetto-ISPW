@@ -1,11 +1,11 @@
 package it.foodmood.view.ui.cli;
 
-import java.util.Objects;
-
+import it.foodmood.exception.BackRequestedException;
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
 import it.foodmood.infrastructure.io.console.ConsoleInputReader;
 import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
+import it.foodmood.view.ui.theme.AnsiUiTheme;
 import it.foodmood.view.ui.theme.UiTheme;
 
 public abstract class ConsoleView implements CliUserInterface{
@@ -15,11 +15,12 @@ public abstract class ConsoleView implements CliUserInterface{
     protected final UiTheme theme;
 
     private static final String CLEAR_CONSOLE = "\033[H\033[J";
+    private static final String BACK_COMMAND = "0";
 
-    protected ConsoleView(UiTheme theme){
+    protected ConsoleView(){
         this.in = ConsoleInputReader.getInstance();
         this.out = new ConsoleOutputWriter();
-        this.theme = Objects.requireNonNull(theme);
+        this.theme = new AnsiUiTheme();
     }
 
     @Override
@@ -73,6 +74,23 @@ public abstract class ConsoleView implements CliUserInterface{
             if(input == null || input.isBlank()){
                 showError("Il campo non può essere vuoto");
                 continue;
+            }
+            return input.trim();
+        }
+    }
+
+    protected String askInputOrBack(String prompt){
+        while(true){
+            out.print(prompt);
+            String input = in.readLine();
+
+            if(input == null || input.isBlank()){
+                showError("Il campo non può essere vuoto");
+                continue;
+            }
+            input = input.trim();
+            if(BACK_COMMAND.equalsIgnoreCase(input)){
+                throw new BackRequestedException();
             }
             return input.trim();
         }
