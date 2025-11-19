@@ -2,10 +2,9 @@ package it.foodmood.view.ui.cli;
 
 import it.foodmood.bean.LoginBean;
 import it.foodmood.exception.AuthenticationException;
-import it.foodmood.exception.BackRequestedException;
 import it.foodmood.view.boundary.LoginBoundary;
 
-public class CliLoginView extends ConsoleView implements CliView {
+public class CliLoginView extends ConsoleView {
 
     private static final String TITLE = "LOGIN";
 
@@ -17,45 +16,42 @@ public class CliLoginView extends ConsoleView implements CliView {
     }
 
     @Override
-    public ViewResult showAndReturn(){
+    public CliPages displayPage(){
         while(true){
-            try{
-                showTitle(TITLE);
-                showInfo("Inserisci le credenziali (0 per tornare indietro)\n");
+            showTitle(TITLE);
+            showInfo("Inserisci le credenziali (0 = indietro)\n");
 
-                LoginBean loginBean = new LoginBean();
+            LoginBean loginBean = new LoginBean();
 
-                while(true){
-                    String email = askInputOrBack("Email: ");
-                    try {
-                        loginBean.setEmail(email);
-                        break;
-                    } catch (Exception e) {
-                        showError(e.getMessage());
-                    }
-                }
-
-                while(true){
-                    String password = askInputOrBack("Password: ");
-                    try {
-                        loginBean.setPassword(password.toCharArray());
-                        break;
-                    } catch (Exception e) {
-                        showError(e.getMessage());
-                    }
-                }
-
+            while(true){
+                String email = askInputOrBack("Email: ");
                 try {
-                    boundary.login(loginBean);
-                    showSuccess("Login effettuato con successo\n");
-                    return ViewResult.SUCCESS;
-                } catch (AuthenticationException e) {
-                    clearScreen();
+                    loginBean.setEmail(email);
+                    break;
+                } catch (Exception e) {
                     showError(e.getMessage());
-                    showInfo("Riprova\n");
                 }
-            } catch (BackRequestedException _) {
-                return ViewResult.BACK;
+            }
+
+            while(true){
+                String password = askInputOrBack("Password: ");
+                try {
+                    loginBean.setPassword(password.toCharArray());
+                    break;
+                } catch (Exception e) {
+                    showError(e.getMessage());
+                }
+            }
+
+            try {
+                boundary.login(loginBean);
+                showSuccess("Login effettuato con successo\n");
+                waitForEnter(null);
+                return CliPages.EXIT;
+            } catch (AuthenticationException e) {
+                clearScreen();
+                showError(e.getMessage());
+                showInfo("Riprova\n");
             }
         }
     }

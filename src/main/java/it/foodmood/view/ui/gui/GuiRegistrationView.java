@@ -3,7 +3,6 @@ package it.foodmood.view.ui.gui;
 import it.foodmood.bean.RegistrationBean;
 import it.foodmood.exception.RegistrationException;
 import it.foodmood.view.boundary.RegistrationBoundary;
-import it.foodmood.view.ui.RegistrationView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,7 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
-public class GuiRegistrationView extends BaseGui implements RegistrationView {
+public class GuiRegistrationView extends BaseGui {
 
     @FXML
     private Button btnBackToLogin;
@@ -114,11 +113,5 @@ public class GuiRegistrationView extends BaseGui implements RegistrationView {
     @FXML
     private void onBackToLoginClicked(){
         factory.showLoginView(); // DA RIVEDERE
-    }
-
-
-    @Override
-    public void show(){
-        // comment
     }
 }

@@ -17,7 +17,7 @@ public final class CliFactory extends UiFactory{
     public void showLoginView(){
         LoginBoundary boundary = new LoginBoundary(userMode);
         CliLoginView view = new CliLoginView(boundary);
-        view.showAndReturn();
+        view.show();
     }  
 
     @Override

@@ -8,7 +8,9 @@ import it.foodmood.config.StartupEnvironment;
 import it.foodmood.infrastructure.bootstrap.ApplicationBootstrap;
 import it.foodmood.infrastructure.bootstrap.BootstrapFactory;
 import it.foodmood.infrastructure.bootstrap.UiMode;
+import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
+import it.foodmood.infrastructure.io.console.ConsoleInputReader;
 import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.infrastructure.util.ConnectionVerifier;
 import it.foodmood.persistence.dao.DaoFactory;
@@ -21,6 +23,7 @@ import it.foodmood.config.PersistenceSettings;
 public final class Main{
     
     public static void main(String[] args){
+        InputReader in = ConsoleInputReader.getInstance();
         OutputWriter out = new ConsoleOutputWriter();
         UiTheme theme = new AnsiUiTheme();
 
@@ -35,7 +38,7 @@ public final class Main{
             boolean interactive = (args == null || args.length == 0);
 
             if(interactive){
-                InteractiveSetup setup = new InteractiveSetup(theme);
+                InteractiveSetup setup = new InteractiveSetup(in, out, theme);
                 startup = setup.askUser();
             } else {
                 startup = StartupConfigurator.fromArgsAndEnvironment(args, fileConfig);

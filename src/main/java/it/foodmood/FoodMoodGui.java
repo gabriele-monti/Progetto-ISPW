@@ -3,6 +3,7 @@ package it.foodmood;
 import it.foodmood.config.ApplicationEnvironment;
 import it.foodmood.config.UserMode;
 import it.foodmood.view.ui.UiFactory;
+import it.foodmood.view.ui.gui.GuiFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -29,9 +30,9 @@ public class FoodMoodGui extends Application {
         stage.setResizable(false);
         stage.show();
 
-        UiFactory.initGui(scene, userMode);
+        UiFactory uiFactory = new GuiFactory(scene, userMode);
 
-        UiFactory.getInstance().showLoginView();
+        uiFactory.showLoginView();
     }
 
     @Override

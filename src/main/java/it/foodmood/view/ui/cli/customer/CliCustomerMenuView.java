@@ -9,23 +9,22 @@ public class CliCustomerMenuView extends ConsoleView {
         super();
     }
 
-    public CliPages show(){
+    @Override
+    public CliPages displayPage(){
         while(true){
             // clearScreen();
             showTitle("Menù Cliente");
 
             showInfo("1. Login");
             showInfo("2. Registrazione");
-            showInfo("3. Ordina");
-            showInfo("4. Esci");
+            showInfo("3. Esci");
 
             String choice = askInput("\nSeleziona un'opzione: ");
 
             switch(choice){
                 case "1": return CliPages.LOGIN;
                 case "2": return CliPages.REGISTRATION;
-                // case "3": return CliPages.ORDER;
-                case "4": return CliPages.EXIT;
+                case "3": return CliPages.EXIT;
                 default : showError("Scelta non valida, riprova.");
             }
         }
