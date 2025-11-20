@@ -6,6 +6,7 @@ public final class SessionManager {
 
     private static SessionManager instance;
     private Session currentSession;
+    private User currentUser;
 
     private SessionManager(){
         // costruttore vuoto
@@ -19,8 +20,13 @@ public final class SessionManager {
     }
 
     public Session createSession(User user){
+        this.currentUser = user;
         this.currentSession = new Session(user.getId() ,user.getRole());
         return currentSession;
+    }
+
+    public User getCurrentUser(){
+        return currentUser;
     }
 
     public Session getCurrentSession(){
@@ -41,5 +47,6 @@ public final class SessionManager {
 
     public void terminateCurrentSession() {
         currentSession = null;
+        currentUser = null;
     }
 }

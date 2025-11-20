@@ -18,7 +18,7 @@ public class CliRegistrationView extends ConsoleView {
     public CliPages displayPage(){
         while(true){
             showTitle(TITLE);
-            showInfo("Inserisci i dati (0 = indietro)\n");
+            showInfo("Crea il tuo account (0 = indietro)\n");
 
             RegistrationBean registrationBean = new RegistrationBean();
 

@@ -19,7 +19,7 @@ public class CliLoginView extends ConsoleView {
     public CliPages displayPage(){
         while(true){
             showTitle(TITLE);
-            showInfo("Inserisci le credenziali (0 = indietro)\n");
+            showInfo("Accedi al tuo account (0 = indietro)\n");
 
             LoginBean loginBean = new LoginBean();
 

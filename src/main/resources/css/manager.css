@@ -1,0 +1,117 @@
+.background-left {
+    -fx-background-image: url("../images/green-back.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.menuBtn {
+    -fx-background-color: linear-gradient(to bottom right, #e9c46a, #ddb558);
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 30;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(233, 196, 106, 0.3), 12, 0.25, 0, 4);
+}
+
+.menuBtn:hover {
+    -fx-background-color: linear-gradient(to bottom right, #ddb558, #d1a647);
+    -fx-effect: dropshadow(gaussian, rgba(233, 196, 106, 0.45), 14, 0.35, 0, 5);
+}
+
+.white-bg{
+    -fx-background-color: #fff;
+}
+
+.radius{
+    -fx-background-radius: 8px;
+}
+
+.shadow{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5,0,0,0);
+}
+
+.form {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 15;
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 15;
+    -fx-border-width: 1.5;
+}
+
+
+.spinner {
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.card .image-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 0);
+}
+
+.allergens {
+    -fx-background-color: #ffffff;
+    -fx-border-color:  #287271;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.nutritional-summary{
+    -fx-background-color:  linear-gradient(to bottom, #e8f4f8 0%, #ffffff 100%);
+    -fx-border-color:  #287271;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.carbohydrates{
+    -fx-background-color:  #8ab17d;
+    -fx-background-radius: 2;
+}
+
+.proteins{
+    -fx-background-color:  #e9c46a;
+    -fx-background-radius: 2;
+}
+
+.fats{
+    -fx-background-color:  #f4a261;
+    -fx-background-radius: 2;
+}
+
+.section-container {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 15;
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 15;
+    -fx-border-width: 1.5;
+}
+
+.btn-save-main {
+    -fx-background-color: linear-gradient(to bottom right, #77916f, #77916f);
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 30;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(42, 157, 143, 0.4), 12, 0.5, 0, 4);
+}
+
+.btn-save-main:pressed {
+    -fx-background-color: #1f5f5a;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.btn-cancel-main {
+    -fx-background-color: linear-gradient(to bottom right, #e21e2c, #e21e2c);
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 30;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(231, 111, 81, 0.4), 12, 0.5, 0, 4);
+}
+
+.btn-cancel-main:pressed {
+    -fx-background-color: #c44d38;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}

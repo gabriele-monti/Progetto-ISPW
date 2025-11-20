@@ -15,6 +15,14 @@ public final class GuiFactory extends UiFactory{
         this.navigator = new GuiNavigator(scene);
         this.userMode = userMode;
     }
+
+    public void showHomeView(){
+        switch (userMode) {
+            case CUSTOMER -> showHomeCustumerView();
+            case WAITER -> showHomeCustumerView();
+            case MANAGER -> showHomeManagerView();
+        }
+    }
     
     public void showLoginView(){
         GuiLoginView controller = navigator.goTo(GuiPages.LOGIN);
@@ -27,6 +35,16 @@ public final class GuiFactory extends UiFactory{
         GuiRegistrationView controller = navigator.goTo(GuiPages.REGISTRATION);
         RegistrationBoundary boundary = new RegistrationBoundary();
         controller.setBoundary(boundary);
+        controller.setFactory(this);
+    }
+
+    public void showHomeCustumerView(){
+        GuiHomeCustomer controller = navigator.goTo(GuiPages.HOME_CUSTOMER);
+        controller.setFactory(this);
+    }
+
+    public void showHomeManagerView(){
+        GuiHomeManager controller = navigator.goTo(GuiPages.HOME_MANAGER);
         controller.setFactory(this);
     }
 }

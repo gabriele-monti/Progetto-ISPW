@@ -102,6 +102,7 @@ public class GuiRegistrationView extends BaseGui {
             registrationBean.setConfirmPassword(confirmPassword.toCharArray());
 
             boundary.registration(registrationBean);
+            showInfo("Registrazione effettuata con successo");
             factory.showLoginView();
         } catch (IllegalArgumentException e){
             errorMessageLabel.setText(e.getMessage());
