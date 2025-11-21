@@ -94,7 +94,7 @@
                                        <children>
                                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../icons/account.png" />
+                                                <Image url="@../icons/mail.png" />
                                              </image>
                                           </ImageView>
                                        </children>

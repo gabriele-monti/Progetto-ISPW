@@ -1,7 +1,6 @@
 package it.foodmood.view.ui.gui;
 
 import it.foodmood.domain.model.User;
-import it.foodmood.utils.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -70,12 +69,21 @@ public class GuiHomeCustomer extends BaseGui {
         // costruttore vuooto
     }
 
-    @FXML
-    private void initialize(){
-        User customer =SessionManager.getInstance().getCurrentUser();
+    private User customer;
 
-        if(customer != null){
+    public void setUser(User customer){
+        this.customer = customer;
+        updateLabel();
+    }
+
+    private void updateLabel(){
+        if(lblUserInitials != null && customer != null){
             lblUserInitials.setText(getUserInitials(customer));
         }
+    }
+
+    @FXML
+    private void initialize(){
+        updateLabel();
     }
 }

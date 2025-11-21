@@ -74,7 +74,7 @@
                                                       <Image url="@../icons/dinner-white.png" />
                                                    </image>
                                                 </ImageView>
-                                                <Label text="GESTIONE PIATTI E MENU" textFill="WHITE">
+                                                <Label text="GESTIONE PIATTI" textFill="WHITE">
                                                    <font>
                                                       <Font name="Arial Bold" size="16.0" />
                                                    </font>
@@ -83,7 +83,7 @@
                                           </HBox>
                                        </graphic>
                                     </Button>
-                                    <Button fx:id="btnManagmentProduct" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="247.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="45.0" prefWidth="280.0" styleClass="menuBtn">
+                                    <Button fx:id="btnManagmentIngredients" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="247.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="45.0" prefWidth="280.0" styleClass="menuBtn">
                                        <font>
                                           <Font name="Arial Bold" size="18.0" />
                                        </font>
@@ -92,10 +92,10 @@
                                              <children>
                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../icons/clipboard.png" />
+                                                      <Image url="@../icons/Ingredient.png" />
                                                    </image>
                                                 </ImageView>
-                                                <Label text="GESTIONE PRODOTTI" textFill="WHITE">
+                                                <Label text="GESTIONE INGREDIENTI" textFill="WHITE">
                                                    <font>
                                                       <Font name="Arial Bold" size="16.0" />
                                                    </font>
@@ -104,7 +104,7 @@
                                           </HBox>
                                        </graphic>
                                     </Button>
-                                    <Button fx:id="btnManagmentDiningRooms" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="214.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="45.0" prefWidth="280.0" styleClass="menuBtn">
+                                    <Button fx:id="btnManagmentRestaurantRoom" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="214.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="45.0" prefWidth="280.0" styleClass="menuBtn">
                                        <font>
                                           <Font name="Arial Bold" size="18.0" />
                                        </font>

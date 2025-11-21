@@ -65,7 +65,7 @@ public class GuiLoginView {
         errorMessageLabel.setText("");
 
         String email = tfEmail.getText();
-        String password = pfPassword.getText();
+        String password = toggleController.getPassword();
 
         if(email.isEmpty() || password.isEmpty()){
             errorMessageLabel.setText("L'indirizzo e-mail e la password sono obbligatori");

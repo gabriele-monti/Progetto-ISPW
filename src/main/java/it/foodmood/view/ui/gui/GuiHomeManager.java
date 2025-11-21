@@ -1,7 +1,7 @@
 package it.foodmood.view.ui.gui;
 
 import it.foodmood.domain.model.User;
-import it.foodmood.utils.SessionManager;
+import it.foodmood.view.boundary.LoginBoundary;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,7 +20,7 @@ public class GuiHomeManager extends BaseGui {
     private Button btnManagmentBooking;
 
     @FXML
-    private Button btnManagmentDiningRooms;
+    private Button btnManagmentRestaurantRoom;
 
     @FXML
     private Button btnManagmentDishes;
@@ -29,7 +29,7 @@ public class GuiHomeManager extends BaseGui {
     private Button btnManagmentEmployees;
 
     @FXML
-    private Button btnManagmentProduct;
+    private Button btnManagmentIngredients;
 
     @FXML
     private AnchorPane contentArea;
@@ -41,16 +41,21 @@ public class GuiHomeManager extends BaseGui {
     private AnchorPane main_form;
 
     @FXML
-    void onLogoutClicked(ActionEvent event) {
-        factory.showLoginView();
-    }
-
-    @FXML
     void switchForm(ActionEvent event) {
         Object source = event.getSource();
 
-        if(source == btnManagmentProduct){
-            GuiIngredients controller = paneNavigator.show(GuiPages.INGREDIENTS);
+        if(source == btnManagmentIngredients){
+            GuiManagmentIngredients controller = paneNavigator.show(GuiPages.MANAGMENT_INGREDIENTS);
+            controller.setFactory(factory);
+        }
+
+        if(source == btnManagmentDishes){
+            GuiManagmentDish controller = paneNavigator.show(GuiPages.MANAGMENT_DISH);
+            controller.setFactory(factory);
+        }
+
+        if(source == btnManagmentRestaurantRoom){
+            GuiManagmentRestaurantRoom controller = paneNavigator.show(GuiPages.MANAGMENT_ROOM_RESTAURANT);
             controller.setFactory(factory);
         }
 
@@ -62,22 +67,38 @@ public class GuiHomeManager extends BaseGui {
 
     public GuiFactory factory;
     private PaneNavigator paneNavigator;
+    private LoginBoundary loginBoundary;
+    private User manager;
 
     public void setFactory(GuiFactory factory){
         this.factory = factory;
     }
 
+    public void setBoundary(LoginBoundary boundary){
+        this.loginBoundary = boundary;
+    }
+
+    public void setManager(User manager){
+        this.manager = manager;
+        updateLabel();
+    }
+
+    private void updateLabel(){
+        if(lblManager != null && manager != null){
+            lblManager.setText(getUserFullName(manager));
+        }
+    }
+
+    @FXML
+    void onLogoutClicked(ActionEvent event) {
+        loginBoundary.logout();
+        factory.showLoginView();
+    }
+
     @FXML
     private void initialize(){
         paneNavigator = new PaneNavigator(contentArea);
-
-        User manager = SessionManager.getInstance().getCurrentUser();
-
-        if(manager != null){
-            lblManager.setText(getUserFullName(manager));
-        }
-
-        paneNavigator.show(GuiPages.INGREDIENTS);
+        updateLabel();
     }
 
 

@@ -65,4 +65,8 @@ public class PasswordToggleController {
         Image img = new Image(url.toExternalForm());
         toggleIcon.setImage(img);
     }
+
+    public String getPassword(){
+        return visible ? visibleField.getText() : passwordField.getText();
+    }
 }

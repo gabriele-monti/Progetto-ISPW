@@ -64,7 +64,7 @@ public final class Main{
 
                     if(connected) {
                         out.println(theme.success("Connessione al database verificata con successo!"));
-                        out.println(theme.success("Database inizializzato correttamente\nURL: ") + dbUrl + "\n");
+                        out.println(theme.success("Database inizializzato correttamente\n") + (theme.bold("URL: ")) + dbUrl + "\n");
                     } else {
                         out.println(theme.error("Impossibile stabilire la connessione al database!"));
                         out.println(theme.warning("Verifica la configurazione del database e riprova.\n"));

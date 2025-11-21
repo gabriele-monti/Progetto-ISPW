@@ -89,8 +89,8 @@ public class GuiRegistrationView extends BaseGui {
         String name = tfName.getText();
         String surname = tfSurname.getText();
         String email = tfEmail.getText();
-        String password = pfPassword.getText();
-        String confirmPassword = pfConfirmPassword.getText();
+        String password = passwordToggleController.getPassword();
+        String confirmPassword = confirmPasswordToggleController.getPassword();
 
         try {
             RegistrationBean registrationBean = new RegistrationBean();
