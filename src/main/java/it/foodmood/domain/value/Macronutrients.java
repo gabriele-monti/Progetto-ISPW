@@ -2,10 +2,6 @@ package it.foodmood.domain.value;
 
 import java.util.Objects;
 
-/*
- * Value Object dei macronutrienti riferiti a 100g/ml di prodotto
- */
-
 public final class Macronutrients {
 
     public static final int BASE_AMOUNT = 100; // 100 g o 100 ml 
@@ -14,22 +10,13 @@ public final class Macronutrients {
     private final double carbohydrates;
     private final double fat;
 
-    private Macronutrients(double protein, double carbohydrates, double fat){
+    public Macronutrients(double protein, double carbohydrates, double fat){
         if (protein < 0 || carbohydrates < 0 || fat < 0){
             throw new IllegalArgumentException("I macronutrienti devono essere >= 0");
         }
         this.protein = protein;
         this.carbohydrates = carbohydrates;
         this.fat = fat;
-    }
-
-    // Factory method per creare macronutrienti per 100 g/ml 
-    public static Macronutrients of(double protein, double carbohydrates, double fat){
-        return new Macronutrients(protein, carbohydrates, fat);
-    }
-
-    public static Macronutrients zero(){
-        return new Macronutrients(0,0,0);
     }
 
     public double getProtein() {return protein;}

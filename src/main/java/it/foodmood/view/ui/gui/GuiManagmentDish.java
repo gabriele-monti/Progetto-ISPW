@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-public class GuiManagmentDish {
+public class GuiManagmentDish extends BaseGui {
 
     public GuiFactory factory;
 
@@ -206,20 +206,10 @@ public class GuiManagmentDish {
     }
 
     private void showListView(){
-        paneList.setVisible(true);
-        paneList.setManaged(true);
-
-        paneForm.setVisible(false);
-        paneForm.setManaged(false);
-
+        swap(paneList, paneForm);
     }
 
     private void showFormView(){
-        paneList.setVisible(false);
-        paneList.setManaged(false);
-
-        paneForm.setVisible(true);
-        paneForm.setManaged(true);
+        swap(paneForm, paneList);
     }
-
 }

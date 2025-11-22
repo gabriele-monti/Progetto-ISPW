@@ -1,6 +1,7 @@
 package it.foodmood.persistence.dao;
 
 import it.foodmood.persistence.filesystem.FileSystemDishDao;
+import it.foodmood.persistence.filesystem.FileSystemIngredientDao;
 import it.foodmood.persistence.filesystem.FileSystemUserDao;
 import it.foodmood.persistence.filesystem.FileSystemCredentialDao;
 
@@ -20,5 +21,10 @@ public final class FileSystemDaoFactory extends DaoFactory {
     @Override
     public CredentialDao getCredentialDao(){ 
         return FileSystemCredentialDao.getInstance();
+    }
+
+    @Override
+    public IngredientDao getIngredientDao(){ 
+        return FileSystemIngredientDao.getInstance();
     }
 }

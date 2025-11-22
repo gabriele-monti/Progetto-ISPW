@@ -11,7 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class GuiManagmentIngredients {
+public class GuiManagmentIngredients extends BaseGui {
 
 
     @FXML
@@ -155,22 +155,10 @@ public class GuiManagmentIngredients {
     }
 
     private void showListView(){
-        paneList.setVisible(true);
-        paneList.setManaged(true);
-
-        paneForm.setVisible(false);
-        paneForm.setManaged(false);
-
-        // opzionale potrei aggiungere il clearForm...
+        swap(paneList, paneForm);
     }
 
     private void showFormView(){
-        paneList.setVisible(false);
-        paneList.setManaged(false);
-
-        paneForm.setVisible(true);
-        paneForm.setManaged(true);
+        swap(paneForm, paneList);
     }
-
-
 }

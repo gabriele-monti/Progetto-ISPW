@@ -42,8 +42,8 @@ public abstract class AbstractCsvDao {
     protected List<String> readAllLines(){
         List<String> out = new ArrayList<>();
         try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while((line = reader.readLine()) != null){
+            String line = reader.readLine();
+            while(line != null){
                 if(!line.isBlank()){
                     out.add(line);
                 }

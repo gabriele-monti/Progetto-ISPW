@@ -11,15 +11,11 @@ public final class Ingredient {
     private final Macronutrients macro;  // Riferiti a 100 g / ml
     private final Set<Allergen> allergens;
 
-    private Ingredient(String name, Macronutrients macro, Set<Allergen> allergens){
+    public Ingredient(String name, Macronutrients macro, Set<Allergen> allergens){
         if (name == null || name.isBlank()) throw new IllegalArgumentException("Il nome non può essere vuoto.");
         this.name = name;
         this.macro = macro;
         this.allergens = allergens == null ? Set.of() : Set.copyOf(allergens);
-    }
-
-    public static Ingredient of(String name, Macronutrients macro, Set<Allergen> allergens){
-        return new Ingredient(name, macro, allergens);
     }
 
     public String getName() {return name;}
@@ -31,7 +27,7 @@ public final class Ingredient {
         return macro.kcal() * qt.ratioToBase();
     }
 
-    public Macronutrients getmacroFor(Quantity qt){
+    public Macronutrients getMacroFor(Quantity qt){
         Objects.requireNonNull(qt, "La quantità non può essere nulla!");
         return macro.scale(qt.ratioToBase());
     }

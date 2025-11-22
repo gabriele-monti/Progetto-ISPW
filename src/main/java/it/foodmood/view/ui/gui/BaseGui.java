@@ -1,6 +1,7 @@
 package it.foodmood.view.ui.gui;
 
 import it.foodmood.domain.model.User;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 
 public abstract class BaseGui {
@@ -44,5 +45,16 @@ public abstract class BaseGui {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    protected void swap(Node nodeShow, Node nodeHide){
+        if(nodeShow != null){
+            nodeShow.setVisible(true);
+            nodeShow.setManaged(true);
+        }
+        if(nodeHide != null){
+            nodeHide.setVisible(false);
+            nodeHide.setManaged(false);
+        }
     }
 }

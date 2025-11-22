@@ -36,4 +36,7 @@ public abstract class DaoFactory {
 
     public abstract CredentialDao getCredentialDao();
 
+    public abstract IngredientDao getIngredientDao();
+
+
 }

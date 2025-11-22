@@ -44,6 +44,9 @@ public class FileSystemUserDao extends AbstractCsvDao implements UserDao {
 
     @Override
     public Optional<User> findById(UUID id){
+        if(id == null){
+            return Optional.empty();
+        }
         return findAll().stream().filter(user -> user.getId().equals(id)).findFirst();
     }
 

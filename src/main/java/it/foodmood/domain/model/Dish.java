@@ -1,7 +1,6 @@
 package it.foodmood.domain.model;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
@@ -59,7 +58,14 @@ public final class Dish {
     public Money getPrice() {return price; }
 
     public Macronutrients totalMacronutrients(){
-        return ingredients.stream().map(portion -> portion.getIngredient().getmacroFor(portion.getQuantity())).reduce(Macronutrients.zero(), Macronutrients::plus);
+        Macronutrients total = new Macronutrients(0, 0, 0);
+
+        for(IngredientPortion portion : ingredients){
+            Macronutrients macronutrients = portion.getIngredient().getMacroFor(portion.getQuantity());
+            total = total.plus(macronutrients);
+        }
+
+        return total;
     }
 
     public double totalKcal(){
@@ -67,7 +73,14 @@ public final class Dish {
     }
 
     public Set<Allergen> allergens(){
-        return ingredients.stream().flatMap(portion -> portion.getIngredient().getAllergens().stream()).collect(Collectors.toUnmodifiableSet());
+
+        Set<Allergen> result = new HashSet<>();
+
+        for(IngredientPortion portion : ingredients){
+            result.addAll(portion.getIngredient().getAllergens());
+        }
+
+        return Collections.unmodifiableSet(result);
     }
 
     public boolean isAllergenic(){

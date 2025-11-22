@@ -14,7 +14,6 @@ import it.foodmood.persistence.dao.UserDao;
 import it.foodmood.utils.SessionManager;
 import it.foodmood.utils.security.PasswordHasher;
 
-
 public class LoginController {
 
     private final UserDao userDao;

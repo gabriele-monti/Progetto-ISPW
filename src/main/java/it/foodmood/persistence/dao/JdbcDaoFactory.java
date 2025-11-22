@@ -1,6 +1,7 @@
 package it.foodmood.persistence.dao;
 
 import it.foodmood.persistence.mysql.JdbcDishDao;
+import it.foodmood.persistence.mysql.JdbcIngredientDao;
 import it.foodmood.persistence.mysql.JdbcUserDao;
 import it.foodmood.persistence.mysql.JdbcCredentialDao;
 
@@ -26,4 +27,8 @@ public final class JdbcDaoFactory extends DaoFactory {
         return JdbcCredentialDao.getInstance();
     }
 
+    @Override
+    public IngredientDao getIngredientDao(){ 
+        return JdbcIngredientDao.getInstance();
+    }
 }
