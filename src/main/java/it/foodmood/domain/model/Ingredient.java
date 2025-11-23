@@ -15,7 +15,7 @@ public final class Ingredient {
         if (name == null || name.isBlank()) throw new IllegalArgumentException("Il nome non può essere vuoto.");
         this.name = name;
         this.macro = macro;
-        this.allergens = allergens == null ? Set.of() : Set.copyOf(allergens);
+        this.allergens = (allergens == null) ? Set.of() : Set.copyOf(allergens);
     }
 
     public String getName() {return name;}

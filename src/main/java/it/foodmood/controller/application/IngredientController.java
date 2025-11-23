@@ -1,5 +1,6 @@
 package it.foodmood.controller.application;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,38 +22,64 @@ public class IngredientController {
     }
 
     public void createIngredient(IngredientBean ingredientBean) throws IngredientException{
-        // Ingredient ingredient;
+        try {
+            String name = ingredientBean.getName();
+            MacronutrientsBean macronutrientsBean = ingredientBean.getMacronutrients();
 
-        String name = ingredientBean.getName();
+            if(macronutrientsBean == null || macronutrientsBean.isEmpty()){
+                throw new IngredientException("L'ingrediente deve avere almeno un macronutriente");
+            }
 
-        MacronutrientsBean macronutrientsBean = ingredientBean.getMacronutrients();
+            // converto i macronutrienti in 0.0 qualora fossero null
+            double protein = normalize(macronutrientsBean.getProtein());
+            double carbohydrate = normalize(macronutrientsBean.getCarbohydrates());
+            double fat = normalize(macronutrientsBean.getFat());
 
-        if(macronutrientsBean == null || macronutrientsBean.isEmpty()){
-            throw new IngredientException("L'ingrediente deve avere almeno un macronutriente");
+            Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
+
+            // converto gli allergeni
+            Set<Allergen> allergens = ingredientBean.getAllergens().stream().filter(s -> s != null && !s.isBlank())
+                        .map(String::trim)
+                        .map(String::toUpperCase)
+                        .map(Allergen::valueOf)
+                        .collect(Collectors.toSet());
+
+            Ingredient ingredient = new Ingredient(name, macronutrients, allergens);
+
+            if(ingredientDao.findById(name).isPresent()){
+                throw new IngredientException("Esiste già un ingrediente con il nome: " + name);
+            }
+
+            // inserisco l'ingrediente
+            ingredientDao.insert(ingredient);
+        } catch (IllegalArgumentException e) {
+            throw new IngredientException(e.getMessage());
         }
-
-        // converto i macronutrienti in 0.0 qualora fossero null
-        double protein = normalize(macronutrientsBean.getProtein());
-        double carbohydrate = normalize(macronutrientsBean.getCarbohydrates());
-        double fat = normalize(macronutrientsBean.getFat());
-
-        Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
-
-        // converto gli allergeni
-        Set<Allergen> allergens = ingredientBean.getAllergens().stream().filter(strings -> strings != null && strings.isBlank())
-                    .map(String::trim)
-                    .map(String::toUpperCase)
-                    .map(Allergen::valueOf)
-                    .collect(Collectors.toSet());
         
-        Ingredient ingredient = new Ingredient(name, macronutrients, allergens);
+    }
 
-        if(ingredientDao.findById(name).isPresent()){
-            throw new IngredientException("Esiste già un ingrediente con il nome: " + name);
-        }
+    public List<IngredientBean> getAllIngredients(){
+        return ingredientDao.findAll().stream().map(this::toBean).collect(Collectors.toList());
+    }
 
-        // inserisco l'ingrediente
-        ingredientDao.insert(ingredient);
+    public void deleteIngredient(String name){
+        ingredientDao.deleteById(name);
+    }
+
+    private IngredientBean toBean(Ingredient ingredient){
+        IngredientBean ingredientBean = new IngredientBean();
+        ingredientBean.setName(ingredient.getName());
+
+        MacronutrientsBean macronutrientsBean = new MacronutrientsBean();
+        macronutrientsBean.setProtein(ingredient.getMacro().getProtein());
+        macronutrientsBean.setCarbohydrates(ingredient.getMacro().getCarbohydrates());
+        macronutrientsBean.setFat(ingredient.getMacro().getFat());
+
+        ingredientBean.setMacronutrients(macronutrientsBean);
+
+        ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::name).collect(Collectors.toList()));
+
+        return ingredientBean;
     }
 
     private double normalize(Double value){

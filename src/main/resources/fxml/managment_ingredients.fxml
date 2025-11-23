@@ -83,12 +83,12 @@
                                                       <Font name="Arial Bold" size="12.0" />
                                                    </font>
                                                 </Button>
-                                                <Button fx:id="btnModifyIngredient" minWidth="150.0" prefHeight="40.0" prefWidth="200.0" styleClass="btn-modify" text="MODIFICA INGREDIENTE">
+                                                <Button fx:id="btnModifyIngredient" minWidth="150.0" onAction="#onModifyIngredient" prefHeight="40.0" prefWidth="200.0" styleClass="btn-modify" text="MODIFICA INGREDIENTE">
                                                    <font>
                                                       <Font name="Arial Bold" size="12.0" />
                                                    </font>
                                                 </Button>
-                                                <Button fx:id="btnDeleteIngredient" minWidth="150.0" prefHeight="40.0" prefWidth="200.0" styleClass="btn-remove" text="RIMUOVI INGREDIENTE" textAlignment="CENTER">
+                                                <Button fx:id="btnDeleteIngredient" minWidth="150.0" onAction="#onDeleteIngredient" prefHeight="40.0" prefWidth="200.0" styleClass="btn-remove" text="RIMUOVI INGREDIENTE" textAlignment="CENTER">
                                                    <font>
                                                       <Font name="Arial Bold" size="12.0" />
                                                    </font>
@@ -187,7 +187,7 @@
                                                 <Font name="Arial Bold" size="16.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="tfCarbhoydrates" maxWidth="1.7976931348623157E308" minHeight="40.0" promptText="0.0" styleClass="form">
+                                          <TextField fx:id="tfCarbohydrates" maxWidth="1.7976931348623157E308" minHeight="40.0" promptText="0.0" styleClass="form">
                                              <font>
                                                 <Font name="Arial" size="15.0" />
                                              </font>
@@ -204,7 +204,7 @@
                                                 <Font name="Arial Bold" size="16.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="tfProteins" maxWidth="1.7976931348623157E308" minHeight="40.0" promptText="0.0" styleClass="form">
+                                          <TextField fx:id="tfProtein" maxWidth="1.7976931348623157E308" minHeight="40.0" promptText="0.0" styleClass="form">
                                              <font>
                                                 <Font name="Arial" size="15.0" />
                                              </font>
@@ -221,7 +221,7 @@
                                                 <Font name="Arial Bold" size="16.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="tfFats" maxWidth="1.7976931348623157E308" minHeight="40.0" promptText="0.0" styleClass="form">
+                                          <TextField fx:id="tfFat" maxWidth="1.7976931348623157E308" minHeight="40.0" promptText="0.0" styleClass="form">
                                              <font>
                                                 <Font name="Arial" size="15.0" />
                                              </font>

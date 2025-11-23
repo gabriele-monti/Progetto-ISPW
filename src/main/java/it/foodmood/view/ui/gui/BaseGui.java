@@ -3,6 +3,7 @@ package it.foodmood.view.ui.gui;
 import it.foodmood.domain.model.User;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public abstract class BaseGui {
 
@@ -45,6 +46,16 @@ public abstract class BaseGui {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    protected boolean showConfirmation(String title, String message){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        var result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 
     protected void swap(Node nodeShow, Node nodeHide){

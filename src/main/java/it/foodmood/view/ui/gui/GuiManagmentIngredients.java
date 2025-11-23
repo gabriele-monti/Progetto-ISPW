@@ -1,5 +1,13 @@
 package it.foodmood.view.ui.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import it.foodmood.bean.IngredientBean;
+import it.foodmood.bean.MacronutrientsBean;
+import it.foodmood.controller.application.IngredientController;
+import it.foodmood.domain.value.Unit;
+import it.foodmood.exception.IngredientException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,139 +17,92 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.layout.AnchorPane;
+
 
 public class GuiManagmentIngredients extends BaseGui {
 
+    @FXML private Button btnCancel;
 
-    @FXML
-    private Button btnCancel;
+    @FXML private Button btnDeleteIngredient;
 
-    @FXML
-    private Button btnDeleteIngredient;
+    @FXML private Button btnModifyIngredient; // non implemento per ora
 
-    @FXML
-    private Button btnModifyIngredient;
+    @FXML private Button btnNewIngredient;
 
-    @FXML
-    private Button btnNewIngredient;
+    @FXML private Button btnSave;
 
-    @FXML
-    private Button btnSave;
+    @FXML private CheckBox cbCelery;
 
-    @FXML
-    private CheckBox cbCelery;
+    @FXML private CheckBox cbCrustaceans;
 
-    @FXML
-    private CheckBox cbCrustaceans;
+    @FXML private CheckBox cbEggs;
 
-    @FXML
-    private CheckBox cbEggs;
+    @FXML private CheckBox cbFish;
 
-    @FXML
-    private CheckBox cbFish;
+    @FXML private CheckBox cbGluten;
 
-    @FXML
-    private CheckBox cbGluten;
+    @FXML private CheckBox cbLupin;
 
-    @FXML
-    private CheckBox cbLupin;
+    @FXML private CheckBox cbMilk;
 
-    @FXML
-    private CheckBox cbMilk;
+    @FXML private CheckBox cbMolluscs;
 
-    @FXML
-    private CheckBox cbMolluscs;
+    @FXML private CheckBox cbMustard;
 
-    @FXML
-    private CheckBox cbMustard;
+    @FXML private CheckBox cbNuts;
 
-    @FXML
-    private CheckBox cbNuts;
+    @FXML private CheckBox cbPeanuts;
 
-    @FXML
-    private CheckBox cbPeanuts;
+    @FXML private CheckBox cbSesame;
 
-    @FXML
-    private CheckBox cbSesame;
+    @FXML private CheckBox cbSoy;
 
-    @FXML
-    private CheckBox cbSoy;
+    @FXML private CheckBox cbSulphites;
 
-    @FXML
-    private CheckBox cbSulphites;
+    @FXML private ComboBox<Unit> cbUnit;
 
-    @FXML
-    private ComboBox<?> cbUnit;
+    @FXML private TableColumn<IngredientBean, String> colAllergens;
 
-    @FXML
-    private TableColumn<?, ?> colAllergens;
+    @FXML private TableColumn<IngredientBean, String> colKcal;
 
-    @FXML
-    private TableColumn<?, ?> colKcal;
+    @FXML private TableColumn<IngredientBean, String> colMacros;
 
-    @FXML
-    private TableColumn<?, ?> colMacros;
+    @FXML private TableColumn<IngredientBean, String> colName;
 
-    @FXML
-    private TableColumn<?, ?> colName;
+    @FXML private TableColumn<IngredientBean, String> colUnit;
 
-    @FXML
-    private TableColumn<?, ?> colUnit;
+    @FXML private Label lblAllergen;
 
-    @FXML
-    private Label lblAllergen;
+    @FXML private Label lblTotalCarbohydrates;
 
-    @FXML
-    private Label lblTotalCarbohydrates;
+    @FXML private Label lblTotalFats;
 
-    @FXML
-    private Label lblTotalFats;
+    @FXML private Label lblTotalKcal;
 
-    @FXML
-    private Label lblTotalKcal;
+    @FXML private Label lblTotalProteins;
 
-    @FXML
-    private Label lblTotalProteins;
+    @FXML private AnchorPane paneForm;
 
-    @FXML
-    private AnchorPane paneForm;
+    @FXML private AnchorPane paneList;
 
-    @FXML
-    private AnchorPane paneList;
+    @FXML private TableView<IngredientBean> tableIngredients;
 
-    @FXML
-    private TableView<?> tableIngredients;
+    @FXML private TextField tfCarbohydrates;
 
-    @FXML
-    private TextField tfCarbhoydrates;
+    @FXML private TextField tfFat;
 
-    @FXML
-    private TextField tfFats;
+    @FXML private TextField tfIngredientName;
 
-    @FXML
-    private TextField tfIngredientName;
+    @FXML private TextField tfProtein;
 
-    @FXML
-    private TextField tfProteins;
+    @FXML private TextField tfResarchIngredient;
 
-    @FXML
-    private TextField tfResarchIngredient;
-
-    @FXML
-    void onAddNewIngredient(ActionEvent event) {
-        showFormView();
-    }
-
-    @FXML
-    void onCancelIngredient(ActionEvent event) {
-        showListView();
-    }
-
-    @FXML
-    void onSaveIngredient(ActionEvent event) {
-        showListView();
-    }
+    private final IngredientController ingredientController = new IngredientController();
+    private final ObservableList<IngredientBean> ingredientItems = FXCollections.observableArrayList();
 
     public GuiFactory factory;
 
@@ -151,7 +112,135 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML
     private void initialize(){
+        initUnitComboBox();
+        initTable();
+        loadIngredients();
         showListView();
+    }
+        
+    private void initUnitComboBox(){
+        cbUnit.getItems().clear();
+        cbUnit.getItems().addAll(Unit.values());
+    }
+
+    private void initTable(){
+        tableIngredients.setItems(ingredientItems);
+
+        colName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+
+        colUnit.setCellValueFactory(cellData -> new SimpleStringProperty("g/ml"));
+
+        colKcal.setCellValueFactory(cellData -> {
+            MacronutrientsBean macro = cellData.getValue().getMacronutrients();
+            if(macro == null){
+                return new SimpleStringProperty("-");
+            }
+            double kcal = macro.calculateKcal();
+            return new SimpleStringProperty(String.format("%.1f", kcal));
+        });
+
+        colMacros.setCellValueFactory(cellData -> {
+            MacronutrientsBean m = cellData.getValue().getMacronutrients();
+            if(m == null){
+                return new SimpleStringProperty("-");
+            }
+            
+            double protein = (m.getProtein() == null) ? 0.0 : m.getProtein();
+            double carbohydrate = (m.getCarbohydrates() == null) ? 0.0 : m.getCarbohydrates();
+            double fat = (m.getFat() == null) ? 0.0 : m.getFat();
+
+            String text = String.format("%.1f / %.1f / %.1f", protein, carbohydrate, fat);
+            
+            return new SimpleStringProperty(text);
+        });
+
+        colAllergens.setCellValueFactory(cellData -> {
+            List<String> allergens = cellData.getValue().getAllergens();
+            String allergenStr = allergens.isEmpty() ? "ALLERGENI NON PRESENTI" : String.join(", " , allergens);
+            return new SimpleStringProperty(allergenStr);
+        });
+    }
+
+    private void loadIngredients(){
+        ingredientItems.clear();
+
+        try {
+            List<IngredientBean> listIngredient = ingredientController.getAllIngredients();
+
+            ingredientItems.addAll(listIngredient);
+        } catch (Exception e) {
+            showError("Errore durante il caricamento degli ingredienti: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    void onAddNewIngredient(ActionEvent event) {
+
+        showFormView();
+    }
+
+    private Double parse(String text){
+        if(text == null || text.isBlank()){
+            return null;
+        }
+        try {
+            return Double.valueOf(text.trim());
+        } catch (Exception e) {
+            showError("Valore non valido: " + text);
+            return null;
+        }
+    }
+
+    private List<String> getSelectedAllergens(){
+        List<String> list = new ArrayList<>();
+
+        if(cbCelery.isSelected()){ list.add("CELERY"); }
+        if(cbCrustaceans.isSelected()){ list.add("CRUSTACEANS"); }
+        if(cbEggs.isSelected()){ list.add("EGGS"); }        
+        if(cbFish.isSelected()){ list.add("FISH"); }        
+        if(cbGluten.isSelected()){ list.add("GLUTEN"); }        
+        if(cbLupin.isSelected()){ list.add("LUPIN"); }        
+        if(cbMilk.isSelected()){ list.add("MILK"); }        
+        if(cbMolluscs.isSelected()){ list.add("MOLLUSCS"); }        
+        if(cbMustard.isSelected()){ list.add("MUSTARD"); }        
+        if(cbNuts.isSelected()){ list.add("NUTS"); }        
+        if(cbPeanuts.isSelected()){ list.add("PEANUTS"); }        
+        if(cbSesame.isSelected()){ list.add("SESAME"); }        
+        if(cbSoy.isSelected()){ list.add("SOY"); }        
+        if(cbSulphites.isSelected()){ list.add("SULPHITES"); }
+
+        return list;
+    }
+
+    @FXML
+    void onCancelIngredient(ActionEvent event) {
+        showListView();
+    }
+
+    @FXML
+    void onSaveIngredient(ActionEvent event) {
+
+        IngredientBean ingredientBean = new IngredientBean();
+
+        try {
+            String name = tfIngredientName.getText();
+            ingredientBean.setName(name);
+
+            MacronutrientsBean macronutrientsBean = new MacronutrientsBean();
+            macronutrientsBean.setProtein(parse(tfProtein.getText()));
+            macronutrientsBean.setCarbohydrates(parse(tfCarbohydrates.getText()));
+            macronutrientsBean.setFat(parse(tfFat.getText()));
+    
+            ingredientBean.setMacronutrients(macronutrientsBean);
+            ingredientBean.setAllergens(getSelectedAllergens());
+            ingredientController.createIngredient(ingredientBean);
+            loadIngredients();
+            // ingredientItems.add(ingredientBean);
+            showInfo("Ingrediente creato correttamente");
+            showListView();
+        } catch (IllegalArgumentException | IngredientException e) {
+            showError(e.getMessage());
+        }  
     }
 
     private void showListView(){
@@ -160,5 +249,33 @@ public class GuiManagmentIngredients extends BaseGui {
 
     private void showFormView(){
         swap(paneForm, paneList);
+    }
+
+    @FXML
+    void onDeleteIngredient(ActionEvent event) {
+        IngredientBean selected = tableIngredients.getSelectionModel().getSelectedItem();
+
+        if(selected == null){
+            showError("Seleziona un ingrediente da eliminare");
+            return;
+        }
+
+        if(!showConfirmation("Conferma eliminazione", "Vuoi eliminare l'ingrediente:\n" + selected.getName() + " ?")) {
+            return;
+        }
+
+        try {
+            ingredientController.deleteIngredient(selected.getName());
+
+            ingredientItems.remove(selected);
+            showInfo("Ingrediente eliminato correttamente.");
+        } catch (Exception e) {
+            showError("Errore durante l'eliminazione: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    void onModifyIngredient(ActionEvent event) {
+        showInfo("Funzionalità non ancora implementata");
     }
 }

@@ -20,21 +20,21 @@ public class MacronutrientsBean {
 
     // Setter
     public void setProtein(Double protein){
-        if(protein == null || !isNonNegative(protein)){
+        if(protein != null && !isNonNegative(protein)){
             throw new IllegalArgumentException("Le proteine devono essere >= 0");
         }
         this.protein = normalize(protein);
     }
 
     public void setCarbohydrates(Double carbohydrates){
-        if(carbohydrates == null || !isNonNegative(carbohydrates)){
+        if(carbohydrates != null && !isNonNegative(carbohydrates)){
             throw new IllegalArgumentException("I carboidrati devono essere >= 0");
         }
         this.carbohydrates = normalize(carbohydrates);
     }
 
     public void setFat(Double fat){
-        if(fat == null || !isNonNegative(fat)){
+        if(fat != null && !isNonNegative(fat)){
             throw new IllegalArgumentException("I grassi devono essere >= 0");
         }
         this.fat = normalize(fat);
@@ -44,6 +44,14 @@ public class MacronutrientsBean {
         return protein == null &&
                carbohydrates == null &&
                fat == null;
+    }
+
+    public double calculateKcal(){
+        double p = (protein == null) ? 0.0 : protein;
+        double c = (carbohydrates == null) ? 0.0 : carbohydrates;
+        double f = (fat == null) ? 0.0 : fat;
+        return (p*4) + (c*4) + (f*9);
+
     }
 
     // Metodi privati per validazione sintattica
