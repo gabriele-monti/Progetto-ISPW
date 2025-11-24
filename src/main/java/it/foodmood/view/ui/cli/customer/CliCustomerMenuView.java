@@ -12,7 +12,7 @@ public class CliCustomerMenuView extends ConsoleView {
     @Override
     public CliPages displayPage(){
         while(true){
-            // clearScreen();
+            clearScreen();
             showTitle("Menù Cliente");
 
             showInfo("1. Login");
@@ -24,7 +24,7 @@ public class CliCustomerMenuView extends ConsoleView {
             switch(choice){
                 case "1": return CliPages.LOGIN;
                 case "2": return CliPages.REGISTRATION;
-                case "3": return CliPages.EXIT;
+                case "3": return CliPages.LOGOUT;
                 default : showError("Scelta non valida, riprova.");
             }
         }

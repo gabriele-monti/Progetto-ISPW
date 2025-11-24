@@ -17,6 +17,7 @@ public class CliRegistrationView extends ConsoleView {
     @Override
     public CliPages displayPage(){
         while(true){
+            clearScreen();
             showTitle(TITLE);
             showInfo("Crea il tuo account (0 = indietro)\n");
 
@@ -66,7 +67,7 @@ public class CliRegistrationView extends ConsoleView {
                 boundary.registration(registrationBean);
                 showSuccess("Registrazione effettuata con successo!");
                 waitForEnter(null);
-                return CliPages.EXIT;
+                return CliPages.LOGOUT;
             } catch (RegistrationException e) {
                 showError(e.getMessage());
                 waitForEnter(null);

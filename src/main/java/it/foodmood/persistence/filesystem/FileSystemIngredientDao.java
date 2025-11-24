@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import it.foodmood.domain.model.Ingredient;
 import it.foodmood.domain.value.Allergen;
+import it.foodmood.domain.value.Unit;
 import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.persistence.dao.IngredientDao;
 import it.foodmood.persistence.exception.PersistenceException;
@@ -103,13 +104,15 @@ public class FileSystemIngredientDao extends AbstractCsvDao implements Ingredien
 
         String allergens = allergensToString(ingredient);
 
+        String unit = ingredient.getUnit().name();
+
         return ingredient.getName() + SEPARATOR + macronutrients.getProtein() + SEPARATOR + macronutrients.getCarbohydrates() + SEPARATOR + 
-               macronutrients.getFat() + SEPARATOR + allergens;
+               macronutrients.getFat() + SEPARATOR + unit + SEPARATOR + allergens;
     }
 
     private Ingredient fromCsv(String line){
         String[] token = line.split(SEPARATOR, -1);
-        if(token.length != 5){
+        if(token.length != 6){
             throw new PersistenceException("Riga ingrediente malformata: " + line);
         }
 
@@ -127,10 +130,17 @@ public class FileSystemIngredientDao extends AbstractCsvDao implements Ingredien
         }
 
         Macronutrients macronutrients = new Macronutrients(protein, carbs, fat);
-        
-        Set<Allergen> allergens = parseAllergens(token[4], line);
 
-        return new Ingredient(name, macronutrients, allergens);
+        String unitStr = token[4];
+        Unit unit;
+        try {
+            unit = Unit.valueOf(unitStr); 
+        } catch (Exception e) {
+            throw new PersistenceException("Unità di misura non valida: " + unitStr);
+        }
+
+        Set<Allergen> allergens = parseAllergens(token[5], line);
+
+        return new Ingredient(name, macronutrients, unit, allergens);
     }
-
 }

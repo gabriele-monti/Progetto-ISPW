@@ -2,6 +2,7 @@ package it.foodmood.view.ui.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
@@ -18,6 +19,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.AnchorPane;
@@ -115,12 +117,14 @@ public class GuiManagmentIngredients extends BaseGui {
         initUnitComboBox();
         initTable();
         loadIngredients();
+        initLivePreview();
         showListView();
     }
         
     private void initUnitComboBox(){
         cbUnit.getItems().clear();
         cbUnit.getItems().addAll(Unit.values());
+        cbUnit.getSelectionModel().select(Unit.GRAM); // default
     }
 
     private void initTable(){
@@ -128,7 +132,7 @@ public class GuiManagmentIngredients extends BaseGui {
 
         colName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
-        colUnit.setCellValueFactory(cellData -> new SimpleStringProperty("g/ml"));
+        colUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUnit()));
 
         colKcal.setCellValueFactory(cellData -> {
             MacronutrientsBean macro = cellData.getValue().getMacronutrients();
@@ -161,6 +165,7 @@ public class GuiManagmentIngredients extends BaseGui {
         });
     }
 
+
     private void loadIngredients(){
         ingredientItems.clear();
 
@@ -189,6 +194,76 @@ public class GuiManagmentIngredients extends BaseGui {
             showError("Valore non valido: " + text);
             return null;
         }
+    }
+
+    private Double parseForPreview(String text){
+        if(text == null || text.isBlank()){
+            return null;
+        }
+        try {
+            return Double.parseDouble(text.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private void updateNutritionalSummary(){
+        MacronutrientsBean macro = new MacronutrientsBean();
+        macro.setProtein(parseForPreview(tfProtein.getText()));
+        macro.setCarbohydrates(parseForPreview(tfCarbohydrates.getText()));
+        macro.setFat(parseForPreview(tfFat.getText()));
+        Double protein = macro.getProtein();
+        Double carbohydrate = macro.getCarbohydrates();
+        Double fat = macro.getFat();
+        double p = (protein == null) ? 0.0 : protein;
+        double c = (carbohydrate == null) ? 0.0 : carbohydrate;
+        double f = (fat == null) ? 0.0 : fat;
+        double kcal = macro.calculateKcal();
+        lblTotalProteins.setText(String.format(Locale.ROOT, "%.1f", p));
+        lblTotalCarbohydrates.setText(String.format(Locale.ROOT, "%.1f", c));
+        lblTotalFats.setText(String.format(Locale.ROOT, "%.1f", f));
+        lblTotalKcal.setText(String.format(Locale.ROOT, "%.1f", kcal));
+    }
+
+    private void updateAllergenSummary(){
+        List<String> allergens = getSelectedAllergens();
+
+        if(allergens.isEmpty()){
+            lblAllergen.setText("Nessun allergene selezionato");
+        } else {
+            lblAllergen.setText(String.join(", ", allergens));
+        }
+    }
+
+
+    private void initLivePreview(){
+
+        ChangeListener<String> macronutrientsListener = (obs, oldVal, newVal) -> updateNutritionalSummary();
+
+        tfProtein.textProperty().addListener(macronutrientsListener);
+        tfCarbohydrates.textProperty().addListener(macronutrientsListener);
+        tfFat.textProperty().addListener(macronutrientsListener);
+
+        updateNutritionalSummary();
+
+        ChangeListener<Boolean> allergenListener = (obs, oldVal, newVal) -> updateAllergenSummary();
+
+        cbCelery.selectedProperty().addListener(allergenListener);
+        cbCrustaceans.selectedProperty().addListener(allergenListener);
+        cbEggs.selectedProperty().addListener(allergenListener);
+        cbFish.selectedProperty().addListener(allergenListener);
+        cbGluten.selectedProperty().addListener(allergenListener);
+        cbLupin.selectedProperty().addListener(allergenListener);
+        cbMilk.selectedProperty().addListener(allergenListener);
+        cbMolluscs.selectedProperty().addListener(allergenListener);
+        cbMustard.selectedProperty().addListener(allergenListener);
+        cbNuts.selectedProperty().addListener(allergenListener);
+        cbPeanuts.selectedProperty().addListener(allergenListener);
+        cbSesame.selectedProperty().addListener(allergenListener);
+        cbSoy.selectedProperty().addListener(allergenListener);
+        cbSulphites.selectedProperty().addListener(allergenListener);
+
+        updateAllergenSummary();
     }
 
     private List<String> getSelectedAllergens(){
@@ -226,12 +301,15 @@ public class GuiManagmentIngredients extends BaseGui {
             String name = tfIngredientName.getText();
             ingredientBean.setName(name);
 
+            Unit selectedUnit = cbUnit.getValue();
+            ingredientBean.setUnit(selectedUnit.name());
+
             MacronutrientsBean macronutrientsBean = new MacronutrientsBean();
             macronutrientsBean.setProtein(parse(tfProtein.getText()));
             macronutrientsBean.setCarbohydrates(parse(tfCarbohydrates.getText()));
             macronutrientsBean.setFat(parse(tfFat.getText()));
-    
             ingredientBean.setMacronutrients(macronutrientsBean);
+
             ingredientBean.setAllergens(getSelectedAllergens());
             ingredientController.createIngredient(ingredientBean);
             loadIngredients();

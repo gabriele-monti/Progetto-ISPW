@@ -9,6 +9,8 @@ public class IngredientBean {
     private String name;
     private MacronutrientsBean macronutrients;
     private List<String> allergens = new ArrayList<>();
+    private String unit;
+
 
     public IngredientBean(){
         // Costruttore vuoto
@@ -20,6 +22,8 @@ public class IngredientBean {
     public MacronutrientsBean getMacronutrients(){ return macronutrients;}
 
     public List<String> getAllergens() {return Collections.unmodifiableList(allergens);}
+
+    public String getUnit(){ return unit;}
 
     // Setter
     public void setName(String name){
@@ -35,6 +39,13 @@ public class IngredientBean {
 
     public void setAllergens(List<String> allergens){
         this.allergens = (allergens == null) ? new ArrayList<>() : validate(allergens);
+    }
+
+    public void setUnit(String unit){
+        if(unit == null || unit.isBlank()){
+            throw new IllegalArgumentException("L'unità non può essere nulla");
+        }
+        this.unit = unit.trim().toUpperCase();
     }
 
     public void addAllergen(String allergen){

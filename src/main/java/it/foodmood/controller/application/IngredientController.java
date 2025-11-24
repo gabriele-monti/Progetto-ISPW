@@ -8,6 +8,7 @@ import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
 import it.foodmood.domain.model.Ingredient;
 import it.foodmood.domain.value.Allergen;
+import it.foodmood.domain.value.Unit;
 import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.persistence.dao.DaoFactory;
@@ -35,6 +36,10 @@ public class IngredientController {
             double carbohydrate = normalize(macronutrientsBean.getCarbohydrates());
             double fat = normalize(macronutrientsBean.getFat());
 
+            String unitStr = ingredientBean.getUnit();
+
+            Unit unit = Unit.valueOf(unitStr);
+
             Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
 
             // converto gli allergeni
@@ -44,7 +49,7 @@ public class IngredientController {
                         .map(Allergen::valueOf)
                         .collect(Collectors.toSet());
 
-            Ingredient ingredient = new Ingredient(name, macronutrients, allergens);
+            Ingredient ingredient = new Ingredient(name, macronutrients, unit, allergens);
 
             if(ingredientDao.findById(name).isPresent()){
                 throw new IngredientException("Esiste già un ingrediente con il nome: " + name);
@@ -76,6 +81,8 @@ public class IngredientController {
         macronutrientsBean.setFat(ingredient.getMacro().getFat());
 
         ingredientBean.setMacronutrients(macronutrientsBean);
+
+        ingredientBean.setUnit(ingredient.getUnit().name());
 
         ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::name).collect(Collectors.toList()));
 

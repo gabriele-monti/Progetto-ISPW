@@ -23,7 +23,7 @@ public class CustomerCliNavigator implements CliNavigator {
             switch (page) {
                 case LOGIN ->  factory.showLoginView();
                 case REGISTRATION -> factory.showRegistrationView();
-                case EXIT -> exit = true;
+                case LOGOUT -> exit = true;
             }
         }
     }

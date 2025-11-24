@@ -28,7 +28,7 @@ public abstract class ConsoleView implements CliUserInterface, CliView{
         try{
             return displayPage();
         } catch (BackRequestedException e){
-            return CliPages.EXIT;
+            return CliPages.LOGOUT;
         }
     }
     

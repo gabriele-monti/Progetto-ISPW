@@ -18,6 +18,7 @@ import it.foodmood.config.JdbcConnectionManager;
 import it.foodmood.domain.model.Ingredient;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.Macronutrients;
+import it.foodmood.domain.value.Unit;
 import it.foodmood.persistence.dao.IngredientDao;
 import it.foodmood.persistence.exception.PersistenceException;
 
@@ -32,7 +33,7 @@ public class JdbcIngredientDao implements IngredientDao {
         return instance;
     }
 
-    private static final String CALL_SAVE_INGREDIENT = "{CALL insert_ingredient(?,?,?,?,?)}";
+    private static final String CALL_SAVE_INGREDIENT = "{CALL insert_ingredient(?,?,?,?,?,?)}";
     private static final String CALL_GET_INGREDIENT_BY_NAME = "{CALL get_ingredient_by_name(?)}";
     private static final String CALL_GET_ALL_INGREDIENTS = "{CALL get_all_ingredients()}";
     private static final String CALL_DELETE_INGREDIENT_BY_NAME = "{CALL delete_ingredient_by_name(?)}";
@@ -51,12 +52,14 @@ public class JdbcIngredientDao implements IngredientDao {
                 cs.setBigDecimal(3, BigDecimal.valueOf(macronutrients.getCarbohydrates()));
                 cs.setBigDecimal(4, BigDecimal.valueOf(macronutrients.getFat()));
 
+                cs.setString(5, ingredient.getUnit().name());
+
                 Set<Allergen> allergens = ingredient.getAllergens();
                 if(allergens == null || allergens.isEmpty()){
-                    cs.setString(5, "[]"); // array vuoto
+                    cs.setString(6, "[]"); // array vuoto
                 } else {
                     String json = allergens.stream().map(a -> "\"" + a.name() + "\"").collect(Collectors.joining(",", "[", "]"));
-                    cs.setString(5, json);
+                    cs.setString(6, json);
                 }
 
                 cs.execute();
@@ -84,9 +87,17 @@ public class JdbcIngredientDao implements IngredientDao {
                     double protein = rs.getDouble("protein");
                     double carbohydrate = rs.getDouble("carbohydrate");
                     double fat = rs.getDouble("fat");
+                    String unitStr = rs.getString("unit");
 
                     Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
                     Set<Allergen> allergens = new HashSet<>();
+
+                    Unit unit;
+                    try {
+                        unit = Unit.valueOf(unitStr); 
+                    } catch (Exception e) {
+                        throw new PersistenceException("Unità di misura non valida: " + unitStr);
+                    }
 
                     do{
                         String allergen_type = rs.getString("allergen_type");
@@ -95,7 +106,7 @@ public class JdbcIngredientDao implements IngredientDao {
                         } 
                     } while (rs.next());
 
-                    Ingredient ingredient = new Ingredient(name, macronutrients, allergens);
+                    Ingredient ingredient = new Ingredient(name, macronutrients, unit, allergens);
                     return Optional.of(ingredient);
                 }
             }
@@ -113,17 +124,29 @@ public class JdbcIngredientDao implements IngredientDao {
 
                 Map<String, Macronutrients> macroMap = new HashMap<>();
                 Map<String, Set<Allergen>> allergenMap = new HashMap<>();
+                Map<String, Unit> unitMap = new HashMap<>();
+
 
                 while (rs.next()) {
                     String name = rs.getString("name");
                     double protein = rs.getDouble("protein");
                     double carbohydrate = rs.getDouble("carbohydrate");
                     double fat = rs.getDouble("fat");
+                    String unitStr = rs.getString("unit");
                     String allergenType = rs.getString("allergen_type");
 
                     if(!macroMap.containsKey(name)){
                         Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
                         macroMap.put(name, macronutrients);
+                    }
+
+                    if(!unitMap.containsKey(name)){
+                        try {
+                            Unit unit = Unit.valueOf(unitStr);
+                            unitMap.put(name, unit);
+                        } catch (Exception e) {
+                            throw new PersistenceException("Unità di misura non valida");
+                        }
                     }
 
                     if(allergenType != null){
@@ -135,11 +158,14 @@ public class JdbcIngredientDao implements IngredientDao {
                         set.add(Allergen.valueOf(allergenType));
                     }
                 }
+
                 List<Ingredient> result = new ArrayList<>();
+
                 for(String ingredientName : macroMap.keySet()){
                     Macronutrients macro = macroMap.get(ingredientName);
+                    Unit unit = unitMap.get(ingredientName);
                     Set<Allergen> allergens = allergenMap.get(ingredientName);
-                    result.add(new Ingredient(ingredientName, macro, allergens));
+                    result.add(new Ingredient(ingredientName, macro, unit, allergens));
                 }
 
                 return result;

@@ -1,7 +1,7 @@
 package it.foodmood.view.ui.cli;
 
-public enum CliPages {
+public enum CliManagerPages {
     LOGIN,
-    REGISTRATION,
+    MANAGMENT_INGREDIENTS,
     LOGOUT
 }

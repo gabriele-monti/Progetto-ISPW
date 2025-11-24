@@ -18,6 +18,7 @@ public class CliLoginView extends ConsoleView {
     @Override
     public CliPages displayPage(){
         while(true){
+            clearScreen();
             showTitle(TITLE);
             showInfo("Accedi al tuo account (0 = indietro)\n");
 
@@ -47,7 +48,7 @@ public class CliLoginView extends ConsoleView {
                 boundary.login(loginBean);
                 showSuccess("Login effettuato con successo\n");
                 waitForEnter(null);
-                return CliPages.EXIT;
+                return CliPages.LOGOUT;
             } catch (AuthenticationException e) {
                 clearScreen();
                 showError(e.getMessage());
