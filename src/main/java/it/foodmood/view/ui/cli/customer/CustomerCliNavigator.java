@@ -1,15 +1,15 @@
 package it.foodmood.view.ui.cli.customer;
 
-import it.foodmood.view.ui.UiFactory;
+import it.foodmood.view.ui.CustomerUi;
 import it.foodmood.view.ui.cli.CliNavigator;
-import it.foodmood.view.ui.cli.CliPages;
+import it.foodmood.view.ui.cli.CustomerPages;
 
 public class CustomerCliNavigator implements CliNavigator {
 
-    private final UiFactory factory;
+    private final CustomerUi ui;
 
-    public CustomerCliNavigator(UiFactory factory){
-        this.factory = factory;
+    public CustomerCliNavigator(CustomerUi customerUi){
+        this.ui = customerUi;
     }
 
     @Override
@@ -18,11 +18,11 @@ public class CustomerCliNavigator implements CliNavigator {
 
         boolean exit = false;
         while(!exit){
-            CliPages page = menuView.show();
+            CustomerPages page = menuView.displayPage();
 
             switch (page) {
-                case LOGIN ->  factory.showLoginView();
-                case REGISTRATION -> factory.showRegistrationView();
+                case LOGIN ->  ui.showLoginView();
+                case REGISTRATION -> ui.showRegistrationView();
                 case LOGOUT -> exit = true;
             }
         }

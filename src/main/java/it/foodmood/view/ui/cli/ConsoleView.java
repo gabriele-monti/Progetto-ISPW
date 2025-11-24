@@ -8,7 +8,7 @@ import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.view.ui.theme.AnsiUiTheme;
 import it.foodmood.view.ui.theme.UiTheme;
 
-public abstract class ConsoleView implements CliUserInterface, CliView{
+public abstract class ConsoleView implements CliUserInterface{
 
     protected final InputReader in;
     protected final OutputWriter out;
@@ -22,16 +22,7 @@ public abstract class ConsoleView implements CliUserInterface, CliView{
         this.out = new ConsoleOutputWriter();
         this.theme = new AnsiUiTheme();
     }
-
-    @Override
-    public final CliPages show(){
-        try{
-            return displayPage();
-        } catch (BackRequestedException e){
-            return CliPages.LOGOUT;
-        }
-    }
-    
+        
     @Override
     public void showError(String error){
         out.println(theme.error(error));

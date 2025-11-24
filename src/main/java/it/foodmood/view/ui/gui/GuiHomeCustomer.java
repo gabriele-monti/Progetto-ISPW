@@ -42,7 +42,7 @@ public class GuiHomeCustomer extends BaseGui {
     }
 
     @FXML
-    void onDigitalMenuClicked(ActionEvent event) {
+    void onMenuClicked(ActionEvent event) {
 
     }
 

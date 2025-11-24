@@ -2,7 +2,7 @@ package it.foodmood;
 
 import it.foodmood.config.ApplicationEnvironment;
 import it.foodmood.config.UserMode;
-import it.foodmood.view.ui.UiFactory;
+import it.foodmood.view.ui.BaseUi;
 import it.foodmood.view.ui.gui.GuiFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -30,9 +30,9 @@ public class FoodMoodGui extends Application {
         stage.setResizable(false);
         stage.show();
 
-        UiFactory uiFactory = new GuiFactory(scene, userMode);
+        BaseUi ui = new GuiFactory(scene, userMode);
 
-        uiFactory.showLoginView();
+        ui.showLoginView();
     }
 
     @Override
