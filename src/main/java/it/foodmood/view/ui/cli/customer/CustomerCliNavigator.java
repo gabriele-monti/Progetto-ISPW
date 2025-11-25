@@ -14,14 +14,15 @@ public class CustomerCliNavigator implements CliNavigator {
 
     @Override
     public void start(){
-        CliCustomerMenuView menuView = new CliCustomerMenuView();
 
+        boolean logged = false;
         boolean exit = false;
+
         while(!exit){
-            CustomerPages page = menuView.displayPage();
+            CustomerPages page = ui.showHomeCustumerView(logged);
 
             switch (page) {
-                case LOGIN ->  ui.showLoginView();
+                case LOGIN -> logged = ui.showLoginView();
                 case REGISTRATION -> ui.showRegistrationView();
                 case LOGOUT -> exit = true;
             }

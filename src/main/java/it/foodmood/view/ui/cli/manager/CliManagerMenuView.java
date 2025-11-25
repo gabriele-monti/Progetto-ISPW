@@ -10,8 +10,8 @@ public class CliManagerMenuView extends ConsoleView {
     }
 
     public ManagerPages displayPage(){
+        clearScreen();
         while(true){
-            clearScreen();
             showTitle("Menù Manager");
 
             showInfo("1. Gestisci Ingredienti");

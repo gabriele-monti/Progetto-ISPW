@@ -7,6 +7,7 @@ import it.foodmood.config.StartupConfigurator;
 import it.foodmood.config.StartupEnvironment;
 import it.foodmood.infrastructure.bootstrap.ApplicationBootstrap;
 import it.foodmood.infrastructure.bootstrap.BootstrapFactory;
+import it.foodmood.infrastructure.bootstrap.DemoBootstrap;
 import it.foodmood.infrastructure.bootstrap.UiMode;
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
@@ -88,6 +89,10 @@ public final class Main{
             // 4) Costruzione con factory
             DaoFactory.init(settings.mode());
             DaoFactory daoFactory = DaoFactory.getInstance();
+
+            if(persistenceMode == PersistenceMode.DEMO){
+                DemoBootstrap.initDemo();
+            }
 
             // 5) Costruzione dell'ambiente dell'applicazione
             ApplicationEnvironment environment = new ApplicationEnvironment(fileConfig, daoFactory);

@@ -18,20 +18,15 @@ public final class CliFactory implements CustomerUi, ManagerUi{
         this.userMode = userMode;
     }
 
-    public void showHomeView(){
-        switch (userMode) {
-            case CUSTOMER -> showHomeCustumerView();
-            case WAITER -> showHomeCustumerView();
-            case MANAGER -> showHomeManagerView();
-        }
+    public CliCustomerMenuView createCustomerMenuView(){
+        return new CliCustomerMenuView();
     }
-    
+
     @Override
-    public void showLoginView(){
+    public boolean showLoginView(){
         LoginBoundary boundary = new LoginBoundary(userMode);
         CliLoginView view = new CliLoginView(boundary);
-        view.setFactory(this);
-        view.displayPage();
+        return view.displayPage();
     }  
 
     @Override
@@ -41,17 +36,20 @@ public final class CliFactory implements CustomerUi, ManagerUi{
         view.displayPage();
     }  
 
+    @Override
     public void showHomeManagerView(){
         CliManagerMenuView view = new CliManagerMenuView();
         view.displayPage();
     }
 
-    public void showHomeCustumerView(){
+    
+    @Override
+    public CustomerPages showHomeCustumerView(boolean logged){
         CliCustomerMenuView view = new CliCustomerMenuView();
-        view.displayPage();
+        return view.displayPage(logged);
     }
 
-
+    @Override
     public void showIngredientManagmentView(){
         IngredientController controller = new IngredientController();
         CliIngredientMenuView view = new CliIngredientMenuView(controller);

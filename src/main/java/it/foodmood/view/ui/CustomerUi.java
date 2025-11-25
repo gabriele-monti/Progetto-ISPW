@@ -1,5 +1,7 @@
 package it.foodmood.view.ui;
 
+import it.foodmood.view.ui.cli.CustomerPages;
+
 public interface CustomerUi extends BaseUi {
-    void showHomeCustumerView();
+    CustomerPages showHomeCustumerView(boolean logged);
 }

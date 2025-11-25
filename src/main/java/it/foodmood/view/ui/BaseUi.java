@@ -1,6 +1,6 @@
 package it.foodmood.view.ui;
 
 public interface BaseUi {
-    void showLoginView();
+    boolean showLoginView();
     void showRegistrationView();   
 } 

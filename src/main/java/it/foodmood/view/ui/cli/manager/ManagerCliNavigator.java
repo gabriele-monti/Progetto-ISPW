@@ -14,6 +14,12 @@ public class ManagerCliNavigator implements CliNavigator {
 
     @Override
     public void start(){
+        boolean logged = ui.showLoginView();
+
+        if(!logged){
+            return;
+        }
+        
         CliManagerMenuView menuView = new CliManagerMenuView();
 
         boolean exit = false;

@@ -31,6 +31,10 @@ public class IngredientController {
                 throw new IngredientException("L'ingrediente deve avere almeno un macronutriente");
             }
 
+            if(macronutrientsBean.getCarbohydrates() == 0.0 && macronutrientsBean.getProtein() == 0.0 && macronutrientsBean.getFat() == 0.0){
+                throw new IngredientException("Deve esserci almeno un macronutriente > 0");
+            }
+
             // converto i macronutrienti in 0.0 qualora fossero null
             double protein = normalize(macronutrientsBean.getProtein());
             double carbohydrate = normalize(macronutrientsBean.getCarbohydrates());
@@ -67,7 +71,15 @@ public class IngredientController {
         return ingredientDao.findAll().stream().map(this::toBean).collect(Collectors.toList());
     }
 
-    public void deleteIngredient(String name){
+    public void deleteIngredient(String name) throws IngredientException{
+        if(name.isBlank()){
+            throw new IngredientException("Il nome dell'ingrediente non può essere vuoto.");
+        }
+        
+        if(ingredientDao.findById(name).isEmpty()){
+            throw new IngredientException("Nessun ingrediente trovato con il nome: " + name);
+        }
+
         ingredientDao.deleteById(name);
     }
 

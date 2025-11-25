@@ -1,5 +1,7 @@
 package it.foodmood.view.ui.cli;
 
+import java.util.List;
+
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.infrastructure.io.InputReader;
 import it.foodmood.infrastructure.io.OutputWriter;
@@ -44,6 +46,11 @@ public abstract class ConsoleView implements CliUserInterface{
     }
 
     @Override
+    public void showBold(String bold){
+        out.println(theme.bold(bold));
+    }
+
+    @Override
     public void showSeparator(String separator){
         out.println(separator);
     }
@@ -66,16 +73,48 @@ public abstract class ConsoleView implements CliUserInterface{
         out.print(CLEAR_CONSOLE);
     }
 
+    public void displayTable(List<String> headers, List<List<String>> data, List<Integer> columnWidths) {
+        if(headers.size() != columnWidths.size()){
+            showError("Il numero di intestazioni e la larghezza delle colonne non coincidono");
+            return;
+        }
+
+        StringBuilder formatBuilder = new StringBuilder();
+        for(int widht : columnWidths){
+            formatBuilder.append("%-").append(widht).append("s | ");
+        }
+        String format = formatBuilder.toString().trim();
+
+        int totalWidth = columnWidths.stream().mapToInt(Integer::intValue).sum()+ (columnWidths.size() * 3) - 1;        
+        String separator = "═".repeat(totalWidth);
+        
+        showInfo(separator);
+        out.println(String.format(format, headers.toArray()));
+        showInfo(separator);
+
+        for(List<String> row : data) {
+            if(row.size() != headers.size()){
+                showError("Una riga ha numero di colonne diverso dalle intestazioni!");
+                continue;
+            }
+            out.println(String.format(format, row.toArray()));
+            showInfo("");
+        }
+        showInfo(separator);
+    }
+
     protected String askInput(String prompt){
         while(true){
             out.print(prompt);
             String input = in.readLine();
+                        
+            input = input.trim();
 
             if(input == null || input.isBlank()){
                 showError("Il campo non può essere vuoto");
                 continue;
             }
-            return input.trim();
+            return input;
         }
     }
 
@@ -92,7 +131,46 @@ public abstract class ConsoleView implements CliUserInterface{
             if(BACK_COMMAND.equalsIgnoreCase(input)){
                 throw new BackRequestedException();
             }
-            return input.trim();
+            return input;
+        }
+    }
+
+    protected boolean askConfirmation(String prompt){
+        while(true){
+            out.print(prompt + " (s/n): ");
+            String input = in.readLine();
+
+            if(input == null || input.isBlank()){
+                showError("Risposta non valida");
+                continue;
+            }
+
+            input = input.trim().toLowerCase();
+
+            if(input.equals("s") || input.equals("si") || input.equals("y")){
+                return true;
+            }
+
+            if(input.equals("no") || input.equals("n")){
+                return false;
+            }
+
+            showWarning("Inserisci una risposta valida (s/n).");
+        }
+    }
+
+    protected Double askDouble(String prompt){
+        while(true){
+            out.print(prompt);
+            String input = in.readLine();
+
+            input = input.replace(",", ".");
+
+            try {
+                return Double.parseDouble(input);
+            } catch (Exception e) {
+                showError("Inserisci un numero valido. Usa punto o virgola per i decimali.\n");
+            }           
         }
     }
 }

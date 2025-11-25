@@ -17,8 +17,8 @@ public class CliRegistrationView extends ConsoleView {
 
     public void displayPage(){
         try {
+            clearScreen();
             while(true){
-                clearScreen();
                 showTitle(TITLE);
                 showInfo("Crea il tuo account (0 = indietro)\n");
 
@@ -51,6 +51,7 @@ public class CliRegistrationView extends ConsoleView {
                     confirmPassword = askInputOrBack("Conferma password: ");
 
                     if(!password.equals(confirmPassword)){
+                        clearScreen();
                         showError("Le password non coincidono. Riprova.");
                         continue;
                     }
@@ -68,6 +69,7 @@ public class CliRegistrationView extends ConsoleView {
                     boundary.registration(registrationBean);
                     showSuccess("Registrazione effettuata con successo!");
                     waitForEnter(null);
+                    return;
                 } catch (BackRequestedException | RegistrationException e) {
                     showError(e.getMessage());
                     waitForEnter(null);

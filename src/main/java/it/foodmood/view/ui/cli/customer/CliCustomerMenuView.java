@@ -9,20 +9,37 @@ public class CliCustomerMenuView extends ConsoleView {
         super();
     }
 
-    public CustomerPages displayPage(){
+    public CustomerPages displayPage(boolean logged){
+        clearScreen();
         while(true){
-            clearScreen();
-            showTitle("Menù Cliente");
+            showTitle("Benvenuto in FoodMood");
 
-            showInfo("1. Login");
-            showInfo("2. Registrazione");
+            if(!logged){
+                showInfo("1. Login");
+                showInfo("2. Registrazione");
+            } else {
+                showInfo("1. Gestisci Account");
+                showInfo("2. Fidelity Card");
+            }
             showInfo("3. Esci");
 
             String choice = askInput("\nSeleziona un'opzione: ");
 
             switch(choice){
-                case "1": return CustomerPages.LOGIN;
-                case "2": return CustomerPages.REGISTRATION;
+                case "1": 
+                if(!logged){
+                    return CustomerPages.LOGIN;
+                } else {
+                    showWarning("Funzionalità non ancora implementata.\n");
+                    break;
+                }
+                case "2": 
+                if(!logged){
+                    return CustomerPages.REGISTRATION;
+                } else {
+                    showWarning("Funzionalità non ancora implementata.\n");
+                    break;
+                }
                 case "3": return CustomerPages.LOGOUT;
                 default : showError("Scelta non valida, riprova.");
             }

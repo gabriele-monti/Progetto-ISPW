@@ -4,10 +4,9 @@ import it.foodmood.config.UserMode;
 import it.foodmood.utils.SessionManager;
 import it.foodmood.view.boundary.LoginBoundary;
 import it.foodmood.view.boundary.RegistrationBoundary;
-import it.foodmood.view.ui.BaseUi;
 import javafx.scene.Scene;
 
-public final class GuiFactory implements BaseUi{
+public final class GuiFactory{
 
     private final UserMode userMode;
     private final GuiNavigator navigator;
