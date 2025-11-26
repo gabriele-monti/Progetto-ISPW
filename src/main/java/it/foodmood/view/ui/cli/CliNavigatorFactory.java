@@ -13,8 +13,6 @@ public class CliNavigatorFactory {
             case CUSTOMER -> new CustomerCliNavigator(factory);
             case WAITER -> new CustomerCliNavigator(factory);
             case MANAGER -> new ManagerCliNavigator(factory);
-            // case WAITER -> new WaiterCliNavigator(uiFactory);
-            // case MANAGER -> new ManagerCliNavigator(uiFactory);
         };
     }
 }

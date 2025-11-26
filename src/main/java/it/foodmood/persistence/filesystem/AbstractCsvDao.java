@@ -23,10 +23,8 @@ public abstract class AbstractCsvDao {
     protected void createFileIfNotExists(){
         try {
             File parent = file.getParentFile();
-            if(parent != null && !parent.exists()){
-                if(parent.mkdirs()){
-                    throw new PersistenceException("Impossibile creare la directory: " + parent);
-                }
+            if(parent != null && !parent.exists() && parent.mkdirs()){
+                throw new PersistenceException("Impossibile creare la directory: " + parent);
             }
             if(!file.exists()){
                 boolean created = file.createNewFile();

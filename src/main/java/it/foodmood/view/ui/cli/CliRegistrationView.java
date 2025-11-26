@@ -22,64 +22,78 @@ public class CliRegistrationView extends ConsoleView {
                 showTitle(TITLE);
                 showInfo("Crea il tuo account (0 = indietro)\n");
 
-                RegistrationBean registrationBean = new RegistrationBean();
+                RegistrationBean registrationBean = build();
 
-                String name = askInputOrBack("Nome: ");
-                registrationBean.setName(name);
-
-                String surname = askInputOrBack("Cognome: ");
-                registrationBean.setSurname(surname);
-
-                String email;
-
-                while(true){
-                    email = askInputOrBack("Email: ");
-                    try {
-                        registrationBean.setEmail(email);
-                        break;
-                    } catch (Exception e) {
-                        showError(e.getMessage());
-                    }
-                }
-
-                String password;
-                String confirmPassword;
-                Boolean validPassword = false;
-
-                while(!validPassword){
-                    password = askInputOrBack("Password: ");
-                    confirmPassword = askInputOrBack("Conferma password: ");
-
-                    if(!password.equals(confirmPassword)){
-                        clearScreen();
-                        showError("Le password non coincidono. Riprova.");
-                        continue;
-                    }
-
-                    try {
-                        registrationBean.setPassword(password.toCharArray());
-                        registrationBean.setConfirmPassword(confirmPassword.toCharArray());
-                        validPassword = true;
-                    } catch (Exception e) {
-                        showError(e.getMessage());
-                    }
-                }
-
-                try {
-                    boundary.registration(registrationBean);
-                    showSuccess("Registrazione effettuata con successo!");
-                    waitForEnter(null);
-                    return;
-                } catch (BackRequestedException | RegistrationException e) {
-                    showError(e.getMessage());
-                    waitForEnter(null);
+                if(submitRegistration(registrationBean)){
                     return;
                 }
             }
         } catch (BackRequestedException e) {
             return;
         }
+    }
 
+    private boolean submitRegistration(RegistrationBean registrationBean) {
+        try {
+            boundary.registration(registrationBean);
+            showSuccess("Registrazione effettuata con successo!");
+            waitForEnter(null);
+            return true;
+        } catch (BackRequestedException | RegistrationException e) {
+            showError(e.getMessage());
+            waitForEnter(null);
+            return true;
+        }
+    }
+
+    private RegistrationBean build() throws BackRequestedException {
+        RegistrationBean registrationBean = new RegistrationBean();
+
+        String name = askInputOrBack("Nome: ");
+        registrationBean.setName(name);
+
+        String surname = askInputOrBack("Cognome: ");
+        registrationBean.setSurname(surname);
+
+        askAndSetEmail(registrationBean);
+        askAndSetPassword(registrationBean);
+
+        return registrationBean;
+    }
+
+    private void askAndSetPassword(RegistrationBean registrationBean) {
+        Boolean validPassword = false;
+
+        while(!validPassword){
+            String password = askInputOrBack("Password: ");
+            String confirmPassword = askInputOrBack("Conferma password: ");
+
+            if(!password.equals(confirmPassword)){
+                clearScreen();
+                showError("Le password non coincidono. Riprova.");
+                continue;
+            }
+
+            try {
+                registrationBean.setPassword(password.toCharArray());
+                registrationBean.setConfirmPassword(confirmPassword.toCharArray());
+                validPassword = true;
+            } catch (Exception e) {
+                showError(e.getMessage());
+            }
+        }
+    }
+
+    private void askAndSetEmail(RegistrationBean registrationBean) {
+        while(true){
+            String email = askInputOrBack("Email: ");
+            try {
+                registrationBean.setEmail(email);
+                break;
+            } catch (Exception e) {
+                showError(e.getMessage());
+            }
+        }
     }
 }
 

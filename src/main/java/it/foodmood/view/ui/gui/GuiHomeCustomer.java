@@ -28,27 +28,27 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML
     void onAccountClicked(ActionEvent event) {
-
+        // commento 
     }
 
     @FXML
     void onCallWaiterClicked(ActionEvent event) {
-
+        // commento 
     }
 
     @FXML
     void onCartClicked(ActionEvent event) {
-
+        // commento
     }
 
     @FXML
     void onMenuClicked(ActionEvent event) {
-
+        // commento 
     }
 
     @FXML
     void onOrderClicked(ActionEvent event) {
-
+        // commento
     }
 
     @FXML
@@ -56,7 +56,7 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML
     void onRequestBillClicked(ActionEvent event) {
-
+        // commento
     }
 
     public GuiFactory factory;

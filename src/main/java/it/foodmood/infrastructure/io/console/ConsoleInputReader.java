@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import it.foodmood.exception.ConsoleReadException;
 import it.foodmood.infrastructure.io.InputReader;
 
 public final class ConsoleInputReader implements InputReader {
@@ -30,8 +31,8 @@ public final class ConsoleInputReader implements InputReader {
         }
         try{
             return bufferedReader.readLine();
-        } catch (IOException _){
-            throw new RuntimeException("Errore nella lettura da console");
+        } catch (IOException e){
+            throw new ConsoleReadException("Errore nella lettura da console: ", e);
         }
     }
 

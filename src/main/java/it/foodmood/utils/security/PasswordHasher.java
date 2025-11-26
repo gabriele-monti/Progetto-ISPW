@@ -6,6 +6,8 @@ import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import it.foodmood.exception.PasswordException;
+
 public class PasswordHasher {
     
     public String hash(char[] password){
@@ -21,7 +23,7 @@ public class PasswordHasher {
             // Ritorno "salt:hash" in base 64
             return Base64.getEncoder().encodeToString(salt) + ":" + Base64.getEncoder().encodeToString(hash);
         } catch (Exception _) {
-            throw new RuntimeException("Errore nel calcolo dell'hash della password.");
+            throw new PasswordException("Errore nel calcolo dell'hash della password");
         }
     }
 

@@ -162,17 +162,17 @@ public class GuiManagmentDish extends BaseGui {
 
     @FXML
     void onAddIngredient(ActionEvent event) {
-
+        // commento
     }
 
     @FXML
     void onCancel(ActionEvent event) {
-
+        // commento
     }
 
     @FXML
     void onImportImage(ActionEvent event) {
-
+        // commento
     }
 
     @FXML
@@ -182,12 +182,12 @@ public class GuiManagmentDish extends BaseGui {
 
     @FXML
     void onRemoveImage(ActionEvent event) {
-
+        // commento
     }
 
     @FXML
     void onRemoveIngredient(ActionEvent event) {
-
+        // commento
     }
 
     @FXML
@@ -197,7 +197,7 @@ public class GuiManagmentDish extends BaseGui {
 
     @FXML
     void onUpdateDish(ActionEvent event) {
-
+        // commento
     }
 
     @FXML

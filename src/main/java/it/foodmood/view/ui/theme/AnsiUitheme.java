@@ -9,7 +9,9 @@ public final class AnsiUiTheme implements UiTheme {
     private static final String INFO = "\u001B[37m";
     private static final String BOLD = "\u001B[1m";
 
-    public AnsiUiTheme(){}
+    public AnsiUiTheme(){
+        // comment
+    }
 
     @Override
     public String error(String text){

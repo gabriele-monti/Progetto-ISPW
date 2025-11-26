@@ -14,7 +14,6 @@ import it.foodmood.exception.IngredientException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.IngredientDao;
 
-
 public class IngredientController {
     private final IngredientDao ingredientDao;
 
@@ -68,7 +67,7 @@ public class IngredientController {
     }
 
     public List<IngredientBean> getAllIngredients(){
-        return ingredientDao.findAll().stream().map(this::toBean).collect(Collectors.toList());
+        return ingredientDao.findAll().stream().map(this::toBean).toList();
     }
 
     public void deleteIngredient(String name) throws IngredientException{
@@ -96,7 +95,7 @@ public class IngredientController {
 
         ingredientBean.setUnit(ingredient.getUnit().name());
 
-        ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::name).collect(Collectors.toList()));
+        ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::name).toList());
 
         return ingredientBean;
     }

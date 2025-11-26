@@ -71,7 +71,6 @@ public class JdbcDishDao implements DishDao {
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try (CallableStatement cs = conn.prepareCall(CALL_GET_ALL_DISHES)) {
                 ResultSet rs = cs.executeQuery();
-                // List<Dish> out = new ArrayList<>();
                 while (rs.next()) {
                     // Da implementare
                 }
