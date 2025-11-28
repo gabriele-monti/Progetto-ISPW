@@ -15,7 +15,7 @@ import javafx.scene.layout.AnchorPane;
 
 public class GuiManagmentDish extends BaseGui {
 
-    public GuiFactory factory;
+    private GuiFactory factory;
 
     public void setFactory(GuiFactory factory){
         this.factory = factory;
@@ -152,7 +152,7 @@ public class GuiManagmentDish extends BaseGui {
 
     @FXML
     void btnChangeQuantity(ActionEvent event) {
-
+        // commento
     }
 
     @FXML

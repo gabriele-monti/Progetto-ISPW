@@ -168,7 +168,7 @@ public abstract class ConsoleView implements CliUserInterface{
 
             try {
                 return Double.parseDouble(input);
-            } catch (Exception e) {
+            } catch (Exception _) {
                 showError("Inserisci un numero valido. Usa punto o virgola per i decimali.\n");
             }           
         }

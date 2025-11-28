@@ -81,7 +81,6 @@ public class GuiLoginView {
             boundary.login(loginBean);
             
             factory.showHomeView();
-            // errorMessageLabel.setText("LOGIN RIUSCITO");
 
         } catch (IllegalArgumentException e){
             errorMessageLabel.setText(e.getMessage());

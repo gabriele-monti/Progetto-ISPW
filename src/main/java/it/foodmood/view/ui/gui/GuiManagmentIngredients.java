@@ -106,7 +106,7 @@ public class GuiManagmentIngredients extends BaseGui {
     private final IngredientController ingredientController = new IngredientController();
     private final ObservableList<IngredientBean> ingredientItems = FXCollections.observableArrayList();
 
-    public GuiFactory factory;
+    private GuiFactory factory;
 
     public void setFactory(GuiFactory factory){
         this.factory = factory;
@@ -190,7 +190,7 @@ public class GuiManagmentIngredients extends BaseGui {
         }
         try {
             return Double.valueOf(text.trim());
-        } catch (Exception e) {
+        } catch (Exception _) {
             showError("Valore non valido: " + text);
             return null;
         }
@@ -202,7 +202,7 @@ public class GuiManagmentIngredients extends BaseGui {
         }
         try {
             return Double.parseDouble(text.trim());
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return null;
         }
     }
@@ -313,7 +313,6 @@ public class GuiManagmentIngredients extends BaseGui {
             ingredientBean.setAllergens(getSelectedAllergens());
             ingredientController.createIngredient(ingredientBean);
             loadIngredients();
-            // ingredientItems.add(ingredientBean);
             showInfo("Ingrediente creato correttamente");
             showListView();
         } catch (IllegalArgumentException | IngredientException e) {

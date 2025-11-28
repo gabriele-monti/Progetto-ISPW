@@ -36,7 +36,7 @@ public class GuiManagmentRestaurantRoom {
     @FXML
     private Label lblSelectedTable;
 
-    public GuiFactory factory;
+    private GuiFactory factory;
 
     public void setFactory(GuiFactory factory){
         this.factory = factory;

@@ -28,8 +28,8 @@ public class CliRegistrationView extends ConsoleView {
                     return;
                 }
             }
-        } catch (BackRequestedException e) {
-            return;
+        } catch (BackRequestedException _) {
+            // comment
         }
     }
 
@@ -62,7 +62,7 @@ public class CliRegistrationView extends ConsoleView {
     }
 
     private void askAndSetPassword(RegistrationBean registrationBean) {
-        Boolean validPassword = false;
+        boolean validPassword = false;
 
         while(!validPassword){
             String password = askInputOrBack("Password: ");

@@ -60,7 +60,7 @@ public class CliIngredientMenuView extends ConsoleView {
                     waitForEnter("Premi INVIO per continuare");
                 }
                     
-            } catch (BackRequestedException e) {
+            } catch (BackRequestedException _) {
                 showInfo("Operazione annullata. Ritorno al menù ingredienti");
                 waitForEnter(null);
             } catch (IngredientException e) {
@@ -110,35 +110,43 @@ public class CliIngredientMenuView extends ConsoleView {
                 }
                 ingredientBean.setUnit(unit);
 
-                try {
-                    showBold("\nInserisci i macronutrienti riferiti a 100 g/ml di prodotto");
-                    showInfo("Inserisci almeno un macronutriente, (0 != indietro)");
-                    double protein = askDouble("Proteine: ");
-                    double carbohydrates = askDouble("Carboidrati: ");
-                    double fat = askDouble("Grassi: ");
-
-                    macronutrientsBean.setProtein(protein);
-                    macronutrientsBean.setCarbohydrates(carbohydrates);
-                    macronutrientsBean.setFat(fat);
-
-                    ingredientBean.setMacronutrients(macronutrientsBean);
-
-                    controller.createIngredient(ingredientBean);
-
-                    showSuccess("Ingrediente inseristo correttamente.");
-                    waitForEnter(null);
+                boolean created = requireMacronutrients(ingredientBean, macronutrientsBean);
+                if(created){
                     return;
-
-                } catch (IngredientException e) {
-                    showError(e.getMessage());
-                    waitForEnter("Premi INVIO per riprovare");                
                 }
             }
-        } catch (BackRequestedException e) {
+        } catch (BackRequestedException _) {
             showInfo("Operazione annullata. Ritorno al menù ingredienti");
             waitForEnter(null);
         }
     }
+
+    private boolean requireMacronutrients(IngredientBean ingredientBean, MacronutrientsBean macronutrientsBean){
+        try {
+            showBold("\nInserisci i macronutrienti riferiti a 100 g/ml di prodotto");
+            showInfo("Inserisci almeno un macronutriente, (0 != indietro)");
+            double protein = askDouble("Proteine: ");
+            double carbohydrates = askDouble("Carboidrati: ");
+            double fat = askDouble("Grassi: ");
+
+            macronutrientsBean.setProtein(protein);
+            macronutrientsBean.setCarbohydrates(carbohydrates);
+            macronutrientsBean.setFat(fat);
+
+            ingredientBean.setMacronutrients(macronutrientsBean);
+
+            controller.createIngredient(ingredientBean);
+
+            showSuccess("Ingrediente inseristo correttamente.");
+            waitForEnter(null);
+            return true;
+
+        } catch (IngredientException e) {
+            showError(e.getMessage());
+            waitForEnter("Premi INVIO per riprovare");       
+            return false;         
+        }
+    } 
 
     private void tableIngredients(){
         var ingredients = controller.getAllIngredients();

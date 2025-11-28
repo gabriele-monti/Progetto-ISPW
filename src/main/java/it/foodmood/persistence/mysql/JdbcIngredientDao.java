@@ -107,14 +107,14 @@ public class JdbcIngredientDao implements IngredientDao {
         Unit unit;
         try {
             unit = Unit.valueOf(unitStr); 
-        } catch (Exception e) {
+        } catch (Exception _) {
             throw new PersistenceException("Unità di misura non valida: " + unitStr);
         }
 
         do{
-            String allergen_type = rs.getString("allergen_type");
-            if(allergen_type != null){
-                allergens.add(Allergen.valueOf(allergen_type));
+            String allergenType = rs.getString("allergen_type");
+            if(allergenType != null){
+                allergens.add(Allergen.valueOf(allergenType));
             } 
         } while (rs.next());
 
@@ -126,60 +126,64 @@ public class JdbcIngredientDao implements IngredientDao {
     public List<Ingredient> findAll(){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            try (CallableStatement cs = conn.prepareCall(CALL_GET_ALL_INGREDIENTS)) {
-                ResultSet rs = cs.executeQuery();
-
-                Map<String, Macronutrients> macroMap = new HashMap<>();
-                Map<String, Set<Allergen>> allergenMap = new HashMap<>();
-                Map<String, Unit> unitMap = new HashMap<>();
-
-
-                while (rs.next()) {
-                    String name = rs.getString("name");
-                    double protein = rs.getDouble("protein");
-                    double carbohydrate = rs.getDouble("carbohydrate");
-                    double fat = rs.getDouble("fat");
-                    String unitStr = rs.getString("unit");
-                    String allergenType = rs.getString("allergen_type");
-
-                    if(!macroMap.containsKey(name)){
-                        Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
-                        macroMap.put(name, macronutrients);
-                    }
-
-                    if(!unitMap.containsKey(name)){
-                        try {
-                            Unit unit = Unit.valueOf(unitStr);
-                            unitMap.put(name, unit);
-                        } catch (Exception e) {
-                            throw new PersistenceException("Unità di misura non valida");
-                        }
-                    }
-
-                    if(allergenType != null){
-                        Set<Allergen> set = allergenMap.get(name);
-                        if(set == null) {
-                            set = new HashSet<>();
-                            allergenMap.put(name, set);
-                        }
-                        set.add(Allergen.valueOf(allergenType));
-                    }
-                }
-
-                List<Ingredient> result = new ArrayList<>();
-
-                for(Map.Entry<String, Macronutrients> entry : macroMap.entrySet()){
-                    String ingredientName = entry.getKey();
-                    Macronutrients macro = entry.getValue();
-                    Unit unit = unitMap.get(ingredientName);
-                    Set<Allergen> allergens = allergenMap.get(ingredientName);
-                    result.add(new Ingredient(ingredientName, macro, unit, allergens));
-                }
-
-                return result;
-            }
+            return executeFindAll(conn);
         } catch (SQLException e) {
             throw new PersistenceException(e);
+        }
+    }
+
+    private List<Ingredient> executeFindAll(Connection conn) throws SQLException{
+        try (CallableStatement cs = conn.prepareCall(CALL_GET_ALL_INGREDIENTS)) {
+            ResultSet rs = cs.executeQuery();
+
+            Map<String, Macronutrients> macroMap = new HashMap<>();
+            Map<String, Set<Allergen>> allergenMap = new HashMap<>();
+            Map<String, Unit> unitMap = new HashMap<>();
+
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                double protein = rs.getDouble("protein");
+                double carbohydrate = rs.getDouble("carbohydrate");
+                double fat = rs.getDouble("fat");
+                String unitStr = rs.getString("unit");
+                String allergenType = rs.getString("allergen_type");
+
+                if(!macroMap.containsKey(name)){
+                    Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
+                    macroMap.put(name, macronutrients);
+                }
+
+                if(!unitMap.containsKey(name)){
+                    try {
+                        Unit unit = Unit.valueOf(unitStr);
+                        unitMap.put(name, unit);
+                    } catch (Exception _) {
+                        throw new PersistenceException("Unità di misura non valida");
+                    }
+                }
+
+                if(allergenType != null){
+                    Set<Allergen> set = allergenMap.get(name);
+                    if(set == null) {
+                        set = new HashSet<>();
+                        allergenMap.put(name, set);
+                    }
+                    set.add(Allergen.valueOf(allergenType));
+                }
+            }
+
+            List<Ingredient> result = new ArrayList<>();
+
+            for(Map.Entry<String, Macronutrients> entry : macroMap.entrySet()){
+                String ingredientName = entry.getKey();
+                Macronutrients macro = entry.getValue();
+                Unit unit = unitMap.get(ingredientName);
+                Set<Allergen> allergens = allergenMap.get(ingredientName);
+                result.add(new Ingredient(ingredientName, macro, unit, allergens));
+            }
+
+            return result;
         }
     }
 

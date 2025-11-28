@@ -75,7 +75,7 @@ public class FileSystemIngredientDao extends AbstractCsvDao implements Ingredien
     private String allergensToString(Ingredient ingredient){
         StringBuilder stringBuilder = new StringBuilder();
         for(Allergen allergen: ingredient.getAllergens()){
-            if(stringBuilder.length() > 0) stringBuilder.append(ALLERGEN_SEPARATOR);
+            if(stringBuilder.isEmpty()) stringBuilder.append(ALLERGEN_SEPARATOR);
             stringBuilder.append(allergen.name());
         }
         return stringBuilder.toString();
@@ -91,7 +91,7 @@ public class FileSystemIngredientDao extends AbstractCsvDao implements Ingredien
         for(String token: field.split(ALLERGEN_SEPARATOR)){
             try {
                 allergens.add(Allergen.valueOf(token.trim()));
-            } catch (Exception e) {
+            } catch (Exception _) {
                 throw new PersistenceException("Allergene: " + token + " non valido\nRiga: "+ line);
             }
         }
@@ -125,7 +125,7 @@ public class FileSystemIngredientDao extends AbstractCsvDao implements Ingredien
             protein = Double.parseDouble(token[1]);
             carbs = Double.parseDouble(token[2]);
             fat = Double.parseDouble(token[3]);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             throw new PersistenceException("Valori nutrizionali non validi: " + line);
         }
 
@@ -135,7 +135,7 @@ public class FileSystemIngredientDao extends AbstractCsvDao implements Ingredien
         Unit unit;
         try {
             unit = Unit.valueOf(unitStr); 
-        } catch (Exception e) {
+        } catch (Exception _) {
             throw new PersistenceException("Unità di misura non valida: " + unitStr);
         }
 

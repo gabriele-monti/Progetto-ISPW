@@ -27,9 +27,10 @@ public class ManagerCliNavigator implements CliNavigator {
         while(!exit){
             ManagerPages page = menuView.displayPage();
 
-            switch (page) {
-                case MANAGMENT_INGREDIENTS ->  ui.showIngredientManagmentView();
-                case LOGOUT -> exit = true;
+            if(page == ManagerPages.MANAGMENT_INGREDIENTS){
+                ui.showIngredientManagmentView();
+            } else if(page == ManagerPages.LOGOUT){
+                exit = true;
             }
         }
     }

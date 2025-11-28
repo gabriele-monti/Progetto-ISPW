@@ -38,7 +38,7 @@ public class GuiHomeManager extends BaseGui {
     private Label lblManager;
 
     @FXML
-    private AnchorPane main_form;
+    private AnchorPane mainForm;
 
     @FXML
     void switchForm(ActionEvent event) {
@@ -65,7 +65,7 @@ public class GuiHomeManager extends BaseGui {
         // costruttore vuoto
     }
 
-    public GuiFactory factory;
+    private GuiFactory factory;
     private PaneNavigator paneNavigator;
     private LoginBoundary loginBoundary;
     private User manager;
