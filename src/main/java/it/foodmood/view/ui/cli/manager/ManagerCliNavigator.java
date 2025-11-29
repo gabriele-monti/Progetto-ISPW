@@ -32,17 +32,20 @@ public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavi
     }
 
     private boolean runManagerSession(){
-        
-        CliManagerMenuView menuView = new CliManagerMenuView();
         SessionManager sessionManager = SessionManager.getInstance();
-
-        ManagerPages page = menuView.displayPage();
 
         while(true){
             try {
                 sessionManager.requireActiveSession();
+
+                CliManagerMenuView menuView = new CliManagerMenuView();
+                ManagerPages page = menuView.displayPage();
+
                 switch(page){
                     case MANAGMENT_INGREDIENTS -> ui.showIngredientManagmentView();
+                    
+                    case MANAGMENT_DISH -> ui.showDishManagmentView();
+
 
                     case LOGOUT -> {
                         sessionManager.terminateCurrentSession();

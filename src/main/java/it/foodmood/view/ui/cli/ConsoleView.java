@@ -120,7 +120,7 @@ public abstract class ConsoleView implements CliUserInterface{
 
     protected String askInputOrBack(String prompt){
         while(true){
-            out.print(prompt);
+            out.print(prompt + " [0 = indietro]: ");
             String input = in.readLine();
 
             if(input == null || input.isBlank()){

@@ -1,7 +1,7 @@
 package it.foodmood.view.ui.cli;
 
 import it.foodmood.config.UserMode;
-import it.foodmood.controller.application.IngredientController;
+import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.boundary.LoginBoundary;
 import it.foodmood.view.boundary.RegistrationBoundary;
 import it.foodmood.view.ui.CustomerUi;
@@ -51,8 +51,15 @@ public final class CliFactory implements CustomerUi, ManagerUi{
 
     @Override
     public void showIngredientManagmentView(){
-        IngredientController controller = new IngredientController();
-        CliIngredientMenuView view = new CliIngredientMenuView(controller);
+        IngredientBoundary boundary = new IngredientBoundary();
+        CliIngredientMenuView view = new CliIngredientMenuView(boundary);
+        view.displayPage();
+    }
+
+    @Override
+    public void showDishManagmentView(){
+        IngredientBoundary boundary = new IngredientBoundary();
+        CliIngredientMenuView view = new CliIngredientMenuView(boundary);
         view.displayPage();
     }
 }

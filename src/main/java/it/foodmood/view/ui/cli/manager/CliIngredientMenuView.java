@@ -4,16 +4,16 @@ import java.util.List;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
-import it.foodmood.controller.application.IngredientController;
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.IngredientException;
+import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliIngredientMenuView extends ProtectedConsoleView {
-    private final IngredientController controller;
+    private final IngredientBoundary boundary;
 
-    public CliIngredientMenuView(IngredientController controller){
-        this.controller = controller;
+    public CliIngredientMenuView(IngredientBoundary boundary){
+        this.boundary = boundary;
     }
 
     public void displayPage(){
@@ -52,8 +52,8 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
                 showTitle("Elimina Ingrediente");
                 tableIngredients();
                     
-                String name = askInputOrBack("Inserisci il nome dell'ingrediente da eliminare: ");
-                controller.deleteIngredient(name.toUpperCase());
+                String name = askInputOrBack("Inserisci il nome dell'ingrediente da eliminare");
+                boundary.deleteIngredient(name.toUpperCase());
                     
                 showSuccess("Ingrediente eliminato con successo.");
 
@@ -65,6 +65,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
                     
             } catch (BackRequestedException _) {
                 showInfo("Operazione annullata. Ritorno al menù ingredienti");
+                choice = false;
                 waitForEnter(null);
             } catch (IngredientException e) {
                 showError(e.getMessage());
@@ -86,17 +87,17 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
     }
 
     private void createIngredient() {
-        controller.ensureActiveSession();
+        boundary.ensureActiveSession();
         try {
             clearScreen();
             while(true){
                 showTitle("Inserisci ingrediente");
-                showBold("Compila i campi (0 = indietro)");
+                showBold("Compila i campi");
 
                 IngredientBean ingredientBean = new IngredientBean();
                 MacronutrientsBean macronutrientsBean = new MacronutrientsBean();
 
-                String name = askInputOrBack("Nome: ");
+                String name = askInputOrBack("Nome");
                 ingredientBean.setName(name);
 
                 String unit = null;
@@ -139,7 +140,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
 
             ingredientBean.setMacronutrients(macronutrientsBean);
 
-            controller.createIngredient(ingredientBean);
+            boundary.createIngredient(ingredientBean);
 
             showSuccess("Ingrediente inseristo correttamente.");
             waitForEnter(null);
@@ -152,7 +153,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
     } 
 
     private void tableIngredients(){
-        var ingredients = controller.getAllIngredients();
+        var ingredients = boundary.getAllIngredients();
 
         if(ingredients == null || ingredients.isEmpty()){
             showWarning("Nessun ingrediente presente.");

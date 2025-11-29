@@ -20,7 +20,7 @@ public class CliRegistrationView extends ConsoleView {
             clearScreen();
             while(true){
                 showTitle(TITLE);
-                showInfo("Crea il tuo account (0 = indietro)\n");
+                showInfo("Crea il tuo account");
 
                 RegistrationBean registrationBean = build();
 
@@ -49,10 +49,10 @@ public class CliRegistrationView extends ConsoleView {
     private RegistrationBean build() throws BackRequestedException {
         RegistrationBean registrationBean = new RegistrationBean();
 
-        String name = askInputOrBack("Nome: ");
+        String name = askInputOrBack("Nome");
         registrationBean.setName(name);
 
-        String surname = askInputOrBack("Cognome: ");
+        String surname = askInputOrBack("Cognome");
         registrationBean.setSurname(surname);
 
         askAndSetEmail(registrationBean);
@@ -65,8 +65,8 @@ public class CliRegistrationView extends ConsoleView {
         boolean validPassword = false;
 
         while(!validPassword){
-            String password = askInputOrBack("Password: ");
-            String confirmPassword = askInputOrBack("Conferma password: ");
+            String password = askInputOrBack("Password");
+            String confirmPassword = askInputOrBack("Conferma password");
 
             if(!password.equals(confirmPassword)){
                 clearScreen();
@@ -86,7 +86,7 @@ public class CliRegistrationView extends ConsoleView {
 
     private void askAndSetEmail(RegistrationBean registrationBean) {
         while(true){
-            String email = askInputOrBack("Email: ");
+            String email = askInputOrBack("Email");
             try {
                 registrationBean.setEmail(email);
                 break;

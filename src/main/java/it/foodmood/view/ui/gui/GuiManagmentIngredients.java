@@ -6,9 +6,9 @@ import java.util.Locale;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
-import it.foodmood.controller.application.IngredientController;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.IngredientException;
+import it.foodmood.view.boundary.IngredientBoundary;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -105,7 +105,7 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML private TextField tfSearchIngredient;
 
-    private final IngredientController ingredientController = new IngredientController();
+    private final IngredientBoundary boundary = new IngredientBoundary();
     private final ObservableList<IngredientBean> ingredientItems = FXCollections.observableArrayList();
     private FilteredList<IngredientBean> filteredIngredient;
 
@@ -196,7 +196,7 @@ public class GuiManagmentIngredients extends BaseGui {
         ingredientItems.clear();
 
         try {
-            List<IngredientBean> listIngredient = ingredientController.getAllIngredients();
+            List<IngredientBean> listIngredient = boundary.getAllIngredients();
 
             ingredientItems.addAll(listIngredient);
         } catch (Exception e) {
@@ -338,7 +338,7 @@ public class GuiManagmentIngredients extends BaseGui {
             ingredientBean.setMacronutrients(macronutrientsBean);
 
             ingredientBean.setAllergens(getSelectedAllergens());
-            ingredientController.createIngredient(ingredientBean);
+            boundary.createIngredient(ingredientBean);
             loadIngredients();
             showInfo("Ingrediente creato correttamente");
             showListView();
@@ -370,7 +370,7 @@ public class GuiManagmentIngredients extends BaseGui {
         }
 
         try {
-            ingredientController.deleteIngredient(selected.getName());
+            boundary.deleteIngredient(selected.getName());
 
             ingredientItems.remove(selected);
             showInfo("Ingrediente eliminato correttamente.");
