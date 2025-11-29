@@ -22,6 +22,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.layout.AnchorPane;
 
 
@@ -101,15 +103,16 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML private TextField tfProtein;
 
-    @FXML private TextField tfResarchIngredient;
+    @FXML private TextField tfSearchIngredient;
 
     private final IngredientController ingredientController = new IngredientController();
     private final ObservableList<IngredientBean> ingredientItems = FXCollections.observableArrayList();
+    private FilteredList<IngredientBean> filteredIngredient;
 
-    private GuiFactory factory;
+    private GuiRouter router;
 
-    public void setFactory(GuiFactory factory){
-        this.factory = factory;
+    public void setRouter(GuiRouter router){
+        this.router = router;
     }
 
     @FXML
@@ -117,6 +120,7 @@ public class GuiManagmentIngredients extends BaseGui {
         initUnitComboBox();
         initTable();
         loadIngredients();
+        initSearchIngredient();
         initLivePreview();
         showListView();
     }
@@ -128,7 +132,6 @@ public class GuiManagmentIngredients extends BaseGui {
     }
 
     private void initTable(){
-        tableIngredients.setItems(ingredientItems);
 
         colName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
@@ -165,6 +168,29 @@ public class GuiManagmentIngredients extends BaseGui {
         });
     }
 
+    private void initSearchIngredient(){
+        filteredIngredient = new FilteredList<>(ingredientItems, ingredient -> true);
+
+        SortedList<IngredientBean> sortedList = new SortedList<>(filteredIngredient);
+        sortedList.comparatorProperty().bind(tableIngredients.comparatorProperty());
+
+        tableIngredients.setItems(sortedList);
+
+        //listener
+        tfSearchIngredient.textProperty().addListener((obs, oldValue, newValue) -> {
+            String filter = (newValue == null) ? "" : newValue.trim().toLowerCase(Locale.ROOT);
+
+            if(filter.isEmpty()){
+                filteredIngredient.setPredicate(ingredient -> true); // mostro tutti
+            } else {
+                filteredIngredient.setPredicate(ingredient -> {
+                    String name = ingredient.getName();
+                    return name != null && name.toLowerCase(Locale.ROOT).contains(filter);
+                });
+            }
+        });
+    }
+
 
     private void loadIngredients(){
         ingredientItems.clear();
@@ -180,7 +206,7 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML
     void onAddNewIngredient(ActionEvent event) {
-
+        if(!ensureAuthenticated(router)) return;
         showFormView();
     }
 
@@ -294,6 +320,7 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML
     void onSaveIngredient(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
 
         IngredientBean ingredientBean = new IngredientBean();
 
@@ -330,6 +357,7 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML
     void onDeleteIngredient(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         IngredientBean selected = tableIngredients.getSelectionModel().getSelectedItem();
 
         if(selected == null){
@@ -353,6 +381,12 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML
     void onModifyIngredient(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         showInfo("Funzionalità non ancora implementata");
+    }
+
+    @FXML
+    void onSearchIngredient(ActionEvent event) {
+
     }
 }

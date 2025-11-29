@@ -49,7 +49,7 @@ public class GuiRegistrationView extends BaseGui {
     private TextField tfSurname;
 
     private RegistrationBoundary boundary;
-    private GuiFactory factory;
+    private GuiRouter router;
 
     private PasswordToggleController passwordToggleController;
     private PasswordToggleController confirmPasswordToggleController;
@@ -62,8 +62,8 @@ public class GuiRegistrationView extends BaseGui {
         this.boundary = boundary;
     }
 
-    public void setFactory(GuiFactory factory){
-        this.factory = factory;
+    public void setRouter(GuiRouter router){
+        this.router = router;
     }
 
     @FXML
@@ -103,7 +103,7 @@ public class GuiRegistrationView extends BaseGui {
 
             boundary.registration(registrationBean);
             showInfo("Registrazione effettuata con successo");
-            factory.showLoginView();
+            router.showLoginView();
         } catch (IllegalArgumentException e){
             errorMessageLabel.setText(e.getMessage());
         } catch (RegistrationException e) {
@@ -113,6 +113,6 @@ public class GuiRegistrationView extends BaseGui {
 
     @FXML
     private void onBackToLoginClicked(){
-        factory.showLoginView(); // DA RIVEDERE
+        router.showLoginView();
     }
 }

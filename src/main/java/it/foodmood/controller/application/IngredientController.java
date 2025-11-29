@@ -1,6 +1,7 @@
 package it.foodmood.controller.application;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,15 +14,18 @@ import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.IngredientDao;
+import it.foodmood.utils.SessionManager;
 
 public class IngredientController {
     private final IngredientDao ingredientDao;
+    private final SessionManager sessionManager = SessionManager.getInstance();
 
     public IngredientController(){
         this.ingredientDao = DaoFactory.getInstance().getIngredientDao();
     }
 
     public void createIngredient(IngredientBean ingredientBean) throws IngredientException{
+        ensureActiveSession();
         try {
             String name = ingredientBean.getName();
             MacronutrientsBean macronutrientsBean = ingredientBean.getMacronutrients();
@@ -67,10 +71,12 @@ public class IngredientController {
     }
 
     public List<IngredientBean> getAllIngredients(){
+        ensureActiveSession();
         return ingredientDao.findAll().stream().map(this::toBean).toList();
     }
 
     public void deleteIngredient(String name) throws IngredientException{
+        ensureActiveSession();
         if(name.isBlank()){
             throw new IngredientException("Il nome dell'ingrediente non può essere vuoto.");
         }
@@ -80,6 +86,10 @@ public class IngredientController {
         }
 
         ingredientDao.deleteById(name);
+    }
+
+    public Optional<IngredientBean> findIngredientByName(String name){
+        return ingredientDao.findById(name).map(this::toBean);
     }
 
     private IngredientBean toBean(Ingredient ingredient){
@@ -102,5 +112,9 @@ public class IngredientController {
 
     private double normalize(Double value){
         return value == null ? 0.0 : value;
+    }
+
+    public void ensureActiveSession(){
+        sessionManager.requireActiveSession();
     }
 }

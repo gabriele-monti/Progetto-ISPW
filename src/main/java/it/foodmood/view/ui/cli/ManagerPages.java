@@ -2,5 +2,6 @@ package it.foodmood.view.ui.cli;
 
 public enum ManagerPages {
     MANAGMENT_INGREDIENTS,
-    LOGOUT
+    LOGOUT, 
+    EXIT
 }

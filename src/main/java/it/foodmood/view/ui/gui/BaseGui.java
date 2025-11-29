@@ -1,11 +1,22 @@
 package it.foodmood.view.ui.gui;
 
 import it.foodmood.domain.model.User;
+import it.foodmood.utils.SessionManager;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 public abstract class BaseGui {
+
+    protected boolean ensureAuthenticated(GuiRouter factory){
+        if(!SessionManager.getInstance().isUserLoggedIn()){
+            showError("Sessione scaduta. Effettua nuovamente il login.");
+            SessionManager.getInstance().terminateCurrentSession();
+            factory.showLoginView();
+            return false;
+        }
+        return true;
+    }
 
     protected String getUserInitials(User user){
         if(user == null || user.getPerson() == null) return "";

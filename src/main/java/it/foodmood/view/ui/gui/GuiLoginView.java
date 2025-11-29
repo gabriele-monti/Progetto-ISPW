@@ -12,29 +12,22 @@ import javafx.scene.image.ImageView;
 
 public class GuiLoginView {
 
-    @FXML
-    private Button btnCreateAccount;
+    @FXML private Button btnCreateAccount;
 
-    @FXML
-    private Button btnLogin;
+    @FXML private Button btnLogin;
 
-    @FXML
-    private Label errorMessageLabel;
+    @FXML private Label errorMessageLabel;
 
-    @FXML
-    private ImageView ivToggle;
+    @FXML private ImageView ivToggle;
 
-    @FXML
-    private PasswordField pfPassword;
+    @FXML private PasswordField pfPassword;
 
-    @FXML
-    private TextField tfEmail;
+    @FXML private TextField tfEmail;
 
-    @FXML
-    private TextField tfPasswordVisible;
+    @FXML private TextField tfPasswordVisible;
 
     private LoginBoundary boundary;
-    private GuiFactory factory;
+    private GuiRouter router;
 
     private PasswordToggleController toggleController;
 
@@ -46,8 +39,8 @@ public class GuiLoginView {
         this.boundary = boundary;
     }
 
-    public void setFactory(GuiFactory factory){
-        this.factory = factory;
+    public void setRouter(GuiRouter router){
+        this.router = router;
     }
 
     @FXML
@@ -80,7 +73,7 @@ public class GuiLoginView {
 
             boundary.login(loginBean);
             
-            factory.showHomeView();
+            router.showHomeView();
 
         } catch (IllegalArgumentException e){
             errorMessageLabel.setText(e.getMessage());
@@ -91,6 +84,6 @@ public class GuiLoginView {
 
     @FXML
     private void onCreateAccountClicked(){
-        factory.showRegistrationView();
+        router.showRegistrationView();
     }
 }

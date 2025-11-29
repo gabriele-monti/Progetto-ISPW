@@ -36,9 +36,9 @@ public class GuiManagmentRestaurantRoom {
     @FXML
     private Label lblSelectedTable;
 
-    private GuiFactory factory;
+    private GuiRouter router;
 
-    public void setFactory(GuiFactory factory){
-        this.factory = factory;
+    public void setRouter(GuiRouter router){
+        this.router = router;
     }
 }

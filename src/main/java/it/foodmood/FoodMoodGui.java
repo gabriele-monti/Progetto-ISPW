@@ -2,7 +2,7 @@ package it.foodmood;
 
 import it.foodmood.config.ApplicationEnvironment;
 import it.foodmood.config.UserMode;
-import it.foodmood.view.ui.gui.GuiFactory;
+import it.foodmood.view.ui.gui.GuiRouter;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -29,7 +29,7 @@ public class FoodMoodGui extends Application {
         stage.setResizable(false);
         stage.show();
 
-        GuiFactory factory = new GuiFactory(scene, userMode);
+        GuiRouter factory = new GuiRouter(scene, userMode);
 
         factory.showLoginView();
     }

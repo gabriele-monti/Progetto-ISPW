@@ -42,21 +42,22 @@ public class GuiHomeManager extends BaseGui {
 
     @FXML
     void switchForm(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         Object source = event.getSource();
 
         if(source == btnManagmentIngredients){
             GuiManagmentIngredients controller = paneNavigator.show(GuiPages.MANAGMENT_INGREDIENTS);
-            controller.setFactory(factory);
+            controller.setRouter(router);
         }
 
         if(source == btnManagmentDishes){
             GuiManagmentDish controller = paneNavigator.show(GuiPages.MANAGMENT_DISH);
-            controller.setFactory(factory);
+            controller.setRouter(router);
         }
 
         if(source == btnManagmentRestaurantRoom){
             GuiManagmentRestaurantRoom controller = paneNavigator.show(GuiPages.MANAGMENT_ROOM_RESTAURANT);
-            controller.setFactory(factory);
+            controller.setRouter(router);
         }
 
     }
@@ -65,13 +66,13 @@ public class GuiHomeManager extends BaseGui {
         // costruttore vuoto
     }
 
-    private GuiFactory factory;
+    private GuiRouter router;
     private PaneNavigator paneNavigator;
     private LoginBoundary loginBoundary;
     private User manager;
 
-    public void setFactory(GuiFactory factory){
-        this.factory = factory;
+    public void setRouter(GuiRouter router){
+        this.router = router;
     }
 
     public void setBoundary(LoginBoundary boundary){
@@ -92,7 +93,7 @@ public class GuiHomeManager extends BaseGui {
     @FXML
     void onLogoutClicked(ActionEvent event) {
         loginBoundary.logout();
-        factory.showLoginView();
+        router.showLoginView();
     }
 
     @FXML
@@ -100,6 +101,4 @@ public class GuiHomeManager extends BaseGui {
         paneNavigator = new PaneNavigator(contentArea);
         updateLabel();
     }
-
-
 }

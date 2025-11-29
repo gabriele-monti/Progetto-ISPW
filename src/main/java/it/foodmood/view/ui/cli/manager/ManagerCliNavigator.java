@@ -1,10 +1,13 @@
 package it.foodmood.view.ui.cli.manager;
 
+import it.foodmood.exception.SessionExpiredException;
+import it.foodmood.utils.SessionManager;
 import it.foodmood.view.ui.ManagerUi;
 import it.foodmood.view.ui.cli.CliNavigator;
 import it.foodmood.view.ui.cli.ManagerPages;
+import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
-public class ManagerCliNavigator implements CliNavigator {
+public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavigator {
 
     private final ManagerUi ui;
 
@@ -14,23 +17,46 @@ public class ManagerCliNavigator implements CliNavigator {
 
     @Override
     public void start(){
-        boolean logged = ui.showLoginView();
 
-        if(!logged){
-            return;
+        boolean exitApp = false;
+        while(!exitApp){
+            boolean logged = ui.showLoginView();
+
+            if(!logged){
+                exitApp = true;
+                continue;
+            }
+
+            exitApp = runManagerSession();
         }
+    }
+
+    private boolean runManagerSession(){
         
         CliManagerMenuView menuView = new CliManagerMenuView();
+        SessionManager sessionManager = SessionManager.getInstance();
 
-        boolean exit = false;
+        ManagerPages page = menuView.displayPage();
 
-        while(!exit){
-            ManagerPages page = menuView.displayPage();
+        while(true){
+            try {
+                sessionManager.requireActiveSession();
+                switch(page){
+                    case MANAGMENT_INGREDIENTS -> ui.showIngredientManagmentView();
 
-            if(page == ManagerPages.MANAGMENT_INGREDIENTS){
-                ui.showIngredientManagmentView();
-            } else if(page == ManagerPages.LOGOUT){
-                exit = true;
+                    case LOGOUT -> {
+                        sessionManager.terminateCurrentSession();
+                        return false;
+                    }
+
+                    case EXIT -> {
+                        sessionManager.terminateCurrentSession();
+                        return true;
+                    }
+                } 
+            } catch (SessionExpiredException _) {
+                showSessionExpiredMessage();
+                return false;
             }
         }
     }

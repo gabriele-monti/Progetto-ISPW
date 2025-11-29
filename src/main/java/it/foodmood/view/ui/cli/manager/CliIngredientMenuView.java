@@ -7,9 +7,9 @@ import it.foodmood.bean.MacronutrientsBean;
 import it.foodmood.controller.application.IngredientController;
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.IngredientException;
-import it.foodmood.view.ui.cli.ConsoleView;
+import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
-public class CliIngredientMenuView extends ConsoleView {
+public class CliIngredientMenuView extends ProtectedConsoleView {
     private final IngredientController controller;
 
     public CliIngredientMenuView(IngredientController controller){
@@ -20,6 +20,9 @@ public class CliIngredientMenuView extends ConsoleView {
         boolean back = false;
 
         while(!back){
+
+            if(!ensureActiveSession()) return;
+
             clearScreen();
             showTitle("Gestisci Ingredienti");
             showInfo("0. Indietro");
@@ -83,6 +86,7 @@ public class CliIngredientMenuView extends ConsoleView {
     }
 
     private void createIngredient() {
+        controller.ensureActiveSession();
         try {
             clearScreen();
             while(true){
@@ -140,7 +144,6 @@ public class CliIngredientMenuView extends ConsoleView {
             showSuccess("Ingrediente inseristo correttamente.");
             waitForEnter(null);
             return true;
-
         } catch (IngredientException e) {
             showError(e.getMessage());
             waitForEnter("Premi INVIO per riprovare");       

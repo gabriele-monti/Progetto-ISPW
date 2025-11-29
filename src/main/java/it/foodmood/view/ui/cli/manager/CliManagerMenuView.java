@@ -15,13 +15,15 @@ public class CliManagerMenuView extends ConsoleView {
             showTitle("Menù Manager");
 
             showInfo("1. Gestisci Ingredienti");
-            showInfo("2. Esci");
+            showInfo("2. Logout");
+            showInfo("3. Esci");
 
             String choice = askInput("\nSeleziona un'opzione: ");
 
             switch(choice){
                 case "1": return ManagerPages.MANAGMENT_INGREDIENTS;
                 case "2": return ManagerPages.LOGOUT;
+                case "3": return ManagerPages.EXIT;
                 default : showError("Scelta non valida, riprova.");
             }
         }

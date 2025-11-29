@@ -1,6 +1,7 @@
 package it.foodmood.utils;
 
 import it.foodmood.domain.model.User;
+import it.foodmood.exception.SessionExpiredException;
 
 public final class SessionManager {
 
@@ -26,6 +27,10 @@ public final class SessionManager {
     }
 
     public User getCurrentUser(){
+        Session session = getCurrentSession();
+        if(session == null){
+            return null;
+        }
         return currentUser;
     }
 
@@ -35,6 +40,7 @@ public final class SessionManager {
         }
         if(currentSession.isExpired()){
             currentSession = null;
+            currentUser = null;
             return null;
         }
         currentSession.refresh();
@@ -48,5 +54,13 @@ public final class SessionManager {
     public void terminateCurrentSession() {
         currentSession = null;
         currentUser = null;
+    }
+
+    public Session requireActiveSession(){
+        Session session = getCurrentSession();
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+        return session;
     }
 }

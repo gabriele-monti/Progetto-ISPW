@@ -15,10 +15,10 @@ import javafx.scene.layout.AnchorPane;
 
 public class GuiManagmentDish extends BaseGui {
 
-    private GuiFactory factory;
+    private GuiRouter router;
 
-    public void setFactory(GuiFactory factory){
-        this.factory = factory;
+    public void setRouter(GuiRouter router){
+        this.router = router;
     }
 
     @FXML

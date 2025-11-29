@@ -69,7 +69,7 @@
                                                       <Font name="Arial Bold" size="16.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="tfResarchIngredient" maxWidth="1.7976931348623157E308" minHeight="40.0" promptText="Cerca ingrediente" styleClass="form">
+                                                <TextField fx:id="tfSearchIngredient" maxWidth="1.7976931348623157E308" minHeight="40.0" onAction="#onSearchIngredient" promptText="Cerca ingrediente per nome" styleClass="form">
                                                    <font>
                                                       <Font name="Arial" size="14.0" />
                                                    </font>

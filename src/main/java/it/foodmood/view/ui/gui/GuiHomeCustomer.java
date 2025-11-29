@@ -59,10 +59,10 @@ public class GuiHomeCustomer extends BaseGui {
         // commento
     }
 
-    private GuiFactory factory;
+    private GuiRouter router;
 
-    public void setFactory(GuiFactory factory){
-        this.factory = factory;
+    public void setRouter(GuiRouter router){
+        this.router = router;
     }
 
     public GuiHomeCustomer(){

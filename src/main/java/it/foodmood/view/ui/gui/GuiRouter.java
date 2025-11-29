@@ -6,14 +6,14 @@ import it.foodmood.view.boundary.LoginBoundary;
 import it.foodmood.view.boundary.RegistrationBoundary;
 import javafx.scene.Scene;
 
-public final class GuiFactory{
+public final class GuiRouter{
 
     private final UserMode userMode;
     private final GuiNavigator navigator;
     private final LoginBoundary loginBoundary;
     private final RegistrationBoundary registrationBoundary;
 
-    public GuiFactory(Scene scene, UserMode userMode){
+    public GuiRouter(Scene scene, UserMode userMode){
         this.navigator = new GuiNavigator(scene);
         this.userMode = userMode;
         this.loginBoundary = new LoginBoundary(userMode);
@@ -31,24 +31,24 @@ public final class GuiFactory{
     public void showLoginView(){
         GuiLoginView controller = navigator.goTo(GuiPages.LOGIN);
         controller.setBoundary(loginBoundary);
-        controller.setFactory(this);
+        controller.setRouter(this);
     }  
 
     public void showRegistrationView(){
         GuiRegistrationView controller = navigator.goTo(GuiPages.REGISTRATION);
         controller.setBoundary(registrationBoundary);
-        controller.setFactory(this);
+        controller.setRouter(this);
     }
 
     public void showHomeCustumerView(){
         GuiHomeCustomer controller = navigator.goTo(GuiPages.HOME_CUSTOMER);
-        controller.setFactory(this);
+        controller.setRouter(this);
         controller.setUser(SessionManager.getInstance().getCurrentUser());
     }
 
     public void showHomeManagerView(){
         GuiHomeManager controller = navigator.goTo(GuiPages.HOME_MANAGER);
-        controller.setFactory(this);
+        controller.setRouter(this);
         controller.setBoundary(loginBoundary);
         controller.setManager(SessionManager.getInstance().getCurrentUser());
     }
