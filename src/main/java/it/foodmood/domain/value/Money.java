@@ -7,19 +7,18 @@ import java.util.Objects;
 public final class Money {
     private final BigDecimal amount;
 
-    private Money(BigDecimal amount){
+    public Money(BigDecimal amount){
+        Objects.requireNonNull(amount, "L'importo non può essere nullo");
+        
         if(amount.compareTo(BigDecimal.ZERO) <= 0){
             throw new IllegalArgumentException("L'importo deve essere > 0");
         }
         this.amount = amount.setScale(2, RoundingMode.HALF_UP);
     }
 
-    public static Money of(double amount){
-        return new Money(BigDecimal.valueOf(amount));
-    }
-
-    public static Money of(BigDecimal amount){
-        return new Money(amount);
+    // costruttore per double
+    public Money(double amount){
+        this(BigDecimal.valueOf(amount));
     }
 
     public BigDecimal getAmount() { return amount;}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
+import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.view.boundary.IngredientBoundary;
@@ -100,19 +101,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
                 String name = askInputOrBack("Nome");
                 ingredientBean.setName(name);
 
-                String unit = null;
-
-                while(unit == null){
-                    showBold("\nUnità di misura");
-                    showInfo("1. Grammi (g)\n2. Milliletri (ml)");
-                    String choice = askInput("\nSeleziona un'opzione: ");
-
-                    switch(choice){
-                        case "1" -> unit = "GRAM";
-                        case "2" -> unit = "MILLILITER";
-                        default -> showError("Scelta non valida, riprova.");
-                    }
-                }
+                Unit unit = askUnit();
                 ingredientBean.setUnit(unit);
 
                 boolean created = requireMacronutrients(ingredientBean, macronutrientsBean);
@@ -123,6 +112,25 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
         } catch (BackRequestedException _) {
             showInfo("Operazione annullata. Ritorno al menù ingredienti");
             waitForEnter(null);
+        }
+    }
+
+    private Unit askUnit() {
+        while(true){
+            showBold("\nUnità di misura");
+            showInfo("1. Grammi (g)\n2. Milliletri (ml)");
+
+            String choice = askInput("\nSeleziona un'opzione: ");
+
+            switch (choice){
+                case "1" : 
+                    return Unit.GRAM;
+                case "2" : 
+                    return Unit.MILLILITER;
+                default: 
+                    showError("Scelta non valida, riprova.");
+                    continue;
+            }
         }
     }
 
@@ -165,7 +173,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
 
         List<List<String>> rows = ingredients.stream().map(ingredient -> {
             String name = ingredient.getName();
-            String unit = ingredient.getUnit().equals("GRAM") ? "g" : "ml";
+            String unit = ingredient.getUnit() == Unit.GRAM ? "g" : "ml";
             var macro = ingredient.getMacronutrients();
             String protein = String.format("%.1f", macro.getProtein());
             String carbs = String.format("%.1f", macro.getCarbohydrates());

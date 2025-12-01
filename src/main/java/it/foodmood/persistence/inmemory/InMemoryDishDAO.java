@@ -50,9 +50,4 @@ public class InMemoryDishDao implements DishDao {
         // implementare
         return List.of();
     }
-    
-    protected String getId(Dish dish){
-        return dish.getId();
-    }
-
 }

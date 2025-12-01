@@ -164,7 +164,7 @@
                   <TableView fx:id="tableIngredients">
                      <columns>
                         <TableColumn fx:id="colName" prefWidth="150.0" text="Nome" />
-                        <TableColumn fx:id="colUnita" prefWidth="70.0" text="Unità" />
+                        <TableColumn fx:id="colUnit" prefWidth="70.0" text="Unità" />
                         <TableColumn fx:id="colKcal" prefWidth="80.0" text="kcal/100" />
                         <TableColumn fx:id="colMacros" prefWidth="140.0" text="Carb/Prot/Grassi" />
                         <TableColumn fx:id="colAllergens" prefWidth="120.0" text="Allergeni" />

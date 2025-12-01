@@ -135,7 +135,11 @@ public class GuiManagmentIngredients extends BaseGui {
 
         colName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
-        colUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUnit()));
+        colUnit.setCellValueFactory(cellData -> {
+            Unit unit = cellData.getValue().getUnit();
+            String unitLabel = (unit == Unit.GRAM) ? "g" : "ml";
+            return new SimpleStringProperty(unitLabel);
+        });
 
         colKcal.setCellValueFactory(cellData -> {
             MacronutrientsBean macro = cellData.getValue().getMacronutrients();
@@ -328,8 +332,8 @@ public class GuiManagmentIngredients extends BaseGui {
             String name = tfIngredientName.getText();
             ingredientBean.setName(name);
 
-            Unit selectedUnit = cbUnit.getValue();
-            ingredientBean.setUnit(selectedUnit.name());
+            Unit unit = cbUnit.getValue();
+            ingredientBean.setUnit(unit);
 
             MacronutrientsBean macronutrientsBean = new MacronutrientsBean();
             macronutrientsBean.setProtein(parse(tfProtein.getText()));

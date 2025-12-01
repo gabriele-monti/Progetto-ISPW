@@ -46,7 +46,6 @@ public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavi
                     
                     case MANAGMENT_DISH -> ui.showDishManagmentView();
 
-
                     case LOGOUT -> {
                         sessionManager.terminateCurrentSession();
                         return false;

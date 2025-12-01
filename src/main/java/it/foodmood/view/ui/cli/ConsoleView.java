@@ -1,5 +1,6 @@
 package it.foodmood.view.ui.cli;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import it.foodmood.exception.BackRequestedException;
@@ -118,6 +119,17 @@ public abstract class ConsoleView implements CliUserInterface{
         }
     }
 
+    protected String askInputOrNull(String prompt){
+        while(true){
+            out.print(prompt);
+            String input = in.readLine();
+                 
+            input = input.trim();
+
+            return input;
+        }
+    }
+
     protected String askInputOrBack(String prompt){
         while(true){
             out.print(prompt + " [0 = indietro]: ");
@@ -159,16 +171,41 @@ public abstract class ConsoleView implements CliUserInterface{
         }
     }
 
+    protected BigDecimal askBigDecimal(String prompt){
+        while(true){
+            out.print(prompt);
+            String input = in.readLine();
+
+            if(input == null){
+                showError("Valore non valido");
+                continue;
+            }
+
+            input = input.replace(",", ".");
+
+            try {
+                return new BigDecimal(input);
+            } catch (NumberFormatException _) {
+                showError("Inserisci un numero valido. Usa punto o virgola per i decimali.\n");
+            }           
+        }
+    }
+
     protected Double askDouble(String prompt){
         while(true){
             out.print(prompt);
             String input = in.readLine();
 
+            if(input == null){
+                showError("Valore non valido");
+                continue;
+            }
+
             input = input.replace(",", ".");
 
             try {
                 return Double.parseDouble(input);
-            } catch (Exception _) {
+            } catch (NumberFormatException _) {
                 showError("Inserisci un numero valido. Usa punto o virgola per i decimali.\n");
             }           
         }

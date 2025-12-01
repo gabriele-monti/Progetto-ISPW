@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import it.foodmood.domain.value.Unit;
+
 public class IngredientBean {
     
     private String name;
     private MacronutrientsBean macronutrients;
     private List<String> allergens = new ArrayList<>();
-    private String unit;
+    private Unit unit;
 
 
     public IngredientBean(){
@@ -23,7 +25,7 @@ public class IngredientBean {
 
     public List<String> getAllergens() {return Collections.unmodifiableList(allergens);}
 
-    public String getUnit(){ return unit;}
+    public Unit getUnit(){ return unit;}
 
     // Setter
     public void setName(String name){
@@ -41,11 +43,11 @@ public class IngredientBean {
         this.allergens = (allergens == null) ? new ArrayList<>() : validate(allergens);
     }
 
-    public void setUnit(String unit){
-        if(unit == null || unit.isBlank()){
-            throw new IllegalArgumentException("L'unità non può essere nulla");
+    public void setUnit(Unit unit){
+        if(unit == null){
+            throw new IllegalArgumentException("Unità di misura non valida.");
         }
-        this.unit = unit.trim().toUpperCase();
+        this.unit = unit;
     }
 
     public void addAllergen(String allergen){

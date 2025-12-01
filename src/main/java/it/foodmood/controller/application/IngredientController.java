@@ -26,6 +26,10 @@ public class IngredientController {
 
     public void createIngredient(IngredientBean ingredientBean) throws IngredientException{
         ensureActiveSession();
+
+        if(ingredientBean == null) {
+            throw new IngredientException("L'ingrediente non può essere nullo.");
+        }
         try {
             String name = ingredientBean.getName();
             MacronutrientsBean macronutrientsBean = ingredientBean.getMacronutrients();
@@ -43,9 +47,7 @@ public class IngredientController {
             double carbohydrate = normalize(macronutrientsBean.getCarbohydrates());
             double fat = normalize(macronutrientsBean.getFat());
 
-            String unitStr = ingredientBean.getUnit();
-
-            Unit unit = Unit.valueOf(unitStr);
+            Unit unit = ingredientBean.getUnit();
 
             Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
 
@@ -103,7 +105,7 @@ public class IngredientController {
 
         ingredientBean.setMacronutrients(macronutrientsBean);
 
-        ingredientBean.setUnit(ingredient.getUnit().name());
+        ingredientBean.setUnit(ingredient.getUnit());
 
         ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::name).toList());
 

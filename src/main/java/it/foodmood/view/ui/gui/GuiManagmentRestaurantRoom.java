@@ -6,35 +6,26 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 public class GuiManagmentRestaurantRoom {
-    @FXML
-    private Button btnAddTable2;
+    
+    @FXML private Button btnAddTable2;
 
-    @FXML
-    private Button btnAddTable4;
+    @FXML private Button btnAddTable4;
 
-    @FXML
-    private Button btnAddTable6;
+    @FXML private Button btnAddTable6;
 
-    @FXML
-    private Button btnAddTable8;
+    @FXML private Button btnAddTable8;
 
-    @FXML
-    private Button btnRemoveAllTables;
+    @FXML private Button btnRemoveAllTables;
 
-    @FXML
-    private Button btnRemoveSelected;
+    @FXML private Button btnRemoveSelected;
 
-    @FXML
-    private Button btnSaveRoom;
+    @FXML private Button btnSaveRoom;
 
-    @FXML
-    private Button btnToggleEditMode;
+    @FXML private Button btnToggleEditMode;
 
-    @FXML
-    private Pane floorPane;
+    @FXML private Pane floorPane;
 
-    @FXML
-    private Label lblSelectedTable;
+    @FXML private Label lblSelectedTable;
 
     private GuiRouter router;
 

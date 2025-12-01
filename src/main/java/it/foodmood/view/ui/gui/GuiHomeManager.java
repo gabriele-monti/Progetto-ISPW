@@ -10,35 +10,25 @@ import javafx.scene.layout.AnchorPane;
 
 public class GuiHomeManager extends BaseGui {
 
-    @FXML
-    private Button btnHome;
+    @FXML private Button btnHome;
 
-    @FXML
-    private Button btnLogout;
+    @FXML private Button btnLogout;
 
-    @FXML
-    private Button btnManagmentBooking;
+    @FXML private Button btnManagmentBooking;
 
-    @FXML
-    private Button btnManagmentRestaurantRoom;
+    @FXML private Button btnManagmentRestaurantRoom;
 
-    @FXML
-    private Button btnManagmentDishes;
+    @FXML private Button btnManagmentDishes;
 
-    @FXML
-    private Button btnManagmentEmployees;
+    @FXML private Button btnManagmentEmployees;
 
-    @FXML
-    private Button btnManagmentIngredients;
+    @FXML private Button btnManagmentIngredients;
 
-    @FXML
-    private AnchorPane contentArea;
+    @FXML private AnchorPane contentArea;
 
-    @FXML
-    private Label lblManager;
+    @FXML private Label lblManager;
 
-    @FXML
-    private AnchorPane mainForm;
+    @FXML private AnchorPane mainForm;
 
     @FXML
     void switchForm(ActionEvent event) {

@@ -3,6 +3,7 @@ package it.foodmood.persistence.mysql;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class JdbcDishDao implements DishDao {
     private static final String CALL_GET_DISHES_BY_DIET = "{CALL get_dishes_by_diet(?)}";
     private static final String CALL_DELETE_DISH_BY_ID = "{CALL delete_dish_by_id(?)}";
 
-    // Unica istanza di dao del piatto che usa jdbc
+    // Unica istanza di dao del Dish che usa jdbc
     private static JdbcDishDao instance;
 
     public static synchronized JdbcDishDao getInstance(){
@@ -37,13 +38,19 @@ public class JdbcDishDao implements DishDao {
         try {
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try (CallableStatement cs = conn.prepareCall(CALL_SAVE_DISH)){
-                cs.setString(1, dish.getId());
-                cs.setString(2, dish.getName());
-                cs.setString(3, dish.getDescription().orElse(null));
-                cs.setString(4, dish.getCourseType().name());
-                cs.setString(5, dish.getDietCategory().name());
-                cs.setBigDecimal(6, dish.getPrice().getAmount());
-                cs.setString(7, dish.getImage().map(img -> img.getUri().toString()).orElse(null));
+                cs.setString(1, dish.getName());
+                cs.setString(2, dish.getDescription());
+                cs.setString(3, dish.getCourseType().name());
+                cs.setString(4, dish.getDietCategory().name());
+                cs.setBigDecimal(5, dish.getPrice().getAmount());
+
+                if(dish.getImage() != null && dish.getImage().getUri() != null){
+                    cs.setString(6, dish.getImage().getUri().toString());
+                } else {
+                    cs.setNull(6, Types.VARCHAR);
+                }
+
+                cs.setString(7, dish.getState().name());
                 cs.execute();
             }
         } catch (SQLException e) {

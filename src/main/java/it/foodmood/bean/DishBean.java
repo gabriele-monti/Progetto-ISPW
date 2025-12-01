@@ -6,45 +6,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import it.foodmood.domain.value.CourseType;
+import it.foodmood.domain.value.DietCategory;
+import it.foodmood.domain.value.DishState;
+
 public class DishBean {
     
-    private String id;
     private String name;
     private String description;
-    private String courseType;
-    private String dietCategory;
+    private CourseType courseType;
+    private DietCategory dietCategory;
     private BigDecimal price;
     private String imageUri;
+    private DishState state;
     private List<IngredientPortionBean> ingredients;
 
     // Costruttore
-    public DishBean(){this.ingredients = new ArrayList<>();}
+    public DishBean(){
+        this.ingredients = new ArrayList<>();
+    }
 
     // Getter
-    public String getId() {return id;}
-
     public String getName(){ return name;}
 
     public String getDescription(){ return description;}
 
-    public String getCourseType(){ return courseType;}
+    public CourseType getCourseType(){ return courseType;}
 
-    public String getDietCategory(){ return dietCategory;}
+    public DietCategory getDietCategory(){ return dietCategory;}
 
     public BigDecimal getPrice(){ return price;}
 
     public String getImageUri(){ return imageUri;}
 
+    public DishState getState(){ return state;}
+
     public List<IngredientPortionBean> getIngredients(){ return new  ArrayList<>(ingredients);}
 
     // Setter + validazione sintattica
 
-    public void setId(String id){
-        this.id = id;
-    }
-
     public void setName(String name){
-        if(!isValidName(name)){
+        if(!isNotBlank(name)){
             throw new IllegalArgumentException("Il nome del piatto non deve essere vuoto.");
         }
         this.name = name.trim().toUpperCase();
@@ -54,18 +56,18 @@ public class DishBean {
         this.description = (description != null && !description.isBlank()) ? description.trim().toUpperCase() : null;
     }
 
-    public void setCourseType(String courseType){
-        if(!isValidEnumString(courseType)){
+    public void setCourseType(CourseType courseType){
+        if(courseType == null){
             throw new IllegalArgumentException("Tipologia portata non valida.");
         }
-        this.courseType = courseType.trim().toUpperCase();
+        this.courseType = courseType;
     }
 
-    public void setDietCategory(String dietCategory){
-        if(!isValidEnumString(dietCategory)){
+    public void setDietCategory(DietCategory dietCategory){
+        if(dietCategory == null){
             throw new IllegalArgumentException("Categoria dietetica non valida");
         }
-        this.dietCategory = dietCategory.trim().toUpperCase();
+        this.dietCategory = dietCategory;
     }
 
     public void setPrice(BigDecimal price){
@@ -84,6 +86,13 @@ public class DishBean {
         } else {
             this.imageUri = null;
         }
+    }
+
+    public void setState(DishState state){
+        if(state == null){
+            throw new IllegalArgumentException("Lo stato del piatto non è valido.");
+        }
+        this.state = state;
     }
 
     public void setIngredients(List<IngredientPortionBean> ingredients){
@@ -106,12 +115,8 @@ public class DishBean {
 
     // Metodi privati per la validazione sintattica
 
-    private boolean isValidName(String name){
-        return name != null && !name.isBlank() && name.length() <= 50;
-    }
-
-    private boolean isValidEnumString(String type){
-        return type != null && !type.isBlank();
+    private boolean isNotBlank(String value){
+        return value != null && !value.isBlank();
     }
 
     private boolean isValidPrice(BigDecimal price){

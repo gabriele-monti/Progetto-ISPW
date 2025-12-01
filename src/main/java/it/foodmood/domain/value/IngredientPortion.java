@@ -13,13 +13,9 @@ public final class IngredientPortion{
     private final Ingredient ingredient;
     private final Quantity quantity;
 
-    private IngredientPortion(Ingredient ingredient, Quantity quantity){
+    public IngredientPortion(Ingredient ingredient, Quantity quantity){
         this.ingredient = Objects.requireNonNull(ingredient, "Ingrediente non può essere nullo.");
         this.quantity = Objects.requireNonNull(quantity, "Quantità non può essere nulla.");
-    }
-
-    public static IngredientPortion of(Ingredient ingredient, Quantity quantity){
-        return new IngredientPortion(ingredient, quantity);
     }
 
     public Ingredient getIngredient() {return ingredient;}
@@ -27,7 +23,7 @@ public final class IngredientPortion{
     public Quantity getQuantity() {return quantity;}
 
     public IngredientPortion withQuantity(Quantity newQuantity){
-        return of(this.ingredient, Objects.requireNonNull(newQuantity, "La nuova quantità non può essere nulla"));
+        return new IngredientPortion(this.ingredient, Objects.requireNonNull(newQuantity, "La nuova quantità non può essere nulla"));
     }
 
     @Override

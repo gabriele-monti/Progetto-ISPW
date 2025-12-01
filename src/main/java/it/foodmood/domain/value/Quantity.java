@@ -9,24 +9,12 @@ public final class Quantity implements Comparable<Quantity>{
     private final double amount;
     private final Unit unit;
 
-    private Quantity(double amount, Unit unit){
+    public Quantity(double amount, Unit unit){
         if(!Double.isFinite(amount) || amount <= 0.0){
             throw new IllegalArgumentException("La quantità deve essere maggiore di 0.");
         }
         this.unit = Objects.requireNonNull(unit, "L'unità non può essere nulla!");
         this.amount = amount;
-    } 
-
-    public static Quantity of(double amount, Unit unit){
-        return new Quantity(amount, unit);
-    }
-
-    public static Quantity grams(double amount){
-        return new Quantity(amount, Unit.GRAM);
-    }
-
-    public static Quantity milliliters(double amount){
-        return new Quantity(amount, Unit.MILLILITER);
     }
 
     public double getAmount() {return amount;}

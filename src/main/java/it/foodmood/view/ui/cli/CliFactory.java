@@ -1,6 +1,7 @@
 package it.foodmood.view.ui.cli;
 
 import it.foodmood.config.UserMode;
+import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.boundary.LoginBoundary;
 import it.foodmood.view.boundary.RegistrationBoundary;
@@ -8,6 +9,7 @@ import it.foodmood.view.ui.CustomerUi;
 import it.foodmood.view.ui.ManagerUi;
 import it.foodmood.view.ui.cli.customer.CliCustomerMenuView;
 import it.foodmood.view.ui.cli.manager.CliIngredientMenuView;
+import it.foodmood.view.ui.cli.manager.CliDishMenuView;
 import it.foodmood.view.ui.cli.manager.CliManagerMenuView;
 
 public final class CliFactory implements CustomerUi, ManagerUi{
@@ -58,8 +60,9 @@ public final class CliFactory implements CustomerUi, ManagerUi{
 
     @Override
     public void showDishManagmentView(){
-        IngredientBoundary boundary = new IngredientBoundary();
-        CliIngredientMenuView view = new CliIngredientMenuView(boundary);
+        DishBoundary dishBoundary = new DishBoundary();
+        IngredientBoundary ingredientBoundary = new IngredientBoundary();
+        CliDishMenuView view = new CliDishMenuView(dishBoundary, ingredientBoundary);
         view.displayPage();
     }
 }

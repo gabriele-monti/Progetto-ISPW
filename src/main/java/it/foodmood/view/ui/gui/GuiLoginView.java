@@ -27,6 +27,7 @@ public class GuiLoginView {
     @FXML private TextField tfPasswordVisible;
 
     private LoginBoundary boundary;
+    
     private GuiRouter router;
 
     private PasswordToggleController toggleController;

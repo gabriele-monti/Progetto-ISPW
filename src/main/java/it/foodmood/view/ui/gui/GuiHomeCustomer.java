@@ -8,23 +8,17 @@ import javafx.scene.control.Label;
 
 public class GuiHomeCustomer extends BaseGui {
 
-    @FXML
-    private Button btnAccount;
+    @FXML private Button btnAccount;
 
-    @FXML
-    private Button btnCallWaiter;
+    @FXML private Button btnCallWaiter;
 
-    @FXML
-    private Button btnCart;
+    @FXML private Button btnCart;
 
-    @FXML
-    private Button btnDigitalMenu;
+    @FXML private Button btnDigitalMenu;
 
-    @FXML
-    private Button btnOrder;
+    @FXML private Button btnOrder;
 
-    @FXML
-    private Button btnRequestBill;
+    @FXML private Button btnRequestBill;
 
     @FXML
     void onAccountClicked(ActionEvent event) {

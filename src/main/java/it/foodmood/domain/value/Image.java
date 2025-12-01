@@ -2,7 +2,6 @@ package it.foodmood.domain.value;
 
 import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /*
  * Rappresenta il riferimento a un'immagine associata al piatto o al prodotto
@@ -10,20 +9,16 @@ import java.util.Optional;
 */
 
 public final class Image{
-    private final URI uri;
+    private URI uri;
 
-    private Image(URI uri){
+    public Image(URI uri){
         this.uri = Objects.requireNonNull(uri, "Percorso nullo!");
-    }
-
-    public static Image of(URI uri) { 
-        return new Image(uri); 
     }
 
     public URI getUri() { return uri; }
 
-    public static Optional<Image> optional(URI uri){
-        return Optional.ofNullable(uri).map(Image::of);
+    public void setUri(URI uri){
+        this.uri = uri;
     }
 
     @Override
