@@ -11,6 +11,7 @@ import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
 import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Unit;
+import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.DishException;
 import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
@@ -303,18 +304,101 @@ public class CliDishMenuView extends ProtectedConsoleView {
         }
     }
 
-    private Object readAllDishes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readAllDishes'");
+    private void readAllDishes() {
+        clearScreen();
+        showTitle("Lista Piatti");
+        tableDishes();
+        waitForEnter(null);
     }
 
-    private Object updateDish() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateDish'");
+    private void updateDish() {
+        showInfo("Funzionalità non ancora implementata");
+        waitForEnter(null);
     }
 
-    private Object deleteDish() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteDish'");
+    private void deleteDish() {
+        boolean choice = true;
+        while (choice) {
+            try {
+                var dishes = dishBoundary.getAllDishes();
+                // clearScreen();
+                showTitle("Elimina Piatto");
+                tableDishes();
+                    
+                String input = askInputOrBack("Inserisci il numero del piatto da eliminare");
+
+                int index;
+                try {
+                    index = Integer.parseInt(input);
+                } catch (NumberFormatException e) {
+                    showError("Inserisci un numero valido.");
+                    waitForEnter(input);
+                    return;
+                }
+
+                if(index == 0) return;
+
+                if(index < 1 || index > dishes.size()){
+                    showError("Indice non valido.");
+                    waitForEnter(null);
+                    return;
+                }
+
+                var selected = dishes.get(index - 1);
+                String dishName = selected.getName();
+                dishBoundary.deleteDish(dishName);
+                    
+                showSuccess("Piatto '" + dishName + "' eliminato con successo.");
+
+                choice = askConfirmation("Vuoi eliminare un'altro piatto?");
+                if(!choice){
+                    waitForEnter("Premi INVIO per continuare");
+                }
+                    
+            } catch (BackRequestedException _) {
+                showInfo("Operazione annullata. Ritorno al menù ingredienti");
+                choice = false;
+                waitForEnter(null);
+            } catch (DishException e) {
+                showError(e.getMessage());
+                waitForEnter("Premi INVIO per riprovare");                
+            } catch (Exception e){
+                showError("Errore: " + e.getClass().getSimpleName());
+                showError("Errore: " + e.getMessage());
+                if(e.getCause() != null){
+                    showError("Causa: " + e.getCause().getMessage());
+                }
+                waitForEnter(null);
+            }
+        }
+    }
+
+    private void tableDishes(){
+        var dishes = dishBoundary.getAllDishes();
+
+        if(dishes == null || dishes.isEmpty()){
+            showWarning("Nessun piatto presente.");
+            waitForEnter(null);
+            return;
+        }
+
+        List<String> headers = List.of("N°", "Nome", "Prezzo", "Stato", "Tipologia", "Categoria");
+
+        List<List<String>> rows = IntStream.range(0, dishes.size()).mapToObj( i -> {
+            var dish = dishes.get(i);
+
+            String index = String.valueOf(i + 1);
+            String name = dish.getName();
+            String price = String.format("%.2f", dish.getPrice());
+            String state = dish.getState().description();
+            String courseType = dish.getCourseType().description();
+            String dietCategory = dish.getDietCategory().description();
+
+            return List.of(index, name, price, state, courseType, dietCategory);
+        }).toList();
+
+        List<Integer> columnWidths = List.of(2,25,7,15,15,15);
+
+        displayTable(headers, rows, columnWidths);
     }
 }

@@ -5,6 +5,13 @@
     -fx-background-repeat: no-repeat;
 }
 
+.background-waiter {
+    -fx-background-image: url("../images/waiter_back.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
 .menuBtn {
     -fx-background-color: linear-gradient(to bottom right, #e9c46a, #ddb558);
     -fx-text-fill: #ffffff;

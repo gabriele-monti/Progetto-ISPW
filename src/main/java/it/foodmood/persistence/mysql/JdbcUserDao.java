@@ -39,6 +39,10 @@ public class JdbcUserDao implements UserDao {
         return instance;
     }
 
+    private JdbcUserDao(){
+        // costruttore privato
+    }
+
     @Override
     public void insert(User user){
         try{

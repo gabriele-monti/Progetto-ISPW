@@ -9,20 +9,20 @@ package it.foodmood.domain.value;
  */
 
 public enum Allergen {
-    GLUTEN("Cereali contenenti glutine"),
-    CRUSTACEANS("Crostacei e prodotti derivati"),
-    EGGS("Uova e derivati"),
-    FISH("Pesce e derivati"),
-    PEANUTS("Arachidi e derivati"),
-    SOY("Soia e derivati"),
-    MILK("Latte e derivati, incluso lattosio"),
-    NUTS("Frutta a guscio (mandorle, nocciole, noci, ecc)"),
-    CELERY("Sedano e derivati"),
-    MUSTARD("Senape e derivati"),
-    SESAME("Semi di sesamo e derivati"),
-    SULPHITES("Anidrite solforosa e solfiti >10mg/kg o litro"),
-    LUPIN("Lupini e derivati"),
-    MOLLUSCS("Molluschi e derivati");
+    GLUTEN("Glutine"),
+    CRUSTACEANS("Crostacei"),
+    EGGS("Uova"),
+    FISH("Pesce"),
+    PEANUTS("Arachidi"),
+    SOY("Soia"),
+    MILK("Latte"),
+    NUTS("Frutta a guscio"),
+    CELERY("Sedano"),
+    MUSTARD("Senape"),
+    SESAME("Semi di sesamo "),
+    SULPHITES("Anidrite solforosa"),
+    LUPIN("Lupini"),
+    MOLLUSCS("Molluschi");
 
     private final String description;
 

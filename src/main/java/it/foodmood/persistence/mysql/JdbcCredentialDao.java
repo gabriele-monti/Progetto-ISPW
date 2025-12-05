@@ -25,6 +25,10 @@ public class JdbcCredentialDao implements CredentialDao {
         return instance;
     }
 
+    private JdbcCredentialDao(){
+        // costruttore privato
+    }
+
     @Override
     public void saveCredential(Credential credential){
         try{

@@ -66,7 +66,7 @@ public abstract class BaseGui {
         alert.setContentText(message);
 
         var result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
+        return result.isPresent() && result.get() == ButtonType.YES;
     }
 
     protected void swap(Node nodeShow, Node nodeHide){

@@ -1,6 +1,8 @@
 package it.foodmood.view.ui.gui;
 
 import it.foodmood.bean.LoginBean;
+import it.foodmood.config.ApplicationConfig;
+import it.foodmood.config.UserMode;
 import it.foodmood.exception.AuthenticationException;
 import it.foodmood.view.boundary.LoginBoundary;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
 public class GuiLoginView {
 
@@ -25,6 +28,8 @@ public class GuiLoginView {
     @FXML private TextField tfEmail;
 
     @FXML private TextField tfPasswordVisible;
+
+    @FXML private VBox registrationBox;
 
     private LoginBoundary boundary;
     
@@ -47,6 +52,14 @@ public class GuiLoginView {
     @FXML
     private void initialize(){
         toggleController = new PasswordToggleController(pfPassword, tfPasswordVisible, ivToggle);
+
+        ApplicationConfig config = ApplicationConfig.fromClasspath();
+        UserMode mode = config.getUserMode();
+
+        if(mode != UserMode.CUSTOMER){
+            registrationBox.setVisible(false);
+            registrationBox.setManaged(false);
+        }
     }
 
     @FXML

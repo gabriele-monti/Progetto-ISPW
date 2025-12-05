@@ -5,9 +5,12 @@ import java.net.URI;
 import java.util.List;
 
 import it.foodmood.bean.DishBean;
+import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.IngredientPortionBean;
+import it.foodmood.bean.MacronutrientsBean;
 import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.Ingredient;
+import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
 import it.foodmood.domain.value.DishState;
@@ -76,6 +79,11 @@ public class DishController {
         }
     }
 
+    public List<DishBean> getAllDishes(){
+        ensureActiveSession();
+        return dishDao.findAll().stream().map(this::toBean).toList();
+    }
+
     private IngredientPortion toDomainIngredientPortion(IngredientPortionBean ingredientPortionBean){
         if(ingredientPortionBean == null){
             throw new IllegalArgumentException("La porzione dell'ingrediente non può essere nulla.");
@@ -107,7 +115,79 @@ public class DishController {
         return portionBeans.stream().map(this::toDomainIngredientPortion).toList();
     }
 
+    public void deleteDish(String name) throws DishException{
+        ensureActiveSession();
+        if(name.isBlank()){
+            throw new DishException("Il nome del piatto non può essere vuoto.");
+        }
+        
+        if(dishDao.findById(name).isEmpty()){
+            throw new DishException("Nessun piatto trovato con il nome: " + name);
+        }
+
+        dishDao.deleteById(name);
+    }
+
+    private DishBean toBean(Dish dish){
+        DishBean dishBean = new DishBean();
+        dishBean.setName(dish.getName());
+        dishBean.setDescription(dish.getDescription());
+        dishBean.setCourseType(dish.getCourseType());
+        dishBean.setDietCategory(dish.getDietCategory());
+
+        Money price = dish.getPrice();
+        dishBean.setPrice(price.getAmount());
+
+        Image image = dish.getImage();
+        if(image != null && image.getUri() != null){
+            dishBean.setImageUri(image.getUri().toString());
+        } else {
+            dishBean.setImageUri(null);
+        }
+
+        dishBean.setState(dish.getState());
+
+        List<IngredientPortionBean> ingredientPortionBeans = dish.getIngredients().stream()
+            .map(this::toBeanIngredientPortion).toList();
+
+        dishBean.setIngredients(ingredientPortionBeans);
+
+        return dishBean;
+    }
+
+    private IngredientPortionBean toBeanIngredientPortion(IngredientPortion ingredientPortion){
+        IngredientPortionBean bean = new IngredientPortionBean();
+
+        Ingredient ingredient = ingredientPortion.getIngredient();
+        IngredientBean ingredientBean = ingredientToBean(ingredient);
+        bean.setIngredient(ingredientBean);
+
+        Quantity quantity = ingredientPortion.getQuantity();
+        bean.setQuantity(quantity.getAmount());
+        bean.setUnit(quantity.getUnit().name());
+
+        return bean;
+    }
+
+    private IngredientBean ingredientToBean(Ingredient ingredient){
+        IngredientBean ingredientBean = new IngredientBean();
+        ingredientBean.setName(ingredient.getName());
+
+        MacronutrientsBean macronutrientsBean = new MacronutrientsBean();
+        macronutrientsBean.setProtein(ingredient.getMacro().getProtein());
+        macronutrientsBean.setCarbohydrates(ingredient.getMacro().getCarbohydrates());
+        macronutrientsBean.setFat(ingredient.getMacro().getFat());
+
+        ingredientBean.setMacronutrients(macronutrientsBean);
+
+        ingredientBean.setUnit(ingredient.getUnit());
+
+        ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::description).toList());
+
+        return ingredientBean;
+    }
+
     public void ensureActiveSession(){
         sessionManager.requireActiveSession();
-    }   
+    }
 }

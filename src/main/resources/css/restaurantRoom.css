@@ -25,7 +25,21 @@
 }
 
 .background-room {
+    -fx-background-image: url("../images/floor1.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.background-room-waiter {
     -fx-background-image: url("../images/floor.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.back {
+    -fx-background-image: url("../images/back_blue.png");
     -fx-background-size: cover;
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
@@ -53,8 +67,30 @@
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.22), 8, 0.3, 0, 2);
 }
 
+.btn-require-bill {
+    -fx-background-color: linear-gradient(to bottom right, #739eb9, #50647d);
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(231, 111, 81, 0.35), 10, 0.3, 0, 3);
+}
+
+.btn-require-bill:hover {
+    -fx-background-color: linear-gradient(to bottom right, #6a7e96, #3d4e62);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-effect: dropshadow(gaussian, rgba(231, 111, 81, 0.45), 14, 0.5, 0, 4);
+}
+
+.btn-require-bill:pressed {
+    -fx-background-color: #334150;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.22), 8, 0.3, 0, 2);
+}
+
 .btn-move {
-    -fx-background-color: linear-gradient(to bottom right, #2a9d8f, #287271);
+    -fx-background-color: linear-gradient(to bottom right, #7fb0cc, #74a7c5);
     -fx-text-fill: #ffffff;
     -fx-background-radius: 12;
     -fx-cursor: hand;
@@ -126,4 +162,18 @@
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.22), 8, 0.3, 0, 2);
+}
+
+.top-bar{
+    -fx-background-color: #292f34;
+}
+
+.right-back{
+    -fx-background-color: #292f34;
+}
+
+.spinner {
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }

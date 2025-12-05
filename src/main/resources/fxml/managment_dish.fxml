@@ -82,12 +82,7 @@
                                                       <Font name="Arial Bold" size="12.0" />
                                                    </font>
                                                 </Button>
-                                                <Button fx:id="btnUpdateDish1" minWidth="150.0" prefHeight="40.0" prefWidth="200.0" styleClass="btn-modify" text="AGGIUNGI PIATTO">
-                                                   <font>
-                                                      <Font name="Arial Bold" size="12.0" />
-                                                   </font>
-                                                </Button>
-                                                <Button fx:id="btnDeleteDish" minWidth="150.0" onAction="#onNewIngredient" prefHeight="40.0" prefWidth="200.0" styleClass="btn-remove" text="RIMUOVI PIATTO" textAlignment="CENTER">
+                                                <Button fx:id="btnDeleteDish" minWidth="150.0" onAction="#onDeleteDish" prefHeight="40.0" prefWidth="200.0" styleClass="btn-remove" text="RIMUOVI PIATTO" textAlignment="CENTER">
                                                    <font>
                                                       <Font name="Arial Bold" size="12.0" />
                                                    </font>
@@ -96,7 +91,7 @@
                                           </HBox>
                                        </children>
                                     </HBox>
-                                    <TableView fx:id="tableIngredients" prefHeight="450.0">
+                                    <TableView fx:id="tableDishes" prefHeight="450.0">
                                        <columns>
                                           <TableColumn fx:id="colName" prefWidth="200.0" text="Nome" />
                                           <TableColumn fx:id="colPrice" prefWidth="200.0" text="Prezzo" />
@@ -173,7 +168,7 @@
                                                             <Font name="Arial Bold" size="16.0" />
                                                          </font>
                                                       </Label>
-                                                      <Button fx:id="btnUpdateDish" minHeight="40.0" minWidth="150.0" onAction="#onUpdateDish" prefHeight="40.0" prefWidth="200.0" styleClass="btn-new-ingredient" text="AGGIORNA PIATTO" textAlignment="CENTER">
+                                                      <Button fx:id="btnUpdateDish" minHeight="40.0" minWidth="150.0" onAction="#onUpdateDish" prefHeight="40.0" prefWidth="200.0" styleClass="btn-modify" text="MODIFICA PIATTO" textAlignment="CENTER">
                                                          <font>
                                                             <Font name="Arial Bold" size="12.0" />
                                                          </font>
@@ -262,7 +257,7 @@
                                                       <Font name="Arial Bold" size="16.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="cbProductType" maxWidth="-Infinity" minHeight="40.0" onAction="#onSelectType" prefWidth="220.0" promptText="Seleziona tipo" styleClass="section-container" />
+                                                <ComboBox fx:id="cbProductType" maxWidth="-Infinity" minHeight="40.0" prefWidth="220.0" promptText="Seleziona tipo" styleClass="section-container" />
                                              </children>
                                           </VBox>
                                           <VBox maxWidth="1.7976931348623157E308" minWidth="-1" spacing="10.0" HBox.hgrow="ALWAYS">
@@ -272,7 +267,7 @@
                                                       <Font name="Arial Bold" size="16.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="cbCategory" maxWidth="-Infinity" minHeight="40.0" onAction="#onSelectCategory" prefWidth="220.0" promptText="Seleziona categoria" styleClass="section-container" />
+                                                <ComboBox fx:id="cbCategory" maxWidth="-Infinity" minHeight="40.0" prefWidth="220.0" promptText="Seleziona categoria" styleClass="section-container" />
                                              </children>
                                           </VBox>
                                           <VBox maxWidth="1.7976931348623157E308" minWidth="-1" spacing="10.0">
@@ -282,7 +277,7 @@
                                                       <Font name="Arial Bold" size="16.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="cbStateForm" maxWidth="-Infinity" minHeight="40.0" onAction="#onSelectSate" prefWidth="220.0" promptText="Seleziona stato" styleClass="section-container" />
+                                                <ComboBox fx:id="cbStateForm" maxWidth="-Infinity" minHeight="40.0" prefWidth="220.0" promptText="Seleziona stato" styleClass="section-container" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -304,7 +299,7 @@
                                                                   <Font name="Arial Bold" size="16.0" />
                                                                </font>
                                                             </Label>
-                                                            <TextField fx:id="tfAdvancedResarch" maxWidth="1.7976931348623157E308" minHeight="40.0" promptText="Cerca nome, allergene..." styleClass="form">
+                                                            <TextField fx:id="tfAdvancedResarch" maxWidth="1.7976931348623157E308" minHeight="40.0" promptText="Cerca nome ingrediente" styleClass="form">
                                                                <font>
                                                                   <Font name="Arial" size="14.0" />
                                                                </font>
@@ -584,7 +579,7 @@
                                                 <Font name="Arial Bold" size="16.0" />
                                              </font>
                                           </Label>
-                                          <TextArea fx:id="taDishDescription" maxWidth="550.0" prefColumnCount="4" prefHeight="100.0" prefRowCount="4" prefWidth="400.0" styleClass="border-line" wrapText="true">
+                                          <TextArea fx:id="taDishDescriptionForm" maxWidth="550.0" prefColumnCount="4" prefHeight="100.0" prefRowCount="4" prefWidth="400.0" styleClass="border-line" wrapText="true">
                                              <font>
                                                 <Font name="Arial" size="15.0" />
                                              </font>

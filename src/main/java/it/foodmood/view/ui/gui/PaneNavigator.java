@@ -28,7 +28,6 @@ public class PaneNavigator {
             AnchorPane.setRightAnchor(content, 0.0);
             AnchorPane.setLeftAnchor(content, 0.0);
 
-
             return controller;
 
         } catch (IOException _) {

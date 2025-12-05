@@ -33,7 +33,7 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML private Button btnDeleteIngredient;
 
-    @FXML private Button btnModifyIngredient; // non implemento per ora
+    @FXML private Button btnModifyIngredient;
 
     @FXML private Button btnNewIngredient;
 

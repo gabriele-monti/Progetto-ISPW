@@ -5,9 +5,12 @@ public enum GuiPages {
     REGISTRATION("/fxml/registration.fxml"),
     HOME_CUSTOMER("/fxml/home_customer.fxml"),
     HOME_MANAGER("/fxml/home_manager.fxml"),
+    HOME_WAITER("/fxml/home_waiter.fxml"),
     MANAGMENT_ROOM_RESTAURANT("/fxml/managment_restaurant_room.fxml"),
     MANAGMENT_DISH("/fxml/managment_dish.fxml"),
-    MANAGMENT_INGREDIENTS("/fxml/managment_ingredients.fxml");
+    MANAGMENT_ORDER("/fxml/managment_order.fxml"),
+    MANAGMENT_INGREDIENTS("/fxml/managment_ingredients.fxml"),
+    CARD("/fxml/card.fxml");
 
     private final String path;
 

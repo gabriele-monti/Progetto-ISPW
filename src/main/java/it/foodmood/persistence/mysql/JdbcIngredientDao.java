@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +27,11 @@ public class JdbcIngredientDao implements IngredientDao {
 
     private static JdbcIngredientDao instance;
 
+    private static final String CALL_SAVE_INGREDIENT = "{CALL insert_ingredient(?,?,?,?,?,?)}";
+    private static final String CALL_GET_INGREDIENT_BY_NAME = "{CALL get_ingredient_by_name(?)}";
+    private static final String CALL_GET_ALL_INGREDIENTS = "{CALL get_all_ingredients()}";
+    private static final String CALL_DELETE_INGREDIENT_BY_NAME = "{CALL delete_ingredient_by_name(?)}";
+
     public static synchronized JdbcIngredientDao getInstance(){
         if(instance == null){
             instance = new JdbcIngredientDao();
@@ -33,10 +39,9 @@ public class JdbcIngredientDao implements IngredientDao {
         return instance;
     }
 
-    private static final String CALL_SAVE_INGREDIENT = "{CALL insert_ingredient(?,?,?,?,?,?)}";
-    private static final String CALL_GET_INGREDIENT_BY_NAME = "{CALL get_ingredient_by_name(?)}";
-    private static final String CALL_GET_ALL_INGREDIENTS = "{CALL get_all_ingredients()}";
-    private static final String CALL_DELETE_INGREDIENT_BY_NAME = "{CALL delete_ingredient_by_name(?)}";
+    private JdbcIngredientDao(){
+        // costruttore privato
+    }
 
     @Override
     public void insert(Ingredient ingredient){
@@ -86,41 +91,61 @@ public class JdbcIngredientDao implements IngredientDao {
         try (CallableStatement cs = conn.prepareCall(CALL_GET_INGREDIENT_BY_NAME)){
             cs.setString(1, name);
             try(ResultSet rs = cs.executeQuery()){
-                return mapIngredient(name, rs);
+                List<Ingredient> ingredients = mapResultSetToIngredients(rs);
+                if(ingredients.isEmpty()){
+                    return Optional.empty();
+                }
+                return Optional.of(ingredients.get(0));
             }
         }
     }
 
-    private Optional<Ingredient> mapIngredient(String name, ResultSet rs) throws SQLException{
-        if(!rs.next()){
-            return Optional.empty();
-        }
+    private List<Ingredient> mapResultSetToIngredients(ResultSet rs) throws SQLException{
 
-        double protein = rs.getDouble("protein");
-        double carbohydrate = rs.getDouble("carbohydrate");
-        double fat = rs.getDouble("fat");
-        String unitStr = rs.getString("unit");
+        Map<String, Macronutrients> macroMap = new LinkedHashMap<>();
+        Map<String, Set<Allergen>> allergenMap = new HashMap<>();
+        Map<String, Unit> unitMap = new HashMap<>();
 
-        Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
-        Set<Allergen> allergens = new HashSet<>();
+        while (rs.next()) {
+            String name = rs.getString("name");
+            // vedo se non ho già viato questo ingrediente
+            if(!macroMap.containsKey(name)){
+                double protein = rs.getDouble("protein");
+                double carbohydrate = rs.getDouble("carbohydrate");
+                double fat = rs.getDouble("fat");
+                String unitStr = rs.getString("unit");
+                Macronutrients macro = new Macronutrients(protein, carbohydrate, fat);
+                
+                macroMap.put(name, macro);
+                unitMap.put(name, Unit.valueOf(unitStr));
+            }
 
-        Unit unit;
-        try {
-            unit = Unit.valueOf(unitStr); 
-        } catch (Exception _) {
-            throw new PersistenceException("Unità di misura non valida: " + unitStr);
-        }
-
-        do{
             String allergenType = rs.getString("allergen_type");
             if(allergenType != null){
-                allergens.add(Allergen.valueOf(allergenType));
-            } 
-        } while (rs.next());
+                Set<Allergen> set = allergenMap.get(name);
+                if(set == null) {
+                    set = new HashSet<>();
+                    allergenMap.put(name, set);
+                }
+                set.add(Allergen.valueOf(allergenType));
+            }
 
-        Ingredient ingredient = new Ingredient(name, macronutrients, unit, allergens);
-        return Optional.of(ingredient);
+        }
+
+        List<Ingredient> result = new ArrayList<>();
+
+        for(String ingredientName : macroMap.keySet()){
+            Macronutrients macro = macroMap.get(ingredientName);
+            Unit unit = unitMap.get(ingredientName);
+            Set<Allergen> allergens = allergenMap.get(ingredientName);
+
+            Ingredient ingredient = new Ingredient(ingredientName, macro, unit, allergens);
+
+            result.add(ingredient);
+        }
+        return result;
     }
+    
 
     @Override
     public List<Ingredient> findAll(){
@@ -136,63 +161,16 @@ public class JdbcIngredientDao implements IngredientDao {
         try (CallableStatement cs = conn.prepareCall(CALL_GET_ALL_INGREDIENTS)) {
             ResultSet rs = cs.executeQuery();
 
-            Map<String, Macronutrients> macroMap = new HashMap<>();
-            Map<String, Set<Allergen>> allergenMap = new HashMap<>();
-            Map<String, Unit> unitMap = new HashMap<>();
-
-
-            while (rs.next()) {
-                String name = rs.getString("name");
-                double protein = rs.getDouble("protein");
-                double carbohydrate = rs.getDouble("carbohydrate");
-                double fat = rs.getDouble("fat");
-                String unitStr = rs.getString("unit");
-                String allergenType = rs.getString("allergen_type");
-
-                if(!macroMap.containsKey(name)){
-                    Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
-                    macroMap.put(name, macronutrients);
-                }
-
-                if(!unitMap.containsKey(name)){
-                    try {
-                        Unit unit = Unit.valueOf(unitStr);
-                        unitMap.put(name, unit);
-                    } catch (Exception _) {
-                        throw new PersistenceException("Unità di misura non valida");
-                    }
-                }
-
-                if(allergenType != null){
-                    Set<Allergen> set = allergenMap.get(name);
-                    if(set == null) {
-                        set = new HashSet<>();
-                        allergenMap.put(name, set);
-                    }
-                    set.add(Allergen.valueOf(allergenType));
-                }
-            }
-
-            List<Ingredient> result = new ArrayList<>();
-
-            for(Map.Entry<String, Macronutrients> entry : macroMap.entrySet()){
-                String ingredientName = entry.getKey();
-                Macronutrients macro = entry.getValue();
-                Unit unit = unitMap.get(ingredientName);
-                Set<Allergen> allergens = allergenMap.get(ingredientName);
-                result.add(new Ingredient(ingredientName, macro, unit, allergens));
-            }
-
-            return result;
+            return mapResultSetToIngredients(rs);
         }
     }
 
     @Override
-    public void deleteById(String id){
+    public void deleteById(String name){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try (CallableStatement cs = conn.prepareCall(CALL_DELETE_INGREDIENT_BY_NAME)){
-                cs.setString(1, id);
+                cs.setString(1, name);
                 cs.execute();
             }
         } catch (SQLException e) {

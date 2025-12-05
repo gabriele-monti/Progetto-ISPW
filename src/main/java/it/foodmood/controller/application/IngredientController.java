@@ -107,7 +107,7 @@ public class IngredientController {
 
         ingredientBean.setUnit(ingredient.getUnit());
 
-        ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::name).toList());
+        ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::description).toList());
 
         return ingredientBean;
     }

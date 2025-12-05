@@ -38,5 +38,5 @@ public abstract class DaoFactory {
 
     public abstract IngredientDao getIngredientDao();
 
-
+    public abstract RestaurantRoomDao getRestaurantRoomDao();
 }

@@ -23,11 +23,12 @@ public final class GuiRouter{
     public void showHomeView(){
         switch (userMode) {
             case CUSTOMER -> showHomeCustumerView();
-            case WAITER -> showHomeCustumerView();
+            case WAITER -> showHomeWaiterView();
             case MANAGER -> showHomeManagerView();
         }
     }
     
+
     public void showLoginView(){
         GuiLoginView controller = navigator.goTo(GuiPages.LOGIN);
         controller.setBoundary(loginBoundary);
@@ -51,5 +52,12 @@ public final class GuiRouter{
         controller.setRouter(this);
         controller.setBoundary(loginBoundary);
         controller.setManager(SessionManager.getInstance().getCurrentUser());
+    }
+
+    public void showHomeWaiterView() {
+        GuiHomeWaiter controller = navigator.goTo(GuiPages.HOME_WAITER);
+        controller.setRouter(this);
+        controller.setBoundary(loginBoundary);
+        controller.setWaiter(SessionManager.getInstance().getCurrentUser());
     }
 }

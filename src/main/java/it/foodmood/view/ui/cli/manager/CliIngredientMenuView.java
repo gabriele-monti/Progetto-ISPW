@@ -1,6 +1,7 @@
 package it.foodmood.view.ui.cli.manager;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
@@ -49,14 +50,37 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
         boolean choice = true;
         while (choice) {
             try {
+                var ingredients = boundary.getAllIngredients();
                 clearScreen();
                 showTitle("Elimina Ingrediente");
                 tableIngredients();
                     
-                String name = askInputOrBack("Inserisci il nome dell'ingrediente da eliminare");
-                boundary.deleteIngredient(name.toUpperCase());
+                String input = askInputOrBack("Inserisci il numero dell'ingrediente da eliminare");
+
+                int index;
+                try {
+                    index = Integer.parseInt(input);
+                } catch (NumberFormatException e) {
+                    showError("Inserisci un numero valido.");
+                    waitForEnter(input);
+                    return;
+                }
+
+                if(index == 0) return;
+
+                if(index < 1 || index > ingredients.size()){
+                    showError("Indice non valido.");
+                    waitForEnter(null);
+                    return;
+                }
+
+                var selected = ingredients.get(index - 1);
+
+                String ingredientName = selected.getName().toUpperCase();
+
+                boundary.deleteIngredient(ingredientName);
                     
-                showSuccess("Ingrediente eliminato con successo.");
+                showSuccess("Ingrediente '" + ingredientName + "' eliminato con successo.");
 
                 choice = askConfirmation("Vuoi eliminare un'altro ingrediente?");
 
@@ -169,9 +193,11 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
             return;
         }
 
-        List<String> headers = List.of("Nome", "Unità", "Proteine", "Carboidrati", "Grassi", "Allergeni");
+        List<String> headers = List.of("N°", "Nome", "Unità", "Proteine", "Carboidrati", "Grassi", "Allergeni");
 
-        List<List<String>> rows = ingredients.stream().map(ingredient -> {
+        List<List<String>> rows = IntStream.range(0, ingredients.size()).mapToObj(i -> {
+            var ingredient = ingredients.get(i);
+            String index = String.valueOf(i + 1);
             String name = ingredient.getName();
             String unit = ingredient.getUnit() == Unit.GRAM ? "g" : "ml";
             var macro = ingredient.getMacronutrients();
@@ -181,10 +207,10 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
 
             String allergens = (ingredient.getAllergens().isEmpty()) ? "-" : String.join(", ", ingredient.getAllergens());
 
-            return List.of(name, unit, protein, carbs, fat, allergens);
+            return List.of(index, name, unit, protein, carbs, fat, allergens);
         }).toList();
 
-        List<Integer> columnWidths = List.of(20,5,8,11,6,20);
+        List<Integer> columnWidths = List.of(4, 20,5,8,11,6,20);
 
         displayTable(headers, rows, columnWidths);
     }

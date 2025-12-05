@@ -188,7 +188,7 @@
                      </children>
                   </VBox>
                   <Region VBox.vgrow="SOMETIMES" />
-                  <VBox alignment="CENTER" prefWidth="464.0" spacing="10.0" VBox.vgrow="NEVER">
+                  <VBox fx:id="registrationBox" alignment="CENTER" prefWidth="464.0" spacing="10.0" VBox.vgrow="NEVER">
                      <children>
                         <Label alignment="CENTER" text="Non hai un account?" textAlignment="CENTER" textFill="#7f8c8d">
                            <font>
