@@ -19,8 +19,8 @@ import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Image;
 import it.foodmood.domain.value.IngredientPortion;
 import it.foodmood.domain.value.Money;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.DishDao;
-import it.foodmood.persistence.exception.PersistenceException;
 
 public class JdbcDishDao implements DishDao {
         

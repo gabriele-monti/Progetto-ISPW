@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.foodmood.persistence.exception.PersistenceException;
+import it.foodmood.exception.PersistenceException;
 
 public abstract class AbstractCsvDao {
     

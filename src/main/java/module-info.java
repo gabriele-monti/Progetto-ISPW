@@ -6,6 +6,6 @@ module it.foodmood {
 
     // Database
     requires java.sql;
-
+    
     opens it.foodmood.view.ui.gui to javafx.fxml;
 }

@@ -39,7 +39,7 @@ public class RestaurantRoomController {
         }
     }
 
-    public RestaurantRoomBean loadRestaurantRoom() throws RestaurantRoomException{
+    public RestaurantRoomBean loadRestaurantRoom(){
         ensureActiveSession();
         Optional<RestaurantRoom> opt = restaurantRoomDao.load();
 

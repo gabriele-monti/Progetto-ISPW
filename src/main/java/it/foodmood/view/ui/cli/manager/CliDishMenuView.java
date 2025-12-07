@@ -20,6 +20,7 @@ import it.foodmood.view.ui.cli.ProtectedConsoleView;
 public class CliDishMenuView extends ProtectedConsoleView {
     private final DishBoundary dishBoundary;
     private final IngredientBoundary ingredientBoundary;
+    private final String INVALID_CHOICE = "Scelta non valida, riprova";
 
     public CliDishMenuView(DishBoundary dishBoundary, IngredientBoundary ingredientBoundary){
         this.dishBoundary = dishBoundary;
@@ -49,7 +50,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
                 case "2" -> readAllDishes();
                 case "3" -> updateDish();
                 case "4" -> deleteDish();
-                default -> showError("Scelta non valida, riprova.");
+                default -> showError(INVALID_CHOICE);
             }
         }
     }
@@ -96,7 +97,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
         } catch (IllegalArgumentException e){
             showError(e.getMessage());
         } catch (Exception e) {
-            showError("Errore: " + e.getMessage());
+            showError(e.getMessage());
             waitForEnter("Premi INVIO per tornare indietro");
         }
     }
@@ -106,55 +107,73 @@ public class CliDishMenuView extends ProtectedConsoleView {
         boolean done = false;
 
         while(!done){
-            clearScreen();
-            showTitle("Ingrediente del piatto: " + dishBean.getName());
-
-            var selected = dishBean.getIngredients();
-            if(selected.isEmpty()){
-                showWarning("Nessun ingrediente aggiunto");
-            } else {
-                showBold("Ingredienti presenti: ");
-                for(int i = 0; i < selected.size(); i++){
-                    var ingredient = selected.get(i);
-                    String unitLabel = ingredient.getUnit().equals("GRAM") ? "g" : "ml";
-                    showInfo((i + 1) + ". " + ingredient.getIngredient().getName() + " - " + String.format("%.2f %s", ingredient.getQuantity(), unitLabel));
-                }
-            }
-
-            showInfo("\n0. Conferma");
-            showInfo("1. Aggiungi ingrediente");
-            showInfo("2. Rimuovi ultimo ingrediente");
-
-            String choice = askInput("Seleziona un'opzione: ");
-
-            switch (choice) {
-                case "0" -> {
-                    if(dishBean.getIngredients().isEmpty()){
-                        showWarning("Il piatto deve avere almeno un ingrediente");
-                        waitForEnter(null);
-                    } else {
-                        done = true;
-                    }
-                }
-                case "1" -> addIngredientToDish(dishBean);
-                
-                case "2" -> {
-                    List<IngredientPortionBean> list = new ArrayList<>(dishBean.getIngredients());
-                    if(!list.isEmpty()){
-                        list.remove(list.size() - 1);
-                        dishBean.setIngredients(list);
-                    } else {
-                        showWarning("Nessun ingrediente da rimuovere");
-                        waitForEnter(null);
-                    }
-                }
-
-                default -> {
-                    showError("Scelta non valida");
-                    waitForEnter(null);
-                }
-            }
+            showIngredients(dishBean);
+            done = ingredientMenuChoice(dishBean);
         }
+    }
+
+    private void showIngredients(DishBean dishBean){
+        clearScreen();
+        showTitle("Ingrediente del piatto: " + dishBean.getName());
+
+        List<IngredientPortionBean> selected = dishBean.getIngredients();
+        if(selected == null || selected.isEmpty()){
+            showWarning("Nessun ingrediente aggiunto");
+        } else {
+            showBold("Ingredienti presenti: ");
+            showIngredientList(selected);
+        }
+
+        showInfo("\n0. Conferma");
+        showInfo("1. Aggiungi ingrediente");
+        showInfo("2. Rimuovi ultimo ingrediente");
+    }
+
+    private void showIngredientList(List<IngredientPortionBean> selected){
+        for(int i = 0; i < selected.size(); i++){
+            var ingredient = selected.get(i);
+            String unitLabel = ingredient.getUnit().equals("GRAM") ? "g" : "ml";
+            showInfo((i + 1) + ". " + ingredient.getIngredient().getName() + " - " + String.format("%.2f %s", ingredient.getQuantity(), unitLabel));
+        }
+    }
+
+    private boolean ingredientMenuChoice(DishBean dishBean){
+        String choice = askInput("Seleziona un'opzione: ");
+
+        switch (choice) {
+            case "0" :
+                return confirmChoice(dishBean);
+            case "1" : 
+                addIngredientToDish(dishBean);
+                return false;
+            case "2": 
+                removeLastIngredient(dishBean);
+                return false;
+            default:
+                showError(INVALID_CHOICE);
+                waitForEnter(null);
+                return false;
+        }
+    }
+
+    private boolean confirmChoice(DishBean dishBean){
+        if(dishBean.getIngredients().isEmpty()){
+            showWarning("Il piatto deve avere almeno un ingrediente");
+            waitForEnter(null);
+            return false;
+        } 
+        return true;
+    }
+
+    private void removeLastIngredient(DishBean dishBean){
+        List<IngredientPortionBean> list = new ArrayList<>(dishBean.getIngredients());
+        if(!list.isEmpty()){
+            list.remove(list.size() - 1);
+            dishBean.setIngredients(list);
+        } else {
+            showWarning("Nessun ingrediente da rimuovere");
+            waitForEnter(null);
+        }  
     }
 
     private void addIngredientToDish(DishBean dishBean){
@@ -178,7 +197,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
         int index;
         try {
             index = Integer.parseInt(input);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             showError("Inserisci un numero valido.");
             waitForEnter(input);
             return;
@@ -256,7 +275,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
                 case "2" : 
                     return DishState.UNAVAILABLE;
                 default: 
-                    showError("Scelta non valida, riprova.");
+                    showError(INVALID_CHOICE);
                     continue;
             }
         }
@@ -278,7 +297,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
                     return values[index];
                 }
             } catch (NumberFormatException _) {
-                showError("Scelta non valida, riprova.");
+                showError(INVALID_CHOICE);
             }
         }
     }
@@ -299,7 +318,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
                     return values[index];
                 }
             } catch (NumberFormatException _) {
-                showError("Scelta non valida, riprova.");
+                showError(INVALID_CHOICE);
             }
         }
     }
@@ -320,57 +339,62 @@ public class CliDishMenuView extends ProtectedConsoleView {
         boolean choice = true;
         while (choice) {
             try {
-                var dishes = dishBoundary.getAllDishes();
-                // clearScreen();
-                showTitle("Elimina Piatto");
-                tableDishes();
-                    
-                String input = askInputOrBack("Inserisci il numero del piatto da eliminare");
-
-                int index;
-                try {
-                    index = Integer.parseInt(input);
-                } catch (NumberFormatException e) {
-                    showError("Inserisci un numero valido.");
-                    waitForEnter(input);
-                    return;
-                }
-
-                if(index == 0) return;
-
-                if(index < 1 || index > dishes.size()){
-                    showError("Indice non valido.");
-                    waitForEnter(null);
-                    return;
-                }
-
-                var selected = dishes.get(index - 1);
-                String dishName = selected.getName();
-                dishBoundary.deleteDish(dishName);
-                    
-                showSuccess("Piatto '" + dishName + "' eliminato con successo.");
-
-                choice = askConfirmation("Vuoi eliminare un'altro piatto?");
-                if(!choice){
-                    waitForEnter("Premi INVIO per continuare");
-                }
-                    
+                choice = deleteSingleDish();
             } catch (BackRequestedException _) {
                 showInfo("Operazione annullata. Ritorno al menù ingredienti");
                 choice = false;
                 waitForEnter(null);
-            } catch (DishException e) {
+            } catch (DishException e){
                 showError(e.getMessage());
-                waitForEnter("Premi INVIO per riprovare");                
-            } catch (Exception e){
-                showError("Errore: " + e.getClass().getSimpleName());
-                showError("Errore: " + e.getMessage());
-                if(e.getCause() != null){
-                    showError("Causa: " + e.getCause().getMessage());
-                }
-                waitForEnter(null);
+                waitForEnter("Premi INVIO per riprovare");
             }
         }
+    }
+
+    private boolean deleteSingleDish() throws BackRequestedException, DishException{
+        var dishes = dishBoundary.getAllDishes();
+        clearScreen();
+        showTitle("Elimina Piatto");
+        tableDishes();
+
+        String input = askInputOrBack("Inserisci il numero del piatto da eliminare");
+
+        Integer index = parseDishIndex(input, dishes.size());
+
+        if(index == null || index == 0){
+            return false;
+        }
+
+        var selected = dishes.get(index - 1);
+        String dishName = selected.getName();
+        dishBoundary.deleteDish(dishName);
+            
+        showSuccess("Piatto '" + dishName + "' eliminato con successo.");
+
+        boolean choice = askConfirmation("Vuoi eliminare un'altro piatto?");
+        if(!choice){
+            waitForEnter("Premi INVIO per continuare");
+        }
+        return choice;
+    }
+
+    private Integer parseDishIndex(String input, int dishSize){
+        int index;
+        try {
+            index = Integer.parseInt(input);
+        } catch (NumberFormatException _) {
+            showError("Inserisci un numero valido.");
+            waitForEnter(input);
+            return null;
+        }
+
+        if(index < 0 || index > dishSize){
+            showError("Indice non valido.");
+            waitForEnter(null);
+            return null;
+        }
+
+        return index;
     }
 
     private void tableDishes(){

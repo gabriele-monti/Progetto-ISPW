@@ -1,10 +1,18 @@
 package it.foodmood.view.ui.gui;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import it.foodmood.domain.model.User;
 import it.foodmood.utils.SessionManager;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
 
 public abstract class BaseGui {
 
@@ -66,7 +74,7 @@ public abstract class BaseGui {
         alert.setContentText(message);
 
         var result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.YES;
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 
     protected void swap(Node nodeShow, Node nodeHide){
@@ -78,5 +86,39 @@ public abstract class BaseGui {
             nodeHide.setVisible(false);
             nodeHide.setManaged(false);
         }
+    }
+    
+    protected <E> void setupComboBox(ComboBox<E> comboBox, E[] values, Function<E, String> description){
+        comboBox.getItems().setAll(values);
+
+        comboBox.setCellFactory(combo -> new ListCell<>(){
+            @Override
+            protected void updateItem(E item, boolean empty){
+                super.updateItem(item, empty);
+                setText((item == null || empty) ? null : description.apply(item));
+            }
+        });
+
+        comboBox.setButtonCell(new ListCell<>(){
+            @Override
+            protected void updateItem(E item, boolean empty){
+                super.updateItem(item, empty);
+                setText((item == null || empty) ? null : description.apply(item));
+            }
+        });
+    }
+
+    protected <T> void setupListCell(ListView<T> listView, Function<T, String> formatter){
+        listView.setCellFactory(view -> new ListCell<>() {
+            @Override
+            protected void updateItem(T item, boolean empty){
+                super.updateItem(item, empty);
+                setText((item == null || empty) ? null : formatter.apply(item));
+            }
+        });
+    }
+
+    protected <T> void setupColumn(TableColumn<T, String> column, Function<T, String> extract){
+        column.setCellValueFactory(cell -> new SimpleStringProperty(Optional.ofNullable(extract.apply(cell.getValue())).orElse("")));
     }
 }

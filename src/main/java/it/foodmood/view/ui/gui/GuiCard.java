@@ -42,7 +42,7 @@ public class GuiCard {
             try {
                 Image image = new Image(dishBean.getImageUri(), true);
                 productImageView.setImage(image);
-            } catch (Exception e) {
+            } catch (Exception _) {
                 productImageView.setImage(null);
             }
         } else {

@@ -8,9 +8,9 @@ import java.util.Set;
 import it.foodmood.domain.model.Ingredient;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.Unit;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.persistence.dao.IngredientDao;
-import it.foodmood.persistence.exception.PersistenceException;
 
 public class FileSystemIngredientDao extends AbstractCsvDao implements IngredientDao {
 

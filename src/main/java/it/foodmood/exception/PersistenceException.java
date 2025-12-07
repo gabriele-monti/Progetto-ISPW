@@ -1,4 +1,4 @@
-package it.foodmood.persistence.exception;
+package it.foodmood.exception;
 
 /*
  * Eccezioni per tutti gli errori di persistenza (Dao, DB, ...)

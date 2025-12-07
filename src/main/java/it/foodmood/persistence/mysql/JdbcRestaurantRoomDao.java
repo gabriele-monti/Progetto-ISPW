@@ -13,8 +13,8 @@ import it.foodmood.domain.model.RestaurantRoom;
 import it.foodmood.domain.model.Table;
 import it.foodmood.domain.value.TablePosition;
 import it.foodmood.domain.value.TableStatus;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.RestaurantRoomDao;
-import it.foodmood.persistence.exception.PersistenceException;
 
 public class JdbcRestaurantRoomDao implements RestaurantRoomDao{
     private static JdbcRestaurantRoomDao instance;

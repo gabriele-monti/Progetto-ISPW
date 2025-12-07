@@ -1,3 +1,4 @@
+
 package it.foodmood.view.ui.gui;
 
 import java.io.File;
@@ -17,7 +18,6 @@ import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.DishException;
 import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,7 +26,6 @@ import javafx.scene.image.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -134,7 +133,6 @@ public class GuiManagmentDish extends BaseGui {
 
     private String currentImageUri;
 
-
     public void setRouter(GuiRouter router){
         this.router = router;
     }
@@ -162,14 +160,10 @@ public class GuiManagmentDish extends BaseGui {
     }
 
     private void initTableDish(){
-        colName.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getName()));
-
-        colPrice.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPrice() != null ? cell.getValue().getPrice().toString() : ""));
-
-        colState.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getState() != null ? cell.getValue().getState().description() : ""));
-
-        colType.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCourseType() != null ? cell.getValue().getCourseType().description() : ""));
-
+        setupColumn(colName, d -> d.getName());
+        setupColumn(colPrice, d -> d.getPrice() != null ? d.getPrice().toString() : null);
+        setupColumn(colState, d -> d.getState() != null ? d.getState().description() : null);
+        setupColumn(colType, d -> d.getCourseType() != null ? d.getCourseType().description() : null);
     }
 
     private Double askQuantity(IngredientBean ingredient, Double defaultValue) {
@@ -218,23 +212,22 @@ public class GuiManagmentDish extends BaseGui {
 
             if(alredyAdded){
                 showError("L'ingrediente " + ingredient.getName() + " è già presente nel piatto");
-                continue;
-            }
+            } else {
+                Double quantity = askQuantity(ingredient, 0.0);
+                if(quantity == null){
+                    continue;
+                }
 
-            Double quantity = askQuantity(ingredient, 0.0);
-            if(quantity == null){
-                continue;
-            }
+                try {
+                    IngredientPortionBean portionBean = new IngredientPortionBean();
+                    portionBean.setIngredient(ingredient);
+                    portionBean.setQuantity(quantity);
+                    portionBean.setUnit(ingredient.getUnit().name());
 
-            try {
-                IngredientPortionBean portionBean = new IngredientPortionBean();
-                portionBean.setIngredient(ingredient);
-                portionBean.setQuantity(quantity);
-                portionBean.setUnit(ingredient.getUnit().name());
-
-                dishIngredients.add(portionBean);
-            } catch (IllegalArgumentException e) {
-                showError(e.getMessage());
+                    dishIngredients.add(portionBean);
+                } catch (IllegalArgumentException e) {
+                    showError(e.getMessage());
+                }
             }
         }
 
@@ -273,7 +266,6 @@ public class GuiManagmentDish extends BaseGui {
                 Image fxImage = new Image(uri, true); 
                 ivImage.setImage(fxImage);
                 
-                
             } catch (Exception e) {
                 showError("Errore durante il caricamento dell'immagine: " + e.getMessage());
                 currentImageUri = null;
@@ -285,10 +277,12 @@ public class GuiManagmentDish extends BaseGui {
 
     @FXML
     void onDeleteDish(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         DishBean selected = tableDishes.getSelectionModel().getSelectedItem();
 
         if(selected == null){
             showError("Seleziona un piatto da eliminare");
+            return;
         }
 
         if(!showConfirmation("Conferma eliminazione", "Vuoi eliminare il piatto:\n" + selected.getName() + " ?")) {
@@ -298,8 +292,8 @@ public class GuiManagmentDish extends BaseGui {
         try {
             dishBoundary.deleteDish(selected.getName());
 
-            loadDishes();
-            showInfo("Ingrediente eliminato correttamente.");
+            allDishes.remove(selected);
+            showInfo("Piatto eliminato correttamente.");
         } catch (Exception e) {
             showError("Errore durante l'eliminazione: " + e.getMessage());
         }
@@ -378,7 +372,7 @@ public class GuiManagmentDish extends BaseGui {
     @FXML
     private void initialize(){
         initTableDish();
-        initUnitComboBox();
+        initComboBox();
         initTable();
         initDishIngredientsList();
         loadIngredients();
@@ -396,61 +390,12 @@ public class GuiManagmentDish extends BaseGui {
         }
     }
 
-    private void initUnitComboBox(){
-        cbCategory.getItems().clear();
-        cbCategory.getItems().addAll(DietCategory.values());
-
-        cbProductType.getItems().clear();
-        cbProductType.getItems().addAll(CourseType.values());
-
-        cbStateForm.getItems().clear();
-        cbStateForm.getItems().addAll(DishState.values());
-
-        cbState.getItems().clear();
-        cbState.getItems().addAll(DishState.values());
-
-        cbState.setCellFactory(combo -> new ListCell<>(){
-            @Override
-            protected void updateItem(DishState item, boolean empty){
-                super.updateItem(item, empty);
-                setText((item == null || empty) ? null : item.description());
-            }
-        });
-
-        cbType.getItems().clear();
-        cbType.getItems().addAll(CourseType.values());
-
-        cbType.setCellFactory(combo -> new ListCell<>(){
-            @Override
-            protected void updateItem(CourseType item, boolean empty){
-                super.updateItem(item, empty);
-                setText((item == null || empty) ? null : item.description());
-            }
-        });
-
-        cbCategory.setCellFactory(combo -> new ListCell<>(){
-            @Override
-            protected void updateItem(DietCategory item, boolean empty){
-                super.updateItem(item, empty);
-                setText((item == null || empty) ? null : item.description());
-            }
-        });
-
-        cbProductType.setCellFactory(combo -> new ListCell<>(){
-            @Override
-            protected void updateItem(CourseType item, boolean empty){
-                super.updateItem(item, empty);
-                setText((item == null || empty) ? null : item.description());
-            }
-        });
-
-        cbStateForm.setCellFactory(combo -> new ListCell<>(){
-            @Override
-            protected void updateItem(DishState item, boolean empty){
-                super.updateItem(item, empty);
-                setText((item == null || empty) ? null : item.description());
-            }
-        });
+    protected void initComboBox(){
+        setupComboBox(cbCategory, DietCategory.values(), DietCategory::description);
+        setupComboBox(cbProductType, CourseType.values(), CourseType::description);
+        setupComboBox(cbType, CourseType.values(), CourseType::description);
+        setupComboBox(cbStateForm, DishState.values(), DishState::description);
+        setupComboBox(cbState, DishState.values(), DishState::description);
     }
 
     private void showListView(){
@@ -462,42 +407,28 @@ public class GuiManagmentDish extends BaseGui {
     }
 
     private void initTable(){
-        colNameForm.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        setupColumn(colNameForm, ingredient -> ingredient.getName());
 
-        colUnitForm.setCellValueFactory(cellData -> {
-            Unit unit = cellData.getValue().getUnit();
-            String unitLabel = (unit == Unit.GRAM) ? "g" : "ml";
-            return new SimpleStringProperty(unitLabel);
+        setupColumn(colUnitForm, ingredient -> { 
+            Unit unit = ingredient.getUnit();
+            return (unit == Unit.GRAM) ? "g" : "ml"; 
         });
 
-        colKcalForm.setCellValueFactory(cellData -> {
-            MacronutrientsBean macro = cellData.getValue().getMacronutrients();
+        setupColumn(colKcalForm, ingredient -> {
+            MacronutrientsBean macro = ingredient.getMacronutrients();
             if(macro == null){
-                return new SimpleStringProperty("-");
+                return ("-");
             }
             double kcal = macro.calculateKcal();
-            return new SimpleStringProperty(String.format("%.1f", kcal));
+            return String.format("%.1f", kcal);
         });
 
-        colMacrosForm.setCellValueFactory(cellData -> {
-            MacronutrientsBean m = cellData.getValue().getMacronutrients();
-            if(m == null){
-                return new SimpleStringProperty("-");
+        setupColumn(colAllergensForm, ingredient -> {
+            List<String> allergens = ingredient.getAllergens();
+            if(allergens == null || allergens.isEmpty()){
+                return "ALLERGENI NON PRESENTI";
             }
-            
-            double protein = (m.getProtein() == null) ? 0.0 : m.getProtein();
-            double carbohydrate = (m.getCarbohydrates() == null) ? 0.0 : m.getCarbohydrates();
-            double fat = (m.getFat() == null) ? 0.0 : m.getFat();
-
-            String text = String.format("%.1f / %.1f / %.1f", protein, carbohydrate, fat);
-            
-            return new SimpleStringProperty(text);
-        });
-
-        colAllergensForm.setCellValueFactory(cellData -> {
-            List<String> allergens = cellData.getValue().getAllergens();
-            String allergenStr = allergens.isEmpty() ? "ALLERGENI NON PRESENTI" : String.join(", " , allergens);
-            return new SimpleStringProperty(allergenStr);
+            return String.join(", ", allergens);
         });
 
         tableIngredientsForm.setItems(ingredientItems);
@@ -506,19 +437,10 @@ public class GuiManagmentDish extends BaseGui {
     private void initDishIngredientsList(){
         listDishIngredients.setItems(dishIngredients);
 
-        listDishIngredients.setCellFactory(listView -> new ListCell<>(){
-
-            @Override
-            protected void updateItem(IngredientPortionBean item, boolean empty){
-                super.updateItem(item, empty);
-                if(item == null || empty){
-                    setText(null);
-                } else {
-                    String unitLabel = "GRAM".equals(item.getUnit()) ? "g" : "ml";
-                    setText(item.getIngredient().getName() + " - " +
-                    String.format("%.2f %s", item.getQuantity(), unitLabel));
-                }
-            }
+        setupListCell(listDishIngredients, item ->{
+            String unitLabel = "GRAM".equals(item.getUnit()) ? "g" : "ml";
+            return item.getIngredient().getName() + " - " +
+                   String.format("%.2f %s", item.getQuantity(), unitLabel);
         });
     }
 

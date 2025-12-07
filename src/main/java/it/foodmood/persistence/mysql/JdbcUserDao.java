@@ -17,8 +17,8 @@ import it.foodmood.domain.model.Waiter;
 import it.foodmood.domain.value.Email;
 import it.foodmood.domain.value.Person;
 import it.foodmood.domain.value.Role;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.UserDao;
-import it.foodmood.persistence.exception.PersistenceException;
 import it.foodmood.utils.RoleConverter;
 
 public class JdbcUserDao implements UserDao {

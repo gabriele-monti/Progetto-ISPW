@@ -8,8 +8,8 @@ import java.util.UUID;
 
 import it.foodmood.config.JdbcConnectionManager;
 import it.foodmood.domain.model.Credential;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.CredentialDao;
-import it.foodmood.persistence.exception.PersistenceException;
 
 public class JdbcCredentialDao implements CredentialDao {
     

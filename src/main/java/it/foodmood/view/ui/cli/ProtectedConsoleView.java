@@ -10,7 +10,7 @@ public abstract class ProtectedConsoleView extends ConsoleView{
         try {
             sessionManager.requireActiveSession();
             return true;
-        } catch (SessionExpiredException e) {
+        } catch (SessionExpiredException _) {
             showSessionExpiredMessage();
             return false;
         }

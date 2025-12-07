@@ -50,53 +50,62 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
         boolean choice = true;
         while (choice) {
             try {
-                var ingredients = boundary.getAllIngredients();
-                clearScreen();
-                showTitle("Elimina Ingrediente");
-                tableIngredients();
-                    
-                String input = askInputOrBack("Inserisci il numero dell'ingrediente da eliminare");
-
-                int index;
-                try {
-                    index = Integer.parseInt(input);
-                } catch (NumberFormatException e) {
-                    showError("Inserisci un numero valido.");
-                    waitForEnter(input);
-                    return;
-                }
-
-                if(index == 0) return;
-
-                if(index < 1 || index > ingredients.size()){
-                    showError("Indice non valido.");
-                    waitForEnter(null);
-                    return;
-                }
-
-                var selected = ingredients.get(index - 1);
-
-                String ingredientName = selected.getName().toUpperCase();
-
-                boundary.deleteIngredient(ingredientName);
-                    
-                showSuccess("Ingrediente '" + ingredientName + "' eliminato con successo.");
-
-                choice = askConfirmation("Vuoi eliminare un'altro ingrediente?");
-
-                if(!choice){
-                    waitForEnter("Premi INVIO per continuare");
-                }
-                    
+                choice = deletionIteration();
             } catch (BackRequestedException _) {
                 showInfo("Operazione annullata. Ritorno al menù ingredienti");
                 choice = false;
                 waitForEnter(null);
-            } catch (IngredientException e) {
+            } catch (IngredientException e){
                 showError(e.getMessage());
-                waitForEnter("Premi INVIO per riprovare");                
+                waitForEnter("Premi INVIO per riprovare");
             }
         }
+    }
+
+    private boolean deletionIteration() throws BackRequestedException, IngredientException {
+
+        var ingredients = boundary.getAllIngredients();
+        clearScreen();
+        showTitle("Elimina Ingrediente");
+        tableIngredients();
+            
+        String input = askInputOrBack("Inserisci il numero dell'ingrediente da eliminare");
+        Integer index = parseIngredientIndex(input, ingredients.size());
+        if(index == null || index == 0){
+            return false;
+        }
+
+        var selected = ingredients.get(index - 1);
+        String ingredientName = selected.getName().toUpperCase();
+        boundary.deleteIngredient(ingredientName);
+            
+        showSuccess("Ingrediente '" + ingredientName + "' eliminato con successo.");
+        boolean choice = askConfirmation("Vuoi eliminare un'altro ingrediente?");
+        if(!choice){
+            waitForEnter("Premi INVIO per continuare");
+        }
+        return choice;
+    }
+
+    private Integer parseIngredientIndex(String input, int ingredientsSize){
+
+        int index;
+
+        try {
+            index = Integer.parseInt(input);
+        } catch (NumberFormatException _) {
+            showError("Inserisci un numero valido.");
+            waitForEnter(input);
+            return null;
+        }
+
+        if(index < 0 || index > ingredientsSize){
+            showError("Indice non valido.");
+            waitForEnter(null);
+            return null;
+        }
+
+        return index;
     }
 
     private void updateIngredient() {

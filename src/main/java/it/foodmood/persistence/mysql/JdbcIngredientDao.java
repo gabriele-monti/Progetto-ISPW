@@ -20,8 +20,8 @@ import it.foodmood.domain.model.Ingredient;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.domain.value.Unit;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.IngredientDao;
-import it.foodmood.persistence.exception.PersistenceException;
 
 public class JdbcIngredientDao implements IngredientDao {
 
@@ -134,13 +134,13 @@ public class JdbcIngredientDao implements IngredientDao {
 
         List<Ingredient> result = new ArrayList<>();
 
-        for(String ingredientName : macroMap.keySet()){
-            Macronutrients macro = macroMap.get(ingredientName);
+        for(Map.Entry<String, Macronutrients> entry : macroMap.entrySet()){
+            String ingredientName = entry.getKey();
+            Macronutrients macro = entry.getValue();
             Unit unit = unitMap.get(ingredientName);
             Set<Allergen> allergens = allergenMap.get(ingredientName);
 
             Ingredient ingredient = new Ingredient(ingredientName, macro, unit, allergens);
-
             result.add(ingredient);
         }
         return result;

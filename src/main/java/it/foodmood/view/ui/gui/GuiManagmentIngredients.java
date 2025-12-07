@@ -106,7 +106,7 @@ public class GuiManagmentIngredients extends BaseGui {
     @FXML private TextField tfSearchIngredient;
 
     private final IngredientBoundary boundary = new IngredientBoundary();
-    private final ObservableList<IngredientBean> ingredientItems = FXCollections.observableArrayList();
+    private final ObservableList<IngredientBean> allIngredients = FXCollections.observableArrayList();
     private FilteredList<IngredientBean> filteredIngredient;
 
     private GuiRouter router;
@@ -173,7 +173,7 @@ public class GuiManagmentIngredients extends BaseGui {
     }
 
     private void initSearchIngredient(){
-        filteredIngredient = new FilteredList<>(ingredientItems, ingredient -> true);
+        filteredIngredient = new FilteredList<>(allIngredients, ingredient -> true);
 
         SortedList<IngredientBean> sortedList = new SortedList<>(filteredIngredient);
         sortedList.comparatorProperty().bind(tableIngredients.comparatorProperty());
@@ -197,12 +197,12 @@ public class GuiManagmentIngredients extends BaseGui {
 
 
     private void loadIngredients(){
-        ingredientItems.clear();
+        allIngredients.clear();
 
         try {
             List<IngredientBean> listIngredient = boundary.getAllIngredients();
 
-            ingredientItems.addAll(listIngredient);
+            allIngredients.addAll(listIngredient);
         } catch (Exception e) {
             showError("Errore durante il caricamento degli ingredienti: " + e.getMessage());
         }
@@ -376,7 +376,7 @@ public class GuiManagmentIngredients extends BaseGui {
         try {
             boundary.deleteIngredient(selected.getName());
 
-            ingredientItems.remove(selected);
+            allIngredients.remove(selected);
             showInfo("Ingrediente eliminato correttamente.");
         } catch (Exception e) {
             showError("Errore durante l'eliminazione: " + e.getMessage());

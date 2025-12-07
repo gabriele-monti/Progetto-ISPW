@@ -24,7 +24,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.Tab;
@@ -289,29 +288,11 @@ public class GuiManagmentOrder extends BaseGui {
         categoryFilter.getItems().add(null);
         categoryFilter.getItems().addAll(CourseType.values());
 
-        categoryFilter.setCellFactory(cb -> new ListCell<>(){
-            @Override
-            protected void updateItem(CourseType item, boolean empty){
-                super.updateItem(item, empty);
-                if(empty || item == null){
-                    setText("Tutte le categorie");
-                } else {
-                    setText(item.description());
-                }
-            }
-        });
-
-        categoryFilter.setButtonCell(new ListCell<>(){
-            @Override
-            protected void updateItem(CourseType item, boolean empty){
-                super.updateItem(item, empty);
-                if(empty || item == null){
-                    setText("Tutte le categorie");
-                } else {
-                    setText(item.description());
-                }
-            }
-        });
+        setupComboBox(
+            categoryFilter,
+            categoryFilter.getItems().toArray(new CourseType[0]),
+            item -> item == null ? "Tutte le categorie" :item.description()
+        );
 
         categoryFilter.setValue(null);
         searchField.textProperty().addListener((old, oldV, newV) -> refreshMenuGrid());

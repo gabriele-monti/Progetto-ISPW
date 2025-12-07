@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import it.foodmood.domain.model.Credential;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.CredentialDao;
-import it.foodmood.persistence.exception.PersistenceException;
 
 public class FileSystemCredentialDao extends AbstractCsvDao implements CredentialDao {
 
