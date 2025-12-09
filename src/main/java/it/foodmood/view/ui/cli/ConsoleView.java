@@ -210,4 +210,22 @@ public abstract class ConsoleView implements CliUserInterface{
             }           
         }
     }
+
+    protected Integer parseInteger(String input, int maxSize){
+        int index;
+        try {
+            index = Integer.parseInt(input);
+        } catch (NumberFormatException _) {
+            showError("Inserisci un numero valido.");
+            waitForEnter(input);
+            return null;
+        }
+
+        if(index < 0 || index > maxSize){
+            showError("Indice non valido.");
+            waitForEnter(null);
+            return null;
+        }
+        return index;
+    }
 }

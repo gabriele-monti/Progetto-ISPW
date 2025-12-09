@@ -17,7 +17,6 @@ import it.foodmood.utils.UnitUtils;
 import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
-import it.foodmood.view.ui.cli.TableIngredients;
 
 public class CliDishMenuView extends ProtectedConsoleView {
     private final DishBoundary dishBoundary;
@@ -234,20 +233,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
     private void tableIngredients(){
         var ingredients = ingredientBoundary.getAllIngredients();
-
-        if(ingredients == null || ingredients.isEmpty()){
-            showWarning("Nessun ingrediente presente.");
-            waitForEnter(null);
-            return;
-        }
-
-        List<String> headers = TableIngredients.ingredientTableHeaders();
-
-        List<List<String>> rows = TableIngredients.ingredientRows(ingredients);
-
-        List<Integer> columnWidths = TableIngredients.ingredientColumnWidths();
-
-        displayTable(headers, rows, columnWidths);
+        showIngredientTable(ingredients);
     }
 
     private DishState askDishState() {
@@ -348,7 +334,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
         String input = askInputOrBack("Inserisci il numero del piatto da eliminare");
 
-        Integer index = parseDishIndex(input, dishes.size());
+        Integer index = parseInteger(input, dishes.size());
 
         if(index == null || index == 0){
             return false;
@@ -365,25 +351,6 @@ public class CliDishMenuView extends ProtectedConsoleView {
             waitForEnter("Premi INVIO per continuare");
         }
         return choice;
-    }
-
-    private Integer parseDishIndex(String input, int dishSize){
-        int index;
-        try {
-            index = Integer.parseInt(input);
-        } catch (NumberFormatException _) {
-            showError("Inserisci un numero valido.");
-            waitForEnter(input);
-            return null;
-        }
-
-        if(index < 0 || index > dishSize){
-            showError("Indice non valido.");
-            waitForEnter(null);
-            return null;
-        }
-
-        return index;
     }
 
     private void tableDishes(){

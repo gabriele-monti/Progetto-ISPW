@@ -1,6 +1,5 @@
 package it.foodmood.view.ui.cli.manager;
 
-import java.util.List;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
@@ -9,7 +8,6 @@ import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
-import it.foodmood.view.ui.cli.TableIngredients;
 
 public class CliIngredientMenuView extends ProtectedConsoleView {
     private final IngredientBoundary boundary;
@@ -70,7 +68,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
         tableIngredients();
             
         String input = askInputOrBack("Inserisci il numero dell'ingrediente da eliminare");
-        Integer index = parseIngredientIndex(input, ingredients.size());
+        Integer index = parseInteger(input, ingredients.size());
         if(index == null || index == 0){
             return false;
         }
@@ -85,27 +83,6 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
             waitForEnter("Premi INVIO per continuare");
         }
         return choice;
-    }
-
-    private Integer parseIngredientIndex(String input, int ingredientsSize){
-
-        int index;
-
-        try {
-            index = Integer.parseInt(input);
-        } catch (NumberFormatException _) {
-            showError("Inserisci un numero valido.");
-            waitForEnter(input);
-            return null;
-        }
-
-        if(index < 0 || index > ingredientsSize){
-            showError("Indice non valido.");
-            waitForEnter(null);
-            return null;
-        }
-
-        return index;
     }
 
     private void updateIngredient() {
@@ -195,19 +172,6 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
 
     private void tableIngredients(){
         var ingredients = boundary.getAllIngredients();
-
-        if(ingredients == null || ingredients.isEmpty()){
-            showWarning("Nessun ingrediente presente.");
-            waitForEnter(null);
-            return;
-        }
-
-        List<String> headers = TableIngredients.ingredientTableHeaders();
-
-        List<List<String>> rows = TableIngredients.ingredientRows(ingredients);
-
-        List<Integer> columnWidths = TableIngredients.ingredientColumnWidths();
-
-        displayTable(headers, rows, columnWidths);
+        showIngredientTable(ingredients);
     }
 }
