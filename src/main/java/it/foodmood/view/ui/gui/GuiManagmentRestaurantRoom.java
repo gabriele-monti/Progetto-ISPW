@@ -1,20 +1,16 @@
 package it.foodmood.view.ui.gui;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import it.foodmood.bean.RestaurantRoomBean;
 import it.foodmood.bean.TableBean;
 import javafx.scene.image.*;
+import javafx.scene.input.MouseEvent;
 import it.foodmood.exception.RestaurantRoomException;
 import it.foodmood.view.boundary.RestaurantRoomBoundary;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
-public class GuiManagmentRestaurantRoom extends BaseGui {
+public class GuiManagmentRestaurantRoom extends RoomController {
     
     @FXML private Button btnAddTable2;
 
@@ -32,21 +28,11 @@ public class GuiManagmentRestaurantRoom extends BaseGui {
 
     @FXML private Button btnToggleEditMode;
 
-    @FXML private Pane floorPane;
+    @FXML private Pane roomPane;
 
-    @FXML private Label lblSelectedTable;
-
-    private final RestaurantRoomBoundary boundary = new RestaurantRoomBoundary();
-    private RestaurantRoomBean currentRoom;
+    private final RestaurantRoomBoundary roomBoundary = new RestaurantRoomBoundary();
 
     private boolean editMode = false;
-    private TableBean selectedTable;
-    private ImageView selectedNode;
-
-    private final Map<Integer, ImageView> tableNodes = new HashMap<>();
-
-    private double cellWidth = 100.0;
-    private double cellHeight = 100.0;
 
     private GuiRouter router;
 
@@ -68,71 +54,27 @@ public class GuiManagmentRestaurantRoom extends BaseGui {
 
         lblSelectedTable.setText("-");
 
-        floorPane.widthProperty().addListener((obs, oldV, newV) -> updateLayout());
-        floorPane.heightProperty().addListener((obs, oldV, newV) -> updateLayout());
-
-        loadRestaurantRoom();
+        initRoomController();
     }
 
-    private void updateLayout(){
-        if(currentRoom == null) return;
-        
-        double paneWidth = floorPane.getWidth() > 0 ? floorPane.getWidth() : floorPane.getPrefWidth();
-        double paneHeight = floorPane.getHeight() > 0 ? floorPane.getHeight() : floorPane.getPrefHeight();
-
-        int rows = currentRoom.getRows();
-        int cols = currentRoom.getCols();
-
-        cellWidth = paneWidth / cols;
-        cellHeight = paneHeight / rows;
-
-        double factor = 0.9;
-        double iconSize = Math.min(cellWidth, cellHeight) * factor;
-
-        for(TableBean tableBean : currentRoom.getTables()){
-            ImageView node = tableNodes.get(tableBean.getId());
-            if(node == null) continue;
-
-            node.setFitWidth(iconSize);
-            node.setFitHeight(iconSize);
-
-            double x = tableBean.getCol() * cellWidth + (cellWidth - iconSize) / 2;
-            double y = 20 + tableBean.getRow() * cellHeight + (cellHeight - iconSize) / 2;
-
-            node.setLayoutX(x);
-            node.setLayoutY(y);
-        }
+    @Override
+    protected Pane getRoomPane(){
+        return roomPane;
     }
 
-    private void loadRestaurantRoom(){
-        try {
-            currentRoom = boundary.loadRestaurantRoom();
-            renderRoom(currentRoom);
-        } catch (RestaurantRoomException e) {
-            showError(e.getMessage());
-        }
+    @Override
+    protected RestaurantRoomBoundary getBoundary(){
+        return roomBoundary;
     }
 
-    private void renderRoom(RestaurantRoomBean restaurantRoomBean){
-        floorPane.getChildren().clear();
-        tableNodes.clear();
-        selectedTable = null;
-        selectedNode = null;
-        lblSelectedTable.setText("-");
-
-        if(restaurantRoomBean == null) return;
-
-        currentRoom = restaurantRoomBean;
-
-        for(TableBean tableBean : restaurantRoomBean.getTables()){
-            ImageView node = createTableNode(tableBean);
-            floorPane.getChildren().add(node);
-            tableNodes.put(tableBean.getId(), node);
-        }
-        updateLayout();
+    @Override
+    protected void onRoomLoaded(){
+        super.onRoomLoaded();
+        refreshDrag();
     }
 
-    private ImageView createTableNode(TableBean tableBean){
+    @Override
+    protected ImageView createTableNode(TableBean tableBean){
         String table = "table_" + tableBean.getSeats() + ".png";
         String path = "/tables/" + table;
         Image image = new Image(getClass().getResourceAsStream(path));
@@ -146,19 +88,6 @@ public class GuiManagmentRestaurantRoom extends BaseGui {
         enableDragIfNeeded(imageView, tableBean);
 
         return imageView;
-    }
-
-    private void selectTable(TableBean table, ImageView node){
-        if(selectedNode != null) {
-            selectedNode.setStyle("");
-        }
-
-        node.setStyle("-fx-effect: dropshadow(gaussian, yellow, 15, 0.5, 0, 0)");
-        
-        selectedNode = node;
-        selectedTable = table;
-
-        lblSelectedTable.setText("Tavolo: " + table.getId() + " - " + table.getSeats() + " posti");
     }
 
     private void enableDragIfNeeded(ImageView imageView, TableBean tableBean){
@@ -204,7 +133,7 @@ public class GuiManagmentRestaurantRoom extends BaseGui {
             imageView.setLayoutY(snappedY);
 
             try {
-                boundary.moveTable(tableBean.getId(), newRow, newCol);
+                roomBoundary.moveTable(tableBean.getId(), newRow, newCol);
                 loadRestaurantRoom();
             } catch (RestaurantRoomException ex) {
                 double oldX = dragDelta.startCol * cellWidth + (cellWidth -imageView.getFitWidth()) / 2;
@@ -242,7 +171,7 @@ public class GuiManagmentRestaurantRoom extends BaseGui {
             tableBean.setRow(row);
             tableBean.setCol(col);
 
-            boundary.addTable(tableBean);
+            roomBoundary.addTable(tableBean);
 
             loadRestaurantRoom();
 
@@ -274,7 +203,7 @@ public class GuiManagmentRestaurantRoom extends BaseGui {
     private void removeSelected(){
         if(selectedTable == null) return;
         try {
-            boundary.removeTable(selectedTable.getId());
+            roomBoundary.removeTable(selectedTable.getId());
             loadRestaurantRoom();
         } catch (RestaurantRoomException e) {
             showError(e.getMessage());
@@ -282,9 +211,12 @@ public class GuiManagmentRestaurantRoom extends BaseGui {
     }
 
     private void removeAllTables(){
-        showConfirmation("Rimozione completa tavoli", "Sei sicuro di voler rimuovere tutti i tavoli? ");
+        boolean confirm = showConfirmation("Rimozione completa tavoli", "Sei sicuro di voler rimuovere tutti i tavoli? ");
+        if(!confirm){
+            return;
+        }
         try {
-            boundary.removeAllTables();
+            roomBoundary.removeAllTables();
             loadRestaurantRoom();
         } catch (RestaurantRoomException e) {
             showError(e.getMessage());
@@ -293,7 +225,7 @@ public class GuiManagmentRestaurantRoom extends BaseGui {
 
     private void toggleEditMode(){
         editMode = !editMode;
-        btnToggleEditMode.setText(editMode ? "SPOSTAMENTO: ON" : "SPOSTAMENTO: OFF");
+        btnToggleEditMode.setText(editMode ? "DRAG: ON" : "DRAG: OFF");
         refreshDrag();
     }
 

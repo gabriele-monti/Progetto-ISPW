@@ -8,6 +8,8 @@ import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.IngredientException;
+import it.foodmood.utils.NutritionUtils;
+import it.foodmood.utils.UnitUtils;
 import it.foodmood.view.boundary.IngredientBoundary;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -137,32 +139,16 @@ public class GuiManagmentIngredients extends BaseGui {
 
         colUnit.setCellValueFactory(cellData -> {
             Unit unit = cellData.getValue().getUnit();
-            String unitLabel = (unit == Unit.GRAM) ? "g" : "ml";
+            String unitLabel = UnitUtils.toLabel(unit);
             return new SimpleStringProperty(unitLabel);
         });
 
         colKcal.setCellValueFactory(cellData -> {
-            MacronutrientsBean macro = cellData.getValue().getMacronutrients();
-            if(macro == null){
-                return new SimpleStringProperty("-");
-            }
-            double kcal = macro.calculateKcal();
-            return new SimpleStringProperty(String.format("%.1f", kcal));
+            return new SimpleStringProperty(NutritionUtils.formatKcal(cellData.getValue().getMacronutrients()));
         });
 
         colMacros.setCellValueFactory(cellData -> {
-            MacronutrientsBean m = cellData.getValue().getMacronutrients();
-            if(m == null){
-                return new SimpleStringProperty("-");
-            }
-            
-            double protein = (m.getProtein() == null) ? 0.0 : m.getProtein();
-            double carbohydrate = (m.getCarbohydrates() == null) ? 0.0 : m.getCarbohydrates();
-            double fat = (m.getFat() == null) ? 0.0 : m.getFat();
-
-            String text = String.format("%.1f / %.1f / %.1f", protein, carbohydrate, fat);
-            
-            return new SimpleStringProperty(text);
+            return new SimpleStringProperty(NutritionUtils.formatMacros(cellData.getValue().getMacronutrients()));
         });
 
         colAllergens.setCellValueFactory(cellData -> {

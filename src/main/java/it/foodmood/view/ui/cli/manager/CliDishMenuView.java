@@ -13,6 +13,7 @@ import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.DishException;
+import it.foodmood.utils.UnitUtils;
 import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
@@ -215,7 +216,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
         Unit unit = selected.getUnit();
 
-        String unitLabel = unit == Unit.GRAM ? "g" : "ml";
+        String unitLabel = UnitUtils.toLabel(unit);
 
         double quantity = askDouble("Quantità in " + unitLabel + ": ");
 

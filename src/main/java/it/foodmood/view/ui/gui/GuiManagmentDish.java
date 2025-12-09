@@ -16,6 +16,7 @@ import it.foodmood.domain.value.DietCategory;
 import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.DishException;
+import it.foodmood.utils.UnitUtils;
 import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
 import javafx.collections.FXCollections;
@@ -168,7 +169,7 @@ public class GuiManagmentDish extends BaseGui {
 
     private Double askQuantity(IngredientBean ingredient, Double defaultValue) {
         Unit unit = ingredient.getUnit();
-        String unitLabel = unit == Unit.GRAM ? "g" : "ml";
+        String unitLabel = UnitUtils.toLabel(unit);
         
         TextInputDialog dialog = new TextInputDialog(
             defaultValue != null ? String.format("%.2f", defaultValue) : ""
@@ -411,7 +412,7 @@ public class GuiManagmentDish extends BaseGui {
 
         setupColumn(colUnitForm, ingredient -> { 
             Unit unit = ingredient.getUnit();
-            return (unit == Unit.GRAM) ? "g" : "ml"; 
+            return UnitUtils.toLabel(unit);
         });
 
         setupColumn(colKcalForm, ingredient -> {

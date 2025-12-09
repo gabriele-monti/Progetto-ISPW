@@ -14,7 +14,7 @@
    <center>
       <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
          <content>
-            <Pane fx:id="floorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="808.0" prefWidth="863.0" styleClass="background-room" stylesheets="@../css/restaurantRoom.css" />
+            <Pane fx:id="roomPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="808.0" prefWidth="863.0" styleClass="background-room" stylesheets="@../css/restaurantRoom.css" />
          </content>
       </ScrollPane>
    </center>
