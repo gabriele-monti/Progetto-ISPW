@@ -7,10 +7,8 @@ import java.util.List;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.IngredientPortionBean;
-import it.foodmood.bean.MacronutrientsBean;
 import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.Ingredient;
-import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
 import it.foodmood.domain.value.DishState;
@@ -159,7 +157,7 @@ public class DishController {
         IngredientPortionBean bean = new IngredientPortionBean();
 
         Ingredient ingredient = ingredientPortion.getIngredient();
-        IngredientBean ingredientBean = ingredientToBean(ingredient);
+        IngredientBean ingredientBean = IngredientMapper.toBean(ingredient);
         bean.setIngredient(ingredientBean);
 
         Quantity quantity = ingredientPortion.getQuantity();
@@ -167,24 +165,6 @@ public class DishController {
         bean.setUnit(quantity.getUnit().name());
 
         return bean;
-    }
-
-    private IngredientBean ingredientToBean(Ingredient ingredient){
-        IngredientBean ingredientBean = new IngredientBean();
-        ingredientBean.setName(ingredient.getName());
-
-        MacronutrientsBean macronutrientsBean = new MacronutrientsBean();
-        macronutrientsBean.setProtein(ingredient.getMacro().getProtein());
-        macronutrientsBean.setCarbohydrates(ingredient.getMacro().getCarbohydrates());
-        macronutrientsBean.setFat(ingredient.getMacro().getFat());
-
-        ingredientBean.setMacronutrients(macronutrientsBean);
-
-        ingredientBean.setUnit(ingredient.getUnit());
-
-        ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::description).toList());
-
-        return ingredientBean;
     }
 
     public void ensureActiveSession(){

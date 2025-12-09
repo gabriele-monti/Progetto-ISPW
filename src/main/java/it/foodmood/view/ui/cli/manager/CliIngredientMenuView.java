@@ -1,7 +1,6 @@
 package it.foodmood.view.ui.cli.manager;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
@@ -10,6 +9,7 @@ import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.TableIngredients;
 
 public class CliIngredientMenuView extends ProtectedConsoleView {
     private final IngredientBoundary boundary;
@@ -202,24 +202,11 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
             return;
         }
 
-        List<String> headers = List.of("N°", "Nome", "Unità", "Proteine", "Carboidrati", "Grassi", "Allergeni");
+        List<String> headers = TableIngredients.ingredientTableHeaders();
 
-        List<List<String>> rows = IntStream.range(0, ingredients.size()).mapToObj(i -> {
-            var ingredient = ingredients.get(i);
-            String index = String.valueOf(i + 1);
-            String name = ingredient.getName();
-            String unit = ingredient.getUnit() == Unit.GRAM ? "g" : "ml";
-            var macro = ingredient.getMacronutrients();
-            String protein = String.format("%.1f", macro.getProtein());
-            String carbs = String.format("%.1f", macro.getCarbohydrates());
-            String fat = String.format("%.1f", macro.getFat());
+        List<List<String>> rows = TableIngredients.ingredientRows(ingredients);
 
-            String allergens = (ingredient.getAllergens().isEmpty()) ? "-" : String.join(", ", ingredient.getAllergens());
-
-            return List.of(index, name, unit, protein, carbs, fat, allergens);
-        }).toList();
-
-        List<Integer> columnWidths = List.of(4, 20,5,8,11,6,20);
+        List<Integer> columnWidths = TableIngredients.ingredientColumnWidths();
 
         displayTable(headers, rows, columnWidths);
     }

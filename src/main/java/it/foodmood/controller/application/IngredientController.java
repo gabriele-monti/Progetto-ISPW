@@ -74,7 +74,7 @@ public class IngredientController {
 
     public List<IngredientBean> getAllIngredients(){
         ensureActiveSession();
-        return ingredientDao.findAll().stream().map(this::toBean).toList();
+        return ingredientDao.findAll().stream().map(IngredientMapper::toBean).toList();
     }
 
     public void deleteIngredient(String name) throws IngredientException{
@@ -91,25 +91,7 @@ public class IngredientController {
     }
 
     public Optional<IngredientBean> findIngredientByName(String name){
-        return ingredientDao.findById(name).map(this::toBean);
-    }
-
-    private IngredientBean toBean(Ingredient ingredient){
-        IngredientBean ingredientBean = new IngredientBean();
-        ingredientBean.setName(ingredient.getName());
-
-        MacronutrientsBean macronutrientsBean = new MacronutrientsBean();
-        macronutrientsBean.setProtein(ingredient.getMacro().getProtein());
-        macronutrientsBean.setCarbohydrates(ingredient.getMacro().getCarbohydrates());
-        macronutrientsBean.setFat(ingredient.getMacro().getFat());
-
-        ingredientBean.setMacronutrients(macronutrientsBean);
-
-        ingredientBean.setUnit(ingredient.getUnit());
-
-        ingredientBean.setAllergens(ingredient.getAllergens().stream().map(Allergen::description).toList());
-
-        return ingredientBean;
+        return ingredientDao.findById(name).map(IngredientMapper::toBean);
     }
 
     private double normalize(Double value){
