@@ -1,14 +1,18 @@
 package it.foodmood.persistence.inmemory;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import it.foodmood.domain.model.Dish;
 import it.foodmood.persistence.dao.DishDao;
 
-public class InMemoryDishDao implements DishDao {
+public class InMemoryDishDao extends AbstractInMemoryCrudDao<Dish, String> implements DishDao {
 
     private static InMemoryDishDao instance;
+
+    private InMemoryDishDao(){
+        // costruttore per il singleton
+    }
 
     public static synchronized InMemoryDishDao getInstance(){
         if(instance == null){
@@ -18,36 +22,23 @@ public class InMemoryDishDao implements DishDao {
     }
 
     @Override
-    public void insert(Dish entity){
-        //Timplementare
-        throw new UnsupportedOperationException("Non ancora imlementato");
+    protected String getId(Dish dish){
+        return dish.getName();
     }
 
     @Override
-    public List<Dish> findAll(){
-        //Timplementare
-        return List.of();
+    public List<Dish> findByCategory(String category){
+        if(category == null){
+            return List.of();
+        }
+        return storage.values().stream().filter(d -> d.getCourseType().name().equalsIgnoreCase(category)).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Dish> findById(String id){
-        //implementare
-        return Optional.empty();
-    }
-
-    @Override
-    public void deleteById(String id){
-        //implementare
-    }
-
-    @Override
-    public List<Dish> findByCategory(String entity){
-        //implementare
-        return List.of();
-    }
-    @Override
-    public List<Dish> findByDietCategory(String entity){
-        // implementare
-        return List.of();
+    public List<Dish> findByDietCategory(String dietCategory){
+        if(dietCategory == null){
+            return List.of();
+        }
+        return storage.values().stream().filter(d -> d.getDietCategory().name().equalsIgnoreCase(dietCategory)).collect(Collectors.toList());
     }
 }

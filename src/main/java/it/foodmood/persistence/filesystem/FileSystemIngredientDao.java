@@ -75,7 +75,9 @@ public class FileSystemIngredientDao extends AbstractCsvDao implements Ingredien
     private String allergensToString(Ingredient ingredient){
         StringBuilder stringBuilder = new StringBuilder();
         for(Allergen allergen: ingredient.getAllergens()){
-            if(stringBuilder.isEmpty()) stringBuilder.append(ALLERGEN_SEPARATOR);
+            if(stringBuilder.length() > 0){
+                stringBuilder.append(ALLERGEN_SEPARATOR);
+            }
             stringBuilder.append(allergen.name());
         }
         return stringBuilder.toString();
