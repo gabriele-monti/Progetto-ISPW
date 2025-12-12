@@ -22,27 +22,27 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML
     void onAccountClicked(ActionEvent event) {
-        // commento 
+        router.showCustomerAccountView();
     }
 
     @FXML
     void onCallWaiterClicked(ActionEvent event) {
-        // commento 
+        showInfo("Un cameriere è stato avvistato, arriverà a breve");
     }
 
     @FXML
     void onCartClicked(ActionEvent event) {
-        // commento
+        showInfo("Funzionalità non ancora implementata");
     }
 
     @FXML
     void onMenuClicked(ActionEvent event) {
-        // commento 
+        showInfo("Funzionalità non ancora implementata");
     }
 
     @FXML
     void onOrderClicked(ActionEvent event) {
-        // commento
+        router.showCustomerOrderView();
     }
 
     @FXML
@@ -50,7 +50,7 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML
     void onRequestBillClicked(ActionEvent event) {
-        // commento
+        showInfo("Il conto è stato richiesto");
     }
 
     private GuiRouter router;

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane minHeight="810.0" minWidth="1440.0" styleClass="background" stylesheets="@../css/customer.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.GuiHomeCustomer">
+<GridPane minHeight="810.0" minWidth="1440.0" styleClass="background-home" stylesheets="@../css/customer.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.GuiHomeCustomer">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" minWidth="1440.0" percentWidth="100.0" />
    </columnConstraints>
@@ -32,6 +32,9 @@
                      <image>
                         <Image url="@../images/logo_restaurant.png" />
                      </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </ImageView>
                </children>
                <padding>
@@ -42,32 +45,6 @@
                <padding>
                   <Insets left="30.0" />
                </padding>
-               <children>
-                  <Button mnemonicParsing="false" styleClass="transparent" text="HOME" textFill="WHITE">
-                     <font>
-                        <Font name="Arial Bold" size="20.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button layoutX="497.0" layoutY="64.0" mnemonicParsing="false" styleClass="transparent" text="FIDELITY CARD" textFill="WHITE">
-                     <font>
-                        <Font name="Arial Bold" size="20.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button layoutX="549.0" layoutY="64.0" mnemonicParsing="false" styleClass="transparent" text="COME FUNZIONA" textFill="WHITE">
-                     <font>
-                        <Font name="Arial Bold" size="20.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-               </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" layoutX="1254.0" layoutY="10.0" minWidth="400.0" spacing="15.0">
                <children>

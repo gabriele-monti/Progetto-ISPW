@@ -25,6 +25,19 @@
     -fx-effect: dropshadow(gaussian, rgba(233, 196, 106, 0.45), 14, 0.35, 0, 5);
 }
 
+.logoutBtn {
+    -fx-background-color: linear-gradient(to bottom right, #e63946, #d62828);
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 30;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(214, 40, 40, 0.3), 12, 0.25, 0, 4);
+}
+
+.logoutBtn:hover {
+    -fx-background-color: linear-gradient(to bottom right, #d62828, #b71c1c);
+    -fx-effect: dropshadow(gaussian, rgba(233, 196, 106, 0.45), 14, 0.35, 0, 5);
+}
+
 .white-bg{
     -fx-background-color: #fff;
 }

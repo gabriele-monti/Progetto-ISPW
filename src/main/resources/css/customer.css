@@ -1,10 +1,42 @@
-.background {
+.background-home {
     -fx-background-image: url("../images/background-app-restaurant.png");
     -fx-background-size: cover;
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
 }
 
+.background-menu {
+    -fx-background-image: url("../images/background_menu.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.section-container {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #8e8e8e;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #cccccc;
+    -fx-cursor: hand;
+    -fx-background-insets: 0;
+
+}
+
+.section-container:hover {
+    -fx-background-color: #f4f4f4;
+    -fx-background-insets: 0;
+}
+
+.section-container:selected {
+    -fx-background-color: linear-gradient(to right, #f3ca52, #f3ca52);
+    -fx-text-fill: white;
+    -fx-background-insets: 0;
+}
+
+.section-container:pressed {
+    -fx-background-insets: 0;
+}
 
 .btnCart {
     -fx-background-color: linear-gradient(to right, #ff7514, #ffa62a);
@@ -103,6 +135,30 @@
     -fx-background-radius: 30 30 0 0;
 }
 
+.vbox-menu-center-bottom {
+    -fx-background-color: #E9C46A;
+    -fx-background-radius: 0 0 30 30;
+}
+
 .transparent {
     -fx-background-color: transparent;
+}
+
+.normalBtn {
+    -fx-background-color: linear-gradient(to bottom right, #77916f, #77916f);
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 30;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(233, 196, 106, 0.3), 12, 0.25, 0, 4);
+}
+
+.normalBtn:hover {
+    -fx-background-color: linear-gradient(to bottom right, #8aa585, #93ad8e);
+    -fx-effect: dropshadow(gaussian, rgba(233, 196, 106, 0.45), 14, 0.35, 0, 5);
+}
+
+.normalBtn:pressed {
+    -fx-background-color: linear-gradient(to bottom, #6c8366, #5e7458); 
+    -fx-text-fill: #ffffff;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.35), 6, 0.25, 0, 1); 
 }

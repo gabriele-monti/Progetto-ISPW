@@ -9,6 +9,7 @@ import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.IngredientPortionBean;
 import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.Ingredient;
+import it.foodmood.domain.validation.DietCategoryValidator;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
 import it.foodmood.domain.value.DishState;
@@ -67,6 +68,8 @@ public class DishController {
             List<IngredientPortion> ingredientPortions = toDomainIngredientPortions(dishBean.getIngredients());
 
             Dish dish = new Dish(name, description, courseType, dietCategory, ingredientPortions, dishState, image, price);
+
+            DietCategoryValidator.validate(dish);
 
             dishDao.insert(dish);
 

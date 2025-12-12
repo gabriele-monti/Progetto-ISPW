@@ -60,4 +60,16 @@ public final class GuiRouter{
         controller.setBoundary(loginBoundary);
         controller.setWaiter(SessionManager.getInstance().getCurrentUser());
     }
+
+    public void showCustomerAccountView(){
+        GuiCustomerAccount controller = navigator.goTo(GuiPages.CUSTOMER_ACCOUNT);
+        controller.setRouter(this);
+        controller.setBoundary(loginBoundary);
+        controller.setUser(SessionManager.getInstance().getCurrentUser());
+    }
+
+    public void showCustomerOrderView(){
+        GuiCustomerOrder controller = navigator.goTo(GuiPages.CUSTOMER_ORDER);
+        controller.setRouter(this);
+    }
 }

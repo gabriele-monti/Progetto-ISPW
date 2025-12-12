@@ -4,6 +4,8 @@ public enum GuiPages {
     LOGIN("/fxml/login.fxml"),
     REGISTRATION("/fxml/registration.fxml"),
     HOME_CUSTOMER("/fxml/home_customer.fxml"),
+    CUSTOMER_ACCOUNT("/fxml/customer_account.fxml"),
+    CUSTOMER_ORDER("/fxml/customer_order.fxml"),
     HOME_MANAGER("/fxml/home_manager.fxml"),
     HOME_WAITER("/fxml/home_waiter.fxml"),
     MANAGMENT_ROOM_RESTAURANT("/fxml/managment_restaurant_room.fxml"),

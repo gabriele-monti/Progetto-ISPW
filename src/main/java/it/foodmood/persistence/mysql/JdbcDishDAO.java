@@ -19,20 +19,26 @@ import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Image;
 import it.foodmood.domain.value.IngredientPortion;
 import it.foodmood.domain.value.Money;
+import it.foodmood.domain.value.Quantity;
+import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.PersistenceException;
+import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
+import it.foodmood.persistence.dao.IngredientDao;
 
 public class JdbcDishDao implements DishDao {
         
-    private static final String CALL_SAVE_DISH = "{CALL insert_dish(?,?,?,?,?,?,?)}";
+    private static final String CALL_INSERT_DISH = "{CALL insert_dish(?,?,?,?,?,?,?,?)}";
     private static final String CALL_GET_DISH_BY_NAME = "{CALL get_dish_by_name(?)}";
     private static final String CALL_GET_ALL_DISHES = "{CALL get_all_dishes()}";
     private static final String CALL_GET_DISHES_BY_COURSE = "{CALL get_dishes_by_course_type(?)}";
     private static final String CALL_GET_DISHES_BY_DIET = "{CALL get_dishes_by_diet(?)}";
+    private static final String CALL_GET_DISH_INGREDIENTS = "{CALL get_dish_ingredients(?)}";
     private static final String CALL_DELETE_DISH_BY_NAME = "{CALL delete_dish_by_name(?)}";
 
     // Unica istanza di dao del Dish che usa jdbc
     private static JdbcDishDao instance;
+    private final IngredientDao ingredientDao;
 
     public static synchronized JdbcDishDao getInstance(){
         if(instance == null){
@@ -42,14 +48,14 @@ public class JdbcDishDao implements DishDao {
     }
 
     private JdbcDishDao(){
-        // costruttore privato
+        this.ingredientDao = DaoFactory.getInstance().getIngredientDao();
     }
 
     @Override
     public void insert(Dish dish){
         try {
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            try (CallableStatement cs = conn.prepareCall(CALL_SAVE_DISH)){
+            try (CallableStatement cs = conn.prepareCall(CALL_INSERT_DISH)){
                 cs.setString(1, dish.getName());
                 cs.setString(2, dish.getDescription());
                 cs.setString(3, dish.getCourseType().name());
@@ -63,6 +69,9 @@ public class JdbcDishDao implements DishDao {
                 }
 
                 cs.setString(7, dish.getState().name());
+
+                String ingredientsJson = toIngredientJson(dish.getIngredients());
+                cs.setString(8, ingredientsJson);
                 cs.execute();
             }
         } catch (SQLException e) {
@@ -86,6 +95,9 @@ public class JdbcDishDao implements DishDao {
             try(ResultSet rs = cs.executeQuery()){
                 if(rs.next()){
                     Dish dish = mapRowToDish(rs);
+                    List<IngredientPortion> ingredients = loadIngredientsForDish(conn, name);
+                    dish.setIngredients(ingredients);
+
                     return Optional.of(dish);
                 } else {
                     return Optional.empty();
@@ -105,6 +117,10 @@ public class JdbcDishDao implements DishDao {
 
                 while (rs.next()) {
                     Dish dish = mapRowToDish(rs);
+
+                    List<IngredientPortion> ingredients = loadIngredientsForDish(conn, dish.getName());
+                    dish.setIngredients(ingredients);
+
                     dishes.add(dish);
                 }
                 return dishes;
@@ -153,6 +169,37 @@ public class JdbcDishDao implements DishDao {
         }
     }
 
+    private List<IngredientPortion> loadIngredientsForDish(Connection conn, String dishName) throws SQLException{
+        List<IngredientPortion> portions = new ArrayList<>();
+
+        try(CallableStatement cs = conn.prepareCall(CALL_GET_DISH_INGREDIENTS)){
+            cs.setString(1, dishName);
+
+            try(ResultSet rs = cs.executeQuery()){
+                while (rs.next()) {
+                    String ingredientName = rs.getString("ingredient_name");
+                    BigDecimal quantityValue = rs.getBigDecimal("quantity");
+                    String unitStr = rs.getString("unit");
+                    
+                    var ingredientDb = ingredientDao.findById(ingredientName);
+                    if(ingredientDb.isEmpty()){
+                        throw new PersistenceException("Ingrediente non trovato: " + ingredientName);
+                    }
+
+                    var ingredient = ingredientDb.get();
+
+                    double amount = quantityValue.doubleValue();
+                    Unit unit = Unit.valueOf(unitStr);
+                    Quantity quantity = new Quantity(amount, unit);
+
+                    portions.add(new IngredientPortion(ingredient, quantity));
+                }
+            }
+        }
+
+        return portions;
+    }
+
     private Dish mapRowToDish(ResultSet rs) throws SQLException {
         String name = rs.getString("name");
         String description = rs.getString("description");
@@ -175,5 +222,19 @@ public class JdbcDishDao implements DishDao {
         var ingredients = new ArrayList<IngredientPortion>();
 
         return new Dish(name, description, courseType, dietCategory, ingredients, state, image, price);
+    }
+
+    private String toIngredientJson(List<IngredientPortion> portions){
+        StringBuilder stringBuilder = new StringBuilder("[");
+        for(int i = 0; i < portions.size(); i++){
+            IngredientPortion p = portions.get(i);
+            if(i > 0) stringBuilder.append(",");
+
+            stringBuilder.append("{").append("\"ingredientName\":\"").append(p.getIngredient().getName()).append("\",")
+                         .append("\"quantity\":").append(p.getQuantity().getAmount()).append(",")
+                         .append("\"unit\":\"").append(p.getQuantity().getUnit().name()).append("\"").append("}");
+        }
+        stringBuilder.append("]");
+        return stringBuilder.toString();
     }
 }

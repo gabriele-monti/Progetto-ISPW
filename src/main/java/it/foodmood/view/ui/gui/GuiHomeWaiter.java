@@ -37,9 +37,8 @@ public class GuiHomeWaiter extends BaseGui {
             GuiManagmentOrder controller = paneNavigator.show(GuiPages.MANAGMENT_ORDER);
             controller.setRouter(router);
         } else {
-            showError("Funzionalità non ancora implementata");
+            showInfo("Funzionalità non ancora implementata");
         }
-
     }
 
     public GuiHomeWaiter(){
