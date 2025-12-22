@@ -330,6 +330,13 @@ public class CliDishMenuView extends ProtectedConsoleView {
         var dishes = dishBoundary.getAllDishes();
         clearScreen();
         showTitle("Elimina Piatto");
+
+        if(dishes == null || dishes.isEmpty()){
+            showWarning("Nessun piatto presente");
+            waitForEnter("Premi INVIO per tornare indietro");
+            return false;
+        }
+
         tableDishes();
 
         String input = askInputOrBack("Inserisci il numero del piatto da eliminare");
@@ -341,16 +348,21 @@ public class CliDishMenuView extends ProtectedConsoleView {
         }
 
         var selected = dishes.get(index - 1);
+        String dishId = selected.getId();
         String dishName = selected.getName();
-        dishBoundary.deleteDish(dishName);
+        dishBoundary.deleteDish(dishId);
             
         showSuccess("Piatto '" + dishName + "' eliminato con successo.");
 
-        boolean choice = askConfirmation("Vuoi eliminare un'altro piatto?");
-        if(!choice){
+        var anotherElimination = dishBoundary.getAllDishes();
+
+        boolean again = anotherElimination != null && !anotherElimination.isEmpty() && askConfirmation("Vuoi eliminare un'altro piatto?");
+
+        if(!again){
             waitForEnter("Premi INVIO per continuare");
         }
-        return choice;
+        
+        return again;
     }
 
     private void tableDishes(){
@@ -358,7 +370,6 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
         if(dishes == null || dishes.isEmpty()){
             showWarning("Nessun piatto presente.");
-            waitForEnter(null);
             return;
         }
 

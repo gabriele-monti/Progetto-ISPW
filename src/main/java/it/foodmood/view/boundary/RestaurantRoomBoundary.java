@@ -3,7 +3,6 @@ package it.foodmood.view.boundary;
 import it.foodmood.bean.RestaurantRoomBean;
 import it.foodmood.bean.TableBean;
 import it.foodmood.controller.application.RestaurantRoomController;
-import it.foodmood.domain.value.TableStatus;
 import it.foodmood.exception.RestaurantRoomException;
 
 public class RestaurantRoomBoundary {
@@ -27,10 +26,6 @@ public class RestaurantRoomBoundary {
 
     public void moveTable(int tableId, int newRow, int newCol) throws RestaurantRoomException{
         controller.moveTable(tableId, newRow, newCol);
-    }
-
-    public void changeTableStatus(int tableId, TableStatus status) throws RestaurantRoomException{
-        controller.changeTableStatus(tableId, status);
     }
 
     public void removeTable(int tableId) throws RestaurantRoomException{

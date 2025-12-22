@@ -22,8 +22,8 @@ public class GuiNavigator {
             scene.setRoot(root);
 
             return loader.getController(); // Restiuisco il controller della pagina
-        } catch (IOException _) {
-            throw new IllegalStateException("Errore nel caricamento della pagina: " + page);
+        } catch (IOException e) {
+            throw new IllegalStateException("Errore nel caricamento della pagina: " + page, e);
         }
     }
 }

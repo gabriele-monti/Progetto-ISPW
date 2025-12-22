@@ -291,7 +291,7 @@ public class GuiManagmentDish extends BaseGui {
         }
 
         try {
-            dishBoundary.deleteDish(selected.getName());
+            dishBoundary.deleteDish(selected.getId());
 
             allDishes.remove(selected);
             showInfo("Piatto eliminato correttamente.");
@@ -387,7 +387,7 @@ public class GuiManagmentDish extends BaseGui {
             allDishes.setAll(dishes);
             tableDishes.setItems(allDishes);
         } catch (Exception e) {
-            showError("Errore durante il caricamento degli ingredienti: " + e.getMessage());
+            showError("Errore durante il caricamento dei prodotti: " + e.getMessage());
         }
     }
 

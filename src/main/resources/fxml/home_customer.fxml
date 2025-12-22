@@ -57,10 +57,10 @@
                            <children>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../icons/grocery-store-white.png" />
+                                    <Image url="@../icons/receipt.png" />
                                  </image>
                               </ImageView>
-                              <Label contentDisplay="CENTER" text="CARRELLO" textFill="WHITE">
+                              <Label contentDisplay="CENTER" text="ORDINE" textFill="WHITE">
                                  <font>
                                     <Font name="Arial Bold" size="18.0" />
                                  </font>
@@ -138,7 +138,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <Button fx:id="btnOrder" alignment="CENTER" contentDisplay="CENTER" maxWidth="550.0" minHeight="90.0" mnemonicParsing="false" onAction="#onOrderClicked" prefWidth="550.0" styleClass="btnOrder" stylesheets="@../css/customer.css" text="ORDINA" textAlignment="CENTER">
+                        <Button fx:id="btnOrder" alignment="CENTER" contentDisplay="CENTER" maxWidth="550.0" minHeight="90.0" mnemonicParsing="false" onAction="#onOrderClicked" prefWidth="550.0" styleClass="btnOrder" stylesheets="@../css/customer.css" text="INIZIA ORA" textAlignment="CENTER">
                            <font>
                               <Font name="Arial Bold" size="40.0" />
                            </font>

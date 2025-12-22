@@ -7,6 +7,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.sql.CallableStatement;
@@ -28,13 +29,14 @@ import it.foodmood.persistence.dao.IngredientDao;
 
 public class JdbcDishDao implements DishDao {
         
-    private static final String CALL_INSERT_DISH = "{CALL insert_dish(?,?,?,?,?,?,?,?)}";
+    private static final String CALL_INSERT_DISH = "{CALL insert_dish(?,?,?,?,?,?,?,?,?)}";
     private static final String CALL_GET_DISH_BY_NAME = "{CALL get_dish_by_name(?)}";
+    private static final String CALL_GET_DISH_BY_ID = "{CALL get_dish_by_id(?)}";
     private static final String CALL_GET_ALL_DISHES = "{CALL get_all_dishes()}";
     private static final String CALL_GET_DISHES_BY_COURSE = "{CALL get_dishes_by_course_type(?)}";
-    private static final String CALL_GET_DISHES_BY_DIET = "{CALL get_dishes_by_diet(?)}";
+    private static final String CALL_GET_DISHES_BY_DIET_CATEGORY = "{CALL get_dishes_by_diet_category(?)}";
     private static final String CALL_GET_DISH_INGREDIENTS = "{CALL get_dish_ingredients(?)}";
-    private static final String CALL_DELETE_DISH_BY_NAME = "{CALL delete_dish_by_name(?)}";
+    private static final String CALL_DELETE_DISH_BY_ID = "{CALL delete_dish_by_id(?)}";
 
     // Unica istanza di dao del Dish che usa jdbc
     private static JdbcDishDao instance;
@@ -56,22 +58,23 @@ public class JdbcDishDao implements DishDao {
         try {
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try (CallableStatement cs = conn.prepareCall(CALL_INSERT_DISH)){
-                cs.setString(1, dish.getName());
-                cs.setString(2, dish.getDescription());
-                cs.setString(3, dish.getCourseType().name());
-                cs.setString(4, dish.getDietCategory().name());
-                cs.setBigDecimal(5, dish.getPrice().getAmount());
+                cs.setString(1, dish.getId().toString());
+                cs.setString(2, dish.getName());
+                cs.setString(3, dish.getDescription());
+                cs.setString(4, dish.getCourseType().name());
+                cs.setString(5, dish.getDietCategory().name());
+                cs.setBigDecimal(6, dish.getPrice().getAmount());
 
                 if(dish.getImage() != null && dish.getImage().getUri() != null){
-                    cs.setString(6, dish.getImage().getUri().toString());
+                    cs.setString(7, dish.getImage().getUri().toString());
                 } else {
-                    cs.setNull(6, Types.VARCHAR);
+                    cs.setNull(7, Types.VARCHAR);
                 }
 
-                cs.setString(7, dish.getState().name());
+                cs.setString(8, dish.getState().name());
 
                 String ingredientsJson = toIngredientJson(dish.getIngredients());
-                cs.setString(8, ingredientsJson);
+                cs.setString(9, ingredientsJson);
                 cs.execute();
             }
         } catch (SQLException e) {
@@ -80,22 +83,46 @@ public class JdbcDishDao implements DishDao {
     }
 
     @Override
-    public Optional<Dish> findById(String name){
+    public Optional<Dish> findByName(String name){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            return executeFindById(conn, name);
+            return executeFindByName(conn, name);
         } catch (SQLException e) {
             throw new PersistenceException(e);
         }
     }
 
-    private Optional<Dish> executeFindById(Connection conn, String name) throws SQLException{
+    @Override
+    public Optional<Dish> findById(UUID id){
+        try{
+            Connection conn = JdbcConnectionManager.getInstance().getConnection();
+            return executeFindById(conn, id);
+        } catch (SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    private Optional<Dish> executeFindByName(Connection conn, String name) throws SQLException{
         try (CallableStatement cs = conn.prepareCall(CALL_GET_DISH_BY_NAME)){
             cs.setString(1, name);
             try(ResultSet rs = cs.executeQuery()){
+                if(!rs.next()) return Optional.empty();
+
+                Dish dish = mapRowToDish(rs);
+                dish.setIngredients(loadIngredientsForDish(conn, dish.getId()));
+
+                return Optional.of(dish);
+            }
+        }
+    }
+
+    private Optional<Dish> executeFindById(Connection conn, UUID id) throws SQLException{
+        try (CallableStatement cs = conn.prepareCall(CALL_GET_DISH_BY_ID)){
+            cs.setString(1, id.toString());
+            try(ResultSet rs = cs.executeQuery()){
                 if(rs.next()){
                     Dish dish = mapRowToDish(rs);
-                    List<IngredientPortion> ingredients = loadIngredientsForDish(conn, name);
+                    List<IngredientPortion> ingredients = loadIngredientsForDish(conn, id);
                     dish.setIngredients(ingredients);
 
                     return Optional.of(dish);
@@ -118,7 +145,7 @@ public class JdbcDishDao implements DishDao {
                 while (rs.next()) {
                     Dish dish = mapRowToDish(rs);
 
-                    List<IngredientPortion> ingredients = loadIngredientsForDish(conn, dish.getName());
+                    List<IngredientPortion> ingredients = loadIngredientsForDish(conn, dish.getId());
                     dish.setIngredients(ingredients);
 
                     dishes.add(dish);
@@ -131,11 +158,11 @@ public class JdbcDishDao implements DishDao {
     }
 
     @Override
-    public void deleteById(String name){
+    public void deleteById(UUID id){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            try (CallableStatement cs = conn.prepareCall(CALL_DELETE_DISH_BY_NAME)){
-                cs.setString(1, name);
+            try (CallableStatement cs = conn.prepareCall(CALL_DELETE_DISH_BY_ID)){
+                cs.setString(1, id.toString());
                 cs.execute();
             }
         } catch (SQLException e) {
@@ -144,12 +171,20 @@ public class JdbcDishDao implements DishDao {
     }
 
     @Override
-    public List<Dish> findByCategory(String category){
+    public List<Dish> findByCourseType(CourseType courseType){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try (CallableStatement cs = conn.prepareCall(CALL_GET_DISHES_BY_COURSE)){
-                cs.setString(1, category);
-                return List.of();
+                cs.setString(1, courseType.name());
+                try(ResultSet rs = cs.executeQuery()){
+                    List<Dish> dishes = new ArrayList<>();
+                    while(rs.next()){
+                        Dish dish = mapRowToDish(rs);
+                        dish.setIngredients((loadIngredientsForDish(conn, dish.getId())));
+                        dishes.add(dish);
+                    }
+                    return dishes;
+                }
             }
         } catch (SQLException e) {
             throw new PersistenceException(e);
@@ -157,23 +192,31 @@ public class JdbcDishDao implements DishDao {
     }
 
     @Override
-    public List<Dish> findByDietCategory(String dietCategory){
+    public List<Dish> findByDietCategory(DietCategory dietCategory){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            try (CallableStatement cs = conn.prepareCall(CALL_GET_DISHES_BY_DIET)){
-                cs.setString(1, dietCategory);
-                return List.of();
+            try (CallableStatement cs = conn.prepareCall(CALL_GET_DISHES_BY_DIET_CATEGORY)){
+                cs.setString(1, dietCategory.name());
+                try(ResultSet rs = cs.executeQuery()){
+                    List<Dish> dishes = new ArrayList<>();
+                    while(rs.next()){
+                        Dish dish = mapRowToDish(rs);
+                        dish.setIngredients((loadIngredientsForDish(conn, dish.getId())));
+                        dishes.add(dish);
+                    }
+                    return dishes;
+                }
             }
         } catch (SQLException e) {
             throw new PersistenceException(e);
         }
     }
 
-    private List<IngredientPortion> loadIngredientsForDish(Connection conn, String dishName) throws SQLException{
+    private List<IngredientPortion> loadIngredientsForDish(Connection conn, UUID dishId) throws SQLException{
         List<IngredientPortion> portions = new ArrayList<>();
 
         try(CallableStatement cs = conn.prepareCall(CALL_GET_DISH_INGREDIENTS)){
-            cs.setString(1, dishName);
+            cs.setString(1, dishId.toString());
 
             try(ResultSet rs = cs.executeQuery()){
                 while (rs.next()) {
@@ -201,6 +244,7 @@ public class JdbcDishDao implements DishDao {
     }
 
     private Dish mapRowToDish(ResultSet rs) throws SQLException {
+        UUID id = UUID.fromString(rs.getString("id_dish"));
         String name = rs.getString("name");
         String description = rs.getString("description");
         String courseTypeStr = rs.getString("course_type");
@@ -221,7 +265,7 @@ public class JdbcDishDao implements DishDao {
 
         var ingredients = new ArrayList<IngredientPortion>();
 
-        return new Dish(name, description, courseType, dietCategory, ingredients, state, image, price);
+        return Dish.fromPersistence(id, name, description, courseType, dietCategory, ingredients, state, image, price);
     }
 
     private String toIngredientJson(List<IngredientPortion> portions){

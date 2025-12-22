@@ -8,7 +8,6 @@ import it.foodmood.bean.TableBean;
 import it.foodmood.domain.model.RestaurantRoom;
 import it.foodmood.domain.model.Table;
 import it.foodmood.domain.value.TablePosition;
-import it.foodmood.domain.value.TableStatus;
 import it.foodmood.exception.RestaurantRoomException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.RestaurantRoomDao;
@@ -93,21 +92,6 @@ public class RestaurantRoomController {
         } catch (IllegalArgumentException e){
             throw new RestaurantRoomException("Errore durante lo spostamento del tavolo: " + e.getMessage());
         }
-    }
-
-    public void changeTableStatus(int tableId, TableStatus newStatus) throws RestaurantRoomException{
-        ensureActiveSession();
-
-        try {
-            RestaurantRoom restaurantRoom = getRestaurantRoom();
-
-            restaurantRoom.changeTableStatus(tableId, newStatus);
-
-            restaurantRoomDao.save(restaurantRoom);
-        } catch (IllegalArgumentException e) {
-            throw new RestaurantRoomException("Errore durante il cambio di stato del tavolo: " + e.getMessage());
-        }
-
     }
 
     public void removeTable(int tableId) throws RestaurantRoomException {

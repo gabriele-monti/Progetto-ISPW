@@ -68,8 +68,15 @@ public final class GuiRouter{
         controller.setUser(SessionManager.getInstance().getCurrentUser());
     }
 
+    public void showCustomerDigitalMenu(){
+        GuiCustomerMenu controller = navigator.goTo(GuiPages.CUSTOMER_DIGITAL_MENU);
+        controller.setRouter(this);
+        controller.setUser(SessionManager.getInstance().getCurrentUser());
+    }
+
     public void showCustomerOrderView(){
         GuiCustomerOrder controller = navigator.goTo(GuiPages.CUSTOMER_ORDER);
         controller.setRouter(this);
+        controller.setUser(SessionManager.getInstance().getCurrentUser());
     }
 }

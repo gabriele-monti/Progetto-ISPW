@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import it.foodmood.domain.value.TablePosition;
-import it.foodmood.domain.value.TableStatus;
 
 public class RestaurantRoom {
     
@@ -103,10 +102,5 @@ public class RestaurantRoom {
 
     private Table findById(int id){
         return tables.stream().filter(t -> t.getId() == id).findFirst().orElseThrow(() -> new IllegalArgumentException("Tavolo " + id + " non trovato."));
-    }
-
-    public void changeTableStatus(int tableId, TableStatus tableStatus){
-        Table table = findById(tableId);
-        table.changeStatus(tableStatus);
     }
 }

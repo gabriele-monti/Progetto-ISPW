@@ -20,9 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -43,23 +41,15 @@ public class GuiManagmentOrder extends RoomController {
 
     @FXML private Label lblDateTime;
 
-
-
-    @FXML private Label lblTotalOrder;
-
     @FXML private GridPane menuGridPane;
 
     @FXML private Tab menuTab;
-
-    @FXML private TextArea notesArea;
 
     @FXML private ListView<?> orderList;
 
     @FXML private Pane roomPane;
 
     @FXML private TextField searchField;
-
-    @FXML private Spinner<?> spinner;
 
     @FXML
     void onClearOrder(ActionEvent event) {

@@ -147,7 +147,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
     private boolean requireMacronutrients(IngredientBean ingredientBean, MacronutrientsBean macronutrientsBean){
         try {
             showBold("\nInserisci i macronutrienti riferiti a 100 g/ml di prodotto");
-            showInfo("Inserisci almeno un macronutriente, (0 != indietro)");
+            showInfo("Inserisci almeno un macronutriente, (0 != )");
             double protein = askDouble("Proteine: ");
             double carbohydrates = askDouble("Carboidrati: ");
             double fat = askDouble("Grassi: ");

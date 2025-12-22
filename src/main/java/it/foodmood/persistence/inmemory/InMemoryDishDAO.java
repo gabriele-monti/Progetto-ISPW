@@ -1,12 +1,15 @@
 package it.foodmood.persistence.inmemory;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.UUID;
 
 import it.foodmood.domain.model.Dish;
+import it.foodmood.domain.value.CourseType;
+import it.foodmood.domain.value.DietCategory;
 import it.foodmood.persistence.dao.DishDao;
 
-public class InMemoryDishDao extends AbstractInMemoryCrudDao<Dish, String> implements DishDao {
+public class InMemoryDishDao extends AbstractInMemoryCrudDao<Dish, UUID> implements DishDao {
 
     private static InMemoryDishDao instance;
 
@@ -22,23 +25,31 @@ public class InMemoryDishDao extends AbstractInMemoryCrudDao<Dish, String> imple
     }
 
     @Override
-    protected String getId(Dish dish){
-        return dish.getName();
+    protected UUID getId(Dish dish){
+        return dish.getId();
     }
 
     @Override
-    public List<Dish> findByCategory(String category){
-        if(category == null){
+    public Optional<Dish> findByName(String name){
+        if(name == null || name.isBlank()){
+            return Optional.empty();
+        }
+        return storage.values().stream().filter(d -> d.getName().equalsIgnoreCase(name)).findFirst();
+    }
+
+    @Override
+    public List<Dish> findByCourseType(CourseType courseType){
+        if(courseType == null){
             return List.of();
         }
-        return storage.values().stream().filter(d -> d.getCourseType().name().equalsIgnoreCase(category)).collect(Collectors.toList());
+        return storage.values().stream().filter(d -> d.getCourseType() == courseType).toList();
     }
 
     @Override
-    public List<Dish> findByDietCategory(String dietCategory){
+    public List<Dish> findByDietCategory(DietCategory dietCategory){
         if(dietCategory == null){
             return List.of();
         }
-        return storage.values().stream().filter(d -> d.getDietCategory().name().equalsIgnoreCase(dietCategory)).collect(Collectors.toList());
+        return storage.values().stream().filter(d -> d.getDietCategory() == dietCategory).toList();
     }
 }

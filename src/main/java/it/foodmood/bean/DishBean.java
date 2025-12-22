@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.math.RoundingMode;
 
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
@@ -12,6 +13,7 @@ import it.foodmood.domain.value.DishState;
 
 public class DishBean {
     
+    private String id;
     private String name;
     private String description;
     private CourseType courseType;
@@ -27,6 +29,8 @@ public class DishBean {
     }
 
     // Getter
+    public String getId() { return id;}
+
     public String getName(){ return name;}
 
     public String getDescription(){ return description;}
@@ -45,15 +49,23 @@ public class DishBean {
 
     // Setter + validazione sintattica
 
+    public void setId(String id){
+        if(id == null || id.isBlank()){
+            this.id = null;
+            return;
+        }
+        this.id = id.trim();
+    }
+
     public void setName(String name){
         if(!isNotBlank(name)){
             throw new IllegalArgumentException("Il nome del piatto non deve essere vuoto.");
         }
-        this.name = name.trim().toUpperCase();
+        this.name = name.trim();
     }
 
     public void setDescription(String description){
-        this.description = (description != null && !description.isBlank()) ? description.trim().toUpperCase() : null;
+        this.description = (description != null && !description.isBlank()) ? description.trim() : null;
     }
 
     public void setCourseType(CourseType courseType){
@@ -74,7 +86,7 @@ public class DishBean {
         if(!isValidPrice(price)){
             throw new IllegalArgumentException("Il prezzo deve essere > 0");
         }
-        this.price = price.setScale(2, java.math.RoundingMode.HALF_UP);
+        this.price = price.setScale(2, RoundingMode.HALF_UP);
     }
 
     public void setImageUri(String imageUri){

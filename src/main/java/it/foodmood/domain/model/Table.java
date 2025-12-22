@@ -7,7 +7,8 @@ import it.foodmood.domain.value.TablePosition;
 import it.foodmood.domain.value.TableStatus;
 
 public class Table {
-    private int id;
+    private final int id;
+
     private final int seats;
     private TablePosition position;
     private TableStatus status;
@@ -15,20 +16,13 @@ public class Table {
     private static final Set<Integer> ALLOWED_SEATS = Set.of(2,4,6,8);
 
     public Table(int id, int seats, TablePosition position){
-        this.id = id;
-        if(!ALLOWED_SEATS.contains(seats)){
-            throw new IllegalArgumentException("Tavolo con '" + seats + "' posti non valido per il dominio");
-        }
-        this.seats = seats;
-        this.position = Objects.requireNonNull(position, "La posizione del tavolo non può essere nulla");
-        this.status = TableStatus.FREE; // default
+        this(id, seats, position, TableStatus.FREE);
     }
 
     public Table(int id, int seats, TablePosition position, TableStatus status){
+        if(id < 0) throw new IllegalArgumentException("Id tavolo non valido");
         this.id = id;
-        if(!ALLOWED_SEATS.contains(seats)){
-            throw new IllegalArgumentException("Tavolo con '" + seats + "' posti non valido per il dominio");
-        }
+        validateSeats(seats);
         this.seats = seats;
         this.position = Objects.requireNonNull(position, "La posizione del tavolo non può essere nulla");
         this.status = Objects.requireNonNull(status, "Lo stato del tavolo non può essere nullo");
@@ -54,7 +48,25 @@ public class Table {
         this.position = Objects.requireNonNull(newTablePosition, "La nuova posizione non può essere nulla");
     }
 
-    public void changeStatus(TableStatus newStatus){
-        this.status = Objects.requireNonNull(newStatus, "Lo stato del tavolo non può essere nullo");
+    public void occupy(){
+        status = status.occupy();
+    }
+
+    public void free(){
+        status = status.free();
+    }
+
+    public void book(){
+        status = status.book();
+    }
+
+    public void cancelBooking(){
+        status = status.cancelBooking();
+    }
+
+    private static void validateSeats(int seats){
+        if(!ALLOWED_SEATS.contains(seats)){
+            throw new IllegalArgumentException("Tavolo con '" + seats + "' posti non valido per il dominio");
+        }
     }
 }

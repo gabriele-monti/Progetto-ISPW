@@ -12,6 +12,7 @@ import it.foodmood.domain.value.Money;
 import java.util.*;
 
 public class Dish {
+    private final UUID id;
     private String name;
     private String description;
     private CourseType courseType;
@@ -21,15 +22,35 @@ public class Dish {
     private Image image;
     private Money price;
 
-    public Dish(String name, String description, CourseType courseType, DietCategory dietCategory, List<IngredientPortion> ingredients, DishState state, Image image, Money price) {
-        this.name = Objects.requireNonNull(name, "Il nome non può essere nullo");
+    private Dish(UUID id, String name, String description, CourseType courseType, DietCategory dietCategory, List<IngredientPortion> ingredients, DishState state, Image image, Money price) {
+        this.id = Objects.requireNonNull(id);
+        this.name = Objects.requireNonNull(name, "Il nome non può essere nullo").trim();
+        if(this.name.isEmpty()) throw new IllegalArgumentException("Il nome non può essere vuoto");
         this.description = description; // opzionale
         this.courseType = Objects.requireNonNull(courseType, "Il tipo della portata non può essere nullo");
         this.dietCategory = Objects.requireNonNull(dietCategory,"La categoria dietetica non può essere nulla.");
-        this.ingredients = (ingredients != null) ? new ArrayList<>(ingredients) : new ArrayList<>();
+        this.ingredients = new ArrayList<>();
+        if(ingredients != null){
+            for(IngredientPortion portion : ingredients){
+                this.ingredients.add(Objects.requireNonNull(portion, "La porzione dell'ingrediente non può essere nulla"));
+            }
+        }
         this.state = Objects.requireNonNull(state, "Lo stato non può essere nullo");
         this.image = image; // opzionale
         this.price = Objects.requireNonNull(price, "Il prezzo non può essere nullo");
+        if(!this.price.isPositive()) throw new IllegalArgumentException("Il prezzo deve essere maggiore di 0");
+    }
+
+    public static Dish create(String name, String description, CourseType courseType, DietCategory dietCategory, List<IngredientPortion> ingredients, DishState state, Image image, Money price) {
+        return new Dish(UUID.randomUUID(), name, description, courseType, dietCategory, ingredients, state, image, price);
+    }
+
+    public static Dish fromPersistence(UUID id, String name, String description, CourseType courseType, DietCategory dietCategory, List<IngredientPortion> ingredients, DishState state, Image image, Money price) {
+        return new Dish(id, name, description, courseType, dietCategory, ingredients, state, image, price);
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
@@ -65,12 +86,13 @@ public class Dish {
     }
 
     public void setIngredients(List<IngredientPortion> ingredients) {
-        this.ingredients.clear();
+        List<IngredientPortion> copy = new ArrayList<>();
         if(ingredients != null){
             for(IngredientPortion portion : ingredients){
-                addIngredient(portion);
+                copy.add(Objects.requireNonNull(portion, "L'ingrediente non può essere nullo"));
             }
         }
+        this.ingredients = copy;
     }
 
     // Metodi
@@ -99,7 +121,8 @@ public class Dish {
     }
 
     public void changeName(String newName){
-        this.name = Objects.requireNonNull(newName, "Il nuovo nome non può essere nullo");
+        this.name = Objects.requireNonNull(newName, "Il nuovo nome non può essere nullo").trim();
+        if(this.name.isEmpty()) throw new IllegalArgumentException("Il nome non può essere vuoto");
     }
 
     public void changeState(DishState newState){
@@ -112,6 +135,7 @@ public class Dish {
 
     public void changePrice(Money newPrice){
         this.price = Objects.requireNonNull(newPrice, "Il nuovo prezzo non può essere nullo");
+        if(!this.price.isPositive()) throw new IllegalArgumentException("Il prezzo deve essere maggiore di 0");
     }
 
     public void changeDescription(String newDescription){
@@ -144,5 +168,17 @@ public class Dish {
     public boolean containsAllergen(Allergen allergen){
         Objects.requireNonNull(allergen, "L'allergene non può essere nullo");
         return allergens().contains(allergen);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(!(o instanceof Dish other)) return false;
+        return id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode(){
+        return id.hashCode();
     }
 }

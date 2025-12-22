@@ -10,7 +10,6 @@ public final class TablePosition {
         if(row < 0 || col < 0){
             throw new IllegalArgumentException("Riga e colonna non possono essere negative");
         }
-
         this.row = row;
         this.col = col;
     }

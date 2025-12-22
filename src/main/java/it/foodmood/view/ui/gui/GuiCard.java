@@ -8,7 +8,6 @@ import it.foodmood.bean.DishBean;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -25,8 +24,6 @@ public class GuiCard {
 
     @FXML private Label productPrice;
 
-    @FXML private Spinner<?> productSpinner;
-
     private DishBean dishBean;
     
     public void setData(DishBean dishBean){
@@ -35,8 +32,8 @@ public class GuiCard {
         productName.setText(dishBean.getName());
 
         var price = dishBean.getPrice().setScale(2, RoundingMode.HALF_UP);
-        NumberFormat number = NumberFormat.getCurrencyInstance(Locale.ROOT);
-        productPrice.setText(number.format(price) + "€");
+        NumberFormat number = NumberFormat.getCurrencyInstance(Locale.ITALY);
+        productPrice.setText(number.format(price));
 
         if(dishBean.getImageUri() != null){
             try {
@@ -49,7 +46,6 @@ public class GuiCard {
             productImageView.setImage(null);
         }
 
-        productSpinner.setEditable(false);
         productAddBtn.setDisable(false);
     } 
 

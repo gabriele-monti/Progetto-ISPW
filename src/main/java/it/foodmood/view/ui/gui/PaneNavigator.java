@@ -30,8 +30,8 @@ public class PaneNavigator {
 
             return controller;
 
-        } catch (IOException _) {
-            throw new IllegalStateException("Errore nel caricamento della pagina: " + page);
+        } catch (IOException e) {
+            throw new IllegalStateException("Errore nel caricamento della pagina: " + page + " (" + page.getPath() + ")", e);
         }
     }
 }

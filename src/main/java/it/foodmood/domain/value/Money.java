@@ -9,10 +9,6 @@ public final class Money {
 
     public Money(BigDecimal amount){
         Objects.requireNonNull(amount, "L'importo non può essere nullo");
-        
-        if(amount.compareTo(BigDecimal.ZERO) <= 0){
-            throw new IllegalArgumentException("L'importo deve essere > 0");
-        }
         this.amount = amount.setScale(2, RoundingMode.HALF_UP);
     }
 
@@ -32,7 +28,7 @@ public final class Money {
     }
 
     // Metodo utile per moltiplicare l'importo per un fattore (prezzo x quantità)
-    public Money multiply(double factor){
+    public Money multiply(int factor){
         return new Money(this.amount.multiply(BigDecimal.valueOf(factor)));
     }
 
@@ -43,6 +39,27 @@ public final class Money {
         BigDecimal result = this.amount.divide(BigDecimal.valueOf(divisor), 2, RoundingMode.HALF_UP);
         return new Money(result);
     }
+
+    public static Money euro(double amount){
+        return new Money(amount);
+    }
+
+    public boolean isZero(){
+        return amount.compareTo(BigDecimal.ZERO) == 0;
+    }
+
+    public boolean isPositive(){
+        return amount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public boolean isNegative(){
+        return amount.compareTo(BigDecimal.ZERO) < 0;
+    }
+
+    public static Money zero(){
+        return new Money(BigDecimal.ZERO);
+    }
+
 
     @Override
     public boolean equals(Object o){

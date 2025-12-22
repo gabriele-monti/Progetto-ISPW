@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.Ingredient;
@@ -57,7 +58,7 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
     }
 
     @Override
-    public Optional<Dish> findById(String name){
+    public Optional<Dish> findByName(String name){
         if(name == null || name.isBlank()){
             return Optional.empty();
         }
@@ -65,12 +66,20 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
     }
 
     @Override
-    public void deleteById(String name){
-        if(name == null || name.isBlank()){
+    public Optional<Dish> findById(UUID id){
+        if(id == null){
+            return Optional.empty();
+        }
+        return findAll().stream().filter(dish -> dish.getId().equals(id)).findFirst();
+    }
+
+    @Override
+    public void deleteById(UUID id){
+        if(id == null){
             return;
         }
         List<Dish> all = findAll();
-        boolean removed = all.removeIf(d -> d.getName().equals(name));
+        boolean removed = all.removeIf(d -> d.getId().equals(id));
         if(!removed){
             return;
         }
@@ -83,25 +92,26 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
     }
 
     @Override
-    public List<Dish> findByCategory(String category){
-        if(category == null || category.isBlank()){
+    public List<Dish> findByCourseType(CourseType courseType){
+        if(courseType == null || courseType.name().isBlank()){
             return List.of();
         }
 
-        return findAll().stream().filter(d -> d.getCourseType().name().equalsIgnoreCase(category)).toList();
+        return findAll().stream().filter(d -> d.getCourseType() == courseType).toList();
     }
 
     @Override
-    public List<Dish> findByDietCategory(String dietCategory){
-        if(dietCategory == null || dietCategory.isBlank()){
+    public List<Dish> findByDietCategory(DietCategory dietCategory){
+        if(dietCategory == null || dietCategory.name().isBlank()){
             return List.of();
         }
 
-        return findAll().stream().filter(d -> d.getDietCategory().name().equalsIgnoreCase(dietCategory)).toList();
+        return findAll().stream().filter(d -> d.getDietCategory() == dietCategory).toList();
     }
 
     private String toCsv(Dish dish){
 
+        String id = dish.getId().toString();
         String name = dish.getName();
         String description = dish.getDescription() == null ? "" : dish.getDescription();
         String courseType = dish.getCourseType().name();
@@ -112,7 +122,7 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
 
         String ingredients = ingredientPortionsToString(dish.getIngredients());
         
-        return name + SEPARATOR + description + SEPARATOR +
+        return id + SEPARATOR + name + SEPARATOR + description + SEPARATOR +
                courseType + SEPARATOR + dietCategory + SEPARATOR +
                imageUri + SEPARATOR + state + SEPARATOR + price + SEPARATOR + ingredients;
     }
@@ -120,23 +130,24 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
     private Dish fromCsv(String line){
         String[] token = line.split(SEPARATOR, -1);
 
-        if(token.length != 8){
+        if(token.length != 9){
             throw new PersistenceException("Riga piatto malformata: " + line);
         }
 
-        try {        
-            String name = token[0];
-            String description = token[1];
+        try {       
+            UUID id = UUID.fromString(token[0]);
+            String name = token[1];
+            String description = token[2];
 
-            CourseType courseType = parseCourseType(token[2]);
-            DietCategory dietCategory = parseDietCategory(token[3]);
-            Image image = parseImage(token[4]);
-            DishState state = parseDishState(token[5]);
-            Money price = parseMoney(token[6]);
+            CourseType courseType = parseCourseType(token[3]);
+            DietCategory dietCategory = parseDietCategory(token[4]);
+            Image image = parseImage(token[5]);
+            DishState state = parseDishState(token[6]);
+            Money price = parseMoney(token[7]);
 
-            List<IngredientPortion> ingredients = parseIngredientPortions(token[7]);
+            List<IngredientPortion> ingredients = parseIngredientPortions(token[8]);
 
-            return new Dish(name, description, courseType, dietCategory, ingredients, state, image, price);
+            return Dish.fromPersistence(id, name, description, courseType, dietCategory, ingredients, state, image, price);
 
         } catch (Exception e) {
             throw new PersistenceException("Errore durante il parsing della riga: " + line);

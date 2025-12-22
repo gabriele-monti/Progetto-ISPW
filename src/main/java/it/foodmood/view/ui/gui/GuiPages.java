@@ -6,6 +6,7 @@ public enum GuiPages {
     HOME_CUSTOMER("/fxml/home_customer.fxml"),
     CUSTOMER_ACCOUNT("/fxml/customer_account.fxml"),
     CUSTOMER_ORDER("/fxml/customer_order.fxml"),
+    CUSTOMER_DIGITAL_MENU("/fxml/customer_digital_menu.fxml"),
     HOME_MANAGER("/fxml/home_manager.fxml"),
     HOME_WAITER("/fxml/home_waiter.fxml"),
     MANAGMENT_ROOM_RESTAURANT("/fxml/managment_restaurant_room.fxml"),

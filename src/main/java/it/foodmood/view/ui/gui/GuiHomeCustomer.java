@@ -37,7 +37,7 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML
     void onMenuClicked(ActionEvent event) {
-        showInfo("Funzionalità non ancora implementata");
+        router.showCustomerDigitalMenu();
     }
 
     @FXML

@@ -3,6 +3,7 @@ package it.foodmood.controller.application;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.IngredientBean;
@@ -53,7 +54,7 @@ public class DishController {
             DishState dishState = dishBean.getState();
 
             // controllo se esiste già un piatto con questo nome
-            if(dishDao.findById(name).isPresent()){ 
+            if(dishDao.findByName(name).isPresent()){ 
                 throw new DishException("Esiste già un piatto con il nome: " + name);
             }
 
@@ -67,7 +68,7 @@ public class DishController {
 
             List<IngredientPortion> ingredientPortions = toDomainIngredientPortions(dishBean.getIngredients());
 
-            Dish dish = new Dish(name, description, courseType, dietCategory, ingredientPortions, dishState, image, price);
+            Dish dish = Dish.create(name, description, courseType, dietCategory, ingredientPortions, dishState, image, price);
 
             DietCategoryValidator.validate(dish);
 
@@ -106,7 +107,6 @@ public class DishController {
         Quantity quantity = new Quantity(amount, unit);
 
         return new IngredientPortion(ingredient, quantity);
-
     }
 
     private List<IngredientPortion> toDomainIngredientPortions(List<IngredientPortionBean> portionBeans) {
@@ -116,21 +116,30 @@ public class DishController {
         return portionBeans.stream().map(this::toDomainIngredientPortion).toList();
     }
 
-    public void deleteDish(String name) throws DishException{
+    public void deleteDish(String id) throws DishException{
         ensureActiveSession();
-        if(name.isBlank()){
-            throw new DishException("Il nome del piatto non può essere vuoto.");
-        }
-        
-        if(dishDao.findById(name).isEmpty()){
-            throw new DishException("Nessun piatto trovato con il nome: " + name);
+        if(id == null || id.isBlank()){
+            throw new DishException("L'id del piatto non può essere vuoto.");
         }
 
-        dishDao.deleteById(name);
+        UUID dishId;
+        
+        try {
+            dishId = UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            throw new DishException("Formato id non valido: " + id);
+        }
+
+        if(dishDao.findById(dishId).isEmpty()){
+            throw new DishException("Nessun piatto trovato con id: " + id);
+        }
+
+        dishDao.deleteById(dishId);
     }
 
     private DishBean toBean(Dish dish){
         DishBean dishBean = new DishBean();
+        dishBean.setId(dish.getId().toString());
         dishBean.setName(dish.getName());
         dishBean.setDescription(dish.getDescription());
         dishBean.setCourseType(dish.getCourseType());

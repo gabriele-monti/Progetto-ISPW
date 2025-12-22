@@ -23,6 +23,10 @@ public class GuiCustomerAccount extends BaseGui {
 
     @FXML private BorderPane passwordPane;
 
+    @FXML private Button btnAccount;
+
+    @FXML private Button btnCart;
+
     @FXML private Button btnBack;
 
     @FXML private Button btnBackToHome;
@@ -41,7 +45,11 @@ public class GuiCustomerAccount extends BaseGui {
 
     @FXML private Button btnSavePreferences;
 
-    @FXML private Label lblCustomerName;
+    @FXML private Label lblFullNameCard;
+
+    @FXML private Label lblFullNameAccount;
+
+    @FXML private Label lblUserInitials;
 
     @FXML private BorderPane personalDetailsPane;
 
@@ -122,12 +130,12 @@ public class GuiCustomerAccount extends BaseGui {
 
     }
 
+
     private GuiRouter router;
 
     public void setRouter(GuiRouter router){
         this.router = router;
     }
-
     private User customer;
 
     public void setUser(User customer){
@@ -136,8 +144,22 @@ public class GuiCustomerAccount extends BaseGui {
     }
 
     private void updateLabel(){
-        if(lblCustomerName != null && customer != null){
-            lblCustomerName.setText(getUserFullName(customer));
+        if(customer == null) return;
+
+        String fullName = getUserFullName(customer);
+        String initials = getUserInitials(customer);
+
+
+        if(lblFullNameCard != null){
+            lblFullNameCard.setText(fullName);
+        }
+
+        if(lblFullNameAccount != null){
+            lblFullNameAccount.setText(fullName);
+        }
+
+        if(lblUserInitials != null && customer != null){
+            lblUserInitials.setText(initials);
         }
     }
 
@@ -181,5 +203,13 @@ public class GuiCustomerAccount extends BaseGui {
         showOnly(preferencesPane);
     }
 
-    
+    @FXML
+    void onCartClicked(ActionEvent event) {
+        showInfo("Funzionalità non ancora implementata");
+    }
+
+    @FXML
+    void onAccountClicked(ActionEvent event) {
+        showAccountPage();
+    }
 }
