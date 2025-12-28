@@ -294,7 +294,6 @@ public class GuiManagmentDish extends BaseGui {
             dishBoundary.deleteDish(selected.getId());
 
             allDishes.remove(selected);
-            showInfo("Piatto eliminato correttamente.");
         } catch (Exception e) {
             showError("Errore durante l'eliminazione: " + e.getMessage());
         }

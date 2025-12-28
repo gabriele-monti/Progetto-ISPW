@@ -100,7 +100,7 @@ public class RestaurantRoom {
                pos.getCol() >= 0 && pos.getCol() < cols;
     }
 
-    private Table findById(int id){
+    public Table findById(int id){
         return tables.stream().filter(t -> t.getId() == id).findFirst().orElseThrow(() -> new IllegalArgumentException("Tavolo " + id + " non trovato."));
     }
 }

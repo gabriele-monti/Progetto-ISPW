@@ -35,7 +35,7 @@ public class TableBean {
 
     public void setId(int id){
         if(id < 0){
-            throw new IllegalArgumentException("L'id del tavolo nonpuò essere negativo");
+            throw new IllegalArgumentException("L'id del tavolo non può essere negativo");
         }
         this.id = id;
     }

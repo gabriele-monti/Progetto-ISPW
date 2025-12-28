@@ -58,6 +58,10 @@ public enum TableStatus {
         throw invalid("cancellare la prenotazione per", this);
     }
 
+    public boolean isFree(){
+        return this == FREE;
+    }
+
     @Override
     public String toString(){
         return description;

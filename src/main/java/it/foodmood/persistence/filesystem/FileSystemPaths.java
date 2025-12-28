@@ -7,6 +7,11 @@ public final class FileSystemPaths {
     public static final String CREDENTIALS = CSV_DIRECTORY + "credentials.csv";
     public static final String DISHES = CSV_DIRECTORY + "dishes.csv";
     public static final String INGREDIENTS = CSV_DIRECTORY + "ingredients.csv";
+    public static final String ORDERS = CSV_DIRECTORY + "orders.csv";
+    public static final String TABLES = CSV_DIRECTORY + "tables.csv";
+    public static final String TABLE_SESSION = CSV_DIRECTORY + "table_session.csv";
+    public static final String RESTAURANT_ROOM = CSV_DIRECTORY + "restaurant_room.csv";
+
 
     private FileSystemPaths(){}
 

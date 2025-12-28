@@ -139,7 +139,7 @@ public class GuiCustomerMenu extends BaseGui{
 
     @FXML
     void onCartClicked(ActionEvent event) {
-        showInfo("Funzionalità non ancora implementata");
+        router.showCustomerRecapOrder();
     }
 
     @FXML

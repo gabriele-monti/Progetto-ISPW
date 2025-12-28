@@ -10,60 +10,46 @@ import it.foodmood.domain.value.Money;
 
 public class TableSession {
     
-    private final UUID id = UUID.randomUUID();
-    private final Table table;
-    private boolean open = true;
+    private final UUID id; // ID sessione
+    private final int tableId; // Numero del tavolo
+    private boolean open = true; // Stato della sessione
 
-    private final List<Order> orders = new ArrayList<>();
-    private final List<SessionGuest> guests = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>(); // Lista di ordini effettuati nella sessione
 
-    public TableSession(Table table, int initialCovers){
-        this.table = Objects.requireNonNull(table, "Il tavolo non può essere nullo");
-        if(initialCovers <= 0) throw new IllegalArgumentException("Il numero dei coperti deve essere maggiore di zero");
-        if(initialCovers > table.getSeats()) throw new IllegalArgumentException("Tavolo pieno");
-        
-        for(int i = 1; i <= initialCovers; i++){
-            guests.add(SessionGuest.guest(i));
-        }
-        this.table.occupy();
+    // Creo la sessione assegnando un UUID randomico, il numero del tavolo, stato Aperto
+    public static TableSession create(int tableId){
+        return new TableSession(UUID.randomUUID(), tableId, true, List.of());
+    }
+
+    public static TableSession fromPersistence(UUID id, int tableId, boolean open, List<Order> orders){
+        return new TableSession(id, tableId, open, orders);
+    }
+
+    private TableSession(UUID id, int tableId, boolean open, List<Order> orders){
+        this.id = Objects.requireNonNull(id, "L'ID della sessione non può essere nullo");
+        if(tableId < 0) throw new IllegalArgumentException("Il numero del tavolo deve essere positivo");
+        this.tableId = tableId;
+        this.open = open;
+        this.orders.addAll(orders);
     }
 
     public UUID getTableSessionId(){
         return id;
     }
 
-    public int getMaxSeats(){
-        return table.getSeats();
-    }
-
     public int getTableId(){
-        return table.getId();
+        return tableId;
     }
-
-    public Order newOrder(int guestNo){
-        ensureGuest(guestNo);
-
+    public Order newOrder(UUID userId){
         ensureOpen();
-        Order order = Order.open(guestNo);
+
+        Order order = Order.open(userId);
         orders.add(order);
         return order;
     }
 
     public List<Order> getOrders(){
         return Collections.unmodifiableList(orders);
-    }
-
-    public SessionGuest addGuest(){
-        ensureOpen();
-
-        if(guests.size() >= table.getSeats()){
-            throw new IllegalStateException("Tavolo pieno");
-        }
-
-        int guestNo = guests.size() + 1;
-        SessionGuest guest = SessionGuest.guest(guestNo);
-        guests.add(guest);
-        return guest;
     }
 
     public Money total(){
@@ -76,12 +62,11 @@ public class TableSession {
         return total;
     }
 
-    public Money totalForGuest(int guestNo){
-        ensureGuest(guestNo);
+    public Money totalForUser(UUID userId){
 
         Money total = Money.zero();
         for(Order order : orders){
-            if(order.getGuestNo() == guestNo && order.getStatus().isPayable()){
+            if(order.getUserId().equals(userId) && order.getStatus().isPayable()){
                 total = total.add(order.total());
             }
         }
@@ -90,48 +75,14 @@ public class TableSession {
 
     public void closePaid(){
         ensureOpen();
+
         boolean hasOpen = orders.stream().anyMatch(Order::isOpen);
-        if(hasOpen) throw new IllegalStateException("Hai ordini ancora aperti!");
+        if(hasOpen) throw new IllegalStateException("Impossibile chiudere una sessione con ordini aperti");
         open = false;
-        table.free();
     }
 
-    public void linkCustomer(int guestNo, UUID customerId){
-        ensureOpen();
-        ensureGuest(guestNo);
-
-        if(customerId == null){
-            throw new IllegalArgumentException("ID cliente obbligatorio");
-        }
-
-        int index = guestNo - 1;
-        SessionGuest current = guests.get(index);
-
-        if(current.getCustomerId().isPresent()){
-            UUID existing = current.getCustomerId().get();
-
-            if(existing.equals(customerId)) return;
-
-            throw new IllegalStateException("Questo guest è già associato ad un altro cliente");
-        }
-
-        boolean alreadyLinked = guests.stream().filter(g -> g.getGuestNo() != guestNo ).anyMatch(g -> g.getCustomerId().map(customerId::equals).orElse(false));
-
-        if(alreadyLinked){
-            throw new IllegalArgumentException("Cliente già associato a questa sessione.");
-        }
-
-        guests.set(index, SessionGuest.registered(guestNo, customerId));
-    }
-
-    public List<SessionGuest> getGuests(){
-        return Collections.unmodifiableList(guests);
-    }
-
-    private void ensureGuest(int guestNo){
-        if(guestNo <= 0 || guestNo > guests.size()){
-            throw new IllegalArgumentException("Guest " + guestNo + " non presente in sessione");
-        }
+    public boolean isOpen(){
+        return open;
     }
 
     private void ensureOpen(){

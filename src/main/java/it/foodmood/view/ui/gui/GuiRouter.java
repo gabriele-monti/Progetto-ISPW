@@ -79,4 +79,10 @@ public final class GuiRouter{
         controller.setRouter(this);
         controller.setUser(SessionManager.getInstance().getCurrentUser());
     }
+
+    public void showCustomerRecapOrder(){
+        GuiCustomerRecapOrder controller = navigator.goTo(GuiPages.CUSTOMER_RECAP_ORDER);
+        controller.setRouter(this);
+        controller.setUser(SessionManager.getInstance().getCurrentUser());
+    }
 }

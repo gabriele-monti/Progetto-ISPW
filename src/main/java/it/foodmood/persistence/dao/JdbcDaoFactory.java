@@ -2,7 +2,9 @@ package it.foodmood.persistence.dao;
 
 import it.foodmood.persistence.mysql.JdbcDishDao;
 import it.foodmood.persistence.mysql.JdbcIngredientDao;
+import it.foodmood.persistence.mysql.JdbcOrderDao;
 import it.foodmood.persistence.mysql.JdbcRestaurantRoomDao;
+import it.foodmood.persistence.mysql.JdbcTableSessionDao;
 import it.foodmood.persistence.mysql.JdbcUserDao;
 import it.foodmood.persistence.mysql.JdbcCredentialDao;
 
@@ -36,4 +38,19 @@ public final class JdbcDaoFactory extends DaoFactory {
     public RestaurantRoomDao getRestaurantRoomDao(){ 
         return JdbcRestaurantRoomDao.getInstance();
     }
+
+    @Override
+    public OrderDao getOrderDao(){ 
+        return JdbcOrderDao.getInstance();
+    }
+
+    @Override
+    public TableSessionDao getTableSessionDao(){ 
+        return JdbcTableSessionDao.getInstance();
+    }
+
+    // @Override
+    // public TableDao getTableDao(){ 
+    //     return JdbcTableDao.getInstance();
+    // }
 }

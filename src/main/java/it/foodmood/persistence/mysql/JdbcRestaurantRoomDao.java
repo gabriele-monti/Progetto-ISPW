@@ -24,8 +24,9 @@ public class JdbcRestaurantRoomDao implements RestaurantRoomDao{
     private static final String CALL_SAVE_RESTAURANT_ROOM = "{CALL save_restaurant_room(?,?)}";
     private static final String CALL_DELETE_ALL_RESTAURANT_TABLES = "{CALL delete_all_restaurant_tables()}";
     private static final String CALL_INSERT_RESTAURANT_TABLE = "{CALL insert_restaurant_table(?,?,?,?,?)}";
-
-
+    private static final String CALL_GET_TABLE_BY_ID = "{CALL get_restaurant_table_by_id(?)}";
+    private static final String CALL_GET_ALL_TABLES = "{CALL get_all_restaurant_tables()}";
+    
     public static synchronized JdbcRestaurantRoomDao getInstance(){
         if(instance == null){
             instance = new JdbcRestaurantRoomDao();
@@ -113,5 +114,67 @@ public class JdbcRestaurantRoomDao implements RestaurantRoomDao{
         } catch (SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    @Override
+    public Optional<Table> findById(Integer tableId){
+        try{
+            Connection conn = JdbcConnectionManager.getInstance().getConnection();
+            return executeFindById(conn, tableId);
+        } catch (SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    private Optional<Table> executeFindById(Connection conn, int tableId) throws SQLException{
+        try (CallableStatement cs = conn.prepareCall(CALL_GET_TABLE_BY_ID)){
+            cs.setInt(1, tableId);
+            try(ResultSet rs = cs.executeQuery()){
+                if(rs.next()){
+                    Table table = mapRowToTable(rs);
+
+                    return Optional.of(table);
+                } else {
+                    return Optional.empty();
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public List<Table> findAll(){
+        try{
+            Connection conn = JdbcConnectionManager.getInstance().getConnection();
+            try (CallableStatement cs = conn.prepareCall(CALL_GET_ALL_TABLES)) {
+                ResultSet rs = cs.executeQuery();
+
+                List<Table> tables = new ArrayList<>();
+
+                while (rs.next()) {
+                    Table table = mapRowToTable(rs);
+
+                    tables.add(table);
+                }
+                return tables;
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    private Table mapRowToTable(ResultSet rs) throws SQLException {
+
+        int tableId = rs.getInt("id");
+        int seats = rs.getInt("seats");
+        int row = rs.getInt("row");
+        int col = rs.getInt("col");
+
+        String tableStatusStr = rs.getString("status");
+        TableStatus status = TableStatus.valueOf(tableStatusStr);
+
+        TablePosition position = new TablePosition(row, col);
+
+        return new Table(tableId, seats, position, status);
     }
 }

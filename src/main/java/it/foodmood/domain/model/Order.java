@@ -12,24 +12,23 @@ import it.foodmood.exception.OrderException;
 public class Order {
     
     private final UUID id;
-    private final int guestNo;
+    private final UUID userId;
     private OrderStatus status;
     private final List<OrderLine> orderLines;
 
-    private Order(UUID id, int guestNo){
-        this.id = Objects.requireNonNull(id);
-        if(guestNo <= 0) throw new IllegalArgumentException("Guest number non valido");
-        this.guestNo = guestNo;
+    private Order(UUID id, UUID userId){
+        this.id = Objects.requireNonNull(id, "L'ID dell'ordine non può essere nullo");
+        this.userId = Objects.requireNonNull(userId, "L'ID del cliente non può essere nullo");
         this.status = OrderStatus.OPEN; 
         this.orderLines = new ArrayList<>();
     }
 
-    public static Order open(int guestNo){
-        return new Order(UUID.randomUUID(), guestNo);
+    public static Order open(UUID userId){
+        return new Order(UUID.randomUUID(), userId);
     }
 
-    public int getGuestNo(){
-        return guestNo;
+    public UUID getUserId(){
+        return userId;
     }
 
     public UUID getId(){
@@ -68,6 +67,12 @@ public class Order {
         ensureModifiable();
         Objects.requireNonNull(dishId);
         orderLines.removeIf(line -> line.sameProduct(dishId));
+    }
+
+    public void removeLine(OrderLine line){
+        ensureModifiable();
+        Objects.requireNonNull(line);
+        orderLines.remove(line);
     }
 
     public Money total(){

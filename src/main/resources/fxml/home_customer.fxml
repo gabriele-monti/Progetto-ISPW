@@ -171,7 +171,7 @@
                                     <Image url="@../icons/open-book.png" />
                                  </image>
                               </ImageView>
-                              <Label text="MENÙ DIGITALE" textAlignment="CENTER">
+                              <Label text="Menù Digitale" textAlignment="CENTER">
                                  <font>
                                     <Font name="Arial Bold" size="26.0" />
                                  </font>
@@ -195,7 +195,7 @@
                                     <Image url="@../icons/reception.png" />
                                  </image>
                               </ImageView>
-                              <Label text="CHIAMA CAMERIERE" textAlignment="CENTER">
+                              <Label text="Chiama un Cameriere" textAlignment="CENTER">
                                  <font>
                                     <Font name="Arial Bold" size="26.0" />
                                  </font>
@@ -219,7 +219,7 @@
                                     <Image url="@../icons/wallet.png" />
                                  </image>
                               </ImageView>
-                              <Label text="RICHIEDI CONTO" textAlignment="CENTER">
+                              <Label text="Richiedi Conto" textAlignment="CENTER">
                                  <font>
                                     <Font name="Arial Bold" size="26.0" />
                                  </font>

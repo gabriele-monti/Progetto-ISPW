@@ -1,8 +1,10 @@
 package it.foodmood.persistence.inmemory;
 
+import java.util.List;
 import java.util.Optional;
 
 import it.foodmood.domain.model.RestaurantRoom;
+import it.foodmood.domain.model.Table;
 import it.foodmood.persistence.dao.RestaurantRoomDao;
 
 public class InMemoryRestaurantRoomDao implements RestaurantRoomDao {
@@ -24,5 +26,15 @@ public class InMemoryRestaurantRoomDao implements RestaurantRoomDao {
     @Override
     public void save(RestaurantRoom restaurantRoom){
         System.out.println("Funzionalità non ancora implementata");
+    }
+
+    @Override
+    public Optional<Table> findById(Integer tableId){
+        return null;
+    }
+
+    @Override
+    public List<Table> findAll(){
+        return null;
     }
 }

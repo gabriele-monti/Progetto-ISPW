@@ -39,4 +39,10 @@ public abstract class DaoFactory {
     public abstract IngredientDao getIngredientDao();
 
     public abstract RestaurantRoomDao getRestaurantRoomDao();
+
+    public abstract OrderDao getOrderDao();
+
+    public abstract TableSessionDao getTableSessionDao();
+
+    // public abstract TableDao getTableDao();
 }

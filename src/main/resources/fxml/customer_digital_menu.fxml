@@ -158,7 +158,7 @@
                                           <Image url="@../icons/olives.png" />
                                        </image>
                                     </ImageView>
-                                    <Label text="ANTIPASTI" textFill="WHITE">
+                                    <Label text="Antipasti" textFill="WHITE">
                                        <font>
                                           <Font name="Arial Bold" size="16.0" />
                                        </font>
@@ -176,7 +176,7 @@
                                           <Image url="@../icons/dish.png" />
                                        </image>
                                     </ImageView>
-                                    <Label text="PRIMI" textFill="WHITE">
+                                    <Label text="Primi" textFill="WHITE">
                                        <font>
                                           <Font name="Arial Bold" size="16.0" />
                                        </font>
@@ -194,7 +194,7 @@
                                           <Image url="@../icons/beef.png" />
                                        </image>
                                     </ImageView>
-                                    <Label text="SECONDI" textFill="WHITE">
+                                    <Label text="Secondi" textFill="WHITE">
                                        <font>
                                           <Font name="Arial Bold" size="16.0" />
                                        </font>
@@ -212,7 +212,7 @@
                                           <Image url="@../icons/fries.png" />
                                        </image>
                                     </ImageView>
-                                    <Label text="CONTORNI" textFill="WHITE">
+                                    <Label text="Contorni" textFill="WHITE">
                                        <font>
                                           <Font name="Arial Bold" size="16.0" />
                                        </font>
@@ -230,7 +230,7 @@
                                           <Image url="@../icons/apple.png" />
                                        </image>
                                     </ImageView>
-                                    <Label text="FRUTTA" textFill="WHITE">
+                                    <Label text="Frutta" textFill="WHITE">
                                        <font>
                                           <Font name="Arial Bold" size="16.0" />
                                        </font>
@@ -248,7 +248,7 @@
                                           <Image url="@../icons/cake.png" />
                                        </image>
                                     </ImageView>
-                                    <Label text="DOLCI" textFill="WHITE">
+                                    <Label text="Dolci" textFill="WHITE">
                                        <font>
                                           <Font name="Arial Bold" size="16.0" />
                                        </font>
@@ -266,7 +266,7 @@
                                           <Image url="@../icons/soft-drink.png" />
                                        </image>
                                     </ImageView>
-                                    <Label text="BEVANDE" textFill="WHITE">
+                                    <Label text="Bevande" textFill="WHITE">
                                        <font>
                                           <Font name="Arial Bold" size="16.0" />
                                        </font>
