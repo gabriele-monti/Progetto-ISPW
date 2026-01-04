@@ -63,7 +63,7 @@ public class CustomerOrderController {
 
             Order order = new Order(actorId, tableSessionId, orderLines);
 
-            // orderDao.insert(order);
+            orderDao.insert(order);
 
             return order.getId().toString();
 
