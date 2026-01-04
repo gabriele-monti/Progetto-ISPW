@@ -14,6 +14,7 @@ public enum GuiPages {
     MANAGMENT_DISH("/fxml/managment_dish.fxml"),
     MANAGMENT_ORDER("/fxml/managment_order.fxml"),
     MANAGMENT_INGREDIENTS("/fxml/managment_ingredients.fxml"),
+    TABLE_SESSION("/fxml/table_session.fxml"),
     CARD("/fxml/card.fxml");
 
     private final String path;

@@ -1,5 +1,6 @@
 package it.foodmood.persistence.inmemory;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import it.foodmood.domain.model.TableSession;
@@ -30,4 +31,10 @@ public class InMemoryTableSessionDao implements TableSessionDao {
     public void closeSession(int sessionId){
         // Funzionalità non implementata
     }
+
+    @Override
+    public Optional<TableSession> findById(UUID tableSessionId){
+        return null;
+    }
+
 }

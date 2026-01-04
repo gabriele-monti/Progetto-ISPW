@@ -20,7 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-public class GuiCustomerMenu extends BaseGui{
+public class GuiCustomerDigitalMenu extends BaseGui{
     
     @FXML private Button btnAccount;
 
@@ -42,6 +42,8 @@ public class GuiCustomerMenu extends BaseGui{
 
     @FXML private Label lblUserInitials;
 
+    @FXML private Label lblTableId;
+
     @FXML private GridPane menuGridPane;
 
     private final ObservableList<DishBean> allDishes = FXCollections.observableArrayList();
@@ -51,6 +53,12 @@ public class GuiCustomerMenu extends BaseGui{
     private final ToggleGroup courseGroup = new ToggleGroup();
     private GuiRouter router;
     private User customer;
+
+    private Cart cart;
+
+    public void setCart(Cart cart){
+        this.cart = cart;
+    }
 
     @FXML
     private void initialize(){
@@ -133,8 +141,11 @@ public class GuiCustomerMenu extends BaseGui{
 
     @FXML
     void onAccountClicked(ActionEvent event) {
-        router.showCustomerAccountView();
-
+        if(customer != null){
+            router.showCustomerAccountView();       
+        } else {
+            showInfo("Devi effettura l'accesso per vedere la sezione Account");
+        }
     }
 
     @FXML
@@ -179,6 +190,7 @@ public class GuiCustomerMenu extends BaseGui{
 
                 GuiCard cardController = loader.getController();
                 cardController.setData(dish);
+                cardController.setOnAddToOrder(this::addToOrder);
 
                 menuGridPane.add(cardNode, col, row);
                 GridPane.setMargin(cardNode, new Insets(5));
@@ -191,6 +203,15 @@ public class GuiCustomerMenu extends BaseGui{
             } catch (Exception e) {
                 showError("Errore nell'inserimento dei prodotti nel menù: " + e.getMessage());
             }
+        }
+    }
+
+    private void addToOrder(DishBean dishBean){
+        try {
+            cart.addItem(dishBean, 1);
+            showInfo(dishBean.getName() + " aggiunto all'ordine.");
+        } catch (Exception e) {
+            showError("Errore durante l'aggiunta all'ordine: " + e.getMessage());
         }
     }
 }

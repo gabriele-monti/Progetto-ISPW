@@ -3,7 +3,6 @@ package it.foodmood.controller.application;
 import java.util.Optional;
 import java.util.UUID;
 
-import it.foodmood.bean.TableSessionBean;
 import it.foodmood.domain.model.Table;
 import it.foodmood.domain.model.TableSession;
 import it.foodmood.exception.TableException;
@@ -25,8 +24,9 @@ public class TableSessionController {
 
     // L'utente inserisce il numero del tavolo
     // Se customerId == null -> utente guest
-    
-    public TableSessionBean enterSession(int tableId){
+    public UUID enterSession(int tableId){
+
+        if(tableId <= 0) throw new IllegalArgumentException("Il numero del tavolo deve essere maggiore di zero");
 
         Optional<Table> tableOpt = restaurantRoomDao.findById(tableId);
         // Verifico esistenza tavolo
@@ -37,9 +37,9 @@ public class TableSessionController {
         try {
             TableSession tableSession = TableSession.create(tableId);
 
-            UUID tableSessionId = tableSessionDao.enterSession(tableSession);
+            UUID sessionId = tableSessionDao.enterSession(tableSession);
 
-            return toBean(tableSessionId);
+            return sessionId;
 
         } catch (IllegalArgumentException e) {
             throw new TableSessionException("Errore durante l'ingresso in sessione: " + e.getMessage());
@@ -57,11 +57,5 @@ public class TableSessionController {
         } catch (IllegalArgumentException e){
             throw new TableSessionException("Errore durante la chiusura della sessione: " + e.getMessage());
         }
-    }
-    
-    private TableSessionBean toBean(UUID sessionId){
-        TableSessionBean tableSessionBean = new TableSessionBean();
-        tableSessionBean.setTableSessionId(sessionId);
-        return tableSessionBean;
     }
 }

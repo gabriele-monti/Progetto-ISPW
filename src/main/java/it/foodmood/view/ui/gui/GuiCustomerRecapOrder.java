@@ -1,14 +1,17 @@
 package it.foodmood.view.ui.gui;
 
-import java.util.UUID;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
 
-import it.foodmood.domain.model.Order;
-import it.foodmood.domain.model.OrderLine;
+import it.foodmood.bean.OrderBean;
+import it.foodmood.bean.OrderLineBean;
+import it.foodmood.bean.TableSessionBean;
 import it.foodmood.domain.model.User;
-import it.foodmood.domain.value.Money;
+import it.foodmood.exception.OrderException;
+import it.foodmood.view.boundary.CustomerOrderBoundary;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -26,15 +29,15 @@ public class GuiCustomerRecapOrder extends BaseGui {
     
     @FXML private Label lblTotalOrder;
 
-    @FXML private TableView<OrderLine> tblOrder;
+    @FXML private TableView<OrderLineBean> tblOrder;
 
-    @FXML private TableColumn<OrderLine, String> colProduct;
+    @FXML private TableColumn<OrderLineBean, String> colProduct;
 
-    @FXML private TableColumn<OrderLine, Integer> colQty;
+    @FXML private TableColumn<OrderLineBean, Integer> colQty;
 
-    @FXML private TableColumn<OrderLine, Void> colDelete;
+    @FXML private TableColumn<OrderLineBean, Void> colDelete;
 
-    @FXML private TableColumn<OrderLine, String> colPrice;
+    @FXML private TableColumn<OrderLineBean, String> colPrice;
 
     @FXML private Button btnAccount;
 
@@ -48,9 +51,34 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     @FXML private Label lblUserInitials;
 
+    private final NumberFormat currency = NumberFormat.getCurrencyInstance(Locale.ITALY);
+
+    private final CustomerOrderBoundary orderBoundary = new CustomerOrderBoundary();
+
+    private Cart cart;
+
+    private TableSessionBean tableSessionBean;
+
+    public void setCart(Cart cart){
+        this.cart = cart;
+        tblOrder.setItems(cart.getItems());
+
+        cart.getItems().addListener((ListChangeListener<OrderLineBean>) c -> updateTotal());
+
+        updateTotal();
+    }
+
+    public void setTableSession(TableSessionBean tableSessionBean){
+        this.tableSessionBean = tableSessionBean;
+    }
+
     @FXML
     void onAccountClicked(ActionEvent event) {
-        router.showCustomerAccountView();
+        if(customer != null){
+            router.showCustomerAccountView();
+        } else {
+            showInfo("Devi effettura l'accesso per vedere la sezione Account");
+        }
     }
 
     @FXML
@@ -69,12 +97,29 @@ public class GuiCustomerRecapOrder extends BaseGui {
     }
 
     @FXML
-    private void initialize(){
-        colProduct.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(col.getValue().productName()));
-        colQty.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(col.getValue().quantity()));
-        colPrice.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(col.getValue().unitPrice().toString()));
+    void onOrder(ActionEvent event) {
+       
+        OrderBean orderBean = new OrderBean();
+        try {
+            String tableSessionId = tableSessionBean.getTableSessionId().toString();
+            orderBean.setTableSessionId(tableSessionId);
+            List<OrderLineBean> orderLines = List.copyOf(cart.getItems());
+            orderBean.setOrderLines(orderLines);
 
-        tblOrder.setItems(orderLines);
+            String orderId = orderBoundary.createOrder(orderBean);
+
+            showInfo("Ordine creato correttamente: " + orderId);
+            cart.clear();
+        } catch (OrderException e) {
+            showError(e.getMessage());
+        }
+    }
+
+    @FXML
+    private void initialize(){
+        colProduct.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(col.getValue().getProductName()));
+        colQty.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(col.getValue().getQuantity()));
+        colPrice.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(currency.format(col.getValue().getSubTotal())));
 
         colDelete.setCellFactory(tabCell -> new TableCell<>(){
             private final Button btn = new Button();
@@ -95,12 +140,10 @@ public class GuiCustomerRecapOrder extends BaseGui {
                 btn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
 
                 btn.setOnAction(e -> {
-                    if(order == null) return;
-                    OrderLine line = getTableView().getItems().get(getIndex());
-
-                    order.removeLine(line);
-
-                    orderLines.setAll(order.getOrderLines());
+                    if(cart == null) return;
+                    OrderLineBean line = getTableView().getItems().get(getIndex());
+                    cart.removeItem(line.getDishId());
+                    updateTotal();
                 });
             }
 
@@ -117,13 +160,7 @@ public class GuiCustomerRecapOrder extends BaseGui {
                 }
             }
         });
-
-        orderLines.add(esempio);
-        orderLines.add(esempio1);
     }
-
-    private final ObservableList<OrderLine> orderLines = FXCollections.observableArrayList();
-    private Order order;
 
     private GuiRouter router;
     private User customer;
@@ -147,18 +184,13 @@ public class GuiCustomerRecapOrder extends BaseGui {
         }
     }
 
-    OrderLine esempio = new OrderLine(
-        UUID.fromString("11111111-1111-1111-1111-111111111111"),
-        "Margherita",
-        new Money(7.50),
-        2
-    );
+    private void updateTotal(){
+        if(lblTotalOrder == null) return;
 
-    OrderLine esempio1 = new OrderLine(
-        UUID.fromString("11111111-1111-2222-1111-111111111111"),
-        "Carne",
-        new Money(23.50),
-        1
-    );
-
+        if(cart == null){
+            lblTotalOrder.setText(currency.format(0));
+            return;
+        }
+        lblTotalOrder.setText(currency.format(cart.total()));
+    }
 }

@@ -59,8 +59,12 @@ public class LoginController {
         }
 
         // 5) Creo la sessione per l'utente
-        SessionManager.getInstance().createSession(user);
+        SessionManager.getInstance().createUserSession(user);
 
         return user;
+    }
+
+    public void logout(){
+        SessionManager.getInstance().terminateCurrentSession();
     }
 }

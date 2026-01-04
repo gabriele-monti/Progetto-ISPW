@@ -249,7 +249,11 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     void onAccountClicked(ActionEvent event) {
-        router.showCustomerAccountView();
+        if(customer != null){
+            router.showCustomerAccountView();
+        } else {
+            showInfo("Devi effettura l'accesso per vedere la sezione Account");
+        }
     }
 
     @FXML

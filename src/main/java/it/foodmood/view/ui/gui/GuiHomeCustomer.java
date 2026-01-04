@@ -16,13 +16,19 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML private Button btnDigitalMenu;
 
+    @FXML private Label lblTableId;
+
     @FXML private Button btnOrder;
 
     @FXML private Button btnRequestBill;
-
+    
     @FXML
     void onAccountClicked(ActionEvent event) {
-        router.showCustomerAccountView();
+        if(customer != null){
+            router.showCustomerAccountView();
+        } else {
+            showInfo("Devi effettura l'accesso per vedere la sezione account");
+        }
     }
 
     @FXML
@@ -53,6 +59,13 @@ public class GuiHomeCustomer extends BaseGui {
         showInfo("Il conto è stato richiesto");
     }
 
+    private Integer tableId;
+
+    public void setTableId(int tableId){
+        this.tableId = tableId;
+        updateLabel();
+    }
+
     private GuiRouter router;
 
     public void setRouter(GuiRouter router){
@@ -73,6 +86,9 @@ public class GuiHomeCustomer extends BaseGui {
     private void updateLabel(){
         if(lblUserInitials != null && customer != null){
             lblUserInitials.setText(getUserInitials(customer));
+        }
+        if(lblTableId != null){
+            lblTableId.setText(String.valueOf("Tavolo " + tableId));
         }
     }
 

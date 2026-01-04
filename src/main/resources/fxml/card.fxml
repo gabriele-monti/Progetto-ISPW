@@ -52,7 +52,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="35.0" spacing="5.0" stylesheets="@../css/customer.css">
                <children>
-                  <Button fx:id="productAddBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="230.0" styleClass="btnAdd" text="Aggiungi all'ordine">
+                  <Button fx:id="productAddBtn" mnemonicParsing="false" onAction="#onAddProduct" prefHeight="35.0" prefWidth="230.0" styleClass="btnAdd" text="Aggiungi all'ordine">
                      <font>
                         <Font name="Arial Bold" size="15.0" />
                      </font>

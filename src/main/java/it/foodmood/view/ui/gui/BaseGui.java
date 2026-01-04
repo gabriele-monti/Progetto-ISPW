@@ -17,7 +17,7 @@ import javafx.scene.control.TableColumn;
 public abstract class BaseGui {
 
     protected boolean ensureAuthenticated(GuiRouter factory){
-        if(!SessionManager.getInstance().isUserLoggedIn()){
+        if(!SessionManager.getInstance().hasActiveSession()){
             showError("Sessione scaduta. Effettua nuovamente il login.");
             SessionManager.getInstance().terminateCurrentSession();
             factory.showLoginView();

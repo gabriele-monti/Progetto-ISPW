@@ -1,27 +1,57 @@
 package it.foodmood.bean;
 
-import it.foodmood.domain.value.Money;
+import java.math.BigDecimal;
 
 public class OrderLineBean {
-    private final String productName;
-    private final Money price;
-    private final int quantity;
+    private String dishId;
+    private String productName;
+    private BigDecimal unitPrice;
+    private BigDecimal subTotal;
+    private int quantity;
 
-    public OrderLineBean(String productName, Money price, int quantity){
-        this.productName = productName;
-        this.price = price;
-        this.quantity = quantity;
+    public OrderLineBean(){
+        // Costruttore vuoto
+    }
+
+    public String getDishId(){
+        return dishId;
     }
 
     public String getProductName(){
         return productName;
     }
 
-    public Money getPrice(){
-        return price;
+    public void setDishId(String dishId) {
+        this.dishId = dishId;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public BigDecimal getUnitPrice(){
+        return unitPrice;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getSubTotal(){
+        if(unitPrice == null) return BigDecimal.ZERO;
+        subTotal = unitPrice.multiply(BigDecimal.valueOf(quantity));
+        return subTotal;
+    }
+
+    public void setSubTotal(BigDecimal subTotal) {
+        this.subTotal = subTotal;
     }
 
     public int getQuantity(){
         return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

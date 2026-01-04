@@ -5,28 +5,20 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
-import it.foodmood.domain.value.Role;
-
 public class Session {
 
     private final UUID userId; 
-    private final Role role;
     private Instant expiryTime;
 
     private static final Duration DURATION = Duration.ofMinutes(50);
 
-    public Session(UUID userId, Role role){
-        this.userId = Objects.requireNonNull(userId);
-        this.role = Objects.requireNonNull(role);
+    public Session(UUID actorId){
+        this.userId = Objects.requireNonNull(actorId);
         this.expiryTime = Instant.now().plus(DURATION);
     }
 
     public UUID getUserId(){
         return userId;
-    }
-
-    public Role getRole(){
-        return role;
     }
 
     public Instant getExpiryTime(){

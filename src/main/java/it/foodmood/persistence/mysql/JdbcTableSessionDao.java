@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Optional;
 import java.util.UUID;
 
 import it.foodmood.config.JdbcConnectionManager;
@@ -14,7 +15,7 @@ import it.foodmood.persistence.dao.TableSessionDao;
 public class JdbcTableSessionDao implements TableSessionDao {
 
     private static final String CALL_ENTER_SESSION = "{CALL enter_table_session(?,?,?)}";
-    private static final String CALL_CLOSE_SESSION = "{CALL close_table_session_by_table(?,?)}";
+    private static final String CALL_CLOSE_SESSION = "{CALL close_table_session_by_table(?)}";
 
     private static JdbcTableSessionDao instance;
 
@@ -38,7 +39,7 @@ public class JdbcTableSessionDao implements TableSessionDao {
 
                 cs.execute();
 
-                String sessionId = cs.getString(2);
+                String sessionId = cs.getString(3);
                 return UUID.fromString(sessionId);
             }
         } catch (SQLException e) {
@@ -58,5 +59,10 @@ public class JdbcTableSessionDao implements TableSessionDao {
         } catch (SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    @Override
+    public Optional<TableSession> findById(UUID tableSessionId){
+        return null;
     }
 }

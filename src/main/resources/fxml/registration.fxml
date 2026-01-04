@@ -84,7 +84,7 @@
                         </Label>
                         <Label fx:id="errorMessageLabel" alignment="CENTER" minHeight="24.0" minWidth="300.0" textAlignment="CENTER" textFill="#d32f2f" wrapText="true">
                            <font>
-                              <Font name="Helvetica Neue Medium" size="14.0" />
+                              <Font name="Arial Bold" size="14.0" />
                            </font>
                            <VBox.margin>
                               <Insets top="8.0" />

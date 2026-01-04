@@ -5,7 +5,6 @@ import it.foodmood.config.UserMode;
 import it.foodmood.controller.application.LoginController;
 import it.foodmood.domain.model.User;
 import it.foodmood.exception.AuthenticationException;
-import it.foodmood.utils.SessionManager;
 
 public class LoginBoundary {
     private final LoginController loginController;
@@ -21,6 +20,6 @@ public class LoginBoundary {
     }
 
     public void logout(){
-        SessionManager.getInstance().terminateCurrentSession();
+        loginController.logout();
     }
 }

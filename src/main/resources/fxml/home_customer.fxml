@@ -80,14 +80,22 @@
                         <Font name="Arial Bold" size="24.0" />
                      </font>
                      <graphic>
-                        <HBox alignment="CENTER_LEFT">
+                        <HBox alignment="CENTER">
                            <children>
+                              <Label contentDisplay="CENTER">
+                                 <font>
+                                    <Font name="Arial Bold" size="18.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </Label>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../icons/account.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="lblUserInitials" contentDisplay="CENTER" text="UTENTE">
+                              <Label fx:id="lblUserInitials" contentDisplay="CENTER">
                                  <font>
                                     <Font name="Arial Bold" size="18.0" />
                                  </font>
@@ -245,7 +253,7 @@
          <children>
             <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="transparent">
                <graphic>
-                  <Label styleClass="transparent" text="Tavolo 23">
+                  <Label fx:id="lblTableId" styleClass="transparent" text="Tavolo">
                      <font>
                         <Font name="Arial Bold" size="20.0" />
                      </font>

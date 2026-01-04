@@ -14,6 +14,10 @@ public enum DishState {
         return description;
     }
 
+    public boolean available(){
+        return this == AVAILABLE;
+    }
+
     @Override
     public String toString(){
         return name() + " - " + description;

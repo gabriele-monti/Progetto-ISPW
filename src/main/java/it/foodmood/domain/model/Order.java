@@ -13,18 +13,27 @@ public class Order {
     
     private final UUID id;
     private final UUID userId;
+    private final UUID tableSessionId;
     private OrderStatus status;
     private final List<OrderLine> orderLines;
 
-    private Order(UUID id, UUID userId){
-        this.id = Objects.requireNonNull(id, "L'ID dell'ordine non può essere nullo");
+    public Order(UUID userId, UUID tableSessionId, List<OrderLine> lines){
+        this.id = UUID.randomUUID();
         this.userId = Objects.requireNonNull(userId, "L'ID del cliente non può essere nullo");
+        this.tableSessionId = Objects.requireNonNull(tableSessionId, "L'ID della sessione del tavolo non può essere nullo");
         this.status = OrderStatus.OPEN; 
-        this.orderLines = new ArrayList<>();
+        if(lines == null || lines.isEmpty()){
+            throw OrderException.emptyConfirm();
+        }
+        this.orderLines = new ArrayList<>(lines);
     }
 
-    public static Order open(UUID userId){
-        return new Order(UUID.randomUUID(), userId);
+    public Order(UUID orderId, UUID userId, UUID tableSessionId, OrderStatus status, List<OrderLine> lines){
+        this.id = Objects.requireNonNull(orderId, "L'ID dell'ordine non può essere nullo");
+        this.userId = Objects.requireNonNull(userId, "L'ID del cliente non può essere nullo");
+        this.tableSessionId = Objects.requireNonNull(tableSessionId, "L'ID della sessione del tavolo non può essere nullo");
+        this.status = status;
+        this.orderLines = new ArrayList<>(lines == null ? List.of() : lines);
     }
 
     public UUID getUserId(){
@@ -33,6 +42,10 @@ public class Order {
 
     public UUID getId(){
         return id;
+    }
+
+    public UUID getTableSessionId(){
+        return tableSessionId;
     }
 
     public OrderStatus getStatus(){

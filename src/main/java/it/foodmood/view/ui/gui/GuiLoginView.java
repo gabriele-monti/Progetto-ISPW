@@ -1,10 +1,11 @@
 package it.foodmood.view.ui.gui;
 
 import it.foodmood.bean.LoginBean;
-import it.foodmood.config.ApplicationConfig;
 import it.foodmood.config.UserMode;
 import it.foodmood.exception.AuthenticationException;
+import it.foodmood.view.boundary.GuestAccessBoundary;
 import it.foodmood.view.boundary.LoginBoundary;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,9 +16,19 @@ import javafx.scene.layout.VBox;
 
 public class GuiLoginView {
 
+    @FXML private VBox accessPage;
+
+    @FXML private VBox loginPage;
+
     @FXML private Button btnCreateAccount;
 
     @FXML private Button btnLogin;
+
+    @FXML private Button btnBack;
+
+    @FXML private Button btnAccess;
+
+    @FXML private Button btnGuest;
 
     @FXML private Label errorMessageLabel;
 
@@ -31,11 +42,17 @@ public class GuiLoginView {
 
     @FXML private VBox registrationBox;
 
+    private UserMode userMode;
+
     private LoginBoundary boundary;
+
+    private GuestAccessBoundary guestAccessBoundary = new GuestAccessBoundary();
     
     private GuiRouter router;
 
     private PasswordToggleController toggleController;
+
+    private boolean startOnLogin = false;
 
     public GuiLoginView(){
         // costruttore vuoto richiesto da fxmlloader
@@ -49,17 +66,56 @@ public class GuiLoginView {
         this.router = router;
     }
 
+    public void setUserMode(UserMode userMode){
+        this.userMode = userMode;
+        configureVisibility();
+    }
+
+    public void setStartOnLogin(boolean start){
+        this.startOnLogin = start;
+        configureVisibility();
+    }
+
+    private void configureVisibility(){
+        if(accessPage == null || loginPage == null) return;
+
+        boolean requireAuthentication = (userMode != UserMode.CUSTOMER);
+
+        if(!requireAuthentication){
+            if(!btnBack.visibleProperty().isBound()){
+                btnBack.visibleProperty().bind(loginPage.visibleProperty());
+            }
+        } else {
+            if(btnBack.visibleProperty().isBound()){
+                btnBack.visibleProperty().unbind();
+            }
+            btnBack.setVisible(false);
+        }
+        
+        registrationBox.setVisible(!requireAuthentication);
+        registrationBox.setManaged(!requireAuthentication); 
+
+        if(requireAuthentication){
+            accessPage.setVisible(false);
+        } else {
+            accessPage.setVisible(true);
+        }
+
+        boolean goLogin = startOnLogin || requireAuthentication;
+        showOnly(goLogin ? loginPage : accessPage);
+    }
+
     @FXML
     private void initialize(){
+
+        accessPage.managedProperty().bind(accessPage.visibleProperty());
+        loginPage.managedProperty().bind(loginPage.visibleProperty());
+
+        btnBack.managedProperty().bind(btnBack.visibleProperty());
+
         toggleController = new PasswordToggleController(pfPassword, tfPasswordVisible, ivToggle);
 
-        ApplicationConfig config = ApplicationConfig.fromClasspath();
-        UserMode mode = config.getUserMode();
-
-        if(mode != UserMode.CUSTOMER){
-            registrationBox.setVisible(false);
-            registrationBox.setManaged(false);
-        }
+        configureVisibility();
     }
 
     @FXML
@@ -87,7 +143,11 @@ public class GuiLoginView {
 
             boundary.login(loginBean);
             
-            router.showHomeView();
+            if(userMode != UserMode.CUSTOMER){
+                router.showHomeView();
+            } else {
+                router.showSessionTableView();
+            }
 
         } catch (IllegalArgumentException e){
             errorMessageLabel.setText(e.getMessage());
@@ -100,4 +160,31 @@ public class GuiLoginView {
     private void onCreateAccountClicked(){
         router.showRegistrationView();
     }
+
+    @FXML
+    void onLoginPage(ActionEvent event) {
+        showOnly(loginPage);
+    }
+
+    @FXML
+    void onRequireTableNumber(ActionEvent event) {
+        guestAccessBoundary.enterAsGuest();
+        router.showSessionTableView();
+    }
+
+    @FXML
+    void onBackToAccessPage(ActionEvent event) {
+        if(userMode == UserMode.CUSTOMER){
+            showOnly(accessPage);
+        }
+    }
+
+    private void showOnly(VBox paneToShow){
+        if(userMode != UserMode.CUSTOMER){
+            paneToShow = loginPage;
+        }
+        accessPage.setVisible(paneToShow == accessPage);
+        loginPage.setVisible(paneToShow == loginPage);
+    }
+
 }

@@ -103,7 +103,7 @@ public class GuiRegistrationView extends BaseGui {
 
             boundary.registration(registrationBean);
             showInfo("Registrazione effettuata con successo");
-            router.showLoginView();
+            router.showLoginView(true);
         } catch (IllegalArgumentException e){
             errorMessageLabel.setText(e.getMessage());
         } catch (RegistrationException e) {
@@ -113,6 +113,6 @@ public class GuiRegistrationView extends BaseGui {
 
     @FXML
     private void onBackToLoginClicked(){
-        router.showLoginView();
+        router.showLoginView(true);
     }
 }

@@ -1,5 +1,6 @@
 package it.foodmood.persistence.filesystem;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import it.foodmood.domain.model.TableSession;
@@ -29,5 +30,10 @@ public class FileSystemTableSessionDao extends AbstractCsvDao implements TableSe
     @Override
     public void closeSession(int tableId){
         // Funzionalità non implementata
+    }
+
+    @Override
+    public Optional<TableSession> findById(UUID tableSessionId){
+        return null;
     }
 }

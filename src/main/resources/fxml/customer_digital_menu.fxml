@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="810.0" maxWidth="1440.0" minHeight="810.0" minWidth="1440.0" prefHeight="810.0" prefWidth="1440.0" styleClass="background-menu" stylesheets="@../css/customer.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.GuiCustomerMenu">
+<GridPane maxHeight="810.0" maxWidth="1440.0" minHeight="810.0" minWidth="1440.0" prefHeight="810.0" prefWidth="1440.0" styleClass="background-menu" stylesheets="@../css/customer.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.GuiCustomerDigitalMenu">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" minWidth="1440.0" percentWidth="100.0" />
    </columnConstraints>
@@ -83,14 +83,22 @@
                         <Font name="Arial Bold" size="24.0" />
                      </font>
                      <graphic>
-                        <HBox alignment="CENTER_LEFT">
+                        <HBox alignment="CENTER">
                            <children>
+                              <Label contentDisplay="CENTER">
+                                 <font>
+                                    <Font name="Arial Bold" size="18.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </Label>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../icons/account.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="lblUserInitials" contentDisplay="CENTER" text="UTENTE">
+                              <Label fx:id="lblUserInitials" contentDisplay="CENTER">
                                  <font>
                                     <Font name="Arial Bold" size="18.0" />
                                  </font>
@@ -110,32 +118,6 @@
                   <Insets right="20.0" />
                </padding>
             </HBox>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" styleClass="hbox-menu-center-bottom" GridPane.rowIndex="2">
-         <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="transparent">
-               <graphic>
-                  <Label styleClass="transparent" text="Tavolo 23">
-                     <font>
-                        <Font name="Arial Bold" size="20.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/table.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Label>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
          </children>
       </HBox>
       <AnchorPane GridPane.rowIndex="1">

@@ -11,7 +11,7 @@ public class RestaurantRoom {
     private final int rows;
     private final int cols;
     private final List<Table> tables = new ArrayList<>();
-    private int nextId = 0;
+    private int nextId = 1;
 
     public RestaurantRoom(int rows, int cols){
         if(rows <= 0 || cols <= 0){

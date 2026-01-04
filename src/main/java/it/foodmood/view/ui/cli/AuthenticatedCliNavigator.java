@@ -5,7 +5,7 @@ import it.foodmood.utils.SessionManager;
 
 public interface AuthenticatedCliNavigator extends CliNavigator {
     default void ensureSessionActive(){
-        if(!SessionManager.getInstance().isUserLoggedIn()){
+        if(!SessionManager.getInstance().hasActiveSession()){
             throw new SessionExpiredException();
         }
     }

@@ -1,5 +1,6 @@
 package it.foodmood.view.ui.gui;
 
+import it.foodmood.bean.TableSessionBean;
 import it.foodmood.config.UserMode;
 import it.foodmood.utils.SessionManager;
 import it.foodmood.view.boundary.LoginBoundary;
@@ -12,12 +13,19 @@ public final class GuiRouter{
     private final GuiNavigator navigator;
     private final LoginBoundary loginBoundary;
     private final RegistrationBoundary registrationBoundary;
+    private final Cart cart;
+    private TableSessionBean currentTableSession;
 
     public GuiRouter(Scene scene, UserMode userMode){
         this.navigator = new GuiNavigator(scene);
         this.userMode = userMode;
         this.loginBoundary = new LoginBoundary(userMode);
         this.registrationBoundary = new RegistrationBoundary();
+        this.cart = new Cart();
+    }
+
+    public Cart getCart(){
+        return cart;
     }
 
     public void showHomeView(){
@@ -27,13 +35,18 @@ public final class GuiRouter{
             case MANAGER -> showHomeManagerView();
         }
     }
-    
 
     public void showLoginView(){
+        showLoginView(userMode != UserMode.CUSTOMER);
+    }  
+
+    public void showLoginView(boolean start){
         GuiLoginView controller = navigator.goTo(GuiPages.LOGIN);
         controller.setBoundary(loginBoundary);
         controller.setRouter(this);
-    }  
+        controller.setUserMode(userMode);
+        controller.setStartOnLogin(start);
+    } 
 
     public void showRegistrationView(){
         GuiRegistrationView controller = navigator.goTo(GuiPages.REGISTRATION);
@@ -41,10 +54,16 @@ public final class GuiRouter{
         controller.setRouter(this);
     }
 
+    public void showHomeCustumerView(TableSessionBean tableSessionBean){
+        this.currentTableSession = tableSessionBean;
+        showHomeCustumerView();
+    }
+
     public void showHomeCustumerView(){
         GuiHomeCustomer controller = navigator.goTo(GuiPages.HOME_CUSTOMER);
         controller.setRouter(this);
         controller.setUser(SessionManager.getInstance().getCurrentUser());
+        controller.setTableId(currentTableSession.getTableId());
     }
 
     public void showHomeManagerView(){
@@ -69,8 +88,9 @@ public final class GuiRouter{
     }
 
     public void showCustomerDigitalMenu(){
-        GuiCustomerMenu controller = navigator.goTo(GuiPages.CUSTOMER_DIGITAL_MENU);
+        GuiCustomerDigitalMenu controller = navigator.goTo(GuiPages.CUSTOMER_DIGITAL_MENU);
         controller.setRouter(this);
+        controller.setCart(cart);
         controller.setUser(SessionManager.getInstance().getCurrentUser());
     }
 
@@ -83,6 +103,13 @@ public final class GuiRouter{
     public void showCustomerRecapOrder(){
         GuiCustomerRecapOrder controller = navigator.goTo(GuiPages.CUSTOMER_RECAP_ORDER);
         controller.setRouter(this);
+        controller.setCart(cart);
+        controller.setTableSession(currentTableSession);
         controller.setUser(SessionManager.getInstance().getCurrentUser());
+    }
+
+    public void showSessionTableView(){
+        GuiTableSession controller = navigator.goTo(GuiPages.TABLE_SESSION);
+        controller.setRouter(this);
     }
 }

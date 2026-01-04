@@ -119,7 +119,7 @@ public class GuiCustomerAccount extends BaseGui {
     @FXML
     private void initialize(){
         showAccountPage();
-
+        
         btnPersonalDetails.setOnAction( e -> showPersonalDetailsPage());
 
         btnChangePassword.setOnAction( e -> showChangePasswordPage());
@@ -127,7 +127,6 @@ public class GuiCustomerAccount extends BaseGui {
         btnFidelityCard.setOnAction( e -> showFidelityCardPage());
 
         btnFoodPreferences.setOnAction( e -> showFoodPreferencesPage());
-
     }
 
 
@@ -210,6 +209,10 @@ public class GuiCustomerAccount extends BaseGui {
 
     @FXML
     void onAccountClicked(ActionEvent event) {
-        showAccountPage();
+        if(customer != null){
+            showAccountPage();
+        } else {
+            showInfo("Devi effettura l'accesso per vedere la sezione Account");
+        }
     }
 }
