@@ -27,7 +27,7 @@ public class GuiHomeCustomer extends BaseGui {
         if(customer != null){
             router.showCustomerAccountView();
         } else {
-            showInfo("Devi effettura l'accesso per vedere la sezione account");
+            showInfo("Effettua l'accesso per vedere la sezione account");
         }
     }
 

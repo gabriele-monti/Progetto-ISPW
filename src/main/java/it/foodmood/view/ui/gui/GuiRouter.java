@@ -97,6 +97,7 @@ public final class GuiRouter{
     public void showCustomerOrderView(){
         GuiCustomerOrder controller = navigator.goTo(GuiPages.CUSTOMER_ORDER);
         controller.setRouter(this);
+        controller.setCart(cart);
         controller.setUser(SessionManager.getInstance().getCurrentUser());
     }
 

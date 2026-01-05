@@ -4,8 +4,11 @@ package it.foodmood.view.ui.gui;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.IngredientBean;
@@ -21,6 +24,8 @@ import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.*;
@@ -129,6 +134,7 @@ public class GuiManagmentDish extends BaseGui {
     private final ObservableList<DishBean> allDishes = FXCollections.observableArrayList();
     private final ObservableList<IngredientBean> ingredientItems = FXCollections.observableArrayList();
     private final ObservableList<IngredientPortionBean> dishIngredients = FXCollections.observableArrayList();
+    private FilteredList<IngredientBean> filteredIngredientForm;
 
     private GuiRouter router;
 
@@ -202,7 +208,7 @@ public class GuiManagmentDish extends BaseGui {
         ObservableList<IngredientBean> selectedIngredients = tableIngredientsForm.getSelectionModel().getSelectedItems();
 
         if(selectedIngredients == null || selectedIngredients.isEmpty()){
-            showError("Seleziona almeno un ingrediente dalla tabella");
+            showInfo("Seleziona almeno un ingrediente dalla tabella");
             return;
         }
 
@@ -233,9 +239,94 @@ public class GuiManagmentDish extends BaseGui {
         }
 
         listDishIngredients.refresh();
-        // updateNutritionalSummary();
+        updateDishSummary();
 
         tableIngredientsForm.getSelectionModel().clearSelection();
+    }
+
+    private void updateDishSummary() {
+        updateNutritionalSummary();
+        updateAllergenSummary();
+    }
+
+    private void updateNutritionalSummary() {
+        double totalProtein = 0.0;
+        double totalCarbhoydrates = 0.0;
+        double totalFat = 0.0;
+
+        for(IngredientPortionBean portion: dishIngredients){
+            if(portion == null || portion.getIngredient() == null) continue;
+
+            IngredientBean ingredientBean = portion.getIngredient();
+            MacronutrientsBean macronutrientsBean = ingredientBean.getMacronutrients();
+
+            if(macronutrientsBean == null) continue;
+
+            Double quantityPortion = portion.getQuantity();
+            double quantity = (quantityPortion == null) ? 0.0 : quantityPortion;
+
+            double factor = quantity / 100.0;
+
+            Double protein = macronutrientsBean.getProtein();
+            Double carbhoydrates = macronutrientsBean.getCarbohydrates();
+            Double fat = macronutrientsBean.getFat();
+
+            totalProtein += ((protein == null) ? 0.0 : protein) * factor;
+            totalCarbhoydrates += ((carbhoydrates == null) ? 0.0 : carbhoydrates) * factor;
+            totalFat += ((fat == null) ? 0.0 : fat) * factor;
+        }
+
+        MacronutrientsBean totalMacro = new MacronutrientsBean();
+        totalMacro.setProtein(totalProtein);
+        totalMacro.setCarbohydrates(totalCarbhoydrates);
+        totalMacro.setFat(totalFat);
+
+        double totalKcal = totalMacro.calculateKcal();
+
+        lblTotalProtein.setText(String.format(Locale.ROOT, "%.1f", totalProtein));
+        lblTotalCarbs.setText(String.format(Locale.ROOT, "%.1f", totalCarbhoydrates));
+        lblTotalFats.setText(String.format(Locale.ROOT, "%.1f", totalFat));
+        lblTotalKcal.setText(String.format(Locale.ROOT, "%.1f", totalKcal));
+    }
+
+    private void updateAllergenSummary() {
+        Set<String> allergens = new LinkedHashSet<>();
+
+        for(IngredientPortionBean portion : dishIngredients){
+            if(portion == null || portion.getIngredient() == null) continue;
+
+            List<String> allergen = portion.getIngredient().getAllergens();
+            if(allergen != null) allergens.addAll(allergen);
+        }
+
+        if(allergens.isEmpty()){
+            lblAllergens.setText("Nessun allergene");
+        } else {
+            lblAllergens.setText(String.join(", ", allergens));
+        }
+    }
+
+    private void initSearchIngredientForm(){
+        filteredIngredientForm = new FilteredList<>(ingredientItems, ingredient -> true);
+
+        SortedList<IngredientBean> sortedList = new SortedList<>(filteredIngredientForm);
+        sortedList.comparatorProperty().bind(tableIngredientsForm.comparatorProperty());
+
+        tableIngredientsForm.setItems(sortedList);
+
+        //listener
+        tfAdvancedResarch.textProperty().addListener((obs, oldValue, newValue) -> {
+            String filter = (newValue == null) ? "" : newValue.trim().toLowerCase(Locale.ROOT);
+
+            if(filter.isEmpty()){
+                filteredIngredientForm.setPredicate(ingredient -> true); // mostro tutti
+            } else {
+                filteredIngredientForm.setPredicate(ingredient -> {
+                    String name = ingredient.getName();
+                    return name != null && name.toLowerCase(Locale.ROOT).contains(filter);
+                });
+            }
+        });
     }
 
     @FXML
@@ -376,6 +467,7 @@ public class GuiManagmentDish extends BaseGui {
         initTable();
         initDishIngredientsList();
         loadIngredients();
+        initSearchIngredientForm();
         loadDishes();
         showListView();
     }

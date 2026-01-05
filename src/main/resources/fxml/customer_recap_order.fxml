@@ -131,20 +131,6 @@
                </center>
                <top>
                   <HBox prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button fx:id="btnBack" minHeight="40.0" minWidth="40.0" onAction="#onBackToHome" style="-fx-background-color: transparent;">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/back.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
                      <BorderPane.margin>
                         <Insets />
                      </BorderPane.margin>

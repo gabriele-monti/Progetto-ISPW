@@ -28,7 +28,6 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.layout.AnchorPane;
 
-
 public class GuiManagmentIngredients extends BaseGui {
 
     @FXML private Button btnCancel;

@@ -212,7 +212,7 @@ public class GuiCustomerAccount extends BaseGui {
         if(customer != null){
             showAccountPage();
         } else {
-            showInfo("Devi effettura l'accesso per vedere la sezione Account");
+            showInfo("Effettua l'accesso per vedere la sezione Account");
         }
     }
 }

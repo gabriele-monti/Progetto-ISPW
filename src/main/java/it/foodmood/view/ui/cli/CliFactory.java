@@ -7,12 +7,14 @@ import it.foodmood.view.boundary.LoginBoundary;
 import it.foodmood.view.boundary.RegistrationBoundary;
 import it.foodmood.view.ui.CustomerUi;
 import it.foodmood.view.ui.ManagerUi;
+import it.foodmood.view.ui.WaiterUi;
 import it.foodmood.view.ui.cli.customer.CliCustomerMenuView;
 import it.foodmood.view.ui.cli.manager.CliIngredientMenuView;
 import it.foodmood.view.ui.cli.manager.CliDishMenuView;
 import it.foodmood.view.ui.cli.manager.CliManagerMenuView;
+import it.foodmood.view.ui.cli.waiter.CliWaiterMenuView;
 
-public final class CliFactory implements CustomerUi, ManagerUi{
+public final class CliFactory implements CustomerUi, ManagerUi, WaiterUi{
     
     private final UserMode userMode;
 
@@ -41,6 +43,12 @@ public final class CliFactory implements CustomerUi, ManagerUi{
     @Override
     public void showHomeManagerView(){
         CliManagerMenuView view = new CliManagerMenuView();
+        view.displayPage();
+    }
+
+     @Override
+    public void showHomeWaiterView(){
+        CliWaiterMenuView view = new CliWaiterMenuView();
         view.displayPage();
     }
 

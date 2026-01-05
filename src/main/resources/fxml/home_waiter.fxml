@@ -104,7 +104,7 @@
                                           </HBox>
                                        </graphic>
                                     </Button>
-                                    <Button fx:id="btnBillManagment" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="303.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="280.0" styleClass="menuBtn">
+                                    <Button fx:id="btnBillManagment" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="303.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="45.0" prefWidth="280.0" styleClass="menuBtn">
                                        <font>
                                           <Font name="Arial Bold" size="18.0" />
                                        </font>
@@ -125,7 +125,7 @@
                                           </HBox>
                                        </graphic>
                                     </Button>
-                                    <Button fx:id="btnManagmentBooking" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="264.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="280.0" styleClass="menuBtn">
+                                    <Button fx:id="btnManagmentBooking" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="264.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="45.0" prefWidth="280.0" styleClass="menuBtn">
                                        <font>
                                           <Font name="Arial Bold" size="18.0" />
                                        </font>

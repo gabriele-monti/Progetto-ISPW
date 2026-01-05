@@ -38,18 +38,15 @@ public class GuiHomeManager extends BaseGui {
         if(source == btnManagmentIngredients){
             GuiManagmentIngredients controller = paneNavigator.show(GuiPages.MANAGMENT_INGREDIENTS);
             controller.setRouter(router);
-        }
-
-        if(source == btnManagmentDishes){
+        } else if(source == btnManagmentDishes){
             GuiManagmentDish controller = paneNavigator.show(GuiPages.MANAGMENT_DISH);
             controller.setRouter(router);
-        }
-
-        if(source == btnManagmentRestaurantRoom){
+        } else if(source == btnManagmentRestaurantRoom){
             GuiManagmentRestaurantRoom controller = paneNavigator.show(GuiPages.MANAGMENT_ROOM_RESTAURANT);
             controller.setRouter(router);
+        } else {
+            showInfo("Funzionalità non ancora implementata");
         }
-
     }
 
     public GuiHomeManager(){
@@ -90,5 +87,8 @@ public class GuiHomeManager extends BaseGui {
     private void initialize(){
         paneNavigator = new PaneNavigator(contentArea);
         updateLabel();
+
+        GuiManagmentDish controller = paneNavigator.show(GuiPages.MANAGMENT_DISH);
+        controller.setRouter(router);
     }
 }

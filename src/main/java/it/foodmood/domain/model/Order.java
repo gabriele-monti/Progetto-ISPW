@@ -23,7 +23,7 @@ public class Order {
         this.tableSessionId = Objects.requireNonNull(tableSessionId, "L'ID della sessione del tavolo non può essere nullo");
         this.status = OrderStatus.OPEN; 
         if(lines == null || lines.isEmpty()){
-            throw new OrderException("Dettagli ordine mancanti");
+            throw new OrderException("Ordine vuoto");
         }
         this.orderLines = new ArrayList<>(lines);
     }

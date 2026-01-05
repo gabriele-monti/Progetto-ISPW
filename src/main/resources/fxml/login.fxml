@@ -99,7 +99,7 @@
                               <Separator prefWidth="200.0" />
                               <Label text="OPPURE" textFill="#8d8d8d">
                                  <font>
-                                    <Font name="Arial" size="16.0" />
+                                    <Font name="Arial" size="15.0" />
                                  </font>
                               </Label>
                               <Separator prefWidth="200.0" />
@@ -115,7 +115,7 @@
                         </Button>
                         <Label alignment="CENTER" text="Continuando come ospite, non potrai usufruire di tanti vantaggi pensati per te." textFill="#8d8d8d">
                            <font>
-                              <Font name="Arial Italic" size="14.0" />
+                              <Font name="Arial Italic" size="13.0" />
                            </font>
                         </Label>
                      </children>

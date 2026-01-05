@@ -41,8 +41,6 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     @FXML private Button btnAccount;
 
-    @FXML private Button btnBack;
-
     @FXML private Button btnCart;
 
     @FXML private Button btnOrder;
@@ -77,13 +75,8 @@ public class GuiCustomerRecapOrder extends BaseGui {
         if(customer != null){
             router.showCustomerAccountView();
         } else {
-            showInfo("Devi effettura l'accesso per vedere la sezione Account");
+            showInfo("Effettua l'accesso per vedere la sezione Account");
         }
-    }
-
-    @FXML
-    void onBackToHome(ActionEvent event) {
-        router.showHomeCustumerView();
     }
 
     @FXML

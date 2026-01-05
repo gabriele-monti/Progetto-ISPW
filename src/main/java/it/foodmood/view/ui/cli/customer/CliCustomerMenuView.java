@@ -12,16 +12,22 @@ public class CliCustomerMenuView extends ConsoleView {
     public CustomerPages displayPage(boolean logged){
         clearScreen();
         while(true){
-            showTitle("Benvenuto in FoodMood");
+            showTitle("Benvenuto al Ristorante il Casale");
+            showInfo("Scopri il piacere di ordinare su misura per te\n");
 
             if(!logged){
                 showInfo("1. Login");
                 showInfo("2. Registrazione");
+                showInfo("3. Esci");
             } else {
-                showInfo("1. Gestisci Account");
-                showInfo("2. Fidelity Card");
+                showInfo("1. Ordina con FoodMood");
+                showInfo("2. Menù digitale");
+                showInfo("3. Chiama un cameriere");
+                showInfo("4. Richiedi il conto");
+                showInfo("5. Profilo");
+                showInfo("6. Logout");
+                showInfo("7. Esci");
             }
-            showInfo("3. Esci");
 
             String choice = askInput("\nSeleziona un'opzione: ");
 
@@ -40,7 +46,7 @@ public class CliCustomerMenuView extends ConsoleView {
                     showWarning("Funzionalità non ancora implementata.\n");
                     break;
                 }
-                case "3": return CustomerPages.LOGOUT;
+                case "7": return CustomerPages.LOGOUT;
                 default : showError("Scelta non valida, riprova.");
             }
         }

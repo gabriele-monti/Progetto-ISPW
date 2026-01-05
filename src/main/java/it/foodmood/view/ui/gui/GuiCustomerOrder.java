@@ -29,8 +29,6 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML private Button btnNextFirst;
 
-    @FXML private Button btnBackSixth;    
-
     @FXML private Button btnNextSecond;
 
     @FXML private Button btnGenerate;
@@ -147,6 +145,12 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML private ToggleButton tbVegetarian;
 
+    private Cart cart;
+
+    public void setCart(Cart cart){
+        this.cart = cart;
+    }
+
     private GuiRouter router;
     private ToggleGroup firstGroup;    
     private ToggleGroup kcalGroup;
@@ -252,7 +256,7 @@ public class GuiCustomerOrder extends BaseGui {
         if(customer != null){
             router.showCustomerAccountView();
         } else {
-            showInfo("Devi effettura l'accesso per vedere la sezione Account");
+            showInfo("Effettua l'accesso per vedere la sezione Account");
         }
     }
 
@@ -289,7 +293,7 @@ public class GuiCustomerOrder extends BaseGui {
         if(tbLactoseFree.isSelected()) count ++;
 
         if(count < 1){
-            showError("Seleziona almeno un opzione per continuare");
+            showInfo("Seleziona almeno un opzione per continuare");
             return;
         }
         showSecondQuestion();
@@ -303,7 +307,7 @@ public class GuiCustomerOrder extends BaseGui {
         long selectedCount = courseButtons.stream().filter(ToggleButton::isSelected).count();
 
         if(selectedCount < 1){
-            showError("Seleziona almeno un opzione per continuare");
+            showInfo("Seleziona almeno un opzione per continuare");
             return;
         }
         showThirdQuestion();
@@ -317,7 +321,7 @@ public class GuiCustomerOrder extends BaseGui {
     @FXML
     private void onNextFourth(ActionEvent e){
         if(kcalGroup.getSelectedToggle() == null){
-            showError("Seleziona un opzione per continuare");
+            showInfo("Seleziona un opzione per continuare");
             return;
         }
         showFifthQuestion();
@@ -357,6 +361,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     void onSummary(ActionEvent event) {
+        router.showCustomerRecapOrder();
     }
 
 
@@ -384,6 +389,7 @@ public class GuiCustomerOrder extends BaseGui {
 
                 GuiCard cardController = loader.getController();
                 cardController.setData(dish);
+                cardController.setOnAddToOrder(this::addToOrder);
 
                 menuGridPane.add(cardNode, col, row);
                 GridPane.setMargin(cardNode, new Insets(5));
@@ -396,6 +402,15 @@ public class GuiCustomerOrder extends BaseGui {
             } catch (Exception e) {
                 showError("Errore nell'inserimento dei prodotti nel menù: " + e.getMessage());
             }
+        }
+    }
+
+    private void addToOrder(DishBean dishBean){
+        try {
+            cart.addItem(dishBean, 1);
+            showInfo(dishBean.getName() + " aggiunto all'ordine.");
+        } catch (Exception e) {
+            showError("Errore durante l'aggiunta all'ordine: " + e.getMessage());
         }
     }
 }
