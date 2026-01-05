@@ -1,5 +1,6 @@
 package it.foodmood.persistence.mysql;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,6 +12,8 @@ import java.util.UUID;
 
 import it.foodmood.config.JdbcConnectionManager;
 import it.foodmood.domain.model.Order;
+import it.foodmood.domain.model.OrderLine;
+import it.foodmood.domain.value.Money;
 import it.foodmood.domain.value.OrderStatus;
 import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.OrderDao;
@@ -18,8 +21,8 @@ import it.foodmood.persistence.dao.OrderDao;
 public class JdbcOrderDao implements OrderDao {
         
     private static final String CALL_INSERT_ORDER = "{CALL insert_customer_order(?,?,?,?)}";
+    private static final String CALL_INSERT_ORDER_LINE = "{CALL insert_customer_order_line(?,?,?,?,?)}";
     private static final String CALL_GET_ORDER_BY_ID = "{CALL get_order_by_id(?)}";
-    private static final String CALL_GET_ALL_ORDERS = "{CALL get_all_orders()}";
 
     // Unica istanza di dao del Order che usa jdbc
     private static JdbcOrderDao instance;
@@ -39,11 +42,27 @@ public class JdbcOrderDao implements OrderDao {
                 cs.setString(1, order.getId().toString());
                 cs.setString(2, order.getUserId().toString());
                 cs.setString(3, order.getTableSessionId().toString());
-                cs.setString(4, order.getStatus().toString());
+                cs.setString(4, order.getStatus().name());
                 cs.execute();
+
+                insertOrderLine(order, conn);
             }
         } catch (SQLException e) {
             throw new PersistenceException(e);
+        }
+    }
+
+    private void insertOrderLine(Order order, Connection conn) throws SQLException{
+        try (CallableStatement cs = conn.prepareCall(CALL_INSERT_ORDER_LINE)){
+            for(OrderLine orderLine : order.getOrderLines()){
+                cs.setString(1, order.getId().toString());
+                cs.setString(2, orderLine.getDishId().toString());
+                cs.setString(3, orderLine.getProductName());
+                cs.setBigDecimal(4, orderLine.getUnitPrice().getAmount());
+                cs.setInt(5, orderLine.getQuantity());
+                cs.addBatch();
+            }
+            cs.executeBatch();
         }
     }
 
@@ -61,73 +80,46 @@ public class JdbcOrderDao implements OrderDao {
         try (CallableStatement cs = conn.prepareCall(CALL_GET_ORDER_BY_ID)){
             cs.setString(1, id.toString());
             try(ResultSet rs = cs.executeQuery()){
-                if(rs.next()){
-                    Order order = mapRowToOrder(rs);
+                if(!rs.next()) return Optional.empty();
 
-                    return Optional.of(order);
-                } else {
-                    return Optional.empty();
-                }
+                Order order = mapRowToOrder(rs);
+                return Optional.of(order);
             }
         }
     }
 
     @Override
     public List<Order> findAll(){
-        try{
-            Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            try (CallableStatement cs = conn.prepareCall(CALL_GET_ALL_ORDERS)) {
-                ResultSet rs = cs.executeQuery();
-
-                List<Order> orders = new ArrayList<>();
-
-                while (rs.next()) {
-                    Order order = mapRowToOrder(rs);
-
-                    orders.add(order);
-                }
-                return orders;
-            }
-        } catch (SQLException e) {
-            throw new PersistenceException(e);
-        }
+        // Funzionalità non implementata
+        return null;
     }
 
     @Override
     public void deleteById(UUID id){
-        try{
-            Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            try (CallableStatement cs = conn.prepareCall(CALL_GET_ORDER_BY_ID)){
-                cs.setString(1, id.toString());
-                cs.execute();
-            }
-        } catch (SQLException e) {
-            throw new PersistenceException(e);
-        }
+        // Funzionalità non implementata
     }
 
     private Order mapRowToOrder(ResultSet rs) throws SQLException {
-        UUID orderId = UUID.fromString("id");
-        UUID userId = UUID.fromString("user_id");
-        UUID tableSessionId = UUID.fromString("table_session_id");
-        OrderStatus status = OrderStatus.valueOf("status");
+        UUID orderId = UUID.fromString(rs.getString("id"));
+        UUID userId = UUID.fromString(rs.getString("user_id"));
+        UUID tableSessionId = UUID.fromString(rs.getString("table_session_id"));
+        OrderStatus status = OrderStatus.valueOf(rs.getString("status"));
 
-        // return new Order(orderId, userId, tableSessionId, status);
-        return null;
+        List<OrderLine> lines = new ArrayList<>();
+        do{
+            lines.add(mapRowToOrderLine(rs));
+        } while (rs.next());
+
+        return new Order(orderId, userId, tableSessionId, status, lines);
     }
 
-    @Override
-    public void update(Order order){
-        // Funzionalità non implememntata
-    }
+    private OrderLine mapRowToOrderLine(ResultSet rs) throws SQLException {
+        UUID dishId = UUID.fromString(rs.getString("dish_id"));
+        String productName = rs.getString("product_name");
+        BigDecimal price = rs.getBigDecimal("unit_price");
+        Money unitPrice = new Money(price);
+        int quantity = rs.getInt("quantity");
 
-    @Override
-    public List<Order> findByTableSessionId(UUID tableSessionId){
-        return null;
-    }
-
-    @Override
-    public Optional<Order> findOpen(UUID tableSessionId, UUID actorId){
-        return null;
+        return new OrderLine(dishId, productName, unitPrice, quantity);
     }
 }

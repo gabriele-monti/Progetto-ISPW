@@ -41,19 +41,4 @@ public class FileSystemOrderDao extends AbstractCsvDao implements OrderDao {
     public void deleteById(UUID id){
         // Funzionalità non implememntata
     }
-
-    @Override
-    public void update(Order order){
-        // Funzionalità non implememntata
-    }
-
-    @Override
-    public List<Order> findByTableSessionId(UUID tableSessionId){
-        return null;
-    }
-
-    @Override
-    public Optional<Order> findOpen(UUID tableSessionId, UUID actorId){
-        return null;
-    }
 }

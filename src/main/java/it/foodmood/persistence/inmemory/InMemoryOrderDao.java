@@ -1,7 +1,5 @@
 package it.foodmood.persistence.inmemory;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import it.foodmood.domain.model.Order;
@@ -25,20 +23,5 @@ public class InMemoryOrderDao extends AbstractInMemoryCrudDao<Order, UUID> imple
     @Override
     public UUID getId(Order order){
         return order.getId();
-    }
-
-    @Override
-    public void update(Order order){
-        // Funzionalità non implememntata
-    }
-
-    @Override
-    public List<Order> findByTableSessionId(UUID tableSessionId){
-        return null;
-    }
-
-    @Override
-    public Optional<Order> findOpen(UUID tableSessionId, UUID actorId){
-        return null;
     }
 }

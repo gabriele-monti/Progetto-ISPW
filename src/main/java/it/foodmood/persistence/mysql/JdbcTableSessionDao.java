@@ -2,6 +2,7 @@ package it.foodmood.persistence.mysql;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Optional;
@@ -16,6 +17,7 @@ public class JdbcTableSessionDao implements TableSessionDao {
 
     private static final String CALL_ENTER_SESSION = "{CALL enter_table_session(?,?,?)}";
     private static final String CALL_CLOSE_SESSION = "{CALL close_table_session_by_table(?)}";
+    private static final String CALL_GET_TABLE_SESSION_BY_ID = "{CALL get_table_session_by_id(?)}";
 
     private static JdbcTableSessionDao instance;
 
@@ -63,6 +65,35 @@ public class JdbcTableSessionDao implements TableSessionDao {
 
     @Override
     public Optional<TableSession> findById(UUID tableSessionId){
-        return null;
+        try{
+            Connection conn = JdbcConnectionManager.getInstance().getConnection();
+            return executeFindById(conn, tableSessionId);
+        } catch (SQLException e) {
+            throw new PersistenceException(e);
+        }    
+    }
+
+    private Optional<TableSession> executeFindById(Connection conn, UUID tableSessionId) throws SQLException{
+        try (CallableStatement cs = conn.prepareCall(CALL_GET_TABLE_SESSION_BY_ID)){
+            cs.setString(1, tableSessionId.toString());
+            try(ResultSet rs = cs.executeQuery()){
+                if(rs.next()){
+                    TableSession tableSession = mapRowToTableSession(rs);
+
+                    return Optional.of(tableSession);
+                } else {
+                    return Optional.empty();
+                }
+            }
+        }
+    }
+
+    private TableSession mapRowToTableSession(ResultSet rs) throws SQLException {
+        
+        UUID id = UUID.fromString(rs.getString("id"));
+        int tableId = rs.getInt("table_id");
+        boolean open = rs.getBoolean("is_open");
+
+        return TableSession.fromPersistence(id, tableId, open);
     }
 }

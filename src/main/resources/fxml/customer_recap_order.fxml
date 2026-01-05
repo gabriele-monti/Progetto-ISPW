@@ -65,7 +65,7 @@
                                  <children>
                                     <TableView fx:id="tblOrder" maxWidth="540.0" minWidth="540.0" prefHeight="540.0" prefWidth="540.0">
                                       <columns>
-                                        <TableColumn fx:id="colProduct" prefWidth="285.0" text="Prodotto" />
+                                        <TableColumn fx:id="colProduct" prefWidth="285.0" text="Articolo" />
                                         <TableColumn fx:id="colQty" minWidth="0.0" prefWidth="100.0" text="Quantità" />
                                           <TableColumn fx:id="colPrice" minWidth="0.0" prefWidth="100.0" text="Prezzo" />
                                           <TableColumn fx:id="colDelete" prefWidth="50.0" />
@@ -113,6 +113,9 @@
                                        </children>
                                     </HBox>
                                  </graphic>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Button>
                            </children>
                            <VBox.margin>
