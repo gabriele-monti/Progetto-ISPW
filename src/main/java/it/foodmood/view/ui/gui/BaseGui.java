@@ -3,7 +3,7 @@ package it.foodmood.view.ui.gui;
 import java.util.Optional;
 import java.util.function.Function;
 
-import it.foodmood.domain.model.User;
+import it.foodmood.bean.ActorBean;
 import it.foodmood.utils.SessionManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;
@@ -26,22 +26,22 @@ public abstract class BaseGui {
         return true;
     }
 
-    protected String getUserInitials(User user){
-        if(user == null || user.getPerson() == null) return "";
+    protected String getUserInitials(ActorBean actor){
+        if(actor == null) return "";
 
-        String name = user.getPerson().firstName();
-        String surname = user.getPerson().lastName();
+        String name = actor.getName();
+        String surname = actor.getSurname();
 
         String n = (name != null && !name.isEmpty()) ? name.substring(0,1).toUpperCase() : "";
         String s = (surname != null && !surname.isEmpty()) ? surname.substring(0,1).toUpperCase() : "";
         return n + s;
     }
 
-    protected String getUserFullName(User user){
-        if(user == null || user.getPerson() == null) return "";
+    protected String getUserFullName(ActorBean actor){
+        if(actor == null) return "";
 
-        String name = user.getPerson().firstName();
-        String surname = user.getPerson().lastName();
+        String name = actor.getName();
+        String surname = actor.getSurname();
 
         StringBuilder stringBuilder = new StringBuilder();
 

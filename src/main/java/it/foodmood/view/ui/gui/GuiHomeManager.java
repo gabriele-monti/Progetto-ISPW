@@ -1,6 +1,6 @@
 package it.foodmood.view.ui.gui;
 
-import it.foodmood.domain.model.User;
+import it.foodmood.bean.ActorBean;
 import it.foodmood.view.boundary.LoginBoundary;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -56,7 +56,7 @@ public class GuiHomeManager extends BaseGui {
     private GuiRouter router;
     private PaneNavigator paneNavigator;
     private LoginBoundary loginBoundary;
-    private User manager;
+    private ActorBean actor;
 
     public void setRouter(GuiRouter router){
         this.router = router;
@@ -66,14 +66,14 @@ public class GuiHomeManager extends BaseGui {
         this.loginBoundary = boundary;
     }
 
-    public void setManager(User manager){
-        this.manager = manager;
+    public void setManager(ActorBean actor){
+        this.actor = actor;
         updateLabel();
     }
 
     private void updateLabel(){
-        if(lblManager != null && manager != null){
-            lblManager.setText(getUserFullName(manager));
+        if(lblManager != null && actor != null){
+            lblManager.setText(getUserFullName(actor));
         }
     }
 

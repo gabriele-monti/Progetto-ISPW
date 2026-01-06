@@ -61,7 +61,7 @@ public class JdbcDishDao implements DishDao {
                 cs.setString(1, dish.getId().toString());
                 cs.setString(2, dish.getName());
                 cs.setString(3, dish.getDescription());
-                cs.setString(4, dish.getCourseType().name());
+                cs.setString(4, dish.getCourseTypes().name());
                 cs.setString(5, dish.getDietCategory().name());
                 cs.setBigDecimal(6, dish.getPrice().getAmount());
 

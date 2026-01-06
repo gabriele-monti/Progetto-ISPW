@@ -61,7 +61,7 @@ public class Dish {
         return description;
     }
 
-    public CourseType getCourseType() {
+    public CourseType getCourseTypes() {
         return courseType;
     }
 

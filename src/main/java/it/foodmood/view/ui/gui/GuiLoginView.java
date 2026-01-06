@@ -1,5 +1,6 @@
 package it.foodmood.view.ui.gui;
 
+import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.config.UserMode;
 import it.foodmood.exception.AuthenticationException;
@@ -53,6 +54,12 @@ public class GuiLoginView {
     private PasswordToggleController toggleController;
 
     private boolean startOnLogin = false;
+
+    private ActorBean actor;
+
+    public void setUser(ActorBean actor){
+        this.actor = actor;
+    }
 
     public GuiLoginView(){
         // costruttore vuoto richiesto da fxmlloader
@@ -146,6 +153,7 @@ public class GuiLoginView {
             if(userMode != UserMode.CUSTOMER){
                 router.showHomeView();
             } else {
+                actor.setGuest(false);
                 router.showSessionTableView();
             }
 
@@ -169,6 +177,7 @@ public class GuiLoginView {
     @FXML
     void onRequireTableNumber(ActionEvent event) {
         guestAccessBoundary.enterAsGuest();
+        actor.setGuest(true);
         router.showSessionTableView();
     }
 

@@ -1,6 +1,6 @@
 package it.foodmood.view.ui.gui;
 
-import it.foodmood.domain.model.User;
+import it.foodmood.bean.ActorBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,7 +24,7 @@ public class GuiHomeCustomer extends BaseGui {
     
     @FXML
     void onAccountClicked(ActionEvent event) {
-        if(customer != null){
+        if(!actor.isGuest()){
             router.showCustomerAccountView();
         } else {
             showInfo("Effettua l'accesso per vedere la sezione account");
@@ -76,16 +76,16 @@ public class GuiHomeCustomer extends BaseGui {
         // costruttore vuooto
     }
 
-    private User customer;
+    private ActorBean actor;
 
-    public void setUser(User customer){
-        this.customer = customer;
+    public void setUser(ActorBean actor){
+        this.actor = actor;
         updateLabel();
     }
 
     private void updateLabel(){
-        if(lblUserInitials != null && customer != null){
-            lblUserInitials.setText(getUserInitials(customer));
+        if(lblUserInitials != null && actor != null){
+            lblUserInitials.setText(getUserInitials(actor));
         }
         if(lblTableId != null){
             lblTableId.setText(String.valueOf("Tavolo " + tableId));

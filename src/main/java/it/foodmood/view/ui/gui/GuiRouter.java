@@ -1,5 +1,6 @@
 package it.foodmood.view.ui.gui;
 
+import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.TableSessionBean;
 import it.foodmood.config.UserMode;
 import it.foodmood.utils.SessionManager;
@@ -15,6 +16,20 @@ public final class GuiRouter{
     private final RegistrationBoundary registrationBoundary;
     private final Cart cart;
     private TableSessionBean currentTableSession;
+    private final ActorBean actorBean;
+
+    private void loadActor(){
+        var user = SessionManager.getInstance().getCurrentUser();
+
+        if(user == null){
+            actorBean.setName(null);
+            actorBean.setSurname(null);
+            return;
+        }
+
+        actorBean.setName(user.getPerson().firstName());
+        actorBean.setSurname(user.getPerson().lastName());
+    }
 
     public GuiRouter(Scene scene, UserMode userMode){
         this.navigator = new GuiNavigator(scene);
@@ -22,6 +37,11 @@ public final class GuiRouter{
         this.loginBoundary = new LoginBoundary(userMode);
         this.registrationBoundary = new RegistrationBoundary();
         this.cart = new Cart();
+        this.actorBean = new ActorBean();
+    }
+
+    public ActorBean getActor(){
+        return actorBean;
     }
 
     public Cart getCart(){
@@ -44,6 +64,7 @@ public final class GuiRouter{
         GuiLoginView controller = navigator.goTo(GuiPages.LOGIN);
         controller.setBoundary(loginBoundary);
         controller.setRouter(this);
+        controller.setUser(actorBean);
         controller.setUserMode(userMode);
         controller.setStartOnLogin(start);
     } 
@@ -60,45 +81,48 @@ public final class GuiRouter{
     }
 
     public void showHomeCustumerView(){
+        loadActor();
         GuiHomeCustomer controller = navigator.goTo(GuiPages.HOME_CUSTOMER);
         controller.setRouter(this);
-        controller.setUser(SessionManager.getInstance().getCurrentUser());
+        controller.setUser(actorBean);
         controller.setTableId(currentTableSession.getTableId());
     }
 
     public void showHomeManagerView(){
+        loadActor();
         GuiHomeManager controller = navigator.goTo(GuiPages.HOME_MANAGER);
         controller.setRouter(this);
         controller.setBoundary(loginBoundary);
-        controller.setManager(SessionManager.getInstance().getCurrentUser());
+        controller.setManager(actorBean);
     }
 
     public void showHomeWaiterView() {
+        loadActor();
         GuiHomeWaiter controller = navigator.goTo(GuiPages.HOME_WAITER);
         controller.setRouter(this);
         controller.setBoundary(loginBoundary);
-        controller.setWaiter(SessionManager.getInstance().getCurrentUser());
+        controller.setWaiter(actorBean);
     }
 
     public void showCustomerAccountView(){
         GuiCustomerAccount controller = navigator.goTo(GuiPages.CUSTOMER_ACCOUNT);
         controller.setRouter(this);
         controller.setBoundary(loginBoundary);
-        controller.setUser(SessionManager.getInstance().getCurrentUser());
+        controller.setUser(actorBean);
     }
 
     public void showCustomerDigitalMenu(){
         GuiCustomerDigitalMenu controller = navigator.goTo(GuiPages.CUSTOMER_DIGITAL_MENU);
         controller.setRouter(this);
         controller.setCart(cart);
-        controller.setUser(SessionManager.getInstance().getCurrentUser());
+        controller.setUser(actorBean);
     }
 
     public void showCustomerOrderView(){
         GuiCustomerOrder controller = navigator.goTo(GuiPages.CUSTOMER_ORDER);
         controller.setRouter(this);
         controller.setCart(cart);
-        controller.setUser(SessionManager.getInstance().getCurrentUser());
+        controller.setUser(actorBean);
     }
 
     public void showCustomerRecapOrder(){
@@ -106,7 +130,7 @@ public final class GuiRouter{
         controller.setRouter(this);
         controller.setCart(cart);
         controller.setTableSession(currentTableSession);
-        controller.setUser(SessionManager.getInstance().getCurrentUser());
+        controller.setUser(actorBean);
     }
 
     public void showSessionTableView(){

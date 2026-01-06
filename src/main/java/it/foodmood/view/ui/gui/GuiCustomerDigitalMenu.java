@@ -2,8 +2,8 @@ package it.foodmood.view.ui.gui;
 
 import java.util.List;
 
+import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.DishBean;
-import it.foodmood.domain.model.User;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.view.boundary.DishBoundary;
 import javafx.collections.FXCollections;
@@ -52,7 +52,7 @@ public class GuiCustomerDigitalMenu extends BaseGui{
 
     private final ToggleGroup courseGroup = new ToggleGroup();
     private GuiRouter router;
-    private User customer;
+    private ActorBean actor;
 
     private Cart cart;
 
@@ -80,8 +80,8 @@ public class GuiCustomerDigitalMenu extends BaseGui{
         loadMenuDishes();
     }
 
-    public void setUser(User customer){
-        this.customer = customer;
+    public void setUser(ActorBean actor){
+        this.actor = actor;
         updateLabel();
     }
 
@@ -126,9 +126,9 @@ public class GuiCustomerDigitalMenu extends BaseGui{
     }
 
     private void updateLabel(){
-        if(customer == null) return;
+        if(actor == null) return;
 
-        String initials = getUserInitials(customer);
+        String initials = getUserInitials(actor);
 
         if(lblUserInitials != null){
             lblUserInitials.setText(initials);
@@ -141,7 +141,7 @@ public class GuiCustomerDigitalMenu extends BaseGui{
 
     @FXML
     void onAccountClicked(ActionEvent event) {
-        if(customer != null){
+        if(!actor.isGuest()){
             router.showCustomerAccountView();       
         } else {
             showInfo("Effettua l'accesso per vedere la sezione Account");
@@ -171,7 +171,7 @@ public class GuiCustomerDigitalMenu extends BaseGui{
     private void refreshMenuGrid(){
         menuGridPane.getChildren().clear();
 
-        List<DishBean> filtered = allDishes.stream().filter(d -> selectedType == null || d.getCourseType() == selectedType).toList();
+        List<DishBean> filtered = allDishes.stream().filter(d -> selectedType == null || d.getCourseTypes() == selectedType).toList();
         
         int card = 4;
         int col = 0;

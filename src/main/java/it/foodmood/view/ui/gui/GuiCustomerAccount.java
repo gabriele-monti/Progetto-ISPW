@@ -1,6 +1,6 @@
 package it.foodmood.view.ui.gui;
 
-import it.foodmood.domain.model.User;
+import it.foodmood.bean.ActorBean;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.view.boundary.LoginBoundary;
 import javafx.event.ActionEvent;
@@ -135,18 +135,18 @@ public class GuiCustomerAccount extends BaseGui {
     public void setRouter(GuiRouter router){
         this.router = router;
     }
-    private User customer;
+    private ActorBean actor;
 
-    public void setUser(User customer){
-        this.customer = customer;
+    public void setUser(ActorBean actor){
+        this.actor = actor;
         updateLabel();
     }
 
     private void updateLabel(){
-        if(customer == null) return;
+        if(actor == null) return;
 
-        String fullName = getUserFullName(customer);
-        String initials = getUserInitials(customer);
+        String fullName = getUserFullName(actor);
+        String initials = getUserInitials(actor);
 
 
         if(lblFullNameCard != null){
@@ -157,7 +157,7 @@ public class GuiCustomerAccount extends BaseGui {
             lblFullNameAccount.setText(fullName);
         }
 
-        if(lblUserInitials != null && customer != null){
+        if(lblUserInitials != null && actor != null){
             lblUserInitials.setText(initials);
         }
     }
@@ -209,7 +209,7 @@ public class GuiCustomerAccount extends BaseGui {
 
     @FXML
     void onAccountClicked(ActionEvent event) {
-        if(customer != null){
+        if(!actor.isGuest()){
             showAccountPage();
         } else {
             showInfo("Effettua l'accesso per vedere la sezione Account");

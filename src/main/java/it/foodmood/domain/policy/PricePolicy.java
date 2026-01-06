@@ -8,7 +8,7 @@ import it.foodmood.domain.value.OrderPreferences;
 
 public class PricePolicy {
     public Optional<Money> calculateMaxBudget(Budget budget, OrderPreferences preferences){
-        int numberOfCourses = preferences.getCourseType().size();
+        int numberOfCourses = preferences.getCourseTypes().size();
 
         return switch(budget){
             case ECONOMIC -> Optional.of(Money.euro(15 + 10 * (numberOfCourses - 1)));

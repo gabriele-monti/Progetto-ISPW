@@ -4,10 +4,10 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
+import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.OrderBean;
 import it.foodmood.bean.OrderLineBean;
 import it.foodmood.bean.TableSessionBean;
-import it.foodmood.domain.model.User;
 import it.foodmood.exception.OrderException;
 import it.foodmood.view.boundary.CustomerOrderBoundary;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -72,7 +72,7 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     @FXML
     void onAccountClicked(ActionEvent event) {
-        if(customer != null){
+        if(!actor.isGuest()){
             router.showCustomerAccountView();
         } else {
             showInfo("Effettua l'accesso per vedere la sezione Account");
@@ -156,21 +156,21 @@ public class GuiCustomerRecapOrder extends BaseGui {
     }
 
     private GuiRouter router;
-    private User customer;
+    private ActorBean actor;
 
     public void setRouter(GuiRouter router){
         this.router = router;
     }
 
-    public void setUser(User customer){
-        this.customer = customer;
+    public void setUser(ActorBean actor){
+        this.actor = actor;
         updateLabel();
     }
 
     private void updateLabel(){
-        if(customer == null) return;
+        if(actor == null) return;
 
-        String initials = getUserInitials(customer);
+        String initials = getUserInitials(actor);
 
         if(lblUserInitials != null){
             lblUserInitials.setText(initials);

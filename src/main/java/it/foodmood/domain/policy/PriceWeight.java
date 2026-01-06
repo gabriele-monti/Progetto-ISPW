@@ -1,5 +1,7 @@
 package it.foodmood.domain.policy;
 
+import java.util.Set;
+
 import it.foodmood.domain.value.CourseType;
 
 public class PriceWeight {
@@ -14,5 +16,15 @@ public class PriceWeight {
             case BEVERAGE -> 0.08;
             case SIDE_DISH -> 0.10;
         };
+    }
+
+    public double normalized(CourseType courseType, Set<CourseType> selected){
+        if(selected == null || selected.isEmpty()) return 1.0;
+
+        double sum = selected.stream().mapToDouble(this::weightFor).sum();
+
+        if(sum <= 0) return 1.0;
+
+        return weightFor(courseType)/sum;
     }
 }

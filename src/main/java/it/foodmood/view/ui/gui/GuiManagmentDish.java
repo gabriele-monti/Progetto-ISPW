@@ -170,7 +170,7 @@ public class GuiManagmentDish extends BaseGui {
         setupColumn(colName, d -> d.getName());
         setupColumn(colPrice, d -> d.getPrice() != null ? d.getPrice().toString() : null);
         setupColumn(colState, d -> d.getState() != null ? d.getState().description() : null);
-        setupColumn(colType, d -> d.getCourseType() != null ? d.getCourseType().description() : null);
+        setupColumn(colType, d -> d.getCourseTypes() != null ? d.getCourseTypes().description() : null);
     }
 
     private Double askQuantity(IngredientBean ingredient, Double defaultValue) {

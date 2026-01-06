@@ -382,7 +382,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
             String name = dish.getName();
             String price = String.format("%.2f", dish.getPrice());
             String state = dish.getState().description();
-            String courseType = dish.getCourseType().description();
+            String courseType = dish.getCourseTypes().description();
             String dietCategory = dish.getDietCategory().description();
 
             return List.of(index, name, price, state, courseType, dietCategory);

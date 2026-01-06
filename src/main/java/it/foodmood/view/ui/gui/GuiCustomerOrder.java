@@ -1,9 +1,17 @@
 package it.foodmood.view.ui.gui;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.DishBean;
-import it.foodmood.domain.model.User;
+import it.foodmood.bean.OrderPreferencesBean;
+import it.foodmood.domain.value.Allergen;
+import it.foodmood.domain.value.Budget;
+import it.foodmood.domain.value.CourseType;
+import it.foodmood.domain.value.DietCategory;
+import it.foodmood.domain.value.Kcal;
 import it.foodmood.view.boundary.DishBoundary;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -145,6 +153,8 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML private ToggleButton tbVegetarian;
 
+    private final OrderPreferencesBean preferences = new OrderPreferencesBean();
+
     private Cart cart;
 
     public void setCart(Cart cart){
@@ -161,8 +171,8 @@ public class GuiCustomerOrder extends BaseGui {
         this.router = router;
     }
 
-    public void setUser(User customer){
-        this.customer = customer;
+    public void setUser(ActorBean actor){
+        this.actor = actor;
         updateLabel();
     }
 
@@ -181,11 +191,11 @@ public class GuiCustomerOrder extends BaseGui {
         router.showHomeCustumerView();
     }
 
-    private User customer;
+    private ActorBean actor;
 
     private void updateLabel(){
-        if(lblUserInitials != null && customer != null){
-            lblUserInitials.setText(getUserInitials(customer));
+        if(lblUserInitials != null && actor != null){
+            lblUserInitials.setText(getUserInitials(actor));
         }
     }
 
@@ -253,7 +263,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     void onAccountClicked(ActionEvent event) {
-        if(customer != null){
+        if(!actor.isGuest()){
             router.showCustomerAccountView();
         } else {
             showInfo("Effettua l'accesso per vedere la sezione Account");
@@ -296,6 +306,7 @@ public class GuiCustomerOrder extends BaseGui {
             showInfo("Seleziona almeno un opzione per continuare");
             return;
         }
+        saveFirstQuestionPreferences();
         showSecondQuestion();
     }
 
@@ -310,11 +321,14 @@ public class GuiCustomerOrder extends BaseGui {
             showInfo("Seleziona almeno un opzione per continuare");
             return;
         }
+        saveSecondQuestionPreferences();
+        filterAllergenButtons();
         showThirdQuestion();
     }
 
     @FXML
     private void onNextThird(ActionEvent e){
+        saveThirdQuestionPreferences();
         showFourthQuestion();
     }
 
@@ -324,15 +338,17 @@ public class GuiCustomerOrder extends BaseGui {
             showInfo("Seleziona un opzione per continuare");
             return;
         }
+        saveFourthQuestionPreferences();
         showFifthQuestion();
     }
 
     @FXML
     private void onGenerate(ActionEvent e){
         if(budgetGroup.getSelectedToggle() == null){
-            showError("Seleziona un opzione per continuare");
+            showInfo("Seleziona un opzione per continuare");
             return;
         }
+        saveFifthQuestionPreferences();
         showProposePane();
         loadMenuDishes();
     }
@@ -413,4 +429,145 @@ public class GuiCustomerOrder extends BaseGui {
             showError("Errore durante l'aggiunta all'ordine: " + e.getMessage());
         }
     }
+
+    private void saveFirstQuestionPreferences(){
+        Set<DietCategory> dietCategories = new HashSet<>();
+
+        Toggle selectedDiet = firstGroup.getSelectedToggle();
+        if(selectedDiet == tbTraditional) {
+            dietCategories.add(DietCategory.TRADITIONAL);
+        } else if (selectedDiet == tbVegan) {
+            dietCategories.add(DietCategory.VEGAN);
+        } else if (selectedDiet == tbVegetarian) {
+            dietCategories.add(DietCategory.VEGETARIAN);
+        }
+
+        if(tbGlutenFree.isSelected()){
+            dietCategories.add(DietCategory.GLUTEN_FREE);
+        }
+
+        if(tbLactoseFree.isSelected()){
+            dietCategories.add(DietCategory.LACTOSE_FREE);
+        }
+        
+        preferences.setDietCategories(dietCategories);
+    }
+
+    private void saveSecondQuestionPreferences(){
+        Set<CourseType> courseTypes = new HashSet<>();
+
+        if(tbAppetizer.isSelected()) courseTypes.add(CourseType.APPETIZER);
+        if(tbFirstCourse.isSelected()) courseTypes.add(CourseType.FIRST_COURSE);
+        if(tbMainCourse.isSelected()) courseTypes.add(CourseType.MAIN_COURSE);
+        if(tbSideDish.isSelected()) courseTypes.add(CourseType.SIDE_DISH);
+        if(tbFruit.isSelected()) courseTypes.add(CourseType.FRUIT);
+        if(tbDessert.isSelected()) courseTypes.add(CourseType.DESSERT);
+        if(tbBeverage.isSelected()) courseTypes.add(CourseType.BEVERAGE);
+        
+        preferences.setCourseTypes(courseTypes);
+    }
+
+    private void saveThirdQuestionPreferences(){
+        Set<Allergen> allergens = new HashSet<>();
+
+        if(tbCelery.isSelected()) allergens.add(Allergen.CELERY);
+        if(tbCrustaceans.isSelected()) allergens.add(Allergen.CRUSTACEANS);
+        if(tbEggs.isSelected()) allergens.add(Allergen.EGGS);
+        if(tbFish.isSelected()) allergens.add(Allergen.FISH);
+        if(tbGluten.isSelected()) allergens.add(Allergen.GLUTEN);
+        if(tbLupin.isSelected()) allergens.add(Allergen.LUPIN);
+        if(tbMilk.isSelected()) allergens.add(Allergen.MILK);
+        if(tbMustard.isSelected()) allergens.add(Allergen.MUSTARD);
+        if(tbMolluscs.isSelected()) allergens.add(Allergen.MOLLUSCS);
+        if(tbNuts.isSelected()) allergens.add(Allergen.NUTS);
+        if(tbPeanuts.isSelected()) allergens.add(Allergen.PEANUTS);
+        if(tbSesame.isSelected()) allergens.add(Allergen.SESAME);
+        if(tbSulphites.isSelected()) allergens.add(Allergen.SULPHITES);
+        if(tbSoy.isSelected()) allergens.add(Allergen.SOY);
+        
+        preferences.setAllergens(allergens);
+    }
+
+    private void saveFourthQuestionPreferences(){
+
+        Toggle selectedKcal = kcalGroup.getSelectedToggle();
+
+        if(selectedKcal == tbKcalLight) {
+            preferences.setKcal(Kcal.LIGHT);
+        } else if (selectedKcal == tbKcalModerate) {
+            preferences.setKcal(Kcal.BALANCED);
+        } else if (selectedKcal == tbKcalComplete) {
+            preferences.setKcal(Kcal.COMPLETE);
+        } else if (selectedKcal == tbKcalNoLimit) {
+            preferences.setKcal(Kcal.FREE);
+        }        
+    }
+
+    private void saveFifthQuestionPreferences(){
+
+        Toggle selectedBudget = budgetGroup.getSelectedToggle();
+
+        if(selectedBudget == tbBudgetEconomic) {
+            preferences.setBudget(Budget.ECONOMIC);
+        } else if (selectedBudget == tbBudgetBalanced) {
+            preferences.setBudget(Budget.BALANCED);
+        } else if (selectedBudget == tbBudgetPremium) {
+            preferences.setBudget(Budget.PREMIUM);
+        } else if (selectedBudget == tbBudgetNoLimit) {
+            preferences.setBudget(Budget.FREE);
+        }        
+    }
+
+    private void filterAllergenButtons(){
+        Set<ToggleButton> relevantAllergens = new HashSet<>();
+
+        if(tbAppetizer.isSelected() || tbFirstCourse.isSelected() || tbMainCourse.isSelected() || tbDessert.isSelected()) {
+            relevantAllergens.addAll(List.of(            tbCelery, tbCrustaceans, tbEggs, tbFish, tbGluten, tbLupin,
+            tbMilk, tbMolluscs, tbMustard, tbNuts, tbPeanuts, tbSesame,
+            tbSoy, tbSulphites));
+        } else { 
+            if(tbFruit.isSelected()){
+                relevantAllergens.addAll(List.of(tbSulphites, tbNuts));
+            }
+            if(tbBeverage.isSelected()){
+                relevantAllergens.addAll(List.of(tbSulphites, tbGluten, tbMilk, tbSoy));
+            }
+            if(tbSideDish.isSelected()){
+                relevantAllergens.addAll(List.of(tbCelery, tbMustard, tbSesame, tbSoy, tbSulphites, tbNuts));
+            }
+        }
+
+        Toggle selectedDiet = firstGroup.getSelectedToggle();
+
+        if(selectedDiet == tbVegan) {
+            relevantAllergens.removeAll(List.of(tbFish, tbCrustaceans, tbMolluscs, tbEggs, tbMilk));
+        } else if (selectedDiet == tbVegetarian) {
+            relevantAllergens.removeAll(List.of(tbFish, tbCrustaceans, tbMolluscs));
+        }
+
+        if(tbGlutenFree.isSelected()){
+            relevantAllergens.remove(tbGluten);
+        }
+
+        if(tbLactoseFree.isSelected()){
+            relevantAllergens.remove(tbMilk);
+        }
+
+        List<ToggleButton> allAllergenButtons = List.of(
+            tbCelery, tbCrustaceans, tbEggs, tbFish, tbGluten, tbLupin,
+            tbMilk, tbMolluscs, tbMustard, tbNuts, tbPeanuts, tbSesame,
+            tbSoy, tbSulphites
+        );
+
+        for(ToggleButton button: allAllergenButtons){
+            if(relevantAllergens.contains(button)){
+                button.setDisable(false);
+            } else {
+                button.setDisable(true);
+                button.setSelected(false);
+            }
+        }
+    }
 }
+
+

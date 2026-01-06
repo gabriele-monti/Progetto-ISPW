@@ -23,7 +23,7 @@ public class OrderPreferences {
         return dietCategories;
     }
 
-    public Set<CourseType> getCourseType(){
+    public Set<CourseType> getCourseTypes(){
         return courseTypes;
     }
 

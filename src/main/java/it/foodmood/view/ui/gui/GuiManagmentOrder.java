@@ -159,7 +159,7 @@ public class GuiManagmentOrder extends RoomController {
         CourseType selectedType = categoryFilter.getValue();
 
         List<DishBean> filtered = allDishes.stream()
-            .filter(d -> selectedType == null || d.getCourseType() == selectedType)
+            .filter(d -> selectedType == null || d.getCourseTypes() == selectedType)
             .filter(d -> {
                 if(search.isEmpty()) return true;
                 String name = d.getName() != null ? d.getName() : "" ;

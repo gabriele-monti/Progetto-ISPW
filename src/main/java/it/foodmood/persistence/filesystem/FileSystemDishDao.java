@@ -97,7 +97,7 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
             return List.of();
         }
 
-        return findAll().stream().filter(d -> d.getCourseType() == courseType).toList();
+        return findAll().stream().filter(d -> d.getCourseTypes() == courseType).toList();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
         String id = dish.getId().toString();
         String name = dish.getName();
         String description = dish.getDescription() == null ? "" : dish.getDescription();
-        String courseType = dish.getCourseType().name();
+        String courseType = dish.getCourseTypes().name();
         String dietCategory = dish.getDietCategory().name();
         String imageUri = dish.getImage() == null ? "" : dish.getImage().getUri().toString();
         String state = dish.getState().name();

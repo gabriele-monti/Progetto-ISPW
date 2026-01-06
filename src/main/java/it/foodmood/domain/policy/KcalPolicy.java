@@ -8,7 +8,7 @@ import it.foodmood.domain.value.OrderPreferences;
 public class KcalPolicy {
     public Optional<Integer> calculateMaxKcal(Kcal kcal, OrderPreferences preferences){
         
-        int numberOfCourses = preferences.getCourseType().size();
+        int numberOfCourses = preferences.getCourseTypes().size();
 
         return switch(kcal){
             case LIGHT -> Optional.of(350 + 150 * (numberOfCourses - 1));

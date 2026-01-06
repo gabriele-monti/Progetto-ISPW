@@ -35,7 +35,7 @@ public class DishBean {
 
     public String getDescription(){ return description;}
 
-    public CourseType getCourseType(){ return courseType;}
+    public CourseType getCourseTypes(){ return courseType;}
 
     public DietCategory getDietCategory(){ return dietCategory;}
 

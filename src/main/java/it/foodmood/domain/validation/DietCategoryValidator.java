@@ -30,7 +30,6 @@ public final class DietCategoryValidator {
         ensureNoAllergens(dish, allergensForbitten, "Vegana");
     }
 
-
     private static void validateVegetarian(Dish dish) throws DishException{
         Set<Allergen> allergensForbitten = EnumSet.of(Allergen.FISH);
         ensureNoAllergens(dish, allergensForbitten, "Vegetariana");

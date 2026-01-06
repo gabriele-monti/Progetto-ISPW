@@ -48,7 +48,7 @@ public class DishController {
             String name = dishBean.getName();
             String description = dishBean.getDescription();
             BigDecimal priceValue = dishBean.getPrice();
-            CourseType courseType = dishBean.getCourseType();
+            CourseType courseType = dishBean.getCourseTypes();
             DietCategory dietCategory = dishBean.getDietCategory();
             String imageUri = dishBean.getImageUri();
             DishState dishState = dishBean.getState();
@@ -142,7 +142,7 @@ public class DishController {
         dishBean.setId(dish.getId().toString());
         dishBean.setName(dish.getName());
         dishBean.setDescription(dish.getDescription());
-        dishBean.setCourseType(dish.getCourseType());
+        dishBean.setCourseType(dish.getCourseTypes());
         dishBean.setDietCategory(dish.getDietCategory());
 
         Money price = dish.getPrice();
