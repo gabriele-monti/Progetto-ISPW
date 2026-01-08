@@ -21,6 +21,13 @@ public enum DietCategory {
         return description;
     }
 
+    public static DietCategory fromName(String value){
+        if(value == null || value.isBlank()){
+            throw new IllegalArgumentException("Tipologia dietetica nulla o vuota");
+        }
+        return DietCategory.valueOf(value.trim());
+    }
+
     @Override
     public String toString(){
         return name() + " - " + description;

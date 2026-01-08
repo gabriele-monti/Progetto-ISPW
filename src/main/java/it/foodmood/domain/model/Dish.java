@@ -174,6 +174,10 @@ public class Dish {
         return state.available();
     }
 
+    public double getKcal(){
+        return totalMacronutrients().kcal();
+    }
+
     @Override
     public boolean equals(Object o){
         if(this == o) return true;

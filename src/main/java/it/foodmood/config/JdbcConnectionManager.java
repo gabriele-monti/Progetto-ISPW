@@ -22,7 +22,7 @@ public final class JdbcConnectionManager implements ConnectionProvider{
         this.user = Objects.requireNonNull(user, "L'user non può essere nullo.");
         this.password = Objects.requireNonNull(password, "La password non può essere nulla.");
 
-        Runtime.getRuntime().addShutdownHook(new Thread(this::closeSafely, "jdbc-shutdown-hook"));
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close, "jdbc-shutdown-hook"));
     }
 
     public static JdbcConnectionManager init(String url, String user, String password){
@@ -64,14 +64,6 @@ public final class JdbcConnectionManager implements ConnectionProvider{
             } catch (SQLException _) {
                 // da implementare
             }
-        }
-    }
-
-    public void closeSafely(){
-        try{
-            close();
-        } catch (Exception _) {
-            // 
         }
     }
 }

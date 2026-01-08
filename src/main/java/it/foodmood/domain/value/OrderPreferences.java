@@ -1,22 +1,22 @@
 package it.foodmood.domain.value;
 
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
 
 public class OrderPreferences {
 
-    private final Set<DietCategory> dietCategories;
-    private final Set<CourseType> courseTypes;
-    private final Set<Allergen> allergens;
-    private final Optional<Integer> maxKcal;
-    private final Optional<Money> maxBudget;
+    private Set<DietCategory> dietCategories;
+    private Set<CourseType> courseTypes;
+    private Set<Allergen> allergens;
+    private Integer maxKcal;
+    private Money maxBudget;
 
     public OrderPreferences (Set<DietCategory> dietCategories, Set<CourseType> courseTypes, Set<Allergen> allergens, Integer maxKcal, Money maxBudget){
-        this.dietCategories = dietCategories == null ? Set.of() : Set.copyOf(dietCategories);
-        this.courseTypes = courseTypes == null ? Set.of() : Set.copyOf(courseTypes);
-        this.allergens = allergens == null ? Set.of() : Set.copyOf(allergens);
-        this.maxKcal = Optional.ofNullable(maxKcal);
-        this.maxBudget = Optional.ofNullable(maxBudget);
+        this.dietCategories = dietCategories != null ? new HashSet<>(dietCategories) : new HashSet<>();
+        this.courseTypes = courseTypes != null ? new HashSet<>(courseTypes) : new HashSet<>();
+        this.allergens = allergens != null ? new HashSet<>(allergens) : new HashSet<>();
+        this.maxKcal = maxKcal;
+        this.maxBudget = maxBudget;
     }
 
     public Set<DietCategory> getDietCategories(){
@@ -31,11 +31,11 @@ public class OrderPreferences {
         return allergens;
     }
 
-    public Optional<Integer> getMaxKcal(){
+    public Integer getMaxKcal(){
         return maxKcal;
     }
 
-    public Optional<Money> getMaxBudget(){
+    public Money getMaxBudget(){
         return maxBudget;
     }
 }

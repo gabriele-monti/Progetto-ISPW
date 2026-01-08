@@ -25,6 +25,13 @@ public enum CourseType {
         return description;
     }
 
+    public static CourseType fromName(String value){
+        if(value == null || value.isBlank()){
+            throw new IllegalArgumentException("Tipologia di portata nulla o vuota");
+        }
+        return CourseType.valueOf(value.trim());
+    }
+
     @Override
     public String toString(){
         return name() + " - " + description;

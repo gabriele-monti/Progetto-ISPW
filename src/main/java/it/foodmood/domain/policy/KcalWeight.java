@@ -4,7 +4,7 @@ import java.util.Set;
 
 import it.foodmood.domain.value.CourseType;
 
-public class CourseTypeWeight {
+public class KcalWeight {
     
     public double weightFor(CourseType courseType){
         return switch(courseType){

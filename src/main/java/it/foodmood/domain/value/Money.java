@@ -60,6 +60,9 @@ public final class Money {
         return new Money(BigDecimal.ZERO);
     }
 
+    public double toDouble(){
+        return amount.doubleValue();
+    }
 
     @Override
     public boolean equals(Object o){

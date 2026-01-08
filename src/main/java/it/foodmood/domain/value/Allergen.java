@@ -34,6 +34,13 @@ public enum Allergen {
         return description;
     }
 
+    public static Allergen fromName(String value){
+        if(value == null || value.isBlank()){
+            throw new IllegalArgumentException("Allergene nullo o vuoto");
+        }
+        return Allergen.valueOf(value.trim());
+    }
+
     @Override
     public String toString(){
         return name() + " - " + description;

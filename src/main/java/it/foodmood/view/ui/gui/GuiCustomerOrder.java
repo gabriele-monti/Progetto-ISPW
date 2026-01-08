@@ -1,17 +1,20 @@
 package it.foodmood.view.ui.gui;
 
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import it.foodmood.bean.ActorBean;
+import it.foodmood.bean.AnswerBean;
 import it.foodmood.bean.DishBean;
-import it.foodmood.bean.OrderPreferencesBean;
+import it.foodmood.bean.ResponseBean;
+import it.foodmood.controller.application.OrderPreferencesController;
 import it.foodmood.domain.value.Allergen;
-import it.foodmood.domain.value.Budget;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
-import it.foodmood.domain.value.Kcal;
+import it.foodmood.domain.value.StepType;
+import it.foodmood.exception.OrderException;
 import it.foodmood.view.boundary.DishBoundary;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,140 +35,84 @@ import javafx.scene.layout.GridPane;
 public class GuiCustomerOrder extends BaseGui {
         
     @FXML private GridPane menuGridPane;
-
     @FXML private Button btnOrderSummary;
-
     @FXML private Button btnNextFirst;
-
     @FXML private Button btnNextSecond;
-
     @FXML private Button btnGenerate;
-
     @FXML private ToggleButton tbBudgetEconomic;
-
     @FXML private Label lblBudgetEconomic;
-
     @FXML private Label lblBudgetBalanced;
-
     @FXML private Label lblBudgetPremium;
-
     @FXML private Label lblUserInitials;
-
     @FXML private ToggleButton tbBudgetBalanced;
-
     @FXML private ToggleButton tbBudgetPremium;
-
     @FXML private ToggleButton tbBudgetNoLimit;
-
     @FXML private Label lblKcalLight;
-
     @FXML private Label lblKcalModerate;
-
     @FXML private Label lblKcalComplete;
-
     @FXML private ToggleButton tbKcalNoLimit;
-
     @FXML private ToggleButton tbKcalLight;
-
     @FXML private ToggleButton tbKcalModerate;
-
     @FXML private ToggleButton tbKcalComplete;
-
     @FXML private ToggleButton tbBeverage;
-
     @FXML private ToggleButton tbDessert;
-
     @FXML private ToggleButton tbFruit;
-
     @FXML private ToggleButton tbSideDish;
-
     @FXML private ToggleButton tbCelery;
-
     @FXML private ToggleButton tbCrustaceans;
-
     @FXML private ToggleButton tbEggs;
-
     @FXML private ToggleButton tbFish;
-
     @FXML private ToggleButton tbGluten;
-
     @FXML private ToggleButton tbLupin;
-
     @FXML private ToggleButton tbMilk;
-
     @FXML private ToggleButton tbMolluscs;
-
     @FXML private ToggleButton tbMustard;
-
     @FXML private ToggleButton tbNuts;
-
     @FXML private ToggleButton tbPeanuts;
-
     @FXML private ToggleButton tbSesame;
-
     @FXML private ToggleButton tbSoy;
-
     @FXML private ToggleButton tbSulphites;
-
     @FXML private ToggleButton tbAppetizer;
-
     @FXML private ToggleButton tbFirstCourse;
-
     @FXML private ToggleButton tbMainCourse;
-
     @FXML private Button btnBackFirst;
-
     @FXML private Button btnBackSecond;
-
     @FXML private Button btnBackThird;
-
     @FXML private Button btnBackFourth;
-
     @FXML private Button btnBackFifth;
-
     @FXML private Button btnNextThird;
-
     @FXML private Button btnNextFourth;
-
     @FXML private Button btnAccount;
-
     @FXML private Button btnCart;
-
     @FXML private BorderPane firstQuestionPane;
-
     @FXML private BorderPane secondQuestionPane;
-
     @FXML private BorderPane thirdQuestionPane;
-
     @FXML private BorderPane fourthQuestionPane;
-
     @FXML private BorderPane fifthQuestionPane;
-
     @FXML private BorderPane proposePane;
-
     @FXML private ToggleButton tbGlutenFree;
-
     @FXML private ToggleButton tbLactoseFree;
-
     @FXML private ToggleButton tbTraditional;
-
     @FXML private ToggleButton tbVegan;
-
     @FXML private ToggleButton tbVegetarian;
 
-    private final OrderPreferencesBean preferences = new OrderPreferencesBean();
-
+    private final OrderPreferencesController orderController;
     private Cart cart;
+    private GuiRouter router;
+    private ToggleGroup dietGroup;    
+    private ToggleGroup kcalGroup;
+    private ToggleGroup budgetGroup;
+    private final DishBoundary dishBoundary = new DishBoundary();
+    private ActorBean actor;
+    private final EnumMap<Allergen, ToggleButton> allergenButtons = new EnumMap<>(Allergen.class);
 
     public void setCart(Cart cart){
         this.cart = cart;
     }
 
-    private GuiRouter router;
-    private ToggleGroup firstGroup;    
-    private ToggleGroup kcalGroup;
-    private ToggleGroup budgetGroup;
-    private final DishBoundary dishBoundary = new DishBoundary();
+    public GuiCustomerOrder(){
+        this.orderController = new OrderPreferencesController();
+    }
 
     public void setRouter(GuiRouter router){
         this.router = router;
@@ -182,6 +129,21 @@ public class GuiCustomerOrder extends BaseGui {
     }
 
     @FXML
+    void onBackToSecondQuestion(ActionEvent event){
+        showSecondQuestion();
+    }
+
+    @FXML
+    void onBackToThirdQuestion(ActionEvent event){
+        showThirdQuestion();
+    }
+
+    @FXML
+    void onBackToFourthQuestion(ActionEvent event){
+        showFourthQuestion();
+    }
+
+    @FXML
     void onBackToHome(ActionEvent event) {
         router.showHomeCustumerView();
     }
@@ -191,7 +153,13 @@ public class GuiCustomerOrder extends BaseGui {
         router.showHomeCustumerView();
     }
 
-    private ActorBean actor;
+    @FXML
+    private void initialize(){
+        updateLabel();
+        setupToggleGroups();
+        initAllergenButtons();
+        initializeWizard();
+    }
 
     private void updateLabel(){
         if(lblUserInitials != null && actor != null){
@@ -199,27 +167,60 @@ public class GuiCustomerOrder extends BaseGui {
         }
     }
 
+    private void handleResponse(ResponseBean response){
+        if(response == null){
+            showError("Errore");
+            return;
+        }
+
+        StepType nextStep = response.getNextStep();
+
+        switch (nextStep) {
+            case COURSE -> showFirstQuestion();
+            case DIET   -> showSecondQuestion();
+            case ALLERGENS ->{
+                updateAllergenButtons(response);
+                showThirdQuestion();
+            }
+            case KCAL -> {
+                updateKcalOptions(response);
+                showFourthQuestion();
+            }
+            case BUDGET -> {
+                updateBudgetOptions(response);
+                showFifthQuestion();
+            }
+            case GENERATE -> {
+                displayProposals(response);
+                showProposePane();
+            }
+            default -> showError("Step non riconosciuto: " + nextStep);
+        }
+    }
+
     private void showOnly(BorderPane paneToShow){
-        firstQuestionPane.setVisible(false);
-        firstQuestionPane.setManaged(false);
+        hidePane(firstQuestionPane);
+        hidePane(secondQuestionPane);
+        hidePane(thirdQuestionPane);
+        hidePane(fourthQuestionPane);
+        hidePane(fifthQuestionPane);
+        hidePane(proposePane);
 
-        secondQuestionPane.setVisible(false);
-        secondQuestionPane.setManaged(false);
+        showPane(paneToShow);
+    }
 
-        thirdQuestionPane.setVisible(false);
-        thirdQuestionPane.setManaged(false);
+    private void hidePane(BorderPane pane){
+        if(pane != null){
+            pane.setVisible(false);
+            pane.setManaged(false);
+        }
+    }
 
-        fourthQuestionPane.setVisible(false);
-        fourthQuestionPane.setManaged(false);
-
-        fifthQuestionPane.setVisible(false);
-        fifthQuestionPane.setManaged(false);
-
-        proposePane.setVisible(false);
-        proposePane.setManaged(false);
-
-        paneToShow.setVisible(true);
-        paneToShow.setManaged(true);
+    private void showPane(BorderPane pane){
+        if(pane != null){
+            pane.setVisible(true);
+            pane.setManaged(true);
+        }
     }
 
     private void showFirstQuestion(){
@@ -247,21 +248,6 @@ public class GuiCustomerOrder extends BaseGui {
     }
 
     @FXML
-    void onBackToSecondQuestion(ActionEvent event){
-        showSecondQuestion();
-    }
-
-    @FXML
-    void onBackToThirdQuestion(ActionEvent event){
-        showThirdQuestion();
-    }
-
-    @FXML
-    void onBackToFourthQuestion(ActionEvent event){
-        showFourthQuestion();
-    }
-
-    @FXML
     void onAccountClicked(ActionEvent event) {
         if(!actor.isGuest()){
             router.showCustomerAccountView();
@@ -270,76 +256,196 @@ public class GuiCustomerOrder extends BaseGui {
         }
     }
 
-    @FXML
-    private void initialize(){
-        updateLabel();
-        showFirstQuestion();
-
-        firstGroup = singleChoice(List.of(tbTraditional, tbVegan, tbVegetarian));
-
+    private void setupToggleGroups(){
+        dietGroup = singleChoice(List.of(tbTraditional, tbVegan, tbVegetarian));
         multipleChoice(List.of(tbGlutenFree, tbLactoseFree));
-
         multipleChoice(List.of(tbAppetizer, tbFirstCourse, tbMainCourse, tbSideDish, tbFruit, tbDessert, tbBeverage));
-
         kcalGroup = singleChoice(List.of(tbKcalNoLimit, tbKcalLight, tbKcalModerate, tbKcalComplete));
-
         budgetGroup = singleChoice(List.of(tbBudgetNoLimit, tbBudgetEconomic, tbBudgetBalanced, tbBudgetPremium));
-
-        btnNextFirst.setOnAction(this::onNextFirst);        
-        btnBackSecond.setOnAction(e -> showFirstQuestion());
-        btnNextSecond.setOnAction(this::onNextSecond);
-        btnNextThird.setOnAction(this::onNextThird);
-        btnNextFourth.setOnAction(this::onNextFourth);
     }
 
-    @FXML
-    private void onNextFirst(ActionEvent e){
-        int count = 0;
-
-        Toggle selectedDiet = firstGroup.getSelectedToggle();
-        if(selectedDiet != null) count ++;
-
-        if(tbGlutenFree.isSelected()) count ++;
-        if(tbLactoseFree.isSelected()) count ++;
-
-        if(count < 1){
-            showInfo("Seleziona almeno un opzione per continuare");
-            return;
+    private void initializeWizard(){
+        try {
+            ResponseBean responseBean = orderController.start();
+            handleResponse(responseBean);
+        } catch (OrderException e) {
+            showError("Errore nell'inizializzazione: " + e.getMessage());
         }
-        saveFirstQuestionPreferences();
-        showSecondQuestion();
+    }
+
+    private AnswerBean dietAnswers(){
+        Set<String> answers = new HashSet<>();
+
+        if(tbTraditional.isSelected()) answers.add(DietCategory.TRADITIONAL.name());
+        if(tbVegan.isSelected()) answers.add(DietCategory.VEGAN.name());
+        if(tbVegetarian.isSelected()) answers.add(DietCategory.VEGETARIAN.name());
+        if(tbGlutenFree.isSelected()) answers.add(DietCategory.GLUTEN_FREE.name());
+        if(tbLactoseFree.isSelected()) answers.add(DietCategory.LACTOSE_FREE.name());
+        
+        return new AnswerBean(StepType.DIET, answers);
     }
 
     @FXML
     private void onNextSecond(ActionEvent e){
+        try {
+            AnswerBean answerBean = dietAnswers();
 
-        List<ToggleButton> courseButtons = List.of(tbAppetizer, tbFirstCourse, tbMainCourse, tbSideDish, tbFruit, tbDessert, tbBeverage);
+            if(answerBean.getAnswers().isEmpty()){
+                showInfo("Seleziona almeno una tipologia dietetica per continuare");
+            }
 
-        long selectedCount = courseButtons.stream().filter(ToggleButton::isSelected).count();
+            ResponseBean responseBean = orderController.submit(answerBean);
 
-        if(selectedCount < 1){
-            showInfo("Seleziona almeno un opzione per continuare");
-            return;
+            handleResponse(responseBean);
+        } catch (OrderException ex) {
+            showError("Errore: " + ex.getMessage());
         }
-        saveSecondQuestionPreferences();
-        filterAllergenButtons();
-        showThirdQuestion();
+    }
+
+    private AnswerBean courseAnswers(){
+        Set<String> answers = new HashSet<>();
+
+        if(tbAppetizer.isSelected()) answers.add(CourseType.APPETIZER.name());
+        if(tbFirstCourse.isSelected()) answers.add(CourseType.FIRST_COURSE.name());
+        if(tbMainCourse.isSelected()) answers.add(CourseType.MAIN_COURSE.name());
+        if(tbSideDish.isSelected()) answers.add(CourseType.SIDE_DISH.name());
+        if(tbFruit.isSelected()) answers.add(CourseType.FRUIT.name());
+        if(tbDessert.isSelected()) answers.add(CourseType.DESSERT.name());
+        if(tbBeverage.isSelected()) answers.add(CourseType.BEVERAGE.name());
+        
+        return new AnswerBean(StepType.COURSE, answers);
     }
 
     @FXML
     private void onNextThird(ActionEvent e){
-        saveThirdQuestionPreferences();
-        showFourthQuestion();
+        try {
+            AnswerBean answerBean = allergenAnswers();
+            ResponseBean responseBean = orderController.submit(answerBean);
+            handleResponse(responseBean);
+
+        } catch (OrderException ex) {
+            showError("Errore: " + ex.getMessage());
+        }
     }
 
     @FXML
     private void onNextFourth(ActionEvent e){
-        if(kcalGroup.getSelectedToggle() == null){
-            showInfo("Seleziona un opzione per continuare");
-            return;
+        try {
+            AnswerBean answerBean = kcalAnswers();
+
+            if(kcalGroup.getSelectedToggle() == null){
+                showInfo("Seleziona un opzione per continuare");
+                return;
+            }
+
+            ResponseBean responseBean = orderController.submit(answerBean);
+
+            handleResponse(responseBean);
+        } catch (OrderException ex) {
+            showError("Errore: " + ex.getMessage());
         }
-        saveFourthQuestionPreferences();
-        showFifthQuestion();
+    }
+
+    @FXML
+    private void onNextFifth(ActionEvent e){
+        try {
+            AnswerBean answerBean = budgetAnswers();
+
+            if(budgetGroup.getSelectedToggle() == null){
+                showInfo("Seleziona un opzione per continuare");
+                return;
+            }
+
+            ResponseBean responseBean = orderController.submit(answerBean);
+
+            handleResponse(responseBean);
+        } catch (OrderException ex) {
+            showError("Errore: " + ex.getMessage());
+        }
+    }
+
+    @FXML
+    private void onNextFirst(ActionEvent e){
+        try {
+            AnswerBean answerBean = courseAnswers();
+
+            if(answerBean.getAnswers().isEmpty()){
+                showInfo("Seleziona almeno una portata per continuare");
+            }
+
+            ResponseBean responseBean = orderController.submit(answerBean);
+
+            handleResponse(responseBean);
+        } catch (OrderException ex) {
+            showError("Errore: " + ex.getMessage());
+        }
+    }
+
+    private AnswerBean kcalAnswers(){
+        Integer selectedValue = null;
+
+        Toggle selected = kcalGroup.getSelectedToggle();
+        if(selected == tbKcalLight && lblKcalLight != null){
+            selectedValue = extractIntFromLabel(lblKcalLight.getText());
+        } else if(selected == tbKcalModerate && lblKcalModerate != null){
+            selectedValue = extractIntFromLabel(lblKcalModerate.getText());
+        } else if(selected == tbKcalComplete && lblKcalComplete != null){
+            selectedValue = extractIntFromLabel(lblKcalComplete.getText());
+        } else if (selected == tbKcalNoLimit) {
+            selectedValue = null;
+        }
+        
+        return new AnswerBean(StepType.KCAL, selectedValue);
+    }
+
+    private AnswerBean budgetAnswers(){
+        Integer selectedValue = null;
+
+        Toggle selected = budgetGroup.getSelectedToggle();
+        if(selected == tbBudgetEconomic && lblBudgetEconomic != null){
+            selectedValue = extractIntFromLabel(lblBudgetEconomic.getText());
+        } else if(selected == tbBudgetBalanced && lblBudgetBalanced != null){
+            selectedValue = extractIntFromLabel(lblBudgetBalanced.getText());
+        } else if(selected == tbBudgetPremium && lblBudgetPremium != null){
+            selectedValue = extractIntFromLabel(lblBudgetPremium.getText());
+        } else if (selected == tbBudgetNoLimit) {
+            selectedValue = null;
+        }
+        
+        return new AnswerBean(StepType.BUDGET, selectedValue);
+    }
+
+    private Integer extractIntFromLabel(String text){
+        if(text == null){
+            return null;
+        }
+        try {
+            String value = text.replaceAll("[^0-9]", "");
+            return value.isEmpty() ? null : Integer.parseInt(value);
+        } catch (NumberFormatException _) {
+            return null;
+        }
+    }
+
+    private AnswerBean allergenAnswers(){
+        Set<String> answers = new HashSet<>();
+
+        if(tbCelery.isSelected()) answers.add(Allergen.CELERY.name());
+        if(tbCrustaceans.isSelected()) answers.add(Allergen.CRUSTACEANS.name());
+        if(tbEggs.isSelected()) answers.add(Allergen.EGGS.name());
+        if(tbFish.isSelected()) answers.add(Allergen.FISH.name());
+        if(tbGluten.isSelected()) answers.add(Allergen.GLUTEN.name());
+        if(tbLupin.isSelected()) answers.add(Allergen.LUPIN.name());
+        if(tbMilk.isSelected()) answers.add(Allergen.MILK.name());
+        if(tbMolluscs.isSelected()) answers.add(Allergen.MOLLUSCS.name());
+        if(tbMustard.isSelected()) answers.add(Allergen.MUSTARD.name());
+        if(tbNuts.isSelected()) answers.add(Allergen.NUTS.name());
+        if(tbPeanuts.isSelected()) answers.add(Allergen.PEANUTS.name());
+        if(tbSesame.isSelected()) answers.add(Allergen.SESAME.name());
+        if(tbSoy.isSelected()) answers.add(Allergen.SOY.name());
+        if(tbSulphites.isSelected()) answers.add(Allergen.SULPHITES.name());
+        
+        return new AnswerBean(StepType.ALLERGENS, answers);
     }
 
     @FXML
@@ -348,13 +454,11 @@ public class GuiCustomerOrder extends BaseGui {
             showInfo("Seleziona un opzione per continuare");
             return;
         }
-        saveFifthQuestionPreferences();
         showProposePane();
         loadMenuDishes();
     }
 
-    private final ObservableList<DishBean> allDishes = FXCollections.observableArrayList();
-
+    private final ObservableList<DishBean> proposedDishes = FXCollections.observableArrayList();
 
     private ToggleGroup singleChoice(List<ToggleButton> buttons){
         ToggleGroup group = new ToggleGroup();
@@ -370,6 +474,91 @@ public class GuiCustomerOrder extends BaseGui {
         }
     }
 
+    private void updateAllergenButtons(ResponseBean response){
+        Set<Allergen> relevantAllergens = response.getAllergens();
+
+        if(relevantAllergens == null || relevantAllergens.isEmpty()){
+            return;
+        }
+
+        for(ToggleButton b : allergenButtons.values()){
+            b.setVisible(false);
+            b.setManaged(false);
+        }
+
+        for(Allergen allergen : relevantAllergens){
+            ToggleButton b = allergenButtons.get(allergen);
+            if(b != null){
+                b.setVisible(true);
+                b.setManaged(true);
+            }
+        }
+    }
+
+    // private void setAllergenButtonsVisible(boolean visible){
+    //     tbCelery.setVisible(visible);
+    //     tbCrustaceans.setVisible(visible);
+    //     tbEggs.setVisible(visible);
+    //     tbFish.setVisible(visible);
+    //     tbGluten.setVisible(visible);
+    //     tbLupin.setVisible(visible);
+    //     tbMilk.setVisible(visible);
+    //     tbMolluscs.setVisible(visible);
+    //     tbMustard.setVisible(visible);
+    //     tbNuts.setVisible(visible);
+    //     tbPeanuts.setVisible(visible);
+    //     tbSesame.setVisible(visible);
+    //     tbSoy.setVisible(visible);
+    //     tbSulphites.setVisible(visible);
+    // }
+
+    private void initAllergenButtons(){
+        allergenButtons.put(Allergen.CELERY, tbCelery);
+        allergenButtons.put(Allergen.CRUSTACEANS, tbCrustaceans);
+        allergenButtons.put(Allergen.EGGS, tbEggs);
+        allergenButtons.put(Allergen.FISH, tbFish);
+        allergenButtons.put(Allergen.GLUTEN, tbGluten);
+        allergenButtons.put(Allergen.LUPIN, tbLupin);
+        allergenButtons.put(Allergen.MILK, tbMilk);
+        allergenButtons.put(Allergen.MOLLUSCS, tbMolluscs);
+        allergenButtons.put(Allergen.MUSTARD, tbMustard);
+        allergenButtons.put(Allergen.NUTS, tbNuts);
+        allergenButtons.put(Allergen.PEANUTS, tbPeanuts);
+        allergenButtons.put(Allergen.SESAME, tbSesame);
+        allergenButtons.put(Allergen.SOY, tbSoy);
+        allergenButtons.put(Allergen.SULPHITES, tbSulphites);
+    }
+
+    private void updateKcalOptions(ResponseBean response){
+        List<Integer> values = response.getValues();
+        if(values != null && values.size() >= 3){
+            lblKcalLight.setText("Leggero (fino a " + values.get(0) + " Kcal)");
+            lblKcalModerate.setText("Moderato (fino a " + values.get(1) + " Kcal)");
+            lblKcalComplete.setText("Abbondante (fino a " + values.get(2) + " Kcal)");
+        }
+    }
+
+    private void updateBudgetOptions(ResponseBean response){
+        List<Integer> values = response.getValues();
+        if(values != null && values.size() >= 3){
+            lblBudgetEconomic.setText("Economico (entro i " + values.get(0) + " €)");
+            lblBudgetBalanced.setText("Equilibrato (entro i " + values.get(1) + " €)");
+            lblBudgetPremium.setText("Premium (entro i " + values.get(2) + " €)");
+        }
+    }
+
+    private void displayProposals(ResponseBean responseBean){
+        List<DishBean> dishes = responseBean.getDishes();
+
+        if(dishes == null || dishes.isEmpty()){
+            showInfo("Nessun piatto trovato con i criteri selezionati");
+            return;
+        }
+
+        proposedDishes.setAll(dishes);
+        refreshMenuGrid();
+    }
+
     @FXML
     void onCartClicked(ActionEvent event) {
         router.showCustomerRecapOrder();
@@ -380,11 +569,10 @@ public class GuiCustomerOrder extends BaseGui {
         router.showCustomerRecapOrder();
     }
 
-
     private void loadMenuDishes(){
         try {
             List<DishBean> dishes = dishBoundary.getAllDishes();
-            allDishes.setAll(dishes);
+            proposedDishes.setAll(dishes);
             refreshMenuGrid();
         } catch (Exception e) {
             showError("Errore durante il caricamente dei piatti: " + e.getMessage());
@@ -398,7 +586,7 @@ public class GuiCustomerOrder extends BaseGui {
         int col = 0;
         int row = 0;
 
-        for(DishBean dish: allDishes){
+        for(DishBean dish: proposedDishes){
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/card.fxml"));
                 AnchorPane cardNode = loader.load();
@@ -427,145 +615,6 @@ public class GuiCustomerOrder extends BaseGui {
             showInfo(dishBean.getName() + " aggiunto all'ordine.");
         } catch (Exception e) {
             showError("Errore durante l'aggiunta all'ordine: " + e.getMessage());
-        }
-    }
-
-    private void saveFirstQuestionPreferences(){
-        Set<DietCategory> dietCategories = new HashSet<>();
-
-        Toggle selectedDiet = firstGroup.getSelectedToggle();
-        if(selectedDiet == tbTraditional) {
-            dietCategories.add(DietCategory.TRADITIONAL);
-        } else if (selectedDiet == tbVegan) {
-            dietCategories.add(DietCategory.VEGAN);
-        } else if (selectedDiet == tbVegetarian) {
-            dietCategories.add(DietCategory.VEGETARIAN);
-        }
-
-        if(tbGlutenFree.isSelected()){
-            dietCategories.add(DietCategory.GLUTEN_FREE);
-        }
-
-        if(tbLactoseFree.isSelected()){
-            dietCategories.add(DietCategory.LACTOSE_FREE);
-        }
-        
-        preferences.setDietCategories(dietCategories);
-    }
-
-    private void saveSecondQuestionPreferences(){
-        Set<CourseType> courseTypes = new HashSet<>();
-
-        if(tbAppetizer.isSelected()) courseTypes.add(CourseType.APPETIZER);
-        if(tbFirstCourse.isSelected()) courseTypes.add(CourseType.FIRST_COURSE);
-        if(tbMainCourse.isSelected()) courseTypes.add(CourseType.MAIN_COURSE);
-        if(tbSideDish.isSelected()) courseTypes.add(CourseType.SIDE_DISH);
-        if(tbFruit.isSelected()) courseTypes.add(CourseType.FRUIT);
-        if(tbDessert.isSelected()) courseTypes.add(CourseType.DESSERT);
-        if(tbBeverage.isSelected()) courseTypes.add(CourseType.BEVERAGE);
-        
-        preferences.setCourseTypes(courseTypes);
-    }
-
-    private void saveThirdQuestionPreferences(){
-        Set<Allergen> allergens = new HashSet<>();
-
-        if(tbCelery.isSelected()) allergens.add(Allergen.CELERY);
-        if(tbCrustaceans.isSelected()) allergens.add(Allergen.CRUSTACEANS);
-        if(tbEggs.isSelected()) allergens.add(Allergen.EGGS);
-        if(tbFish.isSelected()) allergens.add(Allergen.FISH);
-        if(tbGluten.isSelected()) allergens.add(Allergen.GLUTEN);
-        if(tbLupin.isSelected()) allergens.add(Allergen.LUPIN);
-        if(tbMilk.isSelected()) allergens.add(Allergen.MILK);
-        if(tbMustard.isSelected()) allergens.add(Allergen.MUSTARD);
-        if(tbMolluscs.isSelected()) allergens.add(Allergen.MOLLUSCS);
-        if(tbNuts.isSelected()) allergens.add(Allergen.NUTS);
-        if(tbPeanuts.isSelected()) allergens.add(Allergen.PEANUTS);
-        if(tbSesame.isSelected()) allergens.add(Allergen.SESAME);
-        if(tbSulphites.isSelected()) allergens.add(Allergen.SULPHITES);
-        if(tbSoy.isSelected()) allergens.add(Allergen.SOY);
-        
-        preferences.setAllergens(allergens);
-    }
-
-    private void saveFourthQuestionPreferences(){
-
-        Toggle selectedKcal = kcalGroup.getSelectedToggle();
-
-        if(selectedKcal == tbKcalLight) {
-            preferences.setKcal(Kcal.LIGHT);
-        } else if (selectedKcal == tbKcalModerate) {
-            preferences.setKcal(Kcal.BALANCED);
-        } else if (selectedKcal == tbKcalComplete) {
-            preferences.setKcal(Kcal.COMPLETE);
-        } else if (selectedKcal == tbKcalNoLimit) {
-            preferences.setKcal(Kcal.FREE);
-        }        
-    }
-
-    private void saveFifthQuestionPreferences(){
-
-        Toggle selectedBudget = budgetGroup.getSelectedToggle();
-
-        if(selectedBudget == tbBudgetEconomic) {
-            preferences.setBudget(Budget.ECONOMIC);
-        } else if (selectedBudget == tbBudgetBalanced) {
-            preferences.setBudget(Budget.BALANCED);
-        } else if (selectedBudget == tbBudgetPremium) {
-            preferences.setBudget(Budget.PREMIUM);
-        } else if (selectedBudget == tbBudgetNoLimit) {
-            preferences.setBudget(Budget.FREE);
-        }        
-    }
-
-    private void filterAllergenButtons(){
-        Set<ToggleButton> relevantAllergens = new HashSet<>();
-
-        if(tbAppetizer.isSelected() || tbFirstCourse.isSelected() || tbMainCourse.isSelected() || tbDessert.isSelected()) {
-            relevantAllergens.addAll(List.of(            tbCelery, tbCrustaceans, tbEggs, tbFish, tbGluten, tbLupin,
-            tbMilk, tbMolluscs, tbMustard, tbNuts, tbPeanuts, tbSesame,
-            tbSoy, tbSulphites));
-        } else { 
-            if(tbFruit.isSelected()){
-                relevantAllergens.addAll(List.of(tbSulphites, tbNuts));
-            }
-            if(tbBeverage.isSelected()){
-                relevantAllergens.addAll(List.of(tbSulphites, tbGluten, tbMilk, tbSoy));
-            }
-            if(tbSideDish.isSelected()){
-                relevantAllergens.addAll(List.of(tbCelery, tbMustard, tbSesame, tbSoy, tbSulphites, tbNuts));
-            }
-        }
-
-        Toggle selectedDiet = firstGroup.getSelectedToggle();
-
-        if(selectedDiet == tbVegan) {
-            relevantAllergens.removeAll(List.of(tbFish, tbCrustaceans, tbMolluscs, tbEggs, tbMilk));
-        } else if (selectedDiet == tbVegetarian) {
-            relevantAllergens.removeAll(List.of(tbFish, tbCrustaceans, tbMolluscs));
-        }
-
-        if(tbGlutenFree.isSelected()){
-            relevantAllergens.remove(tbGluten);
-        }
-
-        if(tbLactoseFree.isSelected()){
-            relevantAllergens.remove(tbMilk);
-        }
-
-        List<ToggleButton> allAllergenButtons = List.of(
-            tbCelery, tbCrustaceans, tbEggs, tbFish, tbGluten, tbLupin,
-            tbMilk, tbMolluscs, tbMustard, tbNuts, tbPeanuts, tbSesame,
-            tbSoy, tbSulphites
-        );
-
-        for(ToggleButton button: allAllergenButtons){
-            if(relevantAllergens.contains(button)){
-                button.setDisable(false);
-            } else {
-                button.setDisable(true);
-                button.setSelected(false);
-            }
         }
     }
 }
