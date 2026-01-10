@@ -1,5 +1,6 @@
 package it.foodmood.view.ui.cli;
 
+import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.exception.AuthenticationException;
 import it.foodmood.view.boundary.LoginBoundary;
@@ -15,7 +16,7 @@ public class CliLoginView extends ConsoleView {
         this.boundary = boundary;
     }
 
-    public boolean displayPage(){
+    public ActorBean displayPage(){
         clearScreen();
         while(true){
             showTitle(TITLE);
@@ -40,10 +41,10 @@ public class CliLoginView extends ConsoleView {
                 }
             }
             try {
-                boundary.login(loginBean);
-                showSuccess("Login effettuato con successo\n");
+                ActorBean actor = boundary.login(loginBean);
+                showSuccess("Login effettuato con successo");
                 waitForEnter(null);
-                return true;
+                return actor;
             } catch (AuthenticationException e) {
                 clearScreen();
                 showError(e.getMessage());

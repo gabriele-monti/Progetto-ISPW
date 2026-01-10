@@ -27,6 +27,7 @@ public final class DishMapper {
         dishBean.setDescription(dish.getDescription());
         dishBean.setCourseType(dish.getCourseTypes());
         dishBean.setDietCategory(dish.getDietCategory());
+        dishBean.setKcal(dish.getKcal());
 
         Money price = dish.getPrice();
         dishBean.setPrice(price.getAmount());

@@ -1,9 +1,9 @@
 package it.foodmood.view.boundary;
 
+import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.config.UserMode;
 import it.foodmood.controller.application.LoginController;
-import it.foodmood.domain.model.User;
 import it.foodmood.exception.AuthenticationException;
 
 public class LoginBoundary {
@@ -15,7 +15,7 @@ public class LoginBoundary {
         this.userMode = userMode;
     }
 
-    public User login(LoginBean userBean) throws AuthenticationException{
+    public ActorBean login(LoginBean userBean) throws AuthenticationException{
         return loginController.login(userBean, userMode);
     }
 

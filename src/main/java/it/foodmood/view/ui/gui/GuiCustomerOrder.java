@@ -9,7 +9,7 @@ import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.AnswerBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.ResponseBean;
-import it.foodmood.controller.application.OrderPreferencesController;
+import it.foodmood.controller.application.OrderCustomizationController;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
@@ -96,7 +96,7 @@ public class GuiCustomerOrder extends BaseGui {
     @FXML private ToggleButton tbVegan;
     @FXML private ToggleButton tbVegetarian;
 
-    private final OrderPreferencesController orderController;
+    private final OrderCustomizationController orderController;
     private Cart cart;
     private GuiRouter router;
     private ToggleGroup dietGroup;    
@@ -111,7 +111,7 @@ public class GuiCustomerOrder extends BaseGui {
     }
 
     public GuiCustomerOrder(){
-        this.orderController = new OrderPreferencesController();
+        this.orderController = new OrderCustomizationController();
     }
 
     public void setRouter(GuiRouter router){

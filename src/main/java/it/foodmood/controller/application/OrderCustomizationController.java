@@ -29,7 +29,7 @@ import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
 import it.foodmood.utils.SessionManager;
 
-public class OrderPreferencesController {
+public class OrderCustomizationController {
     private final DishDao dishDao;
     private final SessionManager sessionManager; 
     
@@ -45,7 +45,7 @@ public class OrderPreferencesController {
     private OrderWizardState wizardState;
     private OrderComplexity complexity;
 
-    public OrderPreferencesController(){
+    public OrderCustomizationController(){
         DaoFactory factory = DaoFactory.getInstance();
         this.sessionManager = SessionManager.getInstance();
         this.dishDao = factory.getDishDao();
@@ -71,7 +71,7 @@ public class OrderPreferencesController {
         ensureActiveSession();
 
         if(answer == null || answer.getStepType() == null){
-            throw new OrderException("La risposta o lo step corrente non possono essere nulli");
+            throw new OrderException("La risposta non possono essere nulla");
         }
 
         try {

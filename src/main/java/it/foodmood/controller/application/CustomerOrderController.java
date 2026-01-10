@@ -69,34 +69,10 @@ public class CustomerOrderController {
 
         } catch (OrderException e){
             throw e;
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException | NullPointerException e){
             throw new OrderException("Errore durante l'inserimento dell'ordine: " + e.getMessage());
         }
     }
-
-    // private OrderBean toBean(Order order){
-    //     OrderBean orderBean = new OrderBean();
-    //     orderBean.setId(order.getId().toString());
-    //     orderBean.setUserId(order.getUserId().toString());
-    //     orderBean.setStatus(order.getStatus());
-    //     orderBean.setTotal(order.total().getAmount());
-
-    //     List<OrderLineBean> orderLineBeans = order.getOrderLines().stream().map(this::toLineBean).toList();
-
-    //     orderBean.setOrderLines(orderLineBeans);
-
-    //     return orderBean;
-    // }
-
-    // private OrderLineBean toLineBean(OrderLine orderLine){
-    //     OrderLineBean orderLineBean = new OrderLineBean();
-    //     orderLineBean.setDishId(orderLine.dishId().toString());
-    //     orderLineBean.setUnitPrice(orderLine.unitPrice().getAmount());
-    //     orderLineBean.setQuantity(orderLine.quantity());
-    //     orderLineBean.setSubTotal(orderLine.subtotal().getAmount());
-
-    //     return orderLineBean;
-    // }
 
     public void ensureActiveSession(){
         sessionManager.requireActiveSession();

@@ -86,6 +86,11 @@ public class DishController {
         return dishDao.findAll().stream().map(this::toBean).toList();
     }
 
+    public List<DishBean> getDishesByCourseType(CourseType courseType){
+        ensureActiveSession();
+        return dishDao.findByCourseType(courseType).stream().map(this::toBean).toList();
+    }
+
     private IngredientPortion toDomainIngredientPortion(IngredientPortionBean ingredientPortionBean){
         if(ingredientPortionBean == null){
             throw new IllegalArgumentException("La porzione dell'ingrediente non può essere nulla.");
@@ -147,6 +152,8 @@ public class DishController {
 
         Money price = dish.getPrice();
         dishBean.setPrice(price.getAmount());
+
+        dishBean.setKcal(dish.getKcal());
 
         Image image = dish.getImage();
         if(image != null && image.getUri() != null){

@@ -1,6 +1,7 @@
 package it.foodmood.view.ui.cli.manager;
 
 import it.foodmood.view.ui.cli.ManagerPages;
+import it.foodmood.bean.ActorBean;
 import it.foodmood.view.ui.cli.ConsoleView;
 
 public class CliManagerMenuView extends ConsoleView {
@@ -9,10 +10,11 @@ public class CliManagerMenuView extends ConsoleView {
         super();
     }
 
-    public ManagerPages displayPage(){
+    public ManagerPages displayPage(ActorBean actorBean){
         clearScreen();
         while(true){
             showTitle("Menù Manager");
+            showInfo("Utente: " + actorBean.getName() + " " + actorBean.getSurname() + "\n");
 
             showInfo("1. Gestisci Ingredienti");
             showInfo("2. Gestisci Piatti");

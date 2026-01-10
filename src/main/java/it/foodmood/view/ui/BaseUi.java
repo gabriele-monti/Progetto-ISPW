@@ -1,6 +1,9 @@
 package it.foodmood.view.ui;
 
+import it.foodmood.bean.ActorBean;
+
 public interface BaseUi {
-    boolean showLoginView();
+    ActorBean showLoginView();
+    boolean showLogoutView();
     void showRegistrationView();   
 } 

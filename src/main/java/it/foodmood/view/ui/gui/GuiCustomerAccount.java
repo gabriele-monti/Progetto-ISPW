@@ -129,7 +129,6 @@ public class GuiCustomerAccount extends BaseGui {
         btnFoodPreferences.setOnAction( e -> showFoodPreferencesPage());
     }
 
-
     private GuiRouter router;
 
     public void setRouter(GuiRouter router){

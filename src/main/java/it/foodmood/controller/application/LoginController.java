@@ -2,6 +2,7 @@ package it.foodmood.controller.application;
 
 import java.util.Arrays;
 
+import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.config.UserMode;
 import it.foodmood.domain.model.Credential;
@@ -26,7 +27,7 @@ public class LoginController {
         this.passwordHasher = new PasswordHasher();
     }
 
-    public User login(LoginBean loginBean, UserMode mode) throws AuthenticationException{
+    public ActorBean login(LoginBean loginBean, UserMode mode) throws AuthenticationException{
         
         // 1) Verifichiamo l'esistenza dell'utente
         Email email = new Email(loginBean.getEmail());
@@ -61,7 +62,14 @@ public class LoginController {
         // 5) Creo la sessione per l'utente
         SessionManager.getInstance().createUserSession(user);
 
-        return user;
+        ActorBean actor = new ActorBean();
+
+        actor.setName(user.getPerson().firstName());
+        actor.setSurname(user.getPerson().lastName());
+        actor.setGuest(false);
+        actor.setLogged(true);
+
+        return actor;
     }
 
     public void logout(){

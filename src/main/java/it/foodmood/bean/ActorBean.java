@@ -1,9 +1,10 @@
 package it.foodmood.bean;
 
 public class ActorBean {
-    String name;
-    String surname;
-    boolean guest;
+    private String name;
+    private String surname;
+    private boolean guest;
+    private boolean logged;
 
     public ActorBean(){
         // Costruttore vuoto
@@ -29,8 +30,16 @@ public class ActorBean {
         return guest;
     }
 
+    public boolean isLogged(){
+        return logged;
+    }
+
     public void setGuest(boolean guest){
         this.guest = guest;
+    }
+
+    public void setLogged(boolean logged){
+        this.logged = logged;
     }
 }
 

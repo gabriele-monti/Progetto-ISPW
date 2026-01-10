@@ -19,6 +19,7 @@ public class DishBean {
     private CourseType courseType;
     private DietCategory dietCategory;
     private BigDecimal price;
+    private Double kcal;
     private String imageUri;
     private DishState state;
     private List<IngredientPortionBean> ingredients;
@@ -40,6 +41,8 @@ public class DishBean {
     public DietCategory getDietCategory(){ return dietCategory;}
 
     public BigDecimal getPrice(){ return price;}
+
+    public Double getKcal(){ return kcal;}
 
     public String getImageUri(){ return imageUri;}
 
@@ -98,6 +101,13 @@ public class DishBean {
         } else {
             this.imageUri = null;
         }
+    }
+
+    public void setKcal(Double kcal){
+        if(kcal == null){
+            throw new IllegalArgumentException("Kcal del piatto non valide.");
+        }
+        this.kcal = kcal;
     }
 
     public void setState(DishState state){

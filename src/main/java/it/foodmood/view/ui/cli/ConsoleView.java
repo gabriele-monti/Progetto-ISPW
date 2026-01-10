@@ -191,6 +191,31 @@ public abstract class ConsoleView implements CliUserInterface{
         }
     }
 
+    protected Integer askPositiveInt(String prompt){
+        while(true){
+            out.print(prompt);
+            String input = in.readLine();
+
+            if(input == null){
+                showError("Valore non valido");
+                continue;
+            }
+
+            input = input.trim();
+
+            try {
+                int positiveInt = Integer.parseInt(input);
+                if(positiveInt > 0){
+                    return positiveInt;
+                } else {
+                    showError("Inserisci un numero maggiore di zero.");
+                }
+            } catch (NumberFormatException _) {
+                showError("Inserisci un numero intero positivo valido.\n");
+            }           
+        }
+    }
+
     protected Double askDouble(String prompt){
         while(true){
             out.print(prompt);

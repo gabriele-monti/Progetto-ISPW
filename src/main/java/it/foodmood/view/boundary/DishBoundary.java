@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.foodmood.bean.DishBean;
 import it.foodmood.controller.application.DishController;
+import it.foodmood.domain.value.CourseType;
 import it.foodmood.exception.DishException;
 
 public class DishBoundary {
@@ -20,6 +21,10 @@ public class DishBoundary {
 
     public List<DishBean> getAllDishes(){
         return controller.getAllDishes();
+    }
+
+    public List<DishBean> getDishesByCourseType(CourseType courseType){
+        return controller.getDishesByCourseType(courseType);
     }
 
     public void deleteDish(String name) throws DishException{

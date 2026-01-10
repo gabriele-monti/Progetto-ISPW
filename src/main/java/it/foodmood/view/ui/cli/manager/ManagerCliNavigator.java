@@ -1,5 +1,6 @@
 package it.foodmood.view.ui.cli.manager;
 
+import it.foodmood.bean.ActorBean;
 import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.utils.SessionManager;
 import it.foodmood.view.ui.ManagerUi;
@@ -10,9 +11,11 @@ import it.foodmood.view.ui.cli.ProtectedConsoleView;
 public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavigator {
 
     private final ManagerUi ui;
+    ActorBean actor;
 
     public ManagerCliNavigator(ManagerUi managerUi){
         this.ui = managerUi;
+        this.actor = new ActorBean();
     }
 
     @Override
@@ -20,9 +23,9 @@ public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavi
 
         boolean exitApp = false;
         while(!exitApp){
-            boolean logged = ui.showLoginView();
+            actor = ui.showLoginView();
 
-            if(!logged){
+            if(!actor.isLogged()){
                 exitApp = true;
                 continue;
             }
@@ -39,7 +42,7 @@ public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavi
                 sessionManager.requireActiveSession();
 
                 CliManagerMenuView menuView = new CliManagerMenuView();
-                ManagerPages page = menuView.displayPage();
+                ManagerPages page = menuView.displayPage(actor);
 
                 switch(page){
                     case MANAGMENT_INGREDIENTS -> ui.showIngredientManagmentView();
@@ -47,12 +50,12 @@ public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavi
                     case MANAGMENT_DISH -> ui.showDishManagmentView();
 
                     case LOGOUT -> {
-                        sessionManager.terminateCurrentSession();
-                        return false;
+                        if(ui.showLogoutView()){
+                            return false;
+                        };
                     }
 
                     case EXIT -> {
-                        sessionManager.terminateCurrentSession();
                         return true;
                     }
                 } 

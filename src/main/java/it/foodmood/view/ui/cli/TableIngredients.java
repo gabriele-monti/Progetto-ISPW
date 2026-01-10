@@ -17,7 +17,7 @@ public final class TableIngredients{
     }
 
     public static List<Integer> ingredientColumnWidths(){
-        return List.of(4, 20,5,8,11,6,20);
+        return List.of(3, 20,5,8,11,6,20);
     }
 
     public static List<List<String>> ingredientRows(List<IngredientBean> ingredients){

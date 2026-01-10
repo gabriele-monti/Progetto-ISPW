@@ -7,7 +7,9 @@ import it.foodmood.view.ui.cli.waiter.WaiterCliNavigator;
 
 public class CliNavigatorFactory {
 
-    private CliNavigatorFactory() {}
+    private CliNavigatorFactory() {
+        // Costruttore vuoto
+    }
 
     public static CliNavigator create(UserMode mode, CliFactory factory){
         return switch(mode){

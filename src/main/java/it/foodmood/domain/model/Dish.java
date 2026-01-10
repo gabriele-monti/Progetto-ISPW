@@ -116,10 +116,6 @@ public class Dish {
         return total;
     }
 
-    public double totalKcal(){
-        return totalMacronutrients().kcal();
-    }
-
     public void changeName(String newName){
         this.name = Objects.requireNonNull(newName, "Il nuovo nome non può essere nullo").trim();
         if(this.name.isEmpty()) throw new IllegalArgumentException("Il nome non può essere vuoto");
@@ -175,7 +171,7 @@ public class Dish {
     }
 
     public double getKcal(){
-        return totalMacronutrients().kcal();
+        return Math.floor(totalMacronutrients().kcal());
     }
 
     @Override
