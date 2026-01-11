@@ -74,8 +74,6 @@ public class DishController {
 
             dishDao.insert(dish);
 
-        } catch (DishException e){
-            throw e;
         } catch (IllegalArgumentException e){
             throw new DishException("Errore durante l'inserimento del piatto: " + e.getMessage());
         }

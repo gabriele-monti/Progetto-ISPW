@@ -28,16 +28,11 @@ public class CartController {
     public void addToCart(String dishId, int quantity) throws CartException{
         ensureActiveSession();
 
-        try {
-            UUID id = UUID.fromString(dishId);
+        UUID id = UUID.fromString(dishId);
 
-            Dish dish = dishDao.findById(id).orElseThrow(() -> new CartException("Articolo non disponibile"));
+        Dish dish = dishDao.findById(id).orElseThrow(() -> new CartException("Articolo non disponibile"));
 
-            cart.addLine(dish.getId(), dish.getName(), dish.getPrice(), quantity);
-
-        } catch (IllegalArgumentException e) {
-            throw e;
-        }
+        cart.addLine(dish.getId(), dish.getName(), dish.getPrice(), quantity);
     }
 
     public List<OrderLineBean> getCartItems(){

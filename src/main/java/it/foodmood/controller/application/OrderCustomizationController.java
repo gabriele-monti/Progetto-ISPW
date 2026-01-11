@@ -97,8 +97,6 @@ public class OrderCustomizationController {
             // Costruisco la risposta per lo step successivo
             return buildStepResponse(nextStep);
             
-        } catch (OrderException e) {
-            throw e;
         } catch (Exception e){
             throw new OrderException("Errore durante l'elaborazione della risposta: " + e.getMessage());
         }
@@ -204,16 +202,16 @@ public class OrderCustomizationController {
 
         switch(step){
             case COURSE -> { 
-                Set<CourseType> courses = preference.getAnswers().stream().map(CourseType::fromName).collect(Collectors.toSet());;
+                Set<CourseType> courses = preference.getAnswers().stream().map(CourseType::fromName).collect(Collectors.toSet());
                 wizardState.setCourseType(courses); 
             }
             case DIET -> { 
-                Set<DietCategory> diet = preference.getAnswers().stream().map(DietCategory::fromName).collect(Collectors.toSet());; 
+                Set<DietCategory> diet = preference.getAnswers().stream().map(DietCategory::fromName).collect(Collectors.toSet());
                 wizardState.setDietCategory(diet); 
 
             }
             case ALLERGENS -> { 
-                Set<Allergen> allergens = preference.getAnswers().stream().map(Allergen::fromName).collect(Collectors.toSet());; 
+                Set<Allergen> allergens = preference.getAnswers().stream().map(Allergen::fromName).collect(Collectors.toSet());
                 wizardState.setAllergens(allergens);
             }
             case BUDGET -> { 

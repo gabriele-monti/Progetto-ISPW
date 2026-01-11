@@ -67,8 +67,6 @@ public class CustomerOrderController {
 
             return order.getId().toString();
 
-        } catch (OrderException e){
-            throw e;
         } catch (IllegalArgumentException | NullPointerException e){
             throw new OrderException("Errore durante l'inserimento dell'ordine: " + e.getMessage());
         }
