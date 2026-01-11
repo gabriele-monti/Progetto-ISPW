@@ -22,6 +22,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
     private final DishBoundary dishBoundary;
     private final IngredientBoundary ingredientBoundary;
     private final String INVALID_CHOICE = "Scelta non valida, riprova";
+    private final String BACK = "Premi INVIO per tornare indietro";
 
     public CliDishMenuView(DishBoundary dishBoundary, IngredientBoundary ingredientBoundary){
         this.dishBoundary = dishBoundary;
@@ -93,13 +94,13 @@ public class CliDishMenuView extends ProtectedConsoleView {
             waitForEnter(null);
         } catch (DishException e) {
             showError(e.getMessage());
-            waitForEnter("Premi INVIO per tornare indietro");
+            waitForEnter(BACK);
 
         } catch (IllegalArgumentException e){
             showError(e.getMessage());
         } catch (Exception e) {
             showError(e.getMessage());
-            waitForEnter("Premi INVIO per tornare indietro");
+            waitForEnter(BACK);
         }
     }
 
@@ -321,7 +322,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
                 waitForEnter(null);
             } catch (DishException e){
                 showError(e.getMessage());
-                waitForEnter("Premi INVIO per riprovare");
+                waitForEnter(BACK);
             }
         }
     }
@@ -333,7 +334,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
         if(dishes == null || dishes.isEmpty()){
             showWarning("Nessun piatto presente");
-            waitForEnter("Premi INVIO per tornare indietro");
+            waitForEnter(BACK);
             return false;
         }
 

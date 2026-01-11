@@ -96,6 +96,9 @@ public class GuiCustomerOrder extends BaseGui {
     @FXML private ToggleButton tbVegan;
     @FXML private ToggleButton tbVegetarian;
 
+    private final static String OPTION = "Seleziona un'opzione per continuare"; 
+    private final static String ERROR = "Errore: ";
+
     private final OrderCustomizationController orderController;
     private Cart cart;
     private GuiRouter router;
@@ -298,7 +301,7 @@ public class GuiCustomerOrder extends BaseGui {
 
             handleResponse(responseBean);
         } catch (OrderException ex) {
-            showError("Errore: " + ex.getMessage());
+            showError(ERROR + ex.getMessage());
         }
     }
 
@@ -324,7 +327,7 @@ public class GuiCustomerOrder extends BaseGui {
             handleResponse(responseBean);
 
         } catch (OrderException ex) {
-            showError("Errore: " + ex.getMessage());
+            showError(ERROR + ex.getMessage());
         }
     }
 
@@ -334,7 +337,7 @@ public class GuiCustomerOrder extends BaseGui {
             AnswerBean answerBean = kcalAnswers();
 
             if(kcalGroup.getSelectedToggle() == null){
-                showInfo("Seleziona un opzione per continuare");
+                showInfo(OPTION);
                 return;
             }
 
@@ -342,7 +345,7 @@ public class GuiCustomerOrder extends BaseGui {
 
             handleResponse(responseBean);
         } catch (OrderException ex) {
-            showError("Errore: " + ex.getMessage());
+            showError(ERROR + ex.getMessage());
         }
     }
 
@@ -352,7 +355,7 @@ public class GuiCustomerOrder extends BaseGui {
             AnswerBean answerBean = budgetAnswers();
 
             if(budgetGroup.getSelectedToggle() == null){
-                showInfo("Seleziona un opzione per continuare");
+                showInfo(OPTION);
                 return;
             }
 
@@ -360,7 +363,7 @@ public class GuiCustomerOrder extends BaseGui {
 
             handleResponse(responseBean);
         } catch (OrderException ex) {
-            showError("Errore: " + ex.getMessage());
+            showError(ERROR + ex.getMessage());
         }
     }
 
@@ -377,7 +380,7 @@ public class GuiCustomerOrder extends BaseGui {
 
             handleResponse(responseBean);
         } catch (OrderException ex) {
-            showError("Errore: " + ex.getMessage());
+            showError(ERROR + ex.getMessage());
         }
     }
 
@@ -451,7 +454,7 @@ public class GuiCustomerOrder extends BaseGui {
     @FXML
     private void onGenerate(ActionEvent e){
         if(budgetGroup.getSelectedToggle() == null){
-            showInfo("Seleziona un opzione per continuare");
+            showInfo(OPTION);
             return;
         }
         showProposePane();

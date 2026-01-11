@@ -19,6 +19,8 @@ public abstract class ConsoleView implements CliUserInterface{
 
     private static final String CLEAR_CONSOLE = "\033[H\033[J";
     private static final String BACK_COMMAND = "0";
+    private static final String INVALID_VALUE = "Valore non valido";
+    private static final String INVALID_NUMBER = "Inserisci un numero valido.";
 
     protected ConsoleView(){
         this.in = ConsoleInputReader.getInstance();
@@ -177,7 +179,7 @@ public abstract class ConsoleView implements CliUserInterface{
             String input = in.readLine();
 
             if(input == null){
-                showError("Valore non valido");
+                showError(INVALID_VALUE);
                 continue;
             }
 
@@ -186,7 +188,7 @@ public abstract class ConsoleView implements CliUserInterface{
             try {
                 return new BigDecimal(input);
             } catch (NumberFormatException _) {
-                showError("Inserisci un numero valido. Usa punto o virgola per i decimali.\n");
+                showError(INVALID_NUMBER + " Usa punto o virgola per i decimali.\n");
             }           
         }
     }
@@ -197,7 +199,7 @@ public abstract class ConsoleView implements CliUserInterface{
             String input = in.readLine();
 
             if(input == null){
-                showError("Valore non valido");
+                showError(INVALID_VALUE);
                 continue;
             }
 
@@ -222,7 +224,7 @@ public abstract class ConsoleView implements CliUserInterface{
             String input = in.readLine();
 
             if(input == null){
-                showError("Valore non valido");
+                showError(INVALID_VALUE);
                 continue;
             }
 
@@ -231,7 +233,7 @@ public abstract class ConsoleView implements CliUserInterface{
             try {
                 return Double.parseDouble(input);
             } catch (NumberFormatException _) {
-                showError("Inserisci un numero valido. Usa punto o virgola per i decimali.\n");
+                showError(INVALID_NUMBER + " Usa punto o virgola per i decimali.\n");
             }           
         }
     }
@@ -241,7 +243,7 @@ public abstract class ConsoleView implements CliUserInterface{
         try {
             index = Integer.parseInt(input);
         } catch (NumberFormatException _) {
-            showError("Inserisci un numero valido.");
+            showError(INVALID_NUMBER);
             waitForEnter(input);
             return null;
         }

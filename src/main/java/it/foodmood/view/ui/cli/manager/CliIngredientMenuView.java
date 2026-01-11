@@ -10,7 +10,10 @@ import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliIngredientMenuView extends ProtectedConsoleView {
+
     private final IngredientBoundary boundary;
+
+    private final String TRY_AGAIN = "Premi INVIO per riprovare";
 
     public CliIngredientMenuView(IngredientBoundary boundary){
         this.boundary = boundary;
@@ -55,7 +58,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
                 waitForEnter(null);
             } catch (IngredientException e){
                 showError(e.getMessage());
-                waitForEnter("Premi INVIO per riprovare");
+                waitForEnter(TRY_AGAIN);
             }
         }
     }
@@ -165,7 +168,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
             return true;
         } catch (IngredientException e) {
             showError(e.getMessage());
-            waitForEnter("Premi INVIO per riprovare");       
+            waitForEnter(TRY_AGAIN);       
             return false;         
         }
     } 

@@ -17,7 +17,7 @@ public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements Resta
 
     private static final String SEPARATOR = ";";
     private static final String TABLE_JOIN = "|";
-    private static final String TABLE_SEPARATOR = ",";
+    private static final String TABLE_SEPARATOR = "\\|";
     private static final String TABLE_FIELD_SEPARATOR = ",";
 
     public static synchronized FileSystemRestaurantRoomDao getInstance(){
@@ -112,13 +112,13 @@ public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements Resta
             }
 
             sb.append(table.getId())
-              .append(TABLE_SEPARATOR)
+              .append(TABLE_FIELD_SEPARATOR)
               .append(table.getSeats())
-              .append(TABLE_SEPARATOR)
+              .append(TABLE_FIELD_SEPARATOR)
               .append(table.getPosition().getRow())
-              .append(TABLE_SEPARATOR)
+              .append(TABLE_FIELD_SEPARATOR)
               .append(table.getPosition().getCol())
-              .append(TABLE_SEPARATOR)
+              .append(TABLE_FIELD_SEPARATOR)
               .append(table.getStatus().name());
         }
         return sb.toString();

@@ -24,6 +24,17 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
     private final CustomerOrderCustomizationBoundary orderCustomizationBoundary;
     private final CartBoundary cartBoundary;
     private final static String TITLE = "Ordina su misura per te";
+    private final static String OPTION = "\nSeleziona un'opzione: "; 
+    private final static String INVALID_OPTION = "Seleziona un'opzione valida"; 
+    private final static String NEXT = "Premi INVIO per andare avanti";
+    private final static String BACK_TO_HOME = "Premi INVIO per tornare al menù principale";
+    private static final String INVALID_NUMBER = "Inserisci un numero valido.";
+    private static final String UNTIL = " (fino a ";
+    private static final String WITHIN = " (entro i ";
+    private static final String KCAL = " Kcal)";
+    private static final String EURO = " €)";
+
+
     private static final Set<String> BASE_CATEGORIES = Set.of(DietCategory.TRADITIONAL.name(), DietCategory.VEGAN.name(), DietCategory.VEGETARIAN.name());
     
     public CliCustomerOrderCustomizationView(CustomerOrderCustomizationBoundary orderCustomizationBoundary, CartBoundary cartBoundary){
@@ -81,7 +92,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
                 showInfo(next + ". " + "Avanti");
                 // showInfo("0. Indietro");
 
-                String choice = askInput("\nSeleziona un'opzione: ");
+                String choice = askInput(OPTION);
 
                 int index = Integer.parseInt(choice);
 
@@ -95,7 +106,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
                 }
 
                 if(index < 0 || index > next){
-                    showError("Seleziona un opzione valida");
+                    showError(INVALID_OPTION);
                     waitForEnter(null);
                     continue;
                 }
@@ -110,7 +121,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
 
                 if(selected.size() == values.length){
                     showInfo("Hai selezionato tutte le portate disponibili");
-                    waitForEnter("Premi INVIO per andare avanti");
+                    waitForEnter(NEXT);
                     break;
                 }
 
@@ -141,13 +152,13 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             int next = values.length + 1;
             showInfo(next + ". " + "Avanti");
 
-            String choice = askInput("\nSeleziona un'opzione: ");
+            String choice = askInput(OPTION);
 
             int index;
             try {
                 index = Integer.parseInt(choice);
             } catch (NumberFormatException e) {
-                showError("Inserisci un numero valido.");
+                showError(INVALID_NUMBER);
                 waitForEnter(null);
                 continue;
             }
@@ -162,7 +173,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             }
 
             if(index < 0 || index > next){
-                showError("Seleziona un opzione valida");
+                showError(INVALID_OPTION);
                 continue;
             }
 
@@ -180,7 +191,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             
             if(selected.size() == 3){
                 showInfo("Hai selezionato tutte le opzioni disponibili");
-                waitForEnter("Premi INVIO per andare avanti");
+                waitForEnter(NEXT);
                 break;
             }
 
@@ -222,12 +233,12 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             int next = options.size() + 1;
             showInfo(next + ". " + "Avanti");
 
-            String choice = askInput("\nSeleziona un'opzione: ");
+            String choice = askInput(OPTION);
 
             int index = Integer.parseInt(choice);
                 
             if(index < 0 || index > next){
-                showError("Seleziona un opzione valida");
+                showError(INVALID_OPTION);
                 waitForEnter(null);
                 continue;
             }
@@ -247,7 +258,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
 
             if(selected.size() == options.size()){
                 showInfo("Hai selezionato tutte le opzioni disponibili");
-                waitForEnter("Premi INVIO per andare avanti");
+                waitForEnter(NEXT);
                 break;
             }
 
@@ -267,24 +278,24 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             showTitle(TITLE);
             showBold("Vuoi che il tuo pasto rientri in un certo apporto calorico?\n");
 
-            showInfo("1. " + Kcal.LIGHT.description() + " (fino a " + limits.get(0) + " Kcal)");
-            showInfo("2. " + Kcal.BALANCED.description() + " (fino a " + limits.get(1) + " Kcal)");
-            showInfo("3. " + Kcal.COMPLETE.description() + " (fino a " + limits.get(2) + " Kcal)");
+            showInfo("1. " + Kcal.LIGHT.description() + UNTIL + limits.get(0) + KCAL);
+            showInfo("2. " + Kcal.BALANCED.description() + UNTIL + limits.get(1) + KCAL);
+            showInfo("3. " + Kcal.COMPLETE.description() + UNTIL + limits.get(2) + KCAL);
             showInfo("4. " + Kcal.FREE.description());
 
-            String choice = askInput("\nSeleziona un'opzione: ");
+            String choice = askInput(OPTION);
 
             int index;
             try {
                 index = Integer.parseInt(choice);
             } catch (NumberFormatException e) {
-                showError("Inserisci un numero valido.");
+                showError(INVALID_NUMBER);
                 waitForEnter(null);
                 continue;
             }
 
             if(index < 1 || index > 4){
-                showError("Seleziona un opzione valida");
+                showError(INVALID_OPTION);
                 continue;
             }
 
@@ -309,24 +320,24 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             showTitle(TITLE);
             showBold("Vuoi rimanere entro in un certo budget per il tuo pasto?\n");
 
-            showInfo("1. " + Budget.ECONOMIC.description() + " (entro i " + limits.get(0) + " €)");
-            showInfo("2. " + Budget.BALANCED.description() + " (entro i " + limits.get(1) + " €)");
-            showInfo("3. " + Budget.PREMIUM.description() + " (entro i " + limits.get(2) + " €)");
+            showInfo("1. " + Budget.ECONOMIC.description() + WITHIN + limits.get(0) + EURO);
+            showInfo("2. " + Budget.BALANCED.description() + WITHIN + limits.get(1) + EURO);
+            showInfo("3. " + Budget.PREMIUM.description() + WITHIN + limits.get(2) + EURO);
             showInfo("4. " + Budget.FREE.description());
 
-            String choice = askInput("\nSeleziona un'opzione: ");
+            String choice = askInput(OPTION);
 
             int index;
             try {
                 index = Integer.parseInt(choice);
             } catch (NumberFormatException e) {
-                showError("Inserisci un numero valido.");
+                showError(INVALID_NUMBER);
                 waitForEnter(null);
                 continue;
             }
 
             if(index < 1 || index > 4){
-                showError("Seleziona un opzione valida");
+                showError(INVALID_OPTION);
                 continue;
             }
 
@@ -390,7 +401,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             handleResponse(responseBean);
         } catch (OrderException e) {
             showWarning(e.getMessage());
-            waitForEnter("Premi INVIO per tornare al menù principale");
+            waitForEnter(BACK_TO_HOME);
         }
     }
 
@@ -401,7 +412,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             handleResponse(responseBean);
         } catch (OrderException e) {
             showWarning(e.getMessage());
-            waitForEnter("Premi INVIO per tornare al menù principale");
+            waitForEnter(BACK_TO_HOME);
         }
     }
 }
