@@ -1,6 +1,5 @@
 package it.foodmood.bean;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import it.foodmood.domain.value.OrderStatus;
@@ -8,10 +7,8 @@ import it.foodmood.domain.value.OrderStatus;
 public class OrderBean {
     private String id;
     private String tableSessionId;
-    private String userId;
     private OrderStatus status;
     private List<OrderLineBean> orderLines;
-    private BigDecimal total;
 
     public OrderBean(){
         // Costruttore vuoto
@@ -33,14 +30,6 @@ public class OrderBean {
         this.tableSessionId = tableSessionId;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public OrderStatus getStatus(){
         return status;
     }
@@ -57,12 +46,5 @@ public class OrderBean {
         this.orderLines = orderLines;
     }
 
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
 }
 

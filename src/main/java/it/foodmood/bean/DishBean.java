@@ -1,7 +1,6 @@
 package it.foodmood.bean;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -94,9 +93,6 @@ public class DishBean {
 
     public void setImageUri(String imageUri){
         if(imageUri != null && !imageUri.isBlank()){
-            if(!isValidUri(imageUri)){
-                throw new IllegalArgumentException("Percorso dell'immagine non valido.");
-            }
             this.imageUri = imageUri.trim();
         } else {
             this.imageUri = null;
@@ -143,14 +139,5 @@ public class DishBean {
 
     private boolean isValidPrice(BigDecimal price){
         return price != null && price.compareTo(BigDecimal.ZERO) > 0;
-    }
-
-    private boolean isValidUri(String uri){
-        try {
-            URI.create(uri);
-            return true;
-        } catch (IllegalArgumentException _) {
-            return false;
-        }
     }
 }

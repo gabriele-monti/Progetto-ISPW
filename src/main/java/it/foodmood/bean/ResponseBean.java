@@ -7,14 +7,10 @@ import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.StepType;
 
 public class ResponseBean {
-    private StepType nextStep;
+    private final StepType nextStep;
     private Set<Allergen> allergens;
     private List<Integer> values;
     private List<DishBean> dishes;
-
-    public ResponseBean(){
-        // Costruttore vuoto
-    }
 
     public ResponseBean(StepType nextStep){
         this.nextStep = nextStep;

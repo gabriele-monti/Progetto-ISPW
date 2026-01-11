@@ -27,8 +27,8 @@ public class CliCustomerRecapOrderView extends ProtectedConsoleView {
         boolean back = false;
         while(!back){
             showTitle("Il tuo ordine");
-            showInfo("Tavolo: " + tableSession.getTableId() + "\n");
 
+            // Da correggere
             if(!showRecapOrder()){
                 showWarning("Nessun articolo nell'ordine");
                 waitForEnter(null);

@@ -45,9 +45,4 @@ public final class FileSystemDaoFactory extends DaoFactory {
     public TableSessionDao getTableSessionDao(){
         return FileSystemTableSessionDao.getInstance();
     }
-
-    // @Override
-    // public TableDao getTableDao(){
-    //     return FileSystemTableDao.getInstance();
-    // }
 }

@@ -12,7 +12,8 @@ public final class FileSystemPaths {
     public static final String TABLE_SESSION = CSV_DIRECTORY + "table_session.csv";
     public static final String RESTAURANT_ROOM = CSV_DIRECTORY + "restaurant_room.csv";
 
-
-    private FileSystemPaths(){}
+    private FileSystemPaths(){
+        // Costruttore vuoto
+    }
 
 }

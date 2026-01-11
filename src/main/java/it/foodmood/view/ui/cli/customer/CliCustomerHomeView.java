@@ -13,10 +13,11 @@ public class CliCustomerHomeView extends ConsoleView {
 
     public HomeCustomerPages displayPage(ActorBean actorBean, TableSessionBean tableSessionBean){
         while(true){
+            clearScreen();
             boolean logged = actorBean.isLogged();
             showTitle("Benvenuto al Ristorante il Casale");
-            showBold("Scopri il piacere di ordinare su misura per te");
-            showInfo("Tavolo: " + tableSessionBean.getTableId() + "\n");
+            showBold("\nScopri il piacere di ordinare su misura per te\n");
+            showInfo("Tavolo: " + tableSessionBean.getTableId());
             showInfo("Utente: " + actorBean.getName() + " " + actorBean.getSurname() + "\n");
 
             showInfo("1. Ordina con FoodMood");

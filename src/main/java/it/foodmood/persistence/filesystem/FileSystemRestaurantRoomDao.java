@@ -12,8 +12,13 @@ import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.RestaurantRoomDao;
 
 public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements RestaurantRoomDao{
+
     private static FileSystemRestaurantRoomDao instance;
+
     private static final String SEPARATOR = ";";
+    private static final String TABLE_JOIN = "|";
+    private static final String TABLE_SEPARATOR = ",";
+    private static final String TABLE_FIELD_SEPARATOR = ",";
 
     public static synchronized FileSystemRestaurantRoomDao getInstance(){
         if(instance == null){
@@ -28,13 +33,24 @@ public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements Resta
 
     @Override
     public Optional<RestaurantRoom> load(){
-        System.out.println("Funzionalità non ancora implementata");
-        return Optional.empty();
+        List<String> lines = readAllLines();
+
+        if(lines.isEmpty()){
+            return Optional.empty();
+        }
+
+        // Dovrebbe esserci solo una sala per il dominio (modificabile in futuro)
+        String line = lines.get(0);
+        RestaurantRoom restaurantRoom = fromCsv(line);
+        
+        return Optional.of(restaurantRoom);
     }
 
     @Override
     public void save(RestaurantRoom restaurantRoom){
-        System.out.println("Funzionalità non ancora implementata");
+        List<String> lines = new ArrayList<>();
+        lines.add(toCsv(restaurantRoom));
+        overwriteAllLines(lines);
     }
 
     @Override
@@ -47,63 +63,104 @@ public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements Resta
 
     @Override
     public List<Table> findAll(){
-        List<String> lines = readAllLines();
-        List<Table> tables = new ArrayList<>();
-        for(String line: lines){
-            tables.add(fromCsv(line));
+        Optional<RestaurantRoom> restaurantRoom = load();
+        if(restaurantRoom.isEmpty()){
+            return new ArrayList<>();
         }
-        return tables;
+        return new ArrayList<>(restaurantRoom.get().getTables());
     }
 
-    // @Override
-    // public void deleteById(Integer tableId){
-    //     if(tableId == null) {
-    //         return;
-    //     }
-
-    //     List<Table> all = findAll();
-    //     boolean removed = all.removeIf(table -> tableId.equals(table.getId()));
-    //     if(!removed){
-    //         return;
-    //     }
-
-    //     List<String> lines = new ArrayList<>();
-    //     for(Table table : all){
-    //         lines.add(toCsv(table));
-    //     }
-    //     overwriteAllLines(lines);
-    // }
-
-    // private String toCsv(Table table){
+    private String toCsv(RestaurantRoom restaurantRoom){
+        String rows = String.valueOf(restaurantRoom.getRows());
+        String cols = String.valueOf(restaurantRoom.getCols());
+        String tables = tableToString(restaurantRoom.getTables());
         
-    //     return table.getId() + SEPARATOR + table.getSeats() + SEPARATOR + table.getPosition().getRow()
-    //            + SEPARATOR + table.getPosition().getCol() + SEPARATOR + table.getStatus().name();
-    // }
+        return rows + SEPARATOR + cols + SEPARATOR + tables;
+    }
 
-    private Table fromCsv(String line){
+    private RestaurantRoom fromCsv(String line){
         String[] token = line.split(SEPARATOR, -1);
 
-        if(token.length != 5){
-            throw new PersistenceException("Riga tavolo malformata: " + line);
+        if(token.length != 3){
+            throw new PersistenceException("Riga sala malformata: " + line);
         }
 
         try {     
             
-            int tableId = Integer.parseInt(token[0].trim());
-            int seats = Integer.parseInt(token[1].trim());
-            int row = Integer.parseInt(token[2].trim());
-            int col = Integer.parseInt(token[3].trim());
-           
-            String tableStautsStr = token[4].trim();
-            TableStatus status = TableStatus.valueOf(tableStautsStr);
+            int rows = Integer.parseInt(token[0].trim());
+            int cols = Integer.parseInt(token[1].trim());
 
-            TablePosition position = new TablePosition(row, col);
+            List<Table> tables = parseTables(token[2]);
             
-            return new Table(tableId, seats, position, status);
+            return new RestaurantRoom(rows, cols, tables);
 
         } catch (Exception e) {
             throw new PersistenceException("Errore durante il parsing della riga: " + line);
         }
     }
+
+    private String tableToString(List<Table> tables){
+        if(tables == null || tables.isEmpty()){
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for(Table table : tables){
+            if(!sb.isEmpty()){
+                sb.append(TABLE_JOIN);
+            }
+
+            sb.append(table.getId())
+              .append(TABLE_SEPARATOR)
+              .append(table.getSeats())
+              .append(TABLE_SEPARATOR)
+              .append(table.getPosition().getRow())
+              .append(TABLE_SEPARATOR)
+              .append(table.getPosition().getCol())
+              .append(TABLE_SEPARATOR)
+              .append(table.getStatus().name());
+        }
+        return sb.toString();
+    }
+
+    private List<Table> parseTables(String field){
+        List<Table> tables = new ArrayList<>();
+
+        if(field == null || field.isBlank()){
+            return tables;
+        }
+
+        String[] tokens = field.split(TABLE_SEPARATOR, -1);
+
+        for(String token : tokens){
+            if(token.isBlank()) continue;
+
+            String[] tableData = token.split(TABLE_FIELD_SEPARATOR, -1);
+            if(tableData.length != 5){
+                throw new PersistenceException("Dati tavolo marformati: " + token);
+            }
+
+            try {
+                int tableId = Integer.parseInt(tableData[0].trim());
+                int seats = Integer.parseInt(tableData[1].trim());
+                int row = Integer.parseInt(tableData[2].trim());
+                int col = Integer.parseInt(tableData[3].trim());
+
+                String tableStatusStr = tableData[4].trim();
+                TableStatus status = TableStatus.valueOf(tableStatusStr);
+
+                TablePosition position = new TablePosition(row, col);
+
+                Table table = new Table(tableId, seats, position, status);
+
+                tables.add(table);
+
+            } catch (Exception e) {
+                throw new PersistenceException("Errore durante il parsing del tavolo: " + token, e);
+            }
+        }
+        return tables;
+    } 
 
 }

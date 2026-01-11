@@ -16,5 +16,8 @@ public class CliCustomerAccountView extends ProtectedConsoleView {
             waitForEnter(null);
             clearScreen();
         }
+
+        showWarning("Funzionalità non ancora implementata.");
+        waitForEnter(null);
     }
 }

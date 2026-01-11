@@ -22,9 +22,9 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
     }
 
     public void displayPage(){
-        clearScreen();
         boolean back = false;
         while(!back){
+            clearScreen();
             showTitle("Menù Digitale");
 
             showInfo("1. Antipasti");

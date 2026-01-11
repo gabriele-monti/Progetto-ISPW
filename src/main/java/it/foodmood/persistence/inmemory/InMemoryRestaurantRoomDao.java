@@ -1,5 +1,6 @@
 package it.foodmood.persistence.inmemory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import it.foodmood.persistence.dao.RestaurantRoomDao;
 
 public class InMemoryRestaurantRoomDao implements RestaurantRoomDao {
     private static InMemoryRestaurantRoomDao instance;
+    private RestaurantRoom restaurantRoom;
 
     public static synchronized InMemoryRestaurantRoomDao getInstance(){
         if(instance == null){
@@ -17,24 +19,57 @@ public class InMemoryRestaurantRoomDao implements RestaurantRoomDao {
         return instance;
     }
 
+    private InMemoryRestaurantRoomDao(){
+        initializeDefaultRoom();
+    }
+
+    private void initializeDefaultRoom(){
+        // Creo una sala 7x5 
+        this.restaurantRoom = new RestaurantRoom(7, 5);
+
+        // Creo tavoli di esempio
+        this.restaurantRoom.addTable(2, 0, 0);
+        this.restaurantRoom.addTable(4, 0, 1);
+        this.restaurantRoom.addTable(6, 1, 0);
+        this.restaurantRoom.addTable(8, 1, 1);
+    }
+
     @Override
     public Optional<RestaurantRoom> load(){
-        System.out.println("Funzionalità non ancora implementata");
-        return Optional.empty();
+        if(restaurantRoom == null){
+            return Optional.empty();
+        }
+
+        List<Table> tables = new ArrayList<>(restaurantRoom.getTables());
+        RestaurantRoom room = new RestaurantRoom(restaurantRoom.getRows(), restaurantRoom.getCols(), tables);
+
+        return Optional.of(room);
     }
 
     @Override
     public void save(RestaurantRoom restaurantRoom){
-        System.out.println("Funzionalità non ancora implementata");
+        if(restaurantRoom == null){
+            throw new IllegalArgumentException("La sala del ristorante non può essere nulla");
+        }
+
+        List<Table> tables = new ArrayList<>(restaurantRoom.getTables());
+        this.restaurantRoom = new RestaurantRoom(restaurantRoom.getRows(), restaurantRoom.getCols(), tables);
     }
 
     @Override
     public Optional<Table> findById(Integer tableId){
-        return null;
+        if(tableId == null || restaurantRoom == null){
+            return Optional.empty();
+        }
+
+        return restaurantRoom.getTables().stream().filter(table -> tableId.equals(table.getId())).findFirst();
     }
 
     @Override
     public List<Table> findAll(){
-        return null;
+        if(restaurantRoom == null){
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(restaurantRoom.getTables());
     }
 }

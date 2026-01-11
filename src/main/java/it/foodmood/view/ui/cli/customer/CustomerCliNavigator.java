@@ -25,7 +25,10 @@ public class CustomerCliNavigator implements CliNavigator {
 
             switch (page) {
                 case LOGIN -> actor = ui.showLoginView();
-                case REGISTRATION -> ui.showRegistrationView();
+                case REGISTRATION -> {
+                    ui.showRegistrationView();
+                    continue;
+                }
                 case GUEST -> actor = ui.showGuestView();
                 case EXIT -> { exit = true; continue; }
             }

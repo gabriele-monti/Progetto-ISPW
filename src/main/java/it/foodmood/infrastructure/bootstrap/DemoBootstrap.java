@@ -2,6 +2,7 @@ package it.foodmood.infrastructure.bootstrap;
 
 import it.foodmood.domain.model.Credential;
 import it.foodmood.domain.model.Manager;
+import it.foodmood.domain.model.Waiter;
 import it.foodmood.domain.value.Email;
 import it.foodmood.domain.value.Person;
 import it.foodmood.persistence.dao.DaoFactory;
@@ -18,12 +19,16 @@ public final class DemoBootstrap {
         PasswordHasher hasher = new PasswordHasher();
 
         Manager manager = new Manager(new Person("Mario", "Rossi"), new Email("mariorossi@email.com"));
-        String password = "PasswordMario123";
+        Waiter waiter = new Waiter(new Person("Luigi", "Verdi"), new Email("luigiverdi@email.com"));
+        String password = "Password123";
         String hashPassword = hasher.hash(password.toCharArray());
 
-        Credential credential = new Credential(manager.getId(), hashPassword);
+        Credential credentialManager = new Credential(manager.getId(), hashPassword);
+        Credential credentialWaiter = new Credential(waiter.getId(), hashPassword);
     
         userDao.insert(manager);
-        credentialDao.saveCredential(credential);
+        userDao.insert(waiter);
+        credentialDao.saveCredential(credentialManager);
+        credentialDao.saveCredential(credentialWaiter);
     }
 }

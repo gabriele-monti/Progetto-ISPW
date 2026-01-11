@@ -6,7 +6,6 @@ public class OrderLineBean {
     private String dishId;
     private String productName;
     private BigDecimal unitPrice;
-    private BigDecimal subTotal;
     private int quantity;
 
     public OrderLineBean(){
@@ -39,12 +38,7 @@ public class OrderLineBean {
 
     public BigDecimal getSubTotal(){
         if(unitPrice == null) return BigDecimal.ZERO;
-        subTotal = unitPrice.multiply(BigDecimal.valueOf(quantity));
-        return subTotal;
-    }
-
-    public void setSubTotal(BigDecimal subTotal) {
-        this.subTotal = subTotal;
+        return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
 
     public int getQuantity(){

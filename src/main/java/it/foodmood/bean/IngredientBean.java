@@ -35,8 +35,8 @@ public class IngredientBean {
         this.name = name.trim().toUpperCase();
     }
 
-    public void setMacronutrients(MacronutrientsBean macronutriens){
-        this.macronutrients = macronutriens;
+    public void setMacronutrients(MacronutrientsBean macronutrients){
+        this.macronutrients = macronutrients;
     }
 
     public void setAllergens(List<String> allergens){
