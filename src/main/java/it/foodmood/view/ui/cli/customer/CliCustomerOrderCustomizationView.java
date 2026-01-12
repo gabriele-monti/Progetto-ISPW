@@ -28,7 +28,6 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
     private static final String INVALID_OPTION = "Seleziona un'opzione valida"; 
     private static final String NEXT = "Premi INVIO per andare avanti";
     private static final String BACK_TO_HOME = "Premi INVIO per tornare al menù principale";
-    private static final String INVALID_NUMBER = "Inserisci un numero valido.";
     private static final String UNTIL = " (fino a ";
     private static final String WITHIN = " (entro i ";
     private static final String KCAL = " Kcal)";
@@ -76,128 +75,137 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
         CourseType[] values = CourseType.values();
         Set<String> selected = new LinkedHashSet<>();
 
-        while(true){
+        boolean continueLoop = true;
+
+        while(continueLoop){
             clearScreen();
-            try {
-                showTitle(TITLE);
-                showBold("Cosa vorresti ordinare?\n");
+            showTitle(TITLE);
+            showBold("Cosa vorresti ordinare?\n");
 
-                for(int i = 0; i < values.length; i++){
-                    String name = values[i].name();
-                    String alredy = selected.contains(name) ? " (selezionata)" : "";
-                    showInfo((i + 1) + ". " + values[i].description() + alredy);
-                }
-                int next = values.length + 1;
-                showInfo(next + ". " + "Avanti");
+            displayCourseOptions(values, selected);
 
-                String choice = askInput(OPTION);
-
-                int index = Integer.parseInt(choice);
-
-                if(index == next){
-                    if(selected.isEmpty()){
-                        showWarning("Seleziona almeno un opzione per andare avanti");
-                        waitForEnter(null);
-                        continue;
-                    }
-                    break;
-                }
-
-                if(index < 0 || index > next){
-                    showError(INVALID_OPTION);
-                    waitForEnter(null);
-                    continue;
-                }
-
-                String courseName = values[index - 1].name();
-
-                if(!selected.add(courseName)){
-                    clearScreen();
-                    showWarning("Hai già selezionato questa portata");
-                    continue;
-                }
-
-                if(selected.size() == values.length){
-                    showInfo("Hai selezionato tutte le portate disponibili");
-                    waitForEnter(NEXT);
-                    break;
-                }
-
-                boolean again = askConfirmation("Vuoi aggiungere un'altra portata?");
-                if(!again) break;    
-            } catch (NumberFormatException e) {
-                showError(e.getMessage());
-            }            
+            int next = values.length + 1;
+            showInfo(next + ". " + "Avanti");
+            continueLoop = handleCourseSelection(values, selected, next); 
         }
         submitAnswer(StepType.COURSE, selected);
+    }
+
+    private void displayCourseOptions(CourseType[] values, Set<String> selected){
+        for(int i = 0; i < values.length; i++){
+            String name = values[i].name();
+            String alredy = selected.contains(name) ? " (selezionata)" : "";
+            showInfo((i + 1) + ". " + values[i].description() + alredy);
+        }
+    }
+
+    private boolean handleCourseSelection(CourseType[] values, Set<String> selected, int next){
+        int index = askPositiveInt(OPTION);
+
+        if(index == next){
+            return handleNext(selected);
+        }
+
+        if(index > next){
+            showError(INVALID_OPTION);
+            waitForEnter(null);
+            return true;
+        }
+
+        return processSelectedCourse(values, selected, index);
+    }
+
+    private boolean handleNext(Set<String> selected){
+        if(selected.isEmpty()){
+            showWarning("Seleziona almeno un'opzione per andare avanti");
+            waitForEnter(null);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean processSelectedCourse(CourseType[] values, Set<String> selected, int index){
+        String courseName = values[index - 1].name();
+
+        if(!selected.add(courseName)){
+            clearScreen();
+            showWarning("Hai già selezionato questa portata");
+            return true;
+        }
+
+        if(selected.size() == values.length){
+            showInfo("Hai selezionato tutte le portate disponibili");
+            waitForEnter(NEXT);
+            return false;
+        }
+
+        return !askConfirmation("Vuoi aggiungere un'altra portata?");
     }
 
     private void askDietCateogory(){
         DietCategory[] values = DietCategory.values();
         Set<String> selected = new LinkedHashSet<>();
 
-        while(true){
+        boolean continueLoop = true;
+
+        while(continueLoop){
             clearScreen();
             showTitle(TITLE);
             showBold("Segui un particolare stile alimentare?\n");
 
-            for(int i = 0; i < values.length; i++){
-                String name = values[i].name();
-                String alredy = selected.contains(name) ? " (selezionata)" : "";
-                showInfo((i + 1) + ". " + values[i].description() + alredy);
-            }
+            displayDietOptions(values, selected);
 
             int next = values.length + 1;
             showInfo(next + ". " + "Avanti");
 
-            String choice = askInput(OPTION);
-
-            int index;
-            try {
-                index = Integer.parseInt(choice);
-            } catch (NumberFormatException e) {
-                showError(INVALID_NUMBER);
-                waitForEnter(null);
-                continue;
-            }
-                
-            if(index == next){
-                if(selected.isEmpty()){
-                    showWarning("Seleziona almeno un opzione per andare avanti");
-                    waitForEnter(null);
-                    continue;
-                }
-                break;
-            }
-
-            if(index < 0 || index > next){
-                showError(INVALID_OPTION);
-                continue;
-            }
-
-            DietCategory chosen = values[index - 1];
-            String key = chosen.name();
-
-            if(BASE_CATEGORIES.contains(key)){
-                selected.removeAll(BASE_CATEGORIES);
-                selected.add(key);
-            } else {
-                if(!selected.add(key)){
-                    selected.remove(key);
-                }
-            }
-            
-            if(selected.size() == 3){
-                showInfo("Hai selezionato tutte le opzioni disponibili");
-                waitForEnter(NEXT);
-                break;
-            }
-
-            boolean again = askConfirmation("Vuoi selezionare un'altra tipologia?");
-            if(!again) break;    
-           
+            continueLoop = handleDietSelection(values, selected, next);
         }
         submitAnswer(StepType.DIET, selected);
+    }
+
+    private boolean handleDietSelection(DietCategory[] values, Set<String> selected, int next){
+        int index = askPositiveInt(OPTION);
+
+        if(index == next){
+            return handleNext(selected);
+        }
+
+        if(index > next){
+            showError(INVALID_OPTION);
+            waitForEnter(null);
+            return true;
+        }
+
+        return processDietSelection(values, selected, index);
+    }
+
+    private boolean processDietSelection(DietCategory[] values, Set<String> selected, int index){
+        DietCategory chosen = values[index - 1];
+        String key = chosen.name();
+        if(BASE_CATEGORIES.contains(key)){
+            selected.removeAll(BASE_CATEGORIES);
+            selected.add(key);
+        } else {
+            if(!selected.add(key)){
+                selected.remove(key);
+            }
+        }
+        
+        if(selected.size() == 3){
+            showInfo("Hai selezionato tutte le opzioni disponibili");
+            waitForEnter(NEXT);
+            return false;
+        }
+
+        return !askConfirmation("Vuoi selezionare un'altra tipologia?");
+    }
+
+    private void displayDietOptions(DietCategory[] values, Set<String> selected){
+        for(int i = 0; i < values.length; i++){
+            String name = values[i].name();
+            String alredy = selected.contains(name) ? " (selezionata)" : "";
+            showInfo((i + 1) + ". " + values[i].description() + alredy);
+        }
     }
 
     private void askAllergens(ResponseBean response){
@@ -214,140 +222,124 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             return;
         }
 
-        while(true){
+        collectAllergenSelections(options, selected);
+    
+        submitAnswer(StepType.ALLERGENS, selected);
+    }
+
+    private void collectAllergenSelections(List<Allergen> options, Set<String> selected){
+        boolean continueLoop = true;
+        while(continueLoop){
             showTitle(TITLE);
+
             showBold("Seleziona gli allergeni\n");
-            for(int i = 0; i < options.size(); i++){
-                Allergen allergen = options.get(i);
-                String key = allergen.name();
-                String alredy = selected.contains(key) ? " (selezionato)" : "";
-                if(i < 9){
-                    showInfo((i + 1) + ".  " + allergen.description() + alredy);
-                } else {
-                    showInfo((i + 1) + ". " + allergen.description() + alredy);
-                }
-            }
-                
+
+            displayAllergenOptions(options, selected);
+
             int next = options.size() + 1;
             showInfo(next + ". " + "Avanti");
 
-            String choice = askInput(OPTION);
-
-            int index = Integer.parseInt(choice);
-                
-            if(index < 0 || index > next){
-                showError(INVALID_OPTION);
-                waitForEnter(null);
-                continue;
-            }
-                
-            if(index == next){
-                break;
-            }
-
-            Allergen chosen = options.get(index - 1);
-            String key = chosen.name();
-
-            if(!selected.add(key)){
-                clearScreen();
-                showWarning("Hai già selezionato questo allergene");
-                continue;
-            }
-
-            if(selected.size() == options.size()){
-                showInfo("Hai selezionato tutte le opzioni disponibili");
-                waitForEnter(NEXT);
-                break;
-            }
-
-            boolean again = askConfirmation("Vuoi aggiungere un altro allergene?");
-            if(!again) break;
+            continueLoop = handleAllergenSelection(options, selected, next);
         }
-        submitAnswer(StepType.ALLERGENS, selected);
+    }
+
+    private boolean handleAllergenSelection(List<Allergen> options, Set<String> selected, int next){
+        int index = askPositiveInt(OPTION);
+
+        if(index < 0 || index > next){
+            showError(INVALID_OPTION);
+            waitForEnter(null);
+            return true;
+        }
+            
+        if(index == next){
+            return false;
+        }
+
+        return processAllergenSelection(options, selected, index);
+    }
+
+    private boolean processAllergenSelection(List<Allergen> options, Set<String> selected, int index){
+        Allergen chosen = options.get(index - 1);
+        String key = chosen.name();
+
+        if(!selected.add(key)){
+            clearScreen();
+            showWarning("Hai già selezionato questo allergene");
+            return true;
+        }
+
+        if(selected.size() == options.size()){
+            showInfo("Hai selezionato tutte le opzioni disponibili");
+            waitForEnter(NEXT);
+            return false;
+        }
+
+        return !askConfirmation("Vuoi aggiungere un altro allergene?");
+    }
+
+
+    private void displayAllergenOptions(List<Allergen> options, Set<String> selected){
+        for(int i = 0; i < options.size(); i++){
+            Allergen allergen = options.get(i);
+            String key = allergen.name();
+            String alredy = selected.contains(key) ? " (selezionato)" : "";
+            String spacing = (i < 9) ? "  " : " "; 
+            showInfo((i + 1) + "." + spacing + allergen.description() + alredy);
+        }
     }
 
     private void askKcal(ResponseBean responseBean){
         List<Integer> limits = responseBean.getValues();
+        Integer selected = selectKcalOption(limits);
+        submitIntegerAnswer(StepType.KCAL, selected);
+    }
 
-        Integer selected = null;
+    private Integer selectKcalOption(List<Integer> limits){
+        clearScreen();
+        showTitle(TITLE);
+        showBold("Vuoi che il tuo pasto rientri in un certo apporto calorico?\n");
+        
+        showInfo("1. " + Kcal.LIGHT.description() + UNTIL + limits.get(0) + KCAL);
+        showInfo("2. " + Kcal.BALANCED.description() + UNTIL + limits.get(1) + KCAL);
+        showInfo("3. " + Kcal.COMPLETE.description() + UNTIL + limits.get(2) + KCAL);
+        showInfo("4. " + Kcal.FREE.description());
 
-        while(true){
-            clearScreen();
-            showTitle(TITLE);
-            showBold("Vuoi che il tuo pasto rientri in un certo apporto calorico?\n");
+        
+        int index = askPositiveInt(OPTION);
 
-            showInfo("1. " + Kcal.LIGHT.description() + UNTIL + limits.get(0) + KCAL);
-            showInfo("2. " + Kcal.BALANCED.description() + UNTIL + limits.get(1) + KCAL);
-            showInfo("3. " + Kcal.COMPLETE.description() + UNTIL + limits.get(2) + KCAL);
-            showInfo("4. " + Kcal.FREE.description());
-
-            String choice = askInput(OPTION);
-
-            int index;
-            try {
-                index = Integer.parseInt(choice);
-            } catch (NumberFormatException e) {
-                showError(INVALID_NUMBER);
-                waitForEnter(null);
-                continue;
-            }
-
-            if(index < 1 || index > 4){
-                showError(INVALID_OPTION);
-                continue;
-            }
-
-            if(index == 4){
-                submitIntegerAnswer(StepType.KCAL, selected);
-                return;
-            }
-
-            selected = limits.get(index - 1);
-            submitIntegerAnswer(StepType.KCAL, selected);
-            return;
+        if(index > 4){
+            showError(INVALID_OPTION);
+            return selectKcalOption(limits);
         }
+
+        return (index == 4) ? null : limits.get(index - 1);
     }
 
     private void askBudget(ResponseBean responseBean){
         List<Integer> limits = responseBean.getValues();
+        Integer selected = selectBudgetOption(limits);
+        submitIntegerAnswer(StepType.BUDGET, selected);
+    }
 
-        Integer selected = null;
+    private Integer selectBudgetOption(List<Integer> limits){
+        clearScreen();
+        showTitle(TITLE);
+        showBold("Vuoi rimanere entro in un certo budget per il tuo pasto?\n");
 
-        while(true){
-            clearScreen();
-            showTitle(TITLE);
-            showBold("Vuoi rimanere entro in un certo budget per il tuo pasto?\n");
+        showInfo("1. " + Budget.ECONOMIC.description() + WITHIN + limits.get(0) + EURO);
+        showInfo("2. " + Budget.BALANCED.description() + WITHIN + limits.get(1) + EURO);
+        showInfo("3. " + Budget.PREMIUM.description() + WITHIN + limits.get(2) + EURO);
+        showInfo("4. " + Budget.FREE.description());
+        
+        int index = askPositiveInt(OPTION);
 
-            showInfo("1. " + Budget.ECONOMIC.description() + WITHIN + limits.get(0) + EURO);
-            showInfo("2. " + Budget.BALANCED.description() + WITHIN + limits.get(1) + EURO);
-            showInfo("3. " + Budget.PREMIUM.description() + WITHIN + limits.get(2) + EURO);
-            showInfo("4. " + Budget.FREE.description());
-
-            String choice = askInput(OPTION);
-
-            int index;
-            try {
-                index = Integer.parseInt(choice);
-            } catch (NumberFormatException e) {
-                showError(INVALID_NUMBER);
-                waitForEnter(null);
-                continue;
-            }
-
-            if(index < 1 || index > 4){
-                showError(INVALID_OPTION);
-                continue;
-            }
-
-            if(index == 4){
-                submitIntegerAnswer(StepType.BUDGET, selected);
-                return;
-            }
-
-            selected = limits.get(index - 1);
-            submitIntegerAnswer(StepType.BUDGET, selected);
-            return;
+        if(index > 4){
+            showError(INVALID_OPTION);
+            return selectKcalOption(limits);
         }
+
+        return (index == 4) ? null : limits.get(index - 1);
     }
 
     private void showPropose(ResponseBean responseBean){
@@ -364,31 +356,28 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
         addItems(dishes);
     }
 
-    private void addItems(List<DishBean> dishes){
-        while(true){
-            String input = askInputOrBack("Inserisci il numero dell'articolo");
-            Integer index = parseInteger(input, dishes.size());
-            if(index == null ){
-                showWarning("Input non valido");
-                continue;
-            }
+    private boolean addItems(List<DishBean> dishes){
 
-            int quantity = askPositiveInt("Quantità: ");
+        String input = askInputOrBack("Inserisci il numero dell'articolo");
+        Integer index = parseInteger(input, dishes.size());
 
-            DishBean selected = dishes.get(index - 1);
-
-            try {
-                cartBoundary.addProduct(selected.getId(), quantity);
-                showSuccess("Articolo '" + selected.getName() + "' aggiunto con successo.");
-
-            } catch (CartException e) {
-                showWarning(e.getMessage());
-            }
-
-            if(!askConfirmation("Vuoi aggiungere un altro articolo?")){
-                return;
-            }
+        if(index == null ){
+            showWarning("Input non valido");
+            return true;
         }
+
+        int quantity = askPositiveInt("Quantità: ");
+        DishBean selected = dishes.get(index - 1);
+
+        try {
+            cartBoundary.addProduct(selected.getId(), quantity);
+            showSuccess("Articolo '" + selected.getName() + "' aggiunto con successo.");
+        } catch (CartException e) {
+            showWarning(e.getMessage());
+        }
+
+        return askConfirmation("Vuoi aggiungere un altro articolo?");
+
     }
 
 
