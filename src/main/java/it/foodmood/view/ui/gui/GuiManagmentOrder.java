@@ -51,24 +51,26 @@ public class GuiManagmentOrder extends RoomController {
 
     @FXML private TextField searchField;
 
+    private static final String NOT_IMPLEMENTED = "Funzionalità non ancora implementata";
+
     @FXML
     void onClearOrder(ActionEvent event) {
-        showInfo("Funzionalità non ancora implementata");
+        showInfo(NOT_IMPLEMENTED);
     }
 
     @FXML
     void onFreeTable(ActionEvent event) {
-        showInfo("Funzionalità non ancora implementata");
+        showInfo(NOT_IMPLEMENTED);
     }
 
     @FXML
     void onRequestBill(ActionEvent event) {
-        showInfo("Funzionalità non ancora implementata");
+        showInfo(NOT_IMPLEMENTED);
     }
 
     @FXML
     void onSendOrder(ActionEvent event) {
-        showInfo("Funzionalità non ancora implementata");
+        showInfo(NOT_IMPLEMENTED);
     }
 
     @FXML

@@ -89,7 +89,6 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
                 }
                 int next = values.length + 1;
                 showInfo(next + ". " + "Avanti");
-                // showInfo("0. Indietro");
 
                 String choice = askInput(OPTION);
 

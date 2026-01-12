@@ -376,6 +376,6 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML
     void onSearchIngredient(ActionEvent event) {
-
+        // Funzionalità non implementata
     }
 }

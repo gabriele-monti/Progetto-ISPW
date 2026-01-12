@@ -135,12 +135,12 @@ public class GuiManagmentRestaurantRoom extends RoomController {
             try {
                 roomBoundary.moveTable(tableBean.getId(), newRow, newCol);
                 loadRestaurantRoom();
-            } catch (RestaurantRoomException ex) {
+            } catch (RestaurantRoomException err) {
                 double oldX = dragDelta.startCol * cellWidth + (cellWidth -imageView.getFitWidth()) / 2;
                 double oldY = dragDelta.startRow * cellHeight + (cellHeight -imageView.getFitHeight()) / 2;
                 imageView.setLayoutX(oldX);
                 imageView.setLayoutY(oldY);
-                showError(ex.getMessage());
+                showError(err.getMessage());
             }
         });
     }

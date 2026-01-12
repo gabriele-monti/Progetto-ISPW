@@ -98,6 +98,10 @@ public class GuiCustomerOrder extends BaseGui {
 
     private static final String OPTION = "Seleziona un'opzione per continuare"; 
     private static final String ERROR = "Errore: ";
+    private static final String KCAL = " Kcal)";
+    private static final String UNTIL = " (fino a ";
+    private static final String WITHIN = " (entro i ";
+    private static final String EURO = " €)";
 
     private final OrderCustomizationController orderController;
     private Cart cart;
@@ -498,23 +502,6 @@ public class GuiCustomerOrder extends BaseGui {
         }
     }
 
-    // private void setAllergenButtonsVisible(boolean visible){
-    //     tbCelery.setVisible(visible);
-    //     tbCrustaceans.setVisible(visible);
-    //     tbEggs.setVisible(visible);
-    //     tbFish.setVisible(visible);
-    //     tbGluten.setVisible(visible);
-    //     tbLupin.setVisible(visible);
-    //     tbMilk.setVisible(visible);
-    //     tbMolluscs.setVisible(visible);
-    //     tbMustard.setVisible(visible);
-    //     tbNuts.setVisible(visible);
-    //     tbPeanuts.setVisible(visible);
-    //     tbSesame.setVisible(visible);
-    //     tbSoy.setVisible(visible);
-    //     tbSulphites.setVisible(visible);
-    // }
-
     private void initAllergenButtons(){
         allergenButtons.put(Allergen.CELERY, tbCelery);
         allergenButtons.put(Allergen.CRUSTACEANS, tbCrustaceans);
@@ -535,18 +522,18 @@ public class GuiCustomerOrder extends BaseGui {
     private void updateKcalOptions(ResponseBean response){
         List<Integer> values = response.getValues();
         if(values != null && values.size() >= 3){
-            lblKcalLight.setText("Leggero (fino a " + values.get(0) + " Kcal)");
-            lblKcalModerate.setText("Moderato (fino a " + values.get(1) + " Kcal)");
-            lblKcalComplete.setText("Abbondante (fino a " + values.get(2) + " Kcal)");
+            lblKcalLight.setText("Leggero " + UNTIL + values.get(0) + KCAL);
+            lblKcalModerate.setText("Moderato " + UNTIL + values.get(1) +  KCAL);
+            lblKcalComplete.setText("Abbondante " + UNTIL + values.get(2) +  KCAL);
         }
     }
 
     private void updateBudgetOptions(ResponseBean response){
         List<Integer> values = response.getValues();
         if(values != null && values.size() >= 3){
-            lblBudgetEconomic.setText("Economico (entro i " + values.get(0) + " €)");
-            lblBudgetBalanced.setText("Equilibrato (entro i " + values.get(1) + " €)");
-            lblBudgetPremium.setText("Premium (entro i " + values.get(2) + " €)");
+            lblBudgetEconomic.setText("Economico " + WITHIN + values.get(0) + EURO);
+            lblBudgetBalanced.setText("Equilibrato " + WITHIN + values.get(1) + EURO);
+            lblBudgetPremium.setText("Premium " + WITHIN + values.get(2) + EURO);
         }
     }
 

@@ -47,11 +47,7 @@ public class CustomerCliNavigator implements CliNavigator {
                     case CALL_WAITER -> ui.showPageNotImplemented();
                     case REQUIRE_BILL -> ui.showPageNotImplemented();
                     case ACCOUNT -> ui.showAccountCustumerView(actor);
-                    case LOGOUT -> {
-                        if(ui.showLogoutView()){
-                            backToStartMenu = true;
-                        }
-                    }
+                    case LOGOUT -> { backToStartMenu = ui.showLogoutView(); }
                     case EXIT -> exit = true;
                 }
             }
