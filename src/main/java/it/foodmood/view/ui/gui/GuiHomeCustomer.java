@@ -33,7 +33,7 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML
     void onCallWaiterClicked(ActionEvent event) {
-        showInfo("Un cameriere è stato avvistato, arriverà a breve");
+        showInfo("Funzionalità non ancora implementata");
     }
 
     @FXML
@@ -56,7 +56,7 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML
     void onRequestBillClicked(ActionEvent event) {
-        showInfo("Il conto è stato richiesto");
+        showInfo("Funzionalità non ancora implementata");
     }
 
     private Integer tableId;
