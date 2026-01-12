@@ -5,7 +5,6 @@ import java.util.Map;
 
 import it.foodmood.bean.RestaurantRoomBean;
 import it.foodmood.bean.TableBean;
-import it.foodmood.exception.RestaurantRoomException;
 import it.foodmood.view.boundary.RestaurantRoomBoundary;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -55,7 +54,7 @@ public abstract class RoomController extends BaseGui {
             currentRoom = getBoundary().loadRestaurantRoom();
             renderRoom(currentRoom);
             onRoomLoaded();
-        } catch (RestaurantRoomException e) {
+        } catch (Exception e) {
             showError(e.getMessage());
         }
     }

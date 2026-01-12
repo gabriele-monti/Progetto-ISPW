@@ -67,7 +67,6 @@ public class CliCustomerRecapOrderView extends ProtectedConsoleView {
             String orderId = orderBoundary.createOrder(orderBean);
             showSuccess("Ordine creato con successo!\nID: " + orderId);
             cartBoundary.clearCart();
-            return;
         } catch (OrderException e) {
             showError(e.getMessage());
         }

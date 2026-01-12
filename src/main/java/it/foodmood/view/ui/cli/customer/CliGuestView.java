@@ -15,7 +15,6 @@ public class CliGuestView extends ConsoleView {
 
     public ActorBean displayPage(){
         clearScreen();
-        ActorBean actor = boundary.enterAsGuest();
-        return actor;
+        return boundary.enterAsGuest();
     }
 }

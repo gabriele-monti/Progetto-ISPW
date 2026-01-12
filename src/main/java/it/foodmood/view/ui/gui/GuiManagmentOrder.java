@@ -110,7 +110,7 @@ public class GuiManagmentOrder extends RoomController {
 
     private final DishBoundary dishBoundary = new DishBoundary();
 
-    private final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private GuiRouter router;
 

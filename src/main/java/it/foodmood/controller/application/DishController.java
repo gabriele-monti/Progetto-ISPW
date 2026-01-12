@@ -133,7 +133,7 @@ public class DishController {
         try {
             dishId = UUID.fromString(id);
         } catch (IllegalArgumentException e) {
-            throw new DishException("Formato id non valido: " + id);
+            throw new DishException("Formato id non valido: " + id, e);
         }
 
         if(dishDao.findById(dishId).isEmpty()){

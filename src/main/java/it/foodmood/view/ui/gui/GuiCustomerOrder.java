@@ -423,7 +423,7 @@ public class GuiCustomerOrder extends BaseGui {
             return null;
         }
         try {
-            String value = text.replaceAll("[^0-9]", "");
+            String value = text.replaceAll("\\D", "");
             return value.isEmpty() ? null : Integer.parseInt(value);
         } catch (NumberFormatException _) {
             return null;

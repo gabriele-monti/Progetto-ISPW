@@ -13,7 +13,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
 
     private final IngredientBoundary boundary;
 
-    private final String TRY_AGAIN = "Premi INVIO per riprovare";
+    private static final String TRY_AGAIN = "Premi INVIO per riprovare";
 
     public CliIngredientMenuView(IngredientBoundary boundary){
         this.boundary = boundary;

@@ -21,8 +21,8 @@ import it.foodmood.view.ui.cli.ProtectedConsoleView;
 public class CliDishMenuView extends ProtectedConsoleView {
     private final DishBoundary dishBoundary;
     private final IngredientBoundary ingredientBoundary;
-    private final String INVALID_CHOICE = "Scelta non valida, riprova";
-    private final String BACK = "Premi INVIO per tornare indietro";
+    private static final String INVALID_CHOICE = "Scelta non valida, riprova";
+    private static final String BACK = "Premi INVIO per tornare indietro";
 
     public CliDishMenuView(DishBoundary dishBoundary, IngredientBoundary ingredientBoundary){
         this.dishBoundary = dishBoundary;

@@ -49,6 +49,8 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     @FXML private Label lblUserInitials;
 
+    private final static String TRASH = "/icons/trash.png";
+
     private final NumberFormat currency = NumberFormat.getCurrencyInstance(Locale.ITALY);
 
     private final CustomerOrderBoundary orderBoundary = new CustomerOrderBoundary();
@@ -119,7 +121,7 @@ public class GuiCustomerRecapOrder extends BaseGui {
             private final ImageView icon;
 
             {
-                String path = "/icons/trash.png";
+                String path = TRASH;
                 Image img = new Image(getClass().getResourceAsStream(path));
                 icon = new ImageView(img);
                 icon.setFitHeight(20);

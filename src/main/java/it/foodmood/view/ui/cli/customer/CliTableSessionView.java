@@ -22,10 +22,8 @@ public class CliTableSessionView extends ConsoleView {
             showTitle(TITLE);
             try {
                 int tableNumber = askPositiveInt("Inserisci il numero del tuo tavolo: ");
-                TableSessionBean tableSessionBean= boundary.enterSession(tableNumber);
+                return boundary.enterSession(tableNumber);
                 
-                return tableSessionBean;
-
             } catch (TableException e) {
                 clearScreen();
                 showError(e.getMessage());
