@@ -274,9 +274,9 @@ public class JdbcDishDao implements DishDao {
             IngredientPortion p = portions.get(i);
             if(i > 0) stringBuilder.append(",");
 
-            stringBuilder.append("{").append("\"ingredientName\":\"").append(p.getIngredient().getName()).append("\",")
-                         .append("\"quantity\":").append(p.getQuantity().getAmount()).append(",")
-                         .append("\"unit\":\"").append(p.getQuantity().getUnit().name()).append("\"").append("}");
+            stringBuilder.append("{").append("\"ingredientName\":\"").append(p.ingredient().getName()).append("\",")
+                         .append("\"quantity\":").append(p.quantity().amount()).append(",")
+                         .append("\"unit\":\"").append(p.quantity().unit().name()).append("\"").append("}");
         }
         stringBuilder.append("]");
         return stringBuilder.toString();

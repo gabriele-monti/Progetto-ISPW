@@ -104,8 +104,8 @@ public class JdbcRestaurantRoomDao implements RestaurantRoomDao{
                 for(Table table : restaurantRoom.getTables()){
                     cs.setInt(1, table.getId());
                     cs.setInt(2, table.getSeats());
-                    cs.setInt(3, table.getPosition().getRow());
-                    cs.setInt(4, table.getPosition().getCol());
+                    cs.setInt(3, table.getPosition().row());
+                    cs.setInt(4, table.getPosition().col());
                     cs.setString(5, table.getStatus().name());
                     cs.addBatch();
                 }

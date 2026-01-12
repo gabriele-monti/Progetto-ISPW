@@ -15,6 +15,7 @@ public class CliCustomerAccountView extends ProtectedConsoleView {
             showWarning("Effettua l'accesso per vedere la sezione Account");
             waitForEnter(null);
             clearScreen();
+            return;
         }
 
         showWarning("Funzionalità non ancora implementata.");

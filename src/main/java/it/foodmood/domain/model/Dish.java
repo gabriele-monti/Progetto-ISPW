@@ -110,7 +110,7 @@ public class Dish {
         Macronutrients total = new Macronutrients(0, 0, 0);
 
         for(IngredientPortion portion : ingredients){
-            Macronutrients macronutrients = portion.getIngredient().getMacroFor(portion.getQuantity());
+            Macronutrients macronutrients = portion.ingredient().getMacroFor(portion.quantity());
             total = total.plus(macronutrients);
         }
         return total;
@@ -151,7 +151,7 @@ public class Dish {
         Set<Allergen> result = new HashSet<>();
 
         for(IngredientPortion portion : ingredients){
-            result.addAll(portion.getIngredient().getAllergens());
+            result.addAll(portion.ingredient().getAllergens());
         }
 
         return Collections.unmodifiableSet(result);

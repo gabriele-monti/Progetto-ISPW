@@ -43,6 +43,4 @@ public abstract class DaoFactory {
     public abstract OrderDao getOrderDao();
 
     public abstract TableSessionDao getTableSessionDao();
-
-    // public abstract TableDao getTableDao();
 }

@@ -142,7 +142,7 @@ public class OrderCustomizationController {
                 .filter(this::isSafeForAllergens)
                 .filter(dish -> isWithinKcalLimit(dish, courseType))
                 .filter(dish -> isWithinBudgetLimit(dish, courseType))
-                .collect(Collectors.toList());
+                .toList();
 
             allFilteredDishes.addAll(dishesForCourse);
         }

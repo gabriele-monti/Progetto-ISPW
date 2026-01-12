@@ -5,6 +5,5 @@ public class CliPageNotImplemented extends ConsoleView {
         showWarning("Funzionalità non ancora implementata.");
         waitForEnter(null);
         clearScreen();
-        return;
     }
 }

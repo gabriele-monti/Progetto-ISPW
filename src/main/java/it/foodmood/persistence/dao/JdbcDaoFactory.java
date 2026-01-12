@@ -48,9 +48,4 @@ public final class JdbcDaoFactory extends DaoFactory {
     public TableSessionDao getTableSessionDao(){ 
         return JdbcTableSessionDao.getInstance();
     }
-
-    // @Override
-    // public TableDao getTableDao(){ 
-    //     return JdbcTableDao.getInstance();
-    // }
 }

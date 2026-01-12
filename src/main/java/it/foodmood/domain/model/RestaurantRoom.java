@@ -96,8 +96,8 @@ public class RestaurantRoom {
     }
 
     private boolean isInside(TablePosition pos){
-        return pos.getRow() >= 0 && pos.getRow() < rows &&
-               pos.getCol() >= 0 && pos.getCol() < cols;
+        return pos.row() >= 0 && pos.row() < rows &&
+               pos.col() >= 0 && pos.col() < cols;
     }
 
     public Table findById(int id){

@@ -94,8 +94,8 @@ public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements Resta
             
             return new RestaurantRoom(rows, cols, tables);
 
-        } catch (Exception e) {
-            throw new PersistenceException("Errore durante il parsing della riga: " + line);
+        } catch (IllegalArgumentException e) {
+            throw new PersistenceException("Errore durante il parsing della riga: " + line, e);
         }
     }
 
@@ -115,9 +115,9 @@ public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements Resta
               .append(TABLE_FIELD_SEPARATOR)
               .append(table.getSeats())
               .append(TABLE_FIELD_SEPARATOR)
-              .append(table.getPosition().getRow())
+              .append(table.getPosition().row())
               .append(TABLE_FIELD_SEPARATOR)
-              .append(table.getPosition().getCol())
+              .append(table.getPosition().col())
               .append(TABLE_FIELD_SEPARATOR)
               .append(table.getStatus().name());
         }

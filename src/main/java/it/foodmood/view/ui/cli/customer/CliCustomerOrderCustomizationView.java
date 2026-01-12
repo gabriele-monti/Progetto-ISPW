@@ -23,11 +23,11 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
     
     private final CustomerOrderCustomizationBoundary orderCustomizationBoundary;
     private final CartBoundary cartBoundary;
-    private final static String TITLE = "Ordina su misura per te";
-    private final static String OPTION = "\nSeleziona un'opzione: "; 
-    private final static String INVALID_OPTION = "Seleziona un'opzione valida"; 
-    private final static String NEXT = "Premi INVIO per andare avanti";
-    private final static String BACK_TO_HOME = "Premi INVIO per tornare al menù principale";
+    private static final String TITLE = "Ordina su misura per te";
+    private static final String OPTION = "\nSeleziona un'opzione: "; 
+    private static final String INVALID_OPTION = "Seleziona un'opzione valida"; 
+    private static final String NEXT = "Premi INVIO per andare avanti";
+    private static final String BACK_TO_HOME = "Premi INVIO per tornare al menù principale";
     private static final String INVALID_NUMBER = "Inserisci un numero valido.";
     private static final String UNTIL = " (fino a ";
     private static final String WITHIN = " (entro i ";
@@ -50,7 +50,6 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             handleResponse(response);
         } catch (OrderException e) {
             showError(e.getMessage());
-            return;
         }
     }
 

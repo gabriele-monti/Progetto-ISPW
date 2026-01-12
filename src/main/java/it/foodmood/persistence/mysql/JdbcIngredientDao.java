@@ -59,9 +59,9 @@ public class JdbcIngredientDao implements IngredientDao {
             cs.setString(1, ingredient.getName());
 
             Macronutrients macronutrients = ingredient.getMacro();
-            cs.setBigDecimal(2, BigDecimal.valueOf(macronutrients.getProtein()));
-            cs.setBigDecimal(3, BigDecimal.valueOf(macronutrients.getCarbohydrates()));
-            cs.setBigDecimal(4, BigDecimal.valueOf(macronutrients.getFat()));
+            cs.setBigDecimal(2, BigDecimal.valueOf(macronutrients.protein()));
+            cs.setBigDecimal(3, BigDecimal.valueOf(macronutrients.carbohydrates()));
+            cs.setBigDecimal(4, BigDecimal.valueOf(macronutrients.fat()));
 
             cs.setString(5, ingredient.getUnit().name());
 

@@ -149,8 +149,8 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
 
             return Dish.fromPersistence(id, name, description, courseType, dietCategory, ingredients, state, image, price);
 
-        } catch (Exception e) {
-            throw new PersistenceException("Errore durante il parsing della riga: " + line);
+        } catch (IllegalArgumentException e) {
+            throw new PersistenceException("Errore durante il parsing della riga: " + line, e);
         }
     }
 
@@ -184,9 +184,9 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
             if(!ingredientPortion.isEmpty()){
                 ingredientPortion.append(INGREDIENT_JOIN);
             }
-            String ingredientName = portion.getIngredient().getName();
-            double quantity = portion.getQuantity().getAmount();
-            String unit = portion.getQuantity().getUnit().name();
+            String ingredientName = portion.ingredient().getName();
+            double quantity = portion.quantity().amount();
+            String unit = portion.quantity().unit().name();
 
             ingredientPortion.append(ingredientName).append(PORTION_SEPARATOR).append(quantity).append(PORTION_SEPARATOR).append(unit);
         }

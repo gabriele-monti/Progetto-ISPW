@@ -3,7 +3,6 @@ package it.foodmood.controller.application;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import it.foodmood.bean.OrderLineBean;
 import it.foodmood.domain.model.Cart;
@@ -37,7 +36,7 @@ public class CartController {
 
     public List<OrderLineBean> getCartItems(){
         ensureActiveSession();
-        return cart.getLines().stream().map(this::toLineBean).collect(Collectors.toList());
+        return cart.getLines().stream().map(this::toLineBean).toList();
     }
 
     public void clearCart(){

@@ -81,7 +81,7 @@ public class FileSystemTableSessionDao extends AbstractCsvDao implements TableSe
             boolean open = Boolean.parseBoolean(token[2].trim());
 
             return TableSession.fromPersistence(id, tableId, open);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new PersistenceException("Errore durante il parsing della riga: " + line, e);
         }
     }

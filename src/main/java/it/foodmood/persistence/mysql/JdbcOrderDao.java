@@ -91,7 +91,7 @@ public class JdbcOrderDao implements OrderDao {
     @Override
     public List<Order> findAll(){
         // Funzionalità non implementata
-        return null;
+        return List.of();
     }
 
     @Override

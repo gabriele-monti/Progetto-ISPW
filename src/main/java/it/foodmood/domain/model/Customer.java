@@ -29,4 +29,16 @@ public final class Customer extends User{
     public void updateFoodPreferences(FoodPreferences newPreferences){
         this.foodPreferences = Objects.requireNonNull(newPreferences);
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(!(o instanceof Customer)) return false;
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode(){
+        return super.hashCode();
+    }
 }

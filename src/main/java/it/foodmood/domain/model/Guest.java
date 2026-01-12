@@ -17,8 +17,4 @@ public final class Guest {
     public UUID getId(){
         return id;
     }
-
-    public boolean isGuest(){
-        return true;
-    }
 }

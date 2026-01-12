@@ -37,9 +37,7 @@ public class TableSessionController {
         try {
             TableSession tableSession = TableSession.create(tableId);
 
-            UUID sessionId = tableSessionDao.enterSession(tableSession);
-
-            return sessionId;
+            return tableSessionDao.enterSession(tableSession);
 
         } catch (IllegalArgumentException e) {
             throw new TableSessionException("Errore durante l'ingresso in sessione: " + e.getMessage());

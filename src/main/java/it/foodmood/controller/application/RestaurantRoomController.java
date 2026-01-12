@@ -131,8 +131,8 @@ public class RestaurantRoomController {
         tableBean.setStatus(table.getStatus());
 
         TablePosition position = table.getPosition();
-        tableBean.setRow(position.getRow());
-        tableBean.setCol(position.getCol());
+        tableBean.setRow(position.row());
+        tableBean.setCol(position.col());
 
         return tableBean;
     }

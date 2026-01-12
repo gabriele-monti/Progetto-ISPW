@@ -42,7 +42,7 @@ public class FileSystemOrderDao extends AbstractCsvDao implements OrderDao {
     @Override
     public List<Order> findAll(){
         // Funzionalità non implememntata
-        return null;
+        return List.of();
     }
 
     @Override

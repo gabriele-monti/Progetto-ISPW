@@ -2,7 +2,6 @@ package it.foodmood.controller.application;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.IngredientBean;
@@ -52,13 +51,13 @@ public final class DishMapper {
     private IngredientPortionBean toBeanIngredientPortion(IngredientPortion ingredientPortion){
         IngredientPortionBean bean = new IngredientPortionBean();
 
-        Ingredient ingredient = ingredientPortion.getIngredient();
+        Ingredient ingredient = ingredientPortion.ingredient();
         IngredientBean ingredientBean = IngredientMapper.toBean(ingredient);
         bean.setIngredient(ingredientBean);
 
-        Quantity quantity = ingredientPortion.getQuantity();
-        bean.setQuantity(quantity.getAmount());
-        bean.setUnit(quantity.getUnit().name());
+        Quantity quantity = ingredientPortion.quantity();
+        bean.setQuantity(quantity.amount());
+        bean.setUnit(quantity.unit().name());
 
         return bean;
     }
@@ -68,6 +67,6 @@ public final class DishMapper {
             return new ArrayList<>();
         }
 
-        return dishes.stream().map(this::toBean).collect(Collectors.toList());
+        return dishes.stream().map(this::toBean).toList();
     }
 }

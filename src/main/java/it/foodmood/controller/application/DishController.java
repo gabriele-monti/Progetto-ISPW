@@ -20,6 +20,7 @@ import it.foodmood.domain.value.Money;
 import it.foodmood.domain.value.Quantity;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.DishException;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
 import it.foodmood.persistence.dao.IngredientDao;
@@ -75,7 +76,9 @@ public class DishController {
             dishDao.insert(dish);
 
         } catch (IllegalArgumentException e){
-            throw new DishException("Errore durante l'inserimento del piatto: " + e.getMessage());
+            throw new DishException("Errore durante l'inserimento del piatto: " + e.getMessage(), e);
+        } catch (PersistenceException e){
+            throw new DishException("Errore tecnico durante l'inserimento del piatto. ", e);
         }
     }
 
@@ -173,13 +176,13 @@ public class DishController {
     private IngredientPortionBean toBeanIngredientPortion(IngredientPortion ingredientPortion){
         IngredientPortionBean bean = new IngredientPortionBean();
 
-        Ingredient ingredient = ingredientPortion.getIngredient();
+        Ingredient ingredient = ingredientPortion.ingredient();
         IngredientBean ingredientBean = IngredientMapper.toBean(ingredient);
         bean.setIngredient(ingredientBean);
 
-        Quantity quantity = ingredientPortion.getQuantity();
-        bean.setQuantity(quantity.getAmount());
-        bean.setUnit(quantity.getUnit().name());
+        Quantity quantity = ingredientPortion.quantity();
+        bean.setQuantity(quantity.amount());
+        bean.setUnit(quantity.unit().name());
 
         return bean;
     }

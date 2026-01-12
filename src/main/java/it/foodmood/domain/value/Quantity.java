@@ -2,23 +2,15 @@ package it.foodmood.domain.value;
 
 import java.util.Objects;
 
-public final class Quantity implements Comparable<Quantity>{
+public record Quantity (double amount, Unit unit) implements Comparable<Quantity>{
 
     public static final int BASE_AMOUNT = Macronutrients.BASE_AMOUNT;
 
-    private final double amount;
-    private final Unit unit;
-
-    public Quantity(double amount, Unit unit){
+    public Quantity {
         if(!Double.isFinite(amount) || amount <= 0.0){
             throw new IllegalArgumentException("La quantità deve essere maggiore di 0.");
         }
-        this.unit = Objects.requireNonNull(unit, "L'unità non può essere nulla!");
-        this.amount = amount;
     }
-
-    public double getAmount() {return amount;}
-    public Unit getUnit() {return unit;}
 
     // Metodo per moltiplicare la quantità per un fattore (es. dimezza, raddoppia, ...)
     public Quantity scale(double factor){
@@ -59,18 +51,6 @@ public final class Quantity implements Comparable<Quantity>{
         if(this.unit != other.unit){
             throw new IllegalArgumentException("Unità incompatibili: " + this.unit + "vs" + other.unit);
         }
-    }
-
-    @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
-        if(!(o instanceof Quantity q)) return false;
-        return Double.compare(q.amount, amount) == 0 && unit == q.unit; 
-    }
-
-    @Override
-    public int hashCode(){
-        return Objects.hash(amount, unit);
     }
 
     @Override

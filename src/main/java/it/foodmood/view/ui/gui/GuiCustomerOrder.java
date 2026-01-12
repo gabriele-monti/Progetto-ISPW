@@ -96,8 +96,8 @@ public class GuiCustomerOrder extends BaseGui {
     @FXML private ToggleButton tbVegan;
     @FXML private ToggleButton tbVegetarian;
 
-    private final static String OPTION = "Seleziona un'opzione per continuare"; 
-    private final static String ERROR = "Errore: ";
+    private static final String OPTION = "Seleziona un'opzione per continuare"; 
+    private static final String ERROR = "Errore: ";
 
     private final OrderCustomizationController orderController;
     private Cart cart;

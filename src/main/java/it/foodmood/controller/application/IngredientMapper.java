@@ -16,9 +16,9 @@ public final class IngredientMapper {
         ingredientBean.setName(ingredient.getName());
 
         MacronutrientsBean macronutrientsBean = new MacronutrientsBean();
-        macronutrientsBean.setProtein(ingredient.getMacro().getProtein());
-        macronutrientsBean.setCarbohydrates(ingredient.getMacro().getCarbohydrates());
-        macronutrientsBean.setFat(ingredient.getMacro().getFat());
+        macronutrientsBean.setProtein(ingredient.getMacro().protein());
+        macronutrientsBean.setCarbohydrates(ingredient.getMacro().carbohydrates());
+        macronutrientsBean.setFat(ingredient.getMacro().fat());
 
         ingredientBean.setMacronutrients(macronutrientsBean);
 
