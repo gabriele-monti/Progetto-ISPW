@@ -251,42 +251,47 @@ public class GuiManagmentDish extends BaseGui {
 
     private void updateNutritionalSummary() {
         double totalProtein = 0.0;
-        double totalCarbohydrates = 0.0;
+        double totalCarbhoydrates = 0.0;
         double totalFat = 0.0;
 
         for(IngredientPortionBean portion: dishIngredients){
-            if(portion != null && portion.getIngredient() != null && portion.getIngredient().getMacronutrients() != null){
-                IngredientBean ingredientBean = portion.getIngredient();
-                MacronutrientsBean macronutrientsBean = ingredientBean.getMacronutrients();
+            if(portion != null && portion.getIngredient() != null){
+                MacronutrientsBean macronutrientsBean = portion.getIngredient().getMacronutrients();
 
-                if(macronutrientsBean == null) continue;
+                if(macronutrientsBean != null){
+                    double factor = factorPortion(portion);
 
-                Double quantityPortion = portion.getQuantity();
-                double quantity = (quantityPortion == null) ? 0.0 : quantityPortion;
-
-                double factor = quantity / 100.0;
-
-                Double protein = macronutrientsBean.getProtein();
-                Double carbhoydrates = macronutrientsBean.getCarbohydrates();
-                Double fat = macronutrientsBean.getFat();
-
-                totalProtein += ((protein == null) ? 0.0 : protein) * factor;
-                totalCarbohydrates += ((carbhoydrates == null) ? 0.0 : carbhoydrates) * factor;
-                totalFat += ((fat == null) ? 0.0 : fat) * factor;
+                    totalProtein += getNutrientValue(macronutrientsBean.getProtein()) * factor;
+                    totalCarbhoydrates += getNutrientValue(macronutrientsBean.getCarbohydrates()) * factor;
+                    totalFat += getNutrientValue(macronutrientsBean.getFat()) * factor;
+                }
             }
         }
+        updateLabels(totalProtein, totalCarbhoydrates, totalFat);
+    }
 
+    private void updateLabels(double totalProtein, double totalCarbhoydrates, double totalFat){
         MacronutrientsBean totalMacro = new MacronutrientsBean();
         totalMacro.setProtein(totalProtein);
-        totalMacro.setCarbohydrates(totalCarbohydrates);
+        totalMacro.setCarbohydrates(totalCarbhoydrates);
         totalMacro.setFat(totalFat);
 
         double totalKcal = totalMacro.calculateKcal();
 
         lblTotalProtein.setText(String.format(Locale.ROOT, "%.1f", totalProtein));
-        lblTotalCarbs.setText(String.format(Locale.ROOT, "%.1f", totalCarbohydrates));
+        lblTotalCarbs.setText(String.format(Locale.ROOT, "%.1f", totalCarbhoydrates));
         lblTotalFats.setText(String.format(Locale.ROOT, "%.1f", totalFat));
         lblTotalKcal.setText(String.format(Locale.ROOT, "%.1f", totalKcal));
+    }
+
+    private double factorPortion(IngredientPortionBean portion){
+        Double quantityPortion = portion.getQuantity();
+        double quantity = (quantityPortion == null) ? 0.0 : quantityPortion;  
+        return quantity / 100.0;  
+    }
+
+    private double getNutrientValue(Double nutrient){
+        return (nutrient == null) ? 0.0 : nutrient;
     }
 
     private void updateAllergenSummary() {

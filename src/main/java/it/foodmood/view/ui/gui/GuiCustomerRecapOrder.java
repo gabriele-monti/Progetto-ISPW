@@ -15,13 +15,9 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
@@ -48,8 +44,6 @@ public class GuiCustomerRecapOrder extends BaseGui {
     @FXML private BorderPane cardPane;
 
     @FXML private Label lblUserInitials;
-
-    private static final String TRASH = "/icons/trash.png";
 
     private final NumberFormat currency = NumberFormat.getCurrencyInstance(Locale.ITALY);
 
@@ -116,45 +110,11 @@ public class GuiCustomerRecapOrder extends BaseGui {
         colQty.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(col.getValue().getQuantity()));
         colPrice.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(currency.format(col.getValue().getSubTotal())));
 
-        colDelete.setCellFactory(tabCell -> new TableCell<>(){
-            private final Button btn = new Button();
-            private final ImageView icon;
-
-            {
-                String path = TRASH;
-                Image img = new Image(getClass().getResourceAsStream(path));
-                icon = new ImageView(img);
-                icon.setFitHeight(20);
-                icon.setFitWidth(20);
-                icon.setPreserveRatio(true);
-
-                btn.setGraphic(icon);
-
-                btn.setFocusTraversable(false);
-                btn.setTooltip(new Tooltip("Elimina riga"));
-                btn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
-
-                btn.setOnAction(e -> {
-                    if(cart == null) return;
-                    OrderLineBean line = getTableView().getItems().get(getIndex());
-                    cart.removeItem(line.getDishId());
-                    updateTotal();
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty){
-                super.updateItem(item, empty);
-                if(empty){
-                    setGraphic(null);
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setGraphic(btn);
-                    setText(null);
-                }
-            }
-        });
+        colDelete.setCellFactory(tabCell -> new ButtonDelete(line -> {
+            if(cart == null) return;
+            cart.removeItem(line.getDishId());
+            updateTotal();
+        }));
     }
 
     private GuiRouter router;
