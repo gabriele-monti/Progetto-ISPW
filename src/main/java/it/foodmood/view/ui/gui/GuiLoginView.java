@@ -102,11 +102,7 @@ public class GuiLoginView {
         registrationBox.setVisible(!requireAuthentication);
         registrationBox.setManaged(!requireAuthentication); 
 
-        if(requireAuthentication){
-            accessPage.setVisible(false);
-        } else {
-            accessPage.setVisible(true);
-        }
+        accessPage.setVisible(!requireAuthentication);
 
         boolean goLogin = startOnLogin || requireAuthentication;
         showOnly(goLogin ? loginPage : accessPage);

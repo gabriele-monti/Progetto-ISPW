@@ -21,36 +21,46 @@ public class CustomerCliNavigator implements CliNavigator {
         boolean exit = false;
 
         while(!exit){
-            MenuCustomerPages page = ui.showMenuCustumerView();
+            exit = menuNavigation();
+        }
+    }
 
-            switch (page) {
-                case LOGIN -> actor = ui.showLoginView();
-                case REGISTRATION -> {
-                    ui.showRegistrationView();
-                    continue;
-                }
-                case GUEST -> actor = ui.showGuestView();
-                case EXIT -> { exit = true; continue; }
+    private boolean menuNavigation(){
+        MenuCustomerPages page = ui.showMenuCustumerView();
+
+        switch (page) {
+            case LOGIN -> actor = ui.showLoginView();
+            case REGISTRATION -> {
+                ui.showRegistrationView();
+                return false;
             }
+            case GUEST -> actor = ui.showGuestView();
+            case EXIT -> { return true; }
+        }
 
-            boolean backToStartMenu = false;
+        return homeNavigation();
+    }
 
-            TableSessionBean tableSession = ui.showTableSession();
+    private boolean homeNavigation(){
 
-            while(!exit && !backToStartMenu){
-                HomeCustomerPages home = ui.showHomeCustumerView(actor, tableSession);
-                
-                switch (home) {
-                    case ORDER_CUSTOMIZATION -> ui.showCustumerOrderCustomizationView();
-                    case DIGITAL_MENU -> ui.showDigitalMenuCustumerView();
-                    case RECAP_ORDER -> ui.showCustumerRecapOrderView(tableSession);
-                    case CALL_WAITER -> ui.showPageNotImplemented();
-                    case REQUIRE_BILL -> ui.showPageNotImplemented();
-                    case ACCOUNT -> ui.showAccountCustumerView(actor);
-                    case LOGOUT -> { backToStartMenu = ui.showLogoutView(); }
-                    case EXIT -> exit = true;
-                }
+        boolean exit = false;
+
+        TableSessionBean tableSession = ui.showTableSession();
+
+        while(!exit){
+            HomeCustomerPages home = ui.showHomeCustumerView(actor, tableSession);
+            
+            switch (home) {
+                case ORDER_CUSTOMIZATION -> ui.showCustumerOrderCustomizationView();
+                case DIGITAL_MENU -> ui.showDigitalMenuCustumerView();
+                case RECAP_ORDER -> ui.showCustumerRecapOrderView(tableSession);
+                case CALL_WAITER -> ui.showPageNotImplemented();
+                case REQUIRE_BILL -> ui.showPageNotImplemented();
+                case ACCOUNT -> ui.showAccountCustumerView(actor);
+                case LOGOUT -> exit = ui.showLogoutView();
+                case EXIT -> exit = true;
             }
         }
+        return false;
     }
 }

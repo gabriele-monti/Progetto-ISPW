@@ -49,7 +49,7 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     @FXML private Label lblUserInitials;
 
-    private final static String TRASH = "/icons/trash.png";
+    private static final String TRASH = "/icons/trash.png";
 
     private final NumberFormat currency = NumberFormat.getCurrencyInstance(Locale.ITALY);
 

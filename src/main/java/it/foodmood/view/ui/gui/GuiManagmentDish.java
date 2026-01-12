@@ -251,40 +251,40 @@ public class GuiManagmentDish extends BaseGui {
 
     private void updateNutritionalSummary() {
         double totalProtein = 0.0;
-        double totalCarbhoydrates = 0.0;
+        double totalCarbohydrates = 0.0;
         double totalFat = 0.0;
 
         for(IngredientPortionBean portion: dishIngredients){
-            if(portion == null || portion.getIngredient() == null) continue;
+            if(portion != null && portion.getIngredient() != null && portion.getIngredient().getMacronutrients() != null){
+                IngredientBean ingredientBean = portion.getIngredient();
+                MacronutrientsBean macronutrientsBean = ingredientBean.getMacronutrients();
 
-            IngredientBean ingredientBean = portion.getIngredient();
-            MacronutrientsBean macronutrientsBean = ingredientBean.getMacronutrients();
+                if(macronutrientsBean == null) continue;
 
-            if(macronutrientsBean == null) continue;
+                Double quantityPortion = portion.getQuantity();
+                double quantity = (quantityPortion == null) ? 0.0 : quantityPortion;
 
-            Double quantityPortion = portion.getQuantity();
-            double quantity = (quantityPortion == null) ? 0.0 : quantityPortion;
+                double factor = quantity / 100.0;
 
-            double factor = quantity / 100.0;
+                Double protein = macronutrientsBean.getProtein();
+                Double carbhoydrates = macronutrientsBean.getCarbohydrates();
+                Double fat = macronutrientsBean.getFat();
 
-            Double protein = macronutrientsBean.getProtein();
-            Double carbhoydrates = macronutrientsBean.getCarbohydrates();
-            Double fat = macronutrientsBean.getFat();
-
-            totalProtein += ((protein == null) ? 0.0 : protein) * factor;
-            totalCarbhoydrates += ((carbhoydrates == null) ? 0.0 : carbhoydrates) * factor;
-            totalFat += ((fat == null) ? 0.0 : fat) * factor;
+                totalProtein += ((protein == null) ? 0.0 : protein) * factor;
+                totalCarbohydrates += ((carbhoydrates == null) ? 0.0 : carbhoydrates) * factor;
+                totalFat += ((fat == null) ? 0.0 : fat) * factor;
+            }
         }
 
         MacronutrientsBean totalMacro = new MacronutrientsBean();
         totalMacro.setProtein(totalProtein);
-        totalMacro.setCarbohydrates(totalCarbhoydrates);
+        totalMacro.setCarbohydrates(totalCarbohydrates);
         totalMacro.setFat(totalFat);
 
         double totalKcal = totalMacro.calculateKcal();
 
         lblTotalProtein.setText(String.format(Locale.ROOT, "%.1f", totalProtein));
-        lblTotalCarbs.setText(String.format(Locale.ROOT, "%.1f", totalCarbhoydrates));
+        lblTotalCarbs.setText(String.format(Locale.ROOT, "%.1f", totalCarbohydrates));
         lblTotalFats.setText(String.format(Locale.ROOT, "%.1f", totalFat));
         lblTotalKcal.setText(String.format(Locale.ROOT, "%.1f", totalKcal));
     }
