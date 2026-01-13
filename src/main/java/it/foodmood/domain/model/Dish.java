@@ -3,6 +3,7 @@ package it.foodmood.domain.model;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
+import it.foodmood.domain.value.DishParams;
 import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Image;
 import it.foodmood.domain.value.IngredientPortion;
@@ -22,31 +23,31 @@ public class Dish {
     private Image image;
     private Money price;
 
-    private Dish(UUID id, String name, String description, CourseType courseType, DietCategory dietCategory, List<IngredientPortion> ingredients, DishState state, Image image, Money price) {
+    private Dish(UUID id, DishParams params) {
         this.id = Objects.requireNonNull(id);
-        this.name = Objects.requireNonNull(name, "Il nome non può essere nullo").trim();
+        this.name = Objects.requireNonNull(params.name(), "Il nome non può essere nullo").trim();
         if(this.name.isEmpty()) throw new IllegalArgumentException("Il nome non può essere vuoto");
-        this.description = description; // opzionale
-        this.courseType = Objects.requireNonNull(courseType, "Il tipo della portata non può essere nullo");
-        this.dietCategory = Objects.requireNonNull(dietCategory,"La categoria dietetica non può essere nulla.");
+        this.description = params.description(); // opzionale
+        this.courseType = Objects.requireNonNull(params.courseType(), "Il tipo della portata non può essere nullo");
+        this.dietCategory = Objects.requireNonNull(params.dietCategory(),"La categoria dietetica non può essere nulla.");
         this.ingredients = new ArrayList<>();
-        if(ingredients != null){
-            for(IngredientPortion portion : ingredients){
+        if(params.ingredients() != null){
+            for(IngredientPortion portion : params.ingredients()){
                 this.ingredients.add(Objects.requireNonNull(portion, "La porzione dell'ingrediente non può essere nulla"));
             }
         }
-        this.state = Objects.requireNonNull(state, "Lo stato non può essere nullo");
-        this.image = image; // opzionale
-        this.price = Objects.requireNonNull(price, "Il prezzo non può essere nullo");
+        this.state = Objects.requireNonNull(params.state(), "Lo stato non può essere nullo");
+        this.image = params.image(); // opzionale
+        this.price = Objects.requireNonNull(params.price(), "Il prezzo non può essere nullo");
         if(!this.price.isPositive()) throw new IllegalArgumentException("Il prezzo deve essere maggiore di 0");
     }
 
-    public static Dish create(String name, String description, CourseType courseType, DietCategory dietCategory, List<IngredientPortion> ingredients, DishState state, Image image, Money price) {
-        return new Dish(UUID.randomUUID(), name, description, courseType, dietCategory, ingredients, state, image, price);
+    public static Dish create(DishParams params) {
+        return new Dish( UUID.randomUUID(), params );
     }
 
-    public static Dish fromPersistence(UUID id, String name, String description, CourseType courseType, DietCategory dietCategory, List<IngredientPortion> ingredients, DishState state, Image image, Money price) {
-        return new Dish(id, name, description, courseType, dietCategory, ingredients, state, image, price);
+    public static Dish fromPersistence(UUID id, DishParams params) {
+        return new Dish(id, params);
     }
 
     public UUID getId() {

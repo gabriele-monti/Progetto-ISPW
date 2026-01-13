@@ -11,6 +11,7 @@ import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.Ingredient;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
+import it.foodmood.domain.value.DishParams;
 import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Image;
 import it.foodmood.domain.value.IngredientPortion;
@@ -147,7 +148,18 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
 
             List<IngredientPortion> ingredients = parseIngredientPortions(token[8]);
 
-            return Dish.fromPersistence(id, name, description, courseType, dietCategory, ingredients, state, image, price);
+            DishParams params = new DishParams(
+                name,
+                description,
+                courseType,
+                dietCategory,
+                ingredients,
+                state,
+                image,
+                price
+            );
+
+            return Dish.fromPersistence(id, params);
 
         } catch (IllegalArgumentException e) {
             throw new PersistenceException("Errore durante il parsing della riga: " + line, e);

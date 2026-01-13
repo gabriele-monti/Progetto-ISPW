@@ -13,6 +13,7 @@ import it.foodmood.domain.model.Ingredient;
 import it.foodmood.domain.validation.DietCategoryValidator;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
+import it.foodmood.domain.value.DishParams;
 import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Image;
 import it.foodmood.domain.value.IngredientPortion;
@@ -69,7 +70,18 @@ public class DishController {
 
             List<IngredientPortion> ingredientPortions = toDomainIngredientPortions(dishBean.getIngredients());
 
-            Dish dish = Dish.create(name, description, courseType, dietCategory, ingredientPortions, dishState, image, price);
+            DishParams params = new DishParams(
+                name,
+                description,
+                courseType,
+                dietCategory,
+                ingredientPortions,
+                dishState,
+                image,
+                price
+            );
+
+            Dish dish = Dish.create(params);
 
             DietCategoryValidator.validate(dish);
 

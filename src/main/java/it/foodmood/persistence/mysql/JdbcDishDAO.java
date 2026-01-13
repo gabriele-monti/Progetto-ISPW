@@ -16,6 +16,7 @@ import it.foodmood.config.JdbcConnectionManager;
 import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
+import it.foodmood.domain.value.DishParams;
 import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Image;
 import it.foodmood.domain.value.IngredientPortion;
@@ -265,7 +266,9 @@ public class JdbcDishDao implements DishDao {
 
         var ingredients = new ArrayList<IngredientPortion>();
 
-        return Dish.fromPersistence(id, name, description, courseType, dietCategory, ingredients, state, image, price);
+        DishParams params = new DishParams(name, description, courseType, dietCategory, ingredients, state, image, price );
+        
+        return Dish.fromPersistence(id, params);
     }
 
     private String toIngredientJson(List<IngredientPortion> portions){
