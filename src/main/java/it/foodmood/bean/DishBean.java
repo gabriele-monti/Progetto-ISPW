@@ -47,7 +47,7 @@ public class DishBean {
 
     public DishState getState(){ return state;}
 
-    public List<IngredientPortionBean> getIngredients(){ return new  ArrayList<>(ingredients);}
+    public List<IngredientPortionBean> getIngredients(){ return new ArrayList<>(ingredients);}
 
     // Setter + validazione sintattica
 

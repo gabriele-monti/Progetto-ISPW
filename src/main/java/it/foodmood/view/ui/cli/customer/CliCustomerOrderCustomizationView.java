@@ -58,6 +58,8 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             return;
         }
 
+        ensureActiveSession();
+
         StepType nextStep = response.getNextStep();
 
         switch (nextStep) {
@@ -139,7 +141,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             return false;
         }
 
-        return !askConfirmation("Vuoi aggiungere un'altra portata?");
+        return askConfirmation("Vuoi aggiungere un'altra portata?");
     }
 
     private void askDietCateogory(){
@@ -197,7 +199,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             return false;
         }
 
-        return !askConfirmation("Vuoi selezionare un'altra tipologia?");
+        return askConfirmation("Vuoi selezionare un'altra tipologia?");
     }
 
     private void displayDietOptions(DietCategory[] values, Set<String> selected){
@@ -231,7 +233,6 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
         boolean continueLoop = true;
         while(continueLoop){
             showTitle(TITLE);
-
             showBold("Seleziona gli allergeni\n");
 
             displayAllergenOptions(options, selected);
@@ -275,7 +276,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             return false;
         }
 
-        return !askConfirmation("Vuoi aggiungere un altro allergene?");
+        return askConfirmation("Vuoi aggiungere un altro allergene?");
     }
 
 

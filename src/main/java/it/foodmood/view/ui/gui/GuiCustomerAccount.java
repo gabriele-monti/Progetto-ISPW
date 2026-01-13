@@ -103,16 +103,19 @@ public class GuiCustomerAccount extends BaseGui {
 
     @FXML
     void onBackToHome(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showHomeCustumerView();
     }
 
     @FXML
     void onBackToHomePage(MouseEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showHomeCustumerView();
     }
 
     @FXML
     void onBackToAccount(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         showAccountPage();
     }
 
@@ -203,11 +206,13 @@ public class GuiCustomerAccount extends BaseGui {
 
     @FXML
     void onCartClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showCustomerRecapOrder();
     }
 
     @FXML
     void onAccountClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         if(!actor.isGuest()){
             showAccountPage();
         } else {

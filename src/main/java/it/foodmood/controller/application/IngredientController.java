@@ -69,7 +69,6 @@ public class IngredientController {
         } catch (IllegalArgumentException e) {
             throw new IngredientException(e.getMessage());
         }
-        
     }
 
     public List<IngredientBean> getAllIngredients(){
@@ -84,6 +83,7 @@ public class IngredientController {
         }
         
         if(ingredientDao.findById(name).isEmpty()){
+            ensureActiveSession();
             throw new IngredientException("Nessun ingrediente trovato con il nome: " + name);
         }
 

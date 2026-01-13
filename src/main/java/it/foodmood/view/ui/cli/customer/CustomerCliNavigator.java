@@ -2,12 +2,14 @@ package it.foodmood.view.ui.cli.customer;
 
 import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.TableSessionBean;
+import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.view.ui.CustomerUi;
 import it.foodmood.view.ui.cli.CliNavigator;
 import it.foodmood.view.ui.cli.HomeCustomerPages;
 import it.foodmood.view.ui.cli.MenuCustomerPages;
+import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
-public class CustomerCliNavigator implements CliNavigator {
+public class CustomerCliNavigator extends ProtectedConsoleView implements CliNavigator {
 
     private final CustomerUi ui;
     private ActorBean actor;
@@ -48,17 +50,24 @@ public class CustomerCliNavigator implements CliNavigator {
         TableSessionBean tableSession = ui.showTableSession();
 
         while(!exit){
-            HomeCustomerPages home = ui.showHomeCustumerView(actor, tableSession);
-            
-            switch (home) {
-                case ORDER_CUSTOMIZATION -> ui.showCustumerOrderCustomizationView();
-                case DIGITAL_MENU -> ui.showDigitalMenuCustumerView();
-                case RECAP_ORDER -> ui.showCustumerRecapOrderView(tableSession);
-                case CALL_WAITER -> ui.showPageNotImplemented();
-                case REQUIRE_BILL -> ui.showPageNotImplemented();
-                case ACCOUNT -> ui.showAccountCustumerView(actor);
-                case LOGOUT -> exit = ui.showLogoutView();
-                case EXIT -> exit = true;
+            try {
+                HomeCustomerPages home = ui.showHomeCustumerView(actor, tableSession);
+                
+                ensureActiveSession();
+                
+                switch (home) {
+                    case ORDER_CUSTOMIZATION -> ui.showCustumerOrderCustomizationView();
+                    case DIGITAL_MENU -> ui.showDigitalMenuCustumerView();
+                    case RECAP_ORDER -> ui.showCustumerRecapOrderView(tableSession);
+                    case CALL_WAITER -> ui.showPageNotImplemented();
+                    case REQUIRE_BILL -> ui.showPageNotImplemented();
+                    case ACCOUNT -> ui.showAccountCustumerView(actor);
+                    case LOGOUT -> exit = ui.showLogoutView();
+                    case EXIT -> exit = true;
+                }
+            } catch (SessionExpiredException e) {
+                showExceptionMessage(e.getMessage());
+                return false;
             }
         }
         return false;

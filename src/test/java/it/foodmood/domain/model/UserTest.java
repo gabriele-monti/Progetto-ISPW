@@ -14,18 +14,57 @@ class UserTest {
 
     @Test
     void createCustomerUser(){
-        char[] password = "userPass".toCharArray();
+        char[] password = "PasswordUser123".toCharArray();
         String passwordHash = hasher.hash(password);
 
         // Creo il cliente
-        User user = new Customer(new Person("Nome", "Cognome"), new Email("nome.cognome@foodmood.it"));
+        User user = new Customer(new Person("Nome", "Cognome"), new Email("nome.cognome@email.it"));
         
         Credential credential = new Credential(user.getId(), passwordHash);
 
         assertEquals("Nome", user.getPerson().firstName());
         assertEquals("Cognome", user.getPerson().lastName());
-        assertEquals("nome.cognome@foodmood.it", user.getEmail().email());
+        assertEquals("nome.cognome@email.it", user.getEmail().email());
         assertEquals(Role.CUSTOMER, user.getRole());
+
+        assertTrue(hasher.verify(password, credential.getPasswordHash()));
+        assertFalse(hasher.verify("password".toCharArray(), credential.getPasswordHash()));
+    }
+
+        
+    @Test
+    void createWaiter(){
+        char[] password = "PasswordWaiter123".toCharArray();
+        String passwordHash = hasher.hash(password);
+
+        // Creo il cameriere
+        User user = new Waiter(new Person("Luca", "Bianchi"), new Email("lucabianchi@foodmood.it"));
+        
+        Credential credential = new Credential(user.getId(), passwordHash);
+
+        assertEquals("Luca", user.getPerson().firstName());
+        assertEquals("Bianchi", user.getPerson().lastName());
+        assertEquals("lucabianchi@foodmood.it", user.getEmail().email());
+        assertEquals(Role.WAITER, user.getRole());
+
+        assertTrue(hasher.verify(password, credential.getPasswordHash()));
+        assertFalse(hasher.verify("password".toCharArray(), credential.getPasswordHash()));
+    }
+
+    @Test
+    void createManager(){
+        char[] password = "PasswordWaiter123".toCharArray();
+        String passwordHash = hasher.hash(password);
+
+        // Creo il cameriere
+        User user = new Manager(new Person("Giulia", "Gialli"), new Email("giuliagialli@foodmood.it"));
+        
+        Credential credential = new Credential(user.getId(), passwordHash);
+
+        assertEquals("Giulia", user.getPerson().firstName());
+        assertEquals("Gialli", user.getPerson().lastName());
+        assertEquals("giuliagialli@foodmood.it", user.getEmail().email());
+        assertEquals(Role.MANAGER, user.getRole());
 
         assertTrue(hasher.verify(password, credential.getPasswordHash()));
         assertFalse(hasher.verify("password".toCharArray(), credential.getPasswordHash()));

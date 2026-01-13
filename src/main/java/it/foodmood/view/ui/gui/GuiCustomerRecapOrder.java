@@ -68,6 +68,7 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     @FXML
     void onAccountClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         if(!actor.isGuest()){
             router.showCustomerAccountView();
         } else {
@@ -77,16 +78,19 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     @FXML
     void onBackToHomePage(MouseEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showHomeCustumerView();
     }
 
     @FXML
     void onCartClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         // ritorno la stessa pagina
     }
 
     @FXML
     void onOrder(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
        
         OrderBean orderBean = new OrderBean();
         try {

@@ -2,7 +2,6 @@ package it.foodmood.view.ui.cli.manager;
 
 import it.foodmood.bean.ActorBean;
 import it.foodmood.exception.SessionExpiredException;
-import it.foodmood.utils.SessionManager;
 import it.foodmood.view.ui.ManagerUi;
 import it.foodmood.view.ui.cli.CliNavigator;
 import it.foodmood.view.ui.cli.ManagerPages;
@@ -35,26 +34,23 @@ public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavi
     }
 
     private boolean runManagerSession(){
-        SessionManager sessionManager = SessionManager.getInstance();
 
         while(true){
             try {
-                sessionManager.requireActiveSession();
-
                 CliManagerMenuView menuView = new CliManagerMenuView();
                 ManagerPages page = menuView.displayPage(actor);
 
+                ensureActiveSession();
+
                 switch(page){
                     case MANAGMENT_INGREDIENTS -> ui.showIngredientManagmentView();
-                    
                     case MANAGMENT_DISH -> ui.showDishManagmentView();
-
                     case LOGOUT -> { return !ui.showLogoutView(); }
-                    
                     case EXIT -> { return true; }
-                } 
-            } catch (SessionExpiredException _) {
-                showSessionExpiredMessage();
+                }
+
+            } catch (SessionExpiredException e) {
+                showExceptionMessage(e.getMessage());
                 return false;
             }
         }

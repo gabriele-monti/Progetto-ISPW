@@ -24,6 +24,7 @@ public class GuiHomeCustomer extends BaseGui {
     
     @FXML
     void onAccountClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         if(!actor.isGuest()){
             router.showCustomerAccountView();
         } else {
@@ -33,21 +34,25 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML
     void onCallWaiterClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         showInfo("Funzionalità non ancora implementata");
     }
 
     @FXML
     void onCartClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showCustomerRecapOrder();
     }
 
     @FXML
     void onMenuClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showCustomerDigitalMenu();
     }
 
     @FXML
     void onOrderClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showCustomerOrderView();
     }
 
@@ -56,6 +61,7 @@ public class GuiHomeCustomer extends BaseGui {
 
     @FXML
     void onRequestBillClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         showInfo("Funzionalità non ancora implementata");
     }
 

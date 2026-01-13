@@ -29,7 +29,7 @@ public final class SessionManager {
         if(user == null){
             throw new IllegalArgumentException("L'utente non può essere nullo");
         }
-        clear();
+        terminateCurrentSession();
         this.currentUser = user;
         this.currentSession = new Session(user.getId());
         return currentSession;
@@ -39,7 +39,7 @@ public final class SessionManager {
         if(guest == null){
             throw new IllegalArgumentException("L'ospite non può essere nullo");
         }
-        clear();
+        terminateCurrentSession();
         this.currentGuest = guest;
         this.currentSession = new Session(guest.getId());
         return currentSession;
@@ -77,10 +77,12 @@ public final class SessionManager {
         if(currentSession == null){
             return null;
         }
+
         if(currentSession.isExpired()){
-            currentSession = null;
+            terminateCurrentSession();
             return null;
         }
+        
         currentSession.refresh();
         return currentSession;
     }

@@ -34,7 +34,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
         while(!back){
 
-            if(!ensureActiveSession()) return;
+            ensureActiveSession();
 
             clearScreen();
             showTitle("Gestisci Piatti");
@@ -58,7 +58,6 @@ public class CliDishMenuView extends ProtectedConsoleView {
     }
 
     private void createDish() {
-        dishBoundary.ensureActiveSession();
         try {
             clearScreen();
             showTitle("Inserisci Piatto");
@@ -95,19 +94,14 @@ public class CliDishMenuView extends ProtectedConsoleView {
         } catch (DishException e) {
             showError(e.getMessage());
             waitForEnter(BACK);
-
         } catch (IllegalArgumentException e){
             showError(e.getMessage());
-        } catch (Exception e) {
-            showError(e.getMessage());
-            waitForEnter(BACK);
         }
     }
 
 
     private void requireIngredients(DishBean dishBean) {
         boolean done = false;
-
         while(!done){
             showIngredients(dishBean);
             done = ingredientMenuChoice(dishBean);

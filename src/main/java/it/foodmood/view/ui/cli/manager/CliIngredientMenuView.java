@@ -6,13 +6,13 @@ import it.foodmood.bean.MacronutrientsBean;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.IngredientException;
+import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliIngredientMenuView extends ProtectedConsoleView {
 
     private final IngredientBoundary boundary;
-
     private static final String TRY_AGAIN = "Premi INVIO per riprovare";
 
     public CliIngredientMenuView(IngredientBoundary boundary){
@@ -23,8 +23,6 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
         boolean back = false;
 
         while(!back){
-
-            if(!ensureActiveSession()) return;
 
             clearScreen();
             showTitle("Gestisci Ingredienti");
@@ -64,7 +62,6 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
     }
 
     private boolean deletionIteration() throws BackRequestedException, IngredientException {
-
         var ingredients = boundary.getAllIngredients();
         clearScreen();
         showTitle("Elimina Ingrediente");
@@ -100,8 +97,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
         waitForEnter(null);
     }
 
-    private void createIngredient() {
-        boundary.ensureActiveSession();
+    private void createIngredient() throws SessionExpiredException {
         try {
             clearScreen();
             while(true){
@@ -150,7 +146,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
     private boolean requireMacronutrients(IngredientBean ingredientBean, MacronutrientsBean macronutrientsBean){
         try {
             showBold("\nInserisci i macronutrienti riferiti a 100 g/ml di prodotto");
-            showInfo("Inserisci almeno un macronutriente, (0 != )");
+            showInfo("Inserisci almeno un macronutriente, (0 != Indietro)");
             double protein = askDouble("Proteine: ");
             double carbohydrates = askDouble("Carboidrati: ");
             double fat = askDouble("Grassi: ");

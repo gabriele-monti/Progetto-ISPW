@@ -92,36 +92,43 @@ public class GuiCustomerDigitalMenu extends BaseGui{
 
     @FXML 
     void onAppetizerClicked(ActionEvent action){
+        if(!ensureAuthenticated(router)) return;
         setCourseFilter(CourseType.APPETIZER);
     }
 
     @FXML 
     void onFirstCourseClicked(ActionEvent action){
+        if(!ensureAuthenticated(router)) return;
         setCourseFilter(CourseType.FIRST_COURSE);
     }
 
     @FXML 
     void onMainCourseClicked(ActionEvent action){
+        if(!ensureAuthenticated(router)) return;
         setCourseFilter(CourseType.MAIN_COURSE);
     }
 
     @FXML
     void onSideDishClicked(ActionEvent action){
+        if(!ensureAuthenticated(router)) return;
         setCourseFilter(CourseType.SIDE_DISH);
     }
 
     @FXML 
     void onFruitClicked(ActionEvent action){
+        if(!ensureAuthenticated(router)) return;
         setCourseFilter(CourseType.FRUIT);
     }
 
     @FXML 
     void onDessertClicked(ActionEvent action){
+        if(!ensureAuthenticated(router)) return;
         setCourseFilter(CourseType.DESSERT);
     }
 
     @FXML 
     void onBeverageClicked(ActionEvent action){
+        if(!ensureAuthenticated(router)) return;
         setCourseFilter(CourseType.BEVERAGE);
     }
 
@@ -141,6 +148,7 @@ public class GuiCustomerDigitalMenu extends BaseGui{
 
     @FXML
     void onAccountClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         if(!actor.isGuest()){
             router.showCustomerAccountView();       
         } else {
@@ -150,11 +158,13 @@ public class GuiCustomerDigitalMenu extends BaseGui{
 
     @FXML
     void onCartClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showCustomerRecapOrder();
     }
 
     @FXML
     void onBackToHomePage(MouseEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showHomeCustumerView();
     }
 

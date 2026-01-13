@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class IngredientTest {
     @Test
     void testIngredientCreation(){
-        Macronutrients macro = Macronutrients.of(10,5,2);
+        Macronutrients macro = new Macronutrients(10,5,2);
         Set<Allergen> allergens = Set.of(Allergen.MILK);
-        Ingredient ingredient = Ingredient.of("Latte", macro, allergens);
+        Ingredient ingredient = new Ingredient("Latte", macro, Unit.MILLILITER, allergens);
 
         assertEquals("Latte", ingredient.getName());
         assertEquals(macro, ingredient.getMacro());
@@ -26,9 +26,9 @@ class IngredientTest {
 
     @Test
     void testKcalForQuantity(){
-        Macronutrients macro = Macronutrients.of(10,5,2);
-        Ingredient ingredient = Ingredient.of("Latte", macro, Set.of());
-        Quantity q = Quantity.of(50, Unit.GRAM);
+        Macronutrients macro = new Macronutrients(10,5,2);
+        Ingredient ingredient = new Ingredient("Latte", macro, Unit.MILLILITER, Set.of(Allergen.MILK));
+        Quantity q = new Quantity(50, Unit.MILLILITER);
 
         double expected = macro.kcal() * 0.5;
         assertEquals(expected, ingredient.kcalFor(q));
@@ -37,7 +37,7 @@ class IngredientTest {
     @Test
     void testToStringFormat(){
         Set<Allergen> allergens = Set.of(Allergen.CELERY);
-        Ingredient ingredient = Ingredient.of("Pane", Macronutrients.of(7,60,1), allergens);
+        Ingredient ingredient = new Ingredient("Pane", new Macronutrients(7,60,1), Unit.GRAM, allergens);
         assertTrue(ingredient.toString().contains("Pane"));
     }
 }

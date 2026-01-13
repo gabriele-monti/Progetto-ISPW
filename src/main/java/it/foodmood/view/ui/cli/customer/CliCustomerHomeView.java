@@ -2,10 +2,10 @@ package it.foodmood.view.ui.cli.customer;
 
 import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.TableSessionBean;
-import it.foodmood.view.ui.cli.ConsoleView;
 import it.foodmood.view.ui.cli.HomeCustomerPages;
+import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
-public class CliCustomerHomeView extends ConsoleView {
+public class CliCustomerHomeView extends ProtectedConsoleView {
 
     public CliCustomerHomeView(){
         super();

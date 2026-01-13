@@ -15,10 +15,13 @@ public class EnterTableSessionBean {
         if(!tableNumber.matches("\\d+")){
             throw new IllegalArgumentException("Inserisci un numero di tavolo valido");
         }
+
         int tableId = Integer.parseInt(tableNumber);
+
         if(tableId <= 0){
             throw new IllegalArgumentException("Il numero del tavolo deve essere maggiore di zero");
         }
+        
         return tableId;
     }
 } 

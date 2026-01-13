@@ -32,5 +32,4 @@ public class Session {
     public void refresh(){
         this.expiryTime = Instant.now().plus(DURATION);
     }
-
 }

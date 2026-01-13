@@ -6,6 +6,7 @@ import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
 import it.foodmood.exception.RestaurantRoomException;
 import it.foodmood.view.boundary.RestaurantRoomBoundary;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -237,5 +238,12 @@ public class GuiManagmentRestaurantRoom extends RoomController {
         double startY;
         int startRow;
         int startCol;
+    }
+
+    @FXML 
+    void onBackHome(ActionEvent event){
+        if(router != null){
+            router.showHomeManagerView();
+        }
     }
 }

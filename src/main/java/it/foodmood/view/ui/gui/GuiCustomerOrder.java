@@ -132,31 +132,37 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     void onBackToFirstQuestion(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         showFirstQuestion();
     }
 
     @FXML
     void onBackToSecondQuestion(ActionEvent event){
+        if(!ensureAuthenticated(router)) return;
         showSecondQuestion();
     }
 
     @FXML
     void onBackToThirdQuestion(ActionEvent event){
+        if(!ensureAuthenticated(router)) return;
         showThirdQuestion();
     }
 
     @FXML
     void onBackToFourthQuestion(ActionEvent event){
+        if(!ensureAuthenticated(router)) return;
         showFourthQuestion();
     }
 
     @FXML
     void onBackToHome(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showHomeCustumerView();
     }
 
     @FXML
     void onBackToHomePage(MouseEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showHomeCustumerView();
     }
 
@@ -256,6 +262,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     void onAccountClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         if(!actor.isGuest()){
             router.showCustomerAccountView();
         } else {
@@ -296,9 +303,9 @@ public class GuiCustomerOrder extends BaseGui {
     private void onNextSecond(ActionEvent e){
         try {
             AnswerBean answerBean = dietAnswers();
-
-            if(answerBean.getAnswers().isEmpty()){
+            if(answerBean.getAnswers().isEmpty() || dietGroup.getSelectedToggle() == null){
                 showInfo("Seleziona almeno una tipologia dietetica per continuare");
+                return;
             }
 
             ResponseBean responseBean = orderController.submit(answerBean);
@@ -325,6 +332,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     private void onNextThird(ActionEvent e){
+        if(!ensureAuthenticated(router)) return;
         try {
             AnswerBean answerBean = allergenAnswers();
             ResponseBean responseBean = orderController.submit(answerBean);
@@ -337,6 +345,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     private void onNextFourth(ActionEvent e){
+        if(!ensureAuthenticated(router)) return;
         try {
             AnswerBean answerBean = kcalAnswers();
 
@@ -355,6 +364,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     private void onNextFifth(ActionEvent e){
+        if(!ensureAuthenticated(router)) return;
         try {
             AnswerBean answerBean = budgetAnswers();
 
@@ -373,6 +383,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     private void onNextFirst(ActionEvent e){
+        if(!ensureAuthenticated(router)) return;
         try {
             AnswerBean answerBean = courseAnswers();
 
@@ -457,6 +468,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     private void onGenerate(ActionEvent e){
+        if(!ensureAuthenticated(router)) return;
         if(budgetGroup.getSelectedToggle() == null){
             showInfo(OPTION);
             return;
@@ -551,11 +563,13 @@ public class GuiCustomerOrder extends BaseGui {
 
     @FXML
     void onCartClicked(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showCustomerRecapOrder();
     }
 
     @FXML
     void onSummary(ActionEvent event) {
+        if(!ensureAuthenticated(router)) return;
         router.showCustomerRecapOrder();
     }
 

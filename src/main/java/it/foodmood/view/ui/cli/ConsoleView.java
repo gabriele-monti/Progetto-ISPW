@@ -76,6 +76,11 @@ public abstract class ConsoleView implements CliUserInterface{
         out.print(CLEAR_CONSOLE);
     }
 
+    public void showExceptionMessage(String error){
+        out.println(theme.error(error));
+        waitForEnter(null);
+    }
+
     public void displayTable(List<String> headers, List<List<String>> data, List<Integer> columnWidths) {
         if(headers.size() != columnWidths.size()){
             showError("Il numero di intestazioni e la larghezza delle colonne non coincidono");

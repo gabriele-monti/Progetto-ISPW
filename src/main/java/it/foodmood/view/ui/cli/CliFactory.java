@@ -30,7 +30,6 @@ import it.foodmood.view.ui.cli.waiter.CliWaiterMenuView;
 
 public final class CliFactory implements CustomerUi, ManagerUi, WaiterUi{
     
-    private final UserMode userMode;
     private final LoginBoundary loginBoundary;
     private final GuestAccessBoundary guestAccessBoundary;
     private final TableSessionBoundary tableSessionBoundary;
@@ -42,7 +41,6 @@ public final class CliFactory implements CustomerUi, ManagerUi, WaiterUi{
     private final CustomerOrderBoundary customerOrderBoundary;
 
     public CliFactory(UserMode userMode){
-        this.userMode = userMode;
         this.loginBoundary = new LoginBoundary(userMode);
         this.guestAccessBoundary = new GuestAccessBoundary();
         this.tableSessionBoundary = new TableSessionBoundary();

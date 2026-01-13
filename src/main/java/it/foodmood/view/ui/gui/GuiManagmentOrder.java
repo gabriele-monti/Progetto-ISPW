@@ -197,4 +197,11 @@ public class GuiManagmentOrder extends RoomController {
             }
         }
     }
+
+    @FXML 
+    void onBackHome(ActionEvent event){
+        if(router != null){
+            router.showHomeCustumerView();
+        }
+    }
 }
