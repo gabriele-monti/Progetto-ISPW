@@ -6,7 +6,6 @@ import java.util.Optional;
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.controller.application.IngredientController;
 import it.foodmood.exception.IngredientException;
-import it.foodmood.exception.SessionExpiredException;
 
 public class IngredientBoundary {
 

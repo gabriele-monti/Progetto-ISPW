@@ -84,7 +84,6 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     @FXML
     void onCartClicked(ActionEvent event) {
-        if(!ensureAuthenticated(router)) return;
         // ritorno la stessa pagina
     }
 
