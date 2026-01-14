@@ -57,6 +57,7 @@ public class GuiCustomerOrder extends BaseGui {
     @FXML private ToggleButton tbBeverage;
     @FXML private ToggleButton tbDessert;
     @FXML private ToggleButton tbFruit;
+    @FXML private ToggleButton tbPizza;
     @FXML private ToggleButton tbSideDish;
     @FXML private ToggleButton tbCelery;
     @FXML private ToggleButton tbCrustaceans;
@@ -273,7 +274,7 @@ public class GuiCustomerOrder extends BaseGui {
     private void setupToggleGroups(){
         dietGroup = singleChoice(List.of(tbTraditional, tbVegan, tbVegetarian));
         multipleChoice(List.of(tbGlutenFree, tbLactoseFree));
-        multipleChoice(List.of(tbAppetizer, tbFirstCourse, tbMainCourse, tbSideDish, tbFruit, tbDessert, tbBeverage));
+        multipleChoice(List.of(tbAppetizer, tbFirstCourse, tbMainCourse, tbSideDish, tbFruit, tbPizza, tbDessert, tbBeverage));
         kcalGroup = singleChoice(List.of(tbKcalNoLimit, tbKcalLight, tbKcalModerate, tbKcalComplete));
         budgetGroup = singleChoice(List.of(tbBudgetNoLimit, tbBudgetEconomic, tbBudgetBalanced, tbBudgetPremium));
     }
@@ -303,7 +304,7 @@ public class GuiCustomerOrder extends BaseGui {
     private void onNextSecond(ActionEvent e){
         try {
             AnswerBean answerBean = dietAnswers();
-            if(answerBean.getAnswers().isEmpty() || dietGroup.getSelectedToggle() == null){
+            if(answerBean.getAnswers().isEmpty() && dietGroup.getSelectedToggle() == null){
                 showInfo("Seleziona almeno una tipologia dietetica per continuare");
                 return;
             }
@@ -324,6 +325,7 @@ public class GuiCustomerOrder extends BaseGui {
         if(tbMainCourse.isSelected()) answers.add(CourseType.MAIN_COURSE.name());
         if(tbSideDish.isSelected()) answers.add(CourseType.SIDE_DISH.name());
         if(tbFruit.isSelected()) answers.add(CourseType.FRUIT.name());
+        if(tbPizza.isSelected()) answers.add(CourseType.PIZZA.name());
         if(tbDessert.isSelected()) answers.add(CourseType.DESSERT.name());
         if(tbBeverage.isSelected()) answers.add(CourseType.BEVERAGE.name());
         

@@ -22,7 +22,7 @@ public class AllergenFilterPolicy {
 
     private Set<Allergen> plausibleAllergen(CourseType courseType){
         return switch(courseType){
-            case APPETIZER, FIRST_COURSE, MAIN_COURSE -> EnumSet.allOf(Allergen.class);
+            case APPETIZER, FIRST_COURSE, PIZZA, MAIN_COURSE -> EnumSet.allOf(Allergen.class);
 
             case DESSERT -> EnumSet.of(Allergen.GLUTEN, Allergen.EGGS, Allergen.MILK, 
                                        Allergen.NUTS, Allergen.SOY, Allergen.SESAME, Allergen.SULPHITES);

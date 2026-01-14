@@ -11,6 +11,7 @@ public enum CourseType {
     FIRST_COURSE("Primo"), 
     MAIN_COURSE("Secondo"), 
     SIDE_DISH("Contorno"), 
+    PIZZA("Pizza"), 
     DESSERT("Dolce"),
     FRUIT("Frutta"), 
     BEVERAGE("Bevanda");

@@ -38,17 +38,16 @@ public class IngredientController {
                 throw new IngredientException("L'ingrediente deve avere almeno un macronutriente");
             }
 
-            if(macronutrientsBean.getCarbohydrates() == 0.0 && macronutrientsBean.getProtein() == 0.0 && macronutrientsBean.getFat() == 0.0){
-                throw new IngredientException("Deve esserci almeno un macronutriente > 0");
-            }
-
             // converto i macronutrienti in 0.0 qualora fossero null
             double protein = normalize(macronutrientsBean.getProtein());
             double carbohydrate = normalize(macronutrientsBean.getCarbohydrates());
             double fat = normalize(macronutrientsBean.getFat());
 
-            Unit unit = ingredientBean.getUnit();
+            if(protein == 0.0 && carbohydrate == 0.0 && fat == 0.0){
+                throw new IngredientException("Deve esserci almeno un macronutriente > 0");
+            }
 
+            Unit unit = ingredientBean.getUnit();
             Macronutrients macronutrients = new Macronutrients(protein, carbohydrate, fat);
 
             // converto gli allergeni

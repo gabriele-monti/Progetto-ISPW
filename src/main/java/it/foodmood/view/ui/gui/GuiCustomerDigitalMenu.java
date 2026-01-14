@@ -28,6 +28,8 @@ public class GuiCustomerDigitalMenu extends BaseGui{
 
     @FXML private ToggleButton btnBeverage;
 
+    @FXML private ToggleButton btnPizza;
+
     @FXML private Button btnCart;
 
     @FXML private ToggleButton btnDessert;
@@ -65,6 +67,7 @@ public class GuiCustomerDigitalMenu extends BaseGui{
         btnAppetizer.setToggleGroup(courseGroup);
         btnFirstCourse.setToggleGroup(courseGroup);
         btnMainCourse.setToggleGroup(courseGroup);
+        btnPizza.setToggleGroup(courseGroup);
         btnSideDish.setToggleGroup(courseGroup);
         btnFruit.setToggleGroup(courseGroup);
         btnDessert.setToggleGroup(courseGroup);
@@ -94,6 +97,12 @@ public class GuiCustomerDigitalMenu extends BaseGui{
     void onAppetizerClicked(ActionEvent action){
         if(!ensureAuthenticated(router)) return;
         setCourseFilter(CourseType.APPETIZER);
+    }
+
+    @FXML 
+    void onPizzaClicked(ActionEvent action){
+        if(!ensureAuthenticated(router)) return;
+        setCourseFilter(CourseType.PIZZA);
     }
 
     @FXML 

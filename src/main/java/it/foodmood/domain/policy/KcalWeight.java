@@ -11,6 +11,7 @@ public class KcalWeight {
             case APPETIZER -> 0.18;
             case FIRST_COURSE -> 0.40;
             case MAIN_COURSE -> 0.35;
+            case PIZZA -> 0.40;
             case DESSERT -> 0.20;
             case FRUIT -> 0.08;
             case BEVERAGE -> 0.05;

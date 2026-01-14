@@ -50,7 +50,7 @@ public final class DietCategoryValidator {
 
         for(Allergen allergen: forbitten){
             if(present.contains(allergen)){
-                throw new DishException("Il piatto " + dish.getName() + " non rispetta la categoria '" + category + "', contiene l'allergene: " + allergen.description()); 
+                throw new DishException("Il piatto " + dish.getName() + " non rispetta la categoria '" + category + "', contiene: " + allergen.description()); 
             }
         }
     }

@@ -159,6 +159,7 @@ public class GuiManagmentDish extends BaseGui {
         try {
             selected.setQuantity(newQuantity);
             listDishIngredients.refresh();
+            updateDishSummary();
             showInfo("Quantità modificata correttamente");
         } catch (IllegalArgumentException e) {
             showError(e.getMessage());
@@ -410,7 +411,7 @@ public class GuiManagmentDish extends BaseGui {
 
         dishIngredients.remove(selected);
         listDishIngredients.refresh();
-
+        updateDishSummary();
     }
 
     @FXML

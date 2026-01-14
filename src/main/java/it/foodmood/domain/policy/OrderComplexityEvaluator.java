@@ -34,7 +34,7 @@ public class OrderComplexityEvaluator {
             case BEVERAGE, FRUIT -> 1;
             case SIDE_DISH -> 2;
             case APPETIZER, DESSERT -> 3;
-            case FIRST_COURSE, MAIN_COURSE -> 4;
+            case FIRST_COURSE, MAIN_COURSE, PIZZA -> 4;
         };
     }
 }

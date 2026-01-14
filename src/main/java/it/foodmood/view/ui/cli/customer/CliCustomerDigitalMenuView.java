@@ -30,10 +30,11 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
             showInfo("1. Antipasti");
             showInfo("2. Primi");
             showInfo("3. Secondi");
-            showInfo("4. Contorni");
-            showInfo("5. Dolci");
-            showInfo("6. Frutta");
-            showInfo("7. Bevande");
+            showInfo("4. Pizza");
+            showInfo("5. Contorni");
+            showInfo("6. Dolci");
+            showInfo("7. Frutta");
+            showInfo("8. Bevande");
             showInfo("0. Torna al menù principale");
 
             String choice = askInput("\nSeleziona un'opzione: ");
@@ -42,10 +43,11 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
                 case "1" -> proposeDishesByCourseType(CourseType.APPETIZER, "Antipasti");
                 case "2" -> proposeDishesByCourseType(CourseType.FIRST_COURSE, "Primi");
                 case "3" -> proposeDishesByCourseType(CourseType.MAIN_COURSE, "Secondi");
-                case "4" -> proposeDishesByCourseType(CourseType.SIDE_DISH, "Contorni");
-                case "5" -> proposeDishesByCourseType(CourseType.DESSERT, "Dolci");
-                case "6" -> proposeDishesByCourseType(CourseType.FRUIT, "Frutta");
-                case "7" -> proposeDishesByCourseType(CourseType.BEVERAGE, "Bevande");
+                case "4" -> proposeDishesByCourseType(CourseType.PIZZA, "Pizze");
+                case "5" -> proposeDishesByCourseType(CourseType.SIDE_DISH, "Contorni");
+                case "6" -> proposeDishesByCourseType(CourseType.DESSERT, "Dolci");
+                case "7" -> proposeDishesByCourseType(CourseType.FRUIT, "Frutta");
+                case "8" -> proposeDishesByCourseType(CourseType.BEVERAGE, "Bevande");
                 case "0" -> back = true;
                 default  -> showError("Scelta non valida, riprova.");
             }

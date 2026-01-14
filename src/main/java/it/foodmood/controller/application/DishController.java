@@ -60,6 +60,11 @@ public class DishController {
                 throw new DishException("Esiste già un piatto con il nome: " + name);
             }
 
+            // controllo se esiste già un piatto con questo nome
+            if(priceValue == null){ 
+                throw new DishException("Il prezzo non può essere nullo");
+            }
+
             if(dishBean.getIngredients() == null || dishBean.getIngredients().isEmpty()){
                 throw new DishException("Il piatto deve avere almeno un ingrediente.");
             }
