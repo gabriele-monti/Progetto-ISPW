@@ -30,8 +30,4 @@ public class IngredientBoundary {
     public Optional<IngredientBean> findIngredientByName(String name) throws IngredientException{
         return controller.findIngredientByName(name);
     }
-
-    public void ensureActiveSession(){
-        controller.ensureActiveSession();
-    }
 }

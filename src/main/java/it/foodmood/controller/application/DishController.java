@@ -23,6 +23,7 @@ import it.foodmood.domain.value.Quantity;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.DishException;
 import it.foodmood.exception.PersistenceException;
+import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
 import it.foodmood.persistence.dao.IngredientDao;
@@ -95,8 +96,8 @@ public class DishController {
 
         } catch (IllegalArgumentException e){
             throw new DishException("Errore durante l'inserimento del piatto: " + e.getMessage(), e);
-        } catch (PersistenceException e){
-            throw new DishException("Spiacenti si è verificato un errore tecnico durante l'inserimento del piatto, riprovare in seguito.", e);
+        } catch (PersistenceException _){
+            throw new DishException("Spiacenti si è verificato un errore tecnico durante l'inserimento del piatto, riprovare in seguito.");
         }
     }
 
@@ -214,7 +215,11 @@ public class DishController {
         return bean;
     }
 
-    public void ensureActiveSession(){
-        sessionManager.requireActiveSession();
+    public void ensureActiveSession() throws DishException{
+        try {
+            sessionManager.requireActiveSession();
+        } catch (SessionExpiredException e) {
+            throw new DishException(e.getMessage());
+        }
     }
 }

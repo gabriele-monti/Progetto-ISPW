@@ -43,8 +43,8 @@ public class CartController {
             Dish dish = dishDao.findById(id).orElseThrow(() -> new CartException("Articolo non disponibile"));
 
             cart.addLine(dish.getId(), dish.getName(), dish.getPrice(), quantity);
-        } catch (IllegalArgumentException e){
-            throw new CartException("ID articolo non valido", e);
+        } catch (IllegalArgumentException _){
+            throw new CartException("ID articolo non valido");
         } catch (PersistenceException e) {
             throw new CartException("Errore tecnico: impossibile aggiungere l'articolo al carrello. Riprova più tardi", e);
         }

@@ -30,9 +30,5 @@ public class DishBoundary {
     public void deleteDish(String name) throws DishException{
         controller.deleteDish(name);
     }
-
-    public void ensureActiveSession(){
-        controller.ensureActiveSession();
-    }
 }
 

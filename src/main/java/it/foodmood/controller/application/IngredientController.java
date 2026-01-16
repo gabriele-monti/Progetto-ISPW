@@ -13,6 +13,7 @@ import it.foodmood.domain.value.Unit;
 import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.exception.PersistenceException;
+import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.IngredientDao;
 import it.foodmood.utils.SessionManager;
@@ -68,7 +69,9 @@ public class IngredientController {
             // inserisco l'ingrediente
             ingredientDao.insert(ingredient);
         } catch (IllegalArgumentException e) {
-            throw new IngredientException(e.getMessage());
+            throw new IngredientException("Errore durante l'inserimento dell'ingrediente: " + e.getMessage());
+        } catch (PersistenceException _) {
+            throw new IngredientException("Errore tecnico durante l'inserimento dell'ingrediente");
         }
     }
 
@@ -89,17 +92,17 @@ public class IngredientController {
 
         try {
             if(ingredientDao.findById(name).isEmpty()){
-                ensureActiveSession();
                 throw new IngredientException("Nessun ingrediente trovato con il nome: " + name);
             }
             ingredientDao.deleteById(name);
         
-        } catch (PersistenceException e){
+        } catch (PersistenceException _){
             throw new IngredientException("Errore tecnico durante l'eliminazione dell'ingrediente. Riprova più tardi");
         }
     }
 
     public Optional<IngredientBean> findIngredientByName(String name) throws IngredientException{
+        ensureActiveSession();
         try {
             return ingredientDao.findById(name).map(IngredientMapper::toBean);
         } catch (PersistenceException e){
@@ -111,7 +114,11 @@ public class IngredientController {
         return value == null ? 0.0 : value;
     }
 
-    public void ensureActiveSession(){
-        sessionManager.requireActiveSession();
+    public void ensureActiveSession() throws IngredientException{
+        try {
+            sessionManager.requireActiveSession();
+        } catch (SessionExpiredException e) {
+            throw new IngredientException(e.getMessage());
+        }
     }
 }

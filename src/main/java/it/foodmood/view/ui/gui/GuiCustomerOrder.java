@@ -289,7 +289,7 @@ public class GuiCustomerOrder extends BaseGui {
         try {
             ResponseBean responseBean = orderController.start();
             handleResponse(responseBean);
-        } catch (OrderException e) {
+        } catch (Exception e) {
             showError("Errore nell'inizializzazione: " + e.getMessage());
         }
     }

@@ -60,7 +60,7 @@ public class OrderCustomizationController {
         this.dishMapper = new DishMapper();
     }
 
-    public ResponseBean start() throws OrderException{
+    public ResponseBean start(){
         ensureActiveSession();
         this.wizardState = new OrderWizardState();
         this.complexity = null;
@@ -214,7 +214,7 @@ public class OrderCustomizationController {
         return dish.getKcal() <= maxKcalForThisCourse;
     }
 
-    private void updatePreferences(StepType step, AnswerBean preference) throws OrderException{
+    private void updatePreferences(StepType step, AnswerBean preference){
 
         switch(step){
             case COURSE -> { 

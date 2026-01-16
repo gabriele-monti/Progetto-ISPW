@@ -69,7 +69,7 @@ public class CustomerOrderController {
 
             return order.getId().toString();
 
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException _){
             throw new OrderException("Dati ordine non validi");
         } catch (PersistenceException e){
             throw new OrderException("Errore tecnico nell'inserimento dell'ordine. Riprova più tardi", e);

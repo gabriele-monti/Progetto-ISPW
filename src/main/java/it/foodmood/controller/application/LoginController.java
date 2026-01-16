@@ -41,7 +41,7 @@ public class LoginController {
             // 2) Carichiamo le credenziali
             Credential credential = credentialDao.findByUserId(user.getId());
             if(credential == null || credential.passwordHash() == null){
-                throw new AuthenticationException("Credenziali errate.");
+                throw new AuthenticationException(INCORRECT_CREDENTIALS);
             }
 
             // 3) Verifica della password
@@ -76,7 +76,7 @@ public class LoginController {
 
             return actor;
 
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             throw new AuthenticationException(INCORRECT_CREDENTIALS);
         } catch (PersistenceException e){
             throw new AuthenticationException("Errore tecnico durante il login. Riprova più tardi.", e);
