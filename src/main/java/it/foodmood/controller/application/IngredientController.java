@@ -12,11 +12,13 @@ import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.exception.IngredientException;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.IngredientDao;
 import it.foodmood.utils.SessionManager;
 
 public class IngredientController {
+
     private final IngredientDao ingredientDao;
     private final SessionManager sessionManager = SessionManager.getInstance();
 
@@ -70,9 +72,13 @@ public class IngredientController {
         }
     }
 
-    public List<IngredientBean> getAllIngredients(){
+    public List<IngredientBean> getAllIngredients() throws IngredientException{
         ensureActiveSession();
-        return ingredientDao.findAll().stream().map(IngredientMapper::toBean).toList();
+        try {
+            return ingredientDao.findAll().stream().map(IngredientMapper::toBean).toList();
+        } catch (PersistenceException e) {
+            throw new IngredientException("Spiacenti si è verificato un errore tecnico durante il recupero degli ingredienti, riprovare in seguito.", e);
+        }
     }
 
     public void deleteIngredient(String name) throws IngredientException{
@@ -80,17 +86,25 @@ public class IngredientController {
         if(name.isBlank()){
             throw new IngredientException("Il nome dell'ingrediente non può essere vuoto.");
         }
-        
-        if(ingredientDao.findById(name).isEmpty()){
-            ensureActiveSession();
-            throw new IngredientException("Nessun ingrediente trovato con il nome: " + name);
-        }
 
-        ingredientDao.deleteById(name);
+        try {
+            if(ingredientDao.findById(name).isEmpty()){
+                ensureActiveSession();
+                throw new IngredientException("Nessun ingrediente trovato con il nome: " + name);
+            }
+            ingredientDao.deleteById(name);
+        
+        } catch (PersistenceException e){
+            throw new IngredientException("Errore tecnico durante l'eliminazione dell'ingrediente. Riprova più tardi");
+        }
     }
 
-    public Optional<IngredientBean> findIngredientByName(String name){
-        return ingredientDao.findById(name).map(IngredientMapper::toBean);
+    public Optional<IngredientBean> findIngredientByName(String name) throws IngredientException{
+        try {
+            return ingredientDao.findById(name).map(IngredientMapper::toBean);
+        } catch (PersistenceException e){
+            throw new IngredientException("Errore tecnico durante il recuperòo dell'ingrediente. Riprova più tardi");
+        }
     }
 
     private double normalize(Double value){

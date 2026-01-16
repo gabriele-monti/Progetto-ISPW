@@ -16,7 +16,7 @@ public class RestaurantRoomBoundary {
         controller.createRestaurantRoom(restaurantRoomBean);
     }
 
-    public RestaurantRoomBean loadRestaurantRoom(){
+    public RestaurantRoomBean loadRestaurantRoom() throws RestaurantRoomException{
         return controller.loadRestaurantRoom();
     }
 

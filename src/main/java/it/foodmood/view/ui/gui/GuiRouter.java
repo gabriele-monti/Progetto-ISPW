@@ -3,7 +3,9 @@ package it.foodmood.view.ui.gui;
 import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.TableSessionBean;
 import it.foodmood.config.UserMode;
-import it.foodmood.utils.SessionManager;
+import it.foodmood.view.boundary.CartBoundary;
+import it.foodmood.view.boundary.DishBoundary;
+import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.boundary.LoginBoundary;
 import it.foodmood.view.boundary.RegistrationBoundary;
 import javafx.scene.Scene;
@@ -14,38 +16,30 @@ public final class GuiRouter{
     private final GuiNavigator navigator;
     private final LoginBoundary loginBoundary;
     private final RegistrationBoundary registrationBoundary;
-    private final Cart cart;
+    private final CartBoundary cartBoundary;
+    private final DishBoundary dishBoundary;
+    private final IngredientBoundary ingredientBoundary;
     private TableSessionBean currentTableSession;
-    private final ActorBean actorBean;
-
-    private void loadActor(){
-        var user = SessionManager.getInstance().getCurrentUser();
-
-        if(user == null){
-            actorBean.setName(null);
-            actorBean.setSurname(null);
-            return;
-        }
-
-        actorBean.setName(user.getPerson().firstName());
-        actorBean.setSurname(user.getPerson().lastName());
-    }
+    
+    private ActorBean actorBean;
 
     public GuiRouter(Scene scene, UserMode userMode){
         this.navigator = new GuiNavigator(scene);
         this.userMode = userMode;
         this.loginBoundary = new LoginBoundary(userMode);
         this.registrationBoundary = new RegistrationBoundary();
-        this.cart = new Cart();
+        this.cartBoundary = new CartBoundary();
+        this.ingredientBoundary = new IngredientBoundary();
+        this.dishBoundary = new DishBoundary();
         this.actorBean = new ActorBean();
+    }
+
+    public void setActor(ActorBean actorBean){
+        this.actorBean = actorBean;
     }
 
     public ActorBean getActor(){
         return actorBean;
-    }
-
-    public Cart getCart(){
-        return cart;
     }
 
     public void showHomeView(){
@@ -64,7 +58,6 @@ public final class GuiRouter{
         GuiLoginView controller = navigator.goTo(GuiPages.LOGIN);
         controller.setBoundary(loginBoundary);
         controller.setRouter(this);
-        controller.setUser(actorBean);
         controller.setUserMode(userMode);
         controller.setStartOnLogin(start);
     } 
@@ -81,7 +74,6 @@ public final class GuiRouter{
     }
 
     public void showHomeCustumerView(){
-        loadActor();
         GuiHomeCustomer controller = navigator.goTo(GuiPages.HOME_CUSTOMER);
         controller.setRouter(this);
         controller.setUser(actorBean);
@@ -89,18 +81,20 @@ public final class GuiRouter{
     }
 
     public void showHomeManagerView(){
-        loadActor();
         GuiHomeManager controller = navigator.goTo(GuiPages.HOME_MANAGER);
         controller.setRouter(this);
         controller.setBoundary(loginBoundary);
+        controller.setIngredientBoundary(ingredientBoundary);
+        controller.setDishBoundary(dishBoundary);
         controller.setManager(actorBean);
+        controller.openDefaultPage();
     }
 
     public void showHomeWaiterView() {
-        loadActor();
         GuiHomeWaiter controller = navigator.goTo(GuiPages.HOME_WAITER);
         controller.setRouter(this);
         controller.setBoundary(loginBoundary);
+        controller.setDishBoundary(dishBoundary);
         controller.setWaiter(actorBean);
     }
 
@@ -114,21 +108,23 @@ public final class GuiRouter{
     public void showCustomerDigitalMenu(){
         GuiCustomerDigitalMenu controller = navigator.goTo(GuiPages.CUSTOMER_DIGITAL_MENU);
         controller.setRouter(this);
-        controller.setCart(cart);
+        controller.setCart(cartBoundary);
+        controller.setDishBoundary(dishBoundary);
         controller.setUser(actorBean);
     }
 
     public void showCustomerOrderView(){
         GuiCustomerOrder controller = navigator.goTo(GuiPages.CUSTOMER_ORDER);
         controller.setRouter(this);
-        controller.setCart(cart);
+        controller.setCart(cartBoundary);
         controller.setUser(actorBean);
+        controller.setDishBoundary(dishBoundary);
     }
 
     public void showCustomerRecapOrder(){
         GuiCustomerRecapOrder controller = navigator.goTo(GuiPages.CUSTOMER_RECAP_ORDER);
         controller.setRouter(this);
-        controller.setCart(cart);
+        controller.setCart(cartBoundary);
         controller.setTableSession(currentTableSession);
         controller.setUser(actorBean);
     }

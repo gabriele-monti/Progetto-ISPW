@@ -19,7 +19,7 @@ public abstract class DaoFactory {
                 instance = new FileSystemDaoFactory();
                 break;
             default: 
-                instance = new InMemoryDaoFactory();
+                instance = new FileSystemDaoFactory();
         }
     }
 

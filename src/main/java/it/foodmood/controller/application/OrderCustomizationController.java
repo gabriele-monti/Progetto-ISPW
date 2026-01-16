@@ -82,7 +82,7 @@ public class OrderCustomizationController {
 
             // Se ho selezionato le portate, valuto la complessità della richiesta
             if(currentStep == StepType.COURSE){
-                Set<CourseType> courses = wizardState.getCourseTypes();
+                Set<CourseType> courses = wizardState.getCourseType();
                 this.complexity = complexityEvaluator.evaluate(courses);
             }
 
@@ -104,7 +104,7 @@ public class OrderCustomizationController {
 
     private ResponseBean buildStepResponse(StepType nextType){
         if(nextType == StepType.ALLERGENS && complexity == OrderComplexity.MODERATE){
-            Set<Allergen> relevant = allergenPolicy.getAllergens(wizardState.getCourseTypes());
+            Set<Allergen> relevant = allergenPolicy.getAllergens(wizardState.getCourseType());
             return ResponseBean.forAllergens(nextType, relevant);
         }
 
@@ -113,20 +113,20 @@ public class OrderCustomizationController {
         }
 
         if(nextType == StepType.BUDGET && complexity == OrderComplexity.COMPLETE){
-            List<Integer> values = pricePolicy.budgetOption(wizardState.getCourseTypes().size());
+            List<Integer> values = pricePolicy.budgetOption(wizardState.getCourseType().size());
             return ResponseBean.forValues(nextType, values);
         }
 
         if(nextType == StepType.KCAL && complexity == OrderComplexity.COMPLETE){
-            List<Integer> values = kcalPolicy.kcalOptions(wizardState.getCourseTypes().size());
+            List<Integer> values = kcalPolicy.kcalOptions(wizardState.getCourseType().size());
             return ResponseBean.forValues(nextType, values);
         }
 
         return new ResponseBean(nextType);
     }
 
-    private ResponseBean generateProposals(){
-        Set<CourseType> selectedCourses = wizardState.getCourseTypes();
+    private ResponseBean generateProposals() throws OrderException{
+        Set<CourseType> selectedCourses = wizardState.getCourseType();
 
         if(selectedCourses == null || selectedCourses.isEmpty()){
             throw new OrderException("Nessuna portata selezionata");
@@ -158,7 +158,23 @@ public class OrderCustomizationController {
         if(dietPreferences == null || dietPreferences.isEmpty()){
             return true;
         }
-        return dietPreferences.contains(dish.getDietCategory());
+
+        Set<DietCategory> dishCategories = dish.getDietCategories();
+
+        if(dietPreferences.contains(DietCategory.VEGETARIAN) && !(dishCategories.contains(DietCategory.VEGETARIAN) || dishCategories.contains(DietCategory.VEGAN))){
+            return false;
+        }
+
+        if(dietPreferences.contains(DietCategory.VEGAN) && !dishCategories.contains(DietCategory.VEGAN)){
+            return false;
+        }
+
+        for(DietCategory preferences : dietPreferences){
+            if(preferences == DietCategory.VEGETARIAN || preferences == DietCategory.VEGAN) continue;
+            if(!dishCategories.contains(preferences)) return false;
+        }
+
+        return true;
     }
 
     private boolean isSafeForAllergens(Dish dish){
@@ -178,7 +194,7 @@ public class OrderCustomizationController {
             return true;
         }
 
-        Set<CourseType> selectedCourses = wizardState.getCourseTypes();
+        Set<CourseType> selectedCourses = wizardState.getCourseType();
         double normalizedWeight = priceWeight.normalized(courseType, selectedCourses);
         double maxPriceForThisCourse = totalBudget * normalizedWeight;
 
@@ -191,7 +207,7 @@ public class OrderCustomizationController {
             return true;
         }
 
-        Set<CourseType> selectedCourses = wizardState.getCourseTypes();
+        Set<CourseType> selectedCourses = wizardState.getCourseType();
         double normalizedWeight = kcalWeight.normalized(courseType, selectedCourses);
         double maxKcalForThisCourse = totalKcal * normalizedWeight;
 

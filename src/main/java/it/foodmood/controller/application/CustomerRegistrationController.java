@@ -7,6 +7,7 @@ import it.foodmood.domain.model.Credential;
 import it.foodmood.domain.model.Customer;
 import it.foodmood.domain.value.Email;
 import it.foodmood.domain.value.Person;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.exception.RegistrationException;
 import it.foodmood.persistence.dao.CredentialDao;
 import it.foodmood.persistence.dao.DaoFactory;
@@ -46,6 +47,10 @@ public class CustomerRegistrationController {
             userDao.insert(newUser);
             credentialDao.saveCredential(credential);
 
+        } catch (IllegalArgumentException e){
+            throw new RegistrationException("Dati di registrazione non validi.", e);
+        } catch (PersistenceException e){
+            throw new RegistrationException("Errore tecnico durante la registrazione. Riprova più tardi.", e);
         } finally {
             // 8 Pulizia della password in memoria
             char[] password = registrationBean.getPassword();

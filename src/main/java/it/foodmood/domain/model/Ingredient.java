@@ -8,10 +8,10 @@ import it.foodmood.domain.value.Quantity;
 import it.foodmood.domain.value.Unit;
 
 public final class Ingredient {
-    private String name;
-    private Macronutrients macro;  // Riferiti a 100 g / ml
-    private Set<Allergen> allergens;
-    private Unit unit;
+    private final String name;
+    private final Macronutrients macro;  // Riferiti a 100 g / ml
+    private final Set<Allergen> allergens;
+    private final Unit unit;
 
     public Ingredient(String name, Macronutrients macro, Unit unit, Set<Allergen> allergens){
         if (name == null || name.isBlank()) throw new IllegalArgumentException("Il nome non può essere vuoto.");

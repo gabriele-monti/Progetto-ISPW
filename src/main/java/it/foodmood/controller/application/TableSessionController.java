@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import it.foodmood.domain.model.Table;
 import it.foodmood.domain.model.TableSession;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.exception.TableException;
 import it.foodmood.exception.TableSessionException;
 import it.foodmood.persistence.dao.DaoFactory;
@@ -22,38 +23,41 @@ public class TableSessionController {
         this.restaurantRoomDao = factory.getRestaurantRoomDao();
     }
 
-    // L'utente inserisce il numero del tavolo
-    // Se customerId == null -> utente guest
-    public UUID enterSession(int tableId){
-
-        if(tableId <= 0) throw new IllegalArgumentException("Il numero del tavolo deve essere maggiore di zero");
-
-        Optional<Table> tableOpt = restaurantRoomDao.findById(tableId);
-        // Verifico esistenza tavolo
-        if(!tableOpt.isPresent()){ 
-            throw new TableException("Numero " + tableId + " non associato a nessun tavolo");
-        }
-
+    public UUID enterSession(int tableId) throws TableSessionException{
         try {
-            TableSession tableSession = TableSession.create(tableId);
+            if(tableId <= 0) throw new IllegalArgumentException("Il numero del tavolo deve essere maggiore di zero");
 
+            Optional<Table> tableOpt = restaurantRoomDao.findById(tableId);
+            // Verifico esistenza tavolo
+            if(!tableOpt.isPresent()){ 
+                throw new TableException("Numero " + tableId + " non associato a nessun tavolo");
+            }
+
+            TableSession tableSession = TableSession.create(tableId);
             return tableSessionDao.enterSession(tableSession);
 
         } catch (IllegalArgumentException e) {
-            throw new TableSessionException("Errore durante l'ingresso in sessione: " + e.getMessage());
+            throw new TableSessionException("Errore durante l'ingresso in sessione: " + e.getMessage(), e);
+        } catch (PersistenceException e){
+            throw new TableSessionException("Errore tecnico durante l'ingresso in sessione. Riprova più tardi.", e);
         }
     }
 
-    public void closeSession(int tableId){
-        Optional<Table> tableOpt = restaurantRoomDao.findById(tableId);
-        if(tableOpt.isEmpty()){ 
-            throw new TableException("Numero " + tableId + " non associato a nessun tavolo");
-        }
-        
-        try{        
+    public void closeSession(int tableId) throws TableSessionException{
+        try {
+            if(tableId <= 0) throw new IllegalArgumentException("Il numero del tavolo deve essere maggiore di zero");
+
+            Optional<Table> tableOpt = restaurantRoomDao.findById(tableId);
+            if(tableOpt.isEmpty()){ 
+                throw new TableException("Numero " + tableId + " non associato a nessun tavolo");
+            }
+
             tableSessionDao.closeSession(tableId);
+       
         } catch (IllegalArgumentException e){
             throw new TableSessionException("Errore durante la chiusura della sessione: " + e.getMessage());
+        } catch (PersistenceException e){
+            throw new TableSessionException("Errore tecnico durante la chiusura della sessione. Riprova più tardi.", e);
         }
     }
 }

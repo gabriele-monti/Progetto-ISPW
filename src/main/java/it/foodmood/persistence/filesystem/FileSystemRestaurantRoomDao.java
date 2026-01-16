@@ -40,7 +40,7 @@ public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements Resta
         }
 
         // Dovrebbe esserci solo una sala per il dominio (modificabile in futuro)
-        String line = lines.get(0);
+        String line = lines.getFirst();
         RestaurantRoom restaurantRoom = fromCsv(line);
         
         return Optional.of(restaurantRoom);
@@ -64,10 +64,7 @@ public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements Resta
     @Override
     public List<Table> findAll(){
         Optional<RestaurantRoom> restaurantRoom = load();
-        if(restaurantRoom.isEmpty()){
-            return new ArrayList<>();
-        }
-        return new ArrayList<>(restaurantRoom.get().getTables());
+        return restaurantRoom.map(room -> new ArrayList<>(room.getTables())).orElseGet(ArrayList::new);
     }
 
     private String toCsv(RestaurantRoom restaurantRoom){
@@ -138,7 +135,7 @@ public class FileSystemRestaurantRoomDao extends AbstractCsvDao implements Resta
 
             String[] tableData = token.split(TABLE_FIELD_SEPARATOR, -1);
             if(tableData.length != 5){
-                throw new PersistenceException("Dati tavolo marformati: " + token);
+                throw new PersistenceException("Dati tavolo malformati: " + token);
             }
 
             try {

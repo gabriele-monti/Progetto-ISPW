@@ -1,6 +1,7 @@
 package it.foodmood.view.ui.gui;
 
 import it.foodmood.bean.ActorBean;
+import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.LoginBoundary;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +29,8 @@ public class GuiHomeWaiter extends BaseGui {
 
     @FXML private AnchorPane mainForm;
 
+    private DishBoundary dishBoundary;
+
     @FXML
     void switchForm(ActionEvent event) {
         if(!ensureAuthenticated(router)) return;
@@ -36,9 +39,14 @@ public class GuiHomeWaiter extends BaseGui {
         if(source == btnOrderManagment){
             GuiManagmentOrder controller = paneNavigator.show(GuiPages.MANAGMENT_ORDER);
             controller.setRouter(router);
+            controller.setDishBoundary(dishBoundary);
         } else {
             showInfo("Funzionalità non ancora implementata");
         }
+    }
+    
+    public void setDishBoundary(DishBoundary dishBoundary){
+        this.dishBoundary = dishBoundary;
     }
 
     public GuiHomeWaiter(){

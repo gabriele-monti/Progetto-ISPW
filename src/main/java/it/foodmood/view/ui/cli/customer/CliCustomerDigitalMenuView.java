@@ -5,6 +5,7 @@ import java.util.List;
 import it.foodmood.bean.DishBean;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.exception.CartException;
+import it.foodmood.exception.DishException;
 import it.foodmood.view.boundary.CartBoundary;
 import it.foodmood.view.boundary.DishBoundary;
 
@@ -39,22 +40,27 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
 
             String choice = askInput("\nSeleziona un'opzione: ");
 
-            switch(choice){
-                case "1" -> proposeDishesByCourseType(CourseType.APPETIZER, "Antipasti");
-                case "2" -> proposeDishesByCourseType(CourseType.FIRST_COURSE, "Primi");
-                case "3" -> proposeDishesByCourseType(CourseType.MAIN_COURSE, "Secondi");
-                case "4" -> proposeDishesByCourseType(CourseType.PIZZA, "Pizze");
-                case "5" -> proposeDishesByCourseType(CourseType.SIDE_DISH, "Contorni");
-                case "6" -> proposeDishesByCourseType(CourseType.DESSERT, "Dolci");
-                case "7" -> proposeDishesByCourseType(CourseType.FRUIT, "Frutta");
-                case "8" -> proposeDishesByCourseType(CourseType.BEVERAGE, "Bevande");
-                case "0" -> back = true;
-                default  -> showError("Scelta non valida, riprova.");
+            try {
+                switch(choice){
+                    case "1" -> proposeDishesByCourseType(CourseType.APPETIZER, "Antipasti");
+                    case "2" -> proposeDishesByCourseType(CourseType.FIRST_COURSE, "Primi");
+                    case "3" -> proposeDishesByCourseType(CourseType.MAIN_COURSE, "Secondi");
+                    case "4" -> proposeDishesByCourseType(CourseType.PIZZA, "Pizze");
+                    case "5" -> proposeDishesByCourseType(CourseType.SIDE_DISH, "Contorni");
+                    case "6" -> proposeDishesByCourseType(CourseType.DESSERT, "Dolci");
+                    case "7" -> proposeDishesByCourseType(CourseType.FRUIT, "Frutta");
+                    case "8" -> proposeDishesByCourseType(CourseType.BEVERAGE, "Bevande");
+                    case "0" -> back = true;
+                    default  -> showError("Scelta non valida, riprova.");
+                }
+            } catch (DishException e) {
+                showError(e.getMessage());
+                waitForEnter(null);
             }
         }
     }
 
-    private void proposeDishesByCourseType(CourseType courseType, String title){
+    private void proposeDishesByCourseType(CourseType courseType, String title) throws DishException{
         clearScreen();
         showTitle(title);
 

@@ -9,12 +9,14 @@ import it.foodmood.domain.model.Cart;
 import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.OrderLine;
 import it.foodmood.exception.CartException;
+import it.foodmood.exception.PersistenceException;
+import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
 import it.foodmood.utils.SessionManager;
 
 public class CartController {
-    private Cart cart;
+    private final Cart cart;
     private final DishDao dishDao;
     private final SessionManager sessionManager;
 
@@ -27,29 +29,52 @@ public class CartController {
     public void addToCart(String dishId, int quantity) throws CartException{
         ensureActiveSession();
 
-        UUID id = UUID.fromString(dishId);
+        if(dishId == null || dishId.isBlank()){
+            throw new CartException("ID articolo non valido");
+        }
 
-        Dish dish = dishDao.findById(id).orElseThrow(() -> new CartException("Articolo non disponibile"));
+        if(quantity <= 0){
+            throw new CartException("Quantità non valida");
+        }
 
-        cart.addLine(dish.getId(), dish.getName(), dish.getPrice(), quantity);
+        try {
+            UUID id = UUID.fromString(dishId);
+
+            Dish dish = dishDao.findById(id).orElseThrow(() -> new CartException("Articolo non disponibile"));
+
+            cart.addLine(dish.getId(), dish.getName(), dish.getPrice(), quantity);
+        } catch (IllegalArgumentException e){
+            throw new CartException("ID articolo non valido", e);
+        } catch (PersistenceException e) {
+            throw new CartException("Errore tecnico: impossibile aggiungere l'articolo al carrello. Riprova più tardi", e);
+        }
     }
 
-    public List<OrderLineBean> getCartItems(){
+    public List<OrderLineBean> getCartItems() throws CartException{
         ensureActiveSession();
+
         return cart.getLines().stream().map(this::toLineBean).toList();
     }
 
-    public void clearCart(){
+
+    public void removeFromCart(String dishId) throws CartException{
         ensureActiveSession();
-        cart.clear();
+
+        if(dishId == null || dishId.isBlank()){
+            throw new CartException("ID articolo non valido");
+        }
+
+        try {
+            UUID id = UUID.fromString(dishId);
+            cart.removeLine(id);
+        } catch (IllegalArgumentException e) {
+            throw new CartException("Errore tecnico: impossibile rimuovere l'articolo dal carrello.");
+        }
     }
 
-    public List<OrderLine> getOrderLines() throws CartException{
-        ensureActiveSession();
-        if(cart.isEmpty()){
-            throw new CartException("Il carrello è vuoto");
-        }
-        return cart.getLines();
+
+    public void clearCart(){
+        cart.clear();
     }
 
     public BigDecimal getTotal(){
@@ -65,7 +90,11 @@ public class CartController {
         return orderLineBean;
     }
 
-    public void ensureActiveSession(){
-        sessionManager.requireActiveSession();
+    public void ensureActiveSession() throws CartException{
+        try {
+            sessionManager.requireActiveSession();
+        } catch (SessionExpiredException e) {
+            throw new CartException(e.getMessage(), e);
+        }
     }
 }

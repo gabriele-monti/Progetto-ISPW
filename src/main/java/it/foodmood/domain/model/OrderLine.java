@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import it.foodmood.domain.value.Money;
-import it.foodmood.exception.OrderException;
 
 public class OrderLine {
 
@@ -18,8 +17,8 @@ public class OrderLine {
         Objects.requireNonNull(productName, "Il nome del prodotto non può essere nullo");
         Objects.requireNonNull(unitPrice, "Il prezzo non può essere nullo");
         if(productName.isBlank()) throw new IllegalArgumentException("Nome prodotto vuoto");
-        if(!unitPrice.isPositive()) throw new OrderException("Il prezzo deve essere positivo");
-        if(quantity <= 0) throw new OrderException("La quantità deve essere maggiore di zero");
+        if(!unitPrice.isPositive()) throw new IllegalArgumentException("Il prezzo deve essere positivo");
+        if(quantity <= 0) throw new IllegalArgumentException("La quantità deve essere maggiore di zero");
 
         this.dishId = dishId;
         this.productName = productName;

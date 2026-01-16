@@ -34,8 +34,8 @@ public class JdbcCredentialDao implements CredentialDao {
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try(CallableStatement cs = conn.prepareCall(CALL_SAVE_CREDENTIAL)){
-                cs.setString(1, credential.getUserId().toString());
-                cs.setString(2, credential.getPasswordHash());
+                cs.setString(1, credential.userId().toString());
+                cs.setString(2, credential.passwordHash());
                 cs.execute();
             }
         } catch (SQLException e) {

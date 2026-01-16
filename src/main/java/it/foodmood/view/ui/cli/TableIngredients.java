@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import it.foodmood.bean.IngredientBean;
+import it.foodmood.bean.MacronutrientsBean;
 import it.foodmood.domain.value.Unit;
 
 public final class TableIngredients{
@@ -22,11 +23,11 @@ public final class TableIngredients{
 
     public static List<List<String>> ingredientRows(List<IngredientBean> ingredients){
         return IntStream.range(0, ingredients.size()).mapToObj(i -> {
-            var ingredient = ingredients.get(i);
+            IngredientBean ingredient = ingredients.get(i);
             String index = String.valueOf(i + 1);
             String name = ingredient.getName();
             String unit = ingredient.getUnit() == Unit.GRAM ? "g" : "ml";
-            var macro = ingredient.getMacronutrients();
+            MacronutrientsBean macro = ingredient.getMacronutrients();
             String protein = String.format("%.1f", macro.getProtein());
             String carbs = String.format("%.1f", macro.getCarbohydrates());
             String fat = String.format("%.1f", macro.getFat());

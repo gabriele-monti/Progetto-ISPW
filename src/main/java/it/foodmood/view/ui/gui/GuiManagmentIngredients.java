@@ -106,7 +106,7 @@ public class GuiManagmentIngredients extends BaseGui {
 
     @FXML private TextField tfSearchIngredient;
 
-    private final IngredientBoundary boundary = new IngredientBoundary();
+    private IngredientBoundary boundary;
     private final ObservableList<IngredientBean> allIngredients = FXCollections.observableArrayList();
     private FilteredList<IngredientBean> filteredIngredient;
 
@@ -116,11 +116,15 @@ public class GuiManagmentIngredients extends BaseGui {
         this.router = router;
     }
 
+    public void setIngredientBoundary(IngredientBoundary ingredientBoundary){
+        this.boundary = ingredientBoundary;
+        loadIngredients();
+    }
+
     @FXML
     private void initialize(){
         initUnitComboBox();
         initTable();
-        loadIngredients();
         initSearchIngredient();
         initLivePreview();
         showListView();

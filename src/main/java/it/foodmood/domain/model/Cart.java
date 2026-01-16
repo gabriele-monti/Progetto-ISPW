@@ -22,8 +22,24 @@ public class Cart {
         Objects.requireNonNull(productName);
         Objects.requireNonNull(unitPrice);
 
-        OrderLine line = new OrderLine(dishId, productName, unitPrice, quantity);
-        lines.add(line);
+        if(quantity <= 0){
+            throw new IllegalArgumentException("La quantità deve essere maggiore di zero");
+        }
+
+        for(int i = 0; i < lines.size(); i++){
+            OrderLine existing = lines.get(i);
+            if(existing.getDishId().equals(dishId)){
+                int newQuantity = existing.getQuantity() + quantity;
+                lines.set(i, new OrderLine(dishId, productName, unitPrice, newQuantity));
+                return;
+            }
+        }
+        
+        lines.add(new OrderLine(dishId, productName, unitPrice, quantity));
+    }
+
+    public void removeLine(UUID dishId){
+        lines.removeIf(line -> line.getDishId().equals(dishId));
     }
 
     public List<OrderLine> getLines(){

@@ -1,5 +1,7 @@
 package it.foodmood.view.ui.gui;
 
+import java.net.URL;
+
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -57,7 +59,7 @@ public class PasswordToggleController {
     private void updateToggleIcon(){
         String iconName = visible ? "eye.png" : "eye_hidden.png";
         String path = "/icons/" + iconName;
-        var url = getClass().getResource(path);
+        URL url = getClass().getResource(path);
         if(url == null){
             System.err.print("Icona non trovata: " + path);
             return;

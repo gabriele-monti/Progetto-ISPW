@@ -1,5 +1,6 @@
 package it.foodmood.view.ui.gui;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -39,7 +40,7 @@ public class GuiCard {
 
         productName.setText(dishBean.getName());
 
-        var price = dishBean.getPrice().setScale(2, RoundingMode.HALF_UP);
+        BigDecimal price = dishBean.getPrice().setScale(2, RoundingMode.HALF_UP);
         NumberFormat number = NumberFormat.getCurrencyInstance(Locale.ITALY);
         productPrice.setText(number.format(price));
 

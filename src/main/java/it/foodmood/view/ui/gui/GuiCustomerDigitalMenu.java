@@ -5,6 +5,7 @@ import java.util.List;
 import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.domain.value.CourseType;
+import it.foodmood.view.boundary.CartBoundary;
 import it.foodmood.view.boundary.DishBoundary;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,17 +50,22 @@ public class GuiCustomerDigitalMenu extends BaseGui{
     @FXML private GridPane menuGridPane;
 
     private final ObservableList<DishBean> allDishes = FXCollections.observableArrayList();
-    private final DishBoundary dishBoundary = new DishBoundary();
+    private DishBoundary dishBoundary;
+    private CartBoundary cartBoundary;
     private CourseType selectedType = null;
 
     private final ToggleGroup courseGroup = new ToggleGroup();
     private GuiRouter router;
     private ActorBean actor;
 
-    private Cart cart;
 
-    public void setCart(Cart cart){
-        this.cart = cart;
+    public void setCart(CartBoundary cartBoundary){
+        this.cartBoundary = cartBoundary;
+    }
+
+    public void setDishBoundary(DishBoundary dishBoundary){
+        this.dishBoundary = dishBoundary;
+        loadMenuDishes();
     }
 
     @FXML
@@ -79,8 +85,6 @@ public class GuiCustomerDigitalMenu extends BaseGui{
         courseGroup.selectedToggleProperty().addListener((obs, old, newT) -> {
             if(newT == null) courseGroup.selectToggle(old);
         });
-
-        loadMenuDishes();
     }
 
     public void setUser(ActorBean actor){
@@ -183,14 +187,14 @@ public class GuiCustomerDigitalMenu extends BaseGui{
             allDishes.setAll(dishes);
             refreshMenuGrid();
         } catch (Exception e) {
-            showError("Errore durante il caricamente dei piatti: " + e.getMessage());
+            showError(e.getMessage());
         }
     }
 
     private void refreshMenuGrid(){
         menuGridPane.getChildren().clear();
 
-        List<DishBean> filtered = allDishes.stream().filter(d -> selectedType == null || d.getCourseTypes() == selectedType).toList();
+        List<DishBean> filtered = allDishes.stream().filter(d -> selectedType == null || d.getCourseType() == selectedType).toList();
         
         int card = 4;
         int col = 0;
@@ -227,7 +231,8 @@ public class GuiCustomerDigitalMenu extends BaseGui{
 
     private void addToOrder(DishBean dishBean){
         try {
-            cart.addItem(dishBean, 1);
+            String dishId = dishBean.getId();
+            cartBoundary.addProduct(dishId, 1);
             showInfo(dishBean.getName() + " aggiunto all'ordine.");
         } catch (Exception e) {
             showError("Errore durante l'aggiunta all'ordine: " + e.getMessage());

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import it.foodmood.bean.TableSessionBean;
 import it.foodmood.controller.application.TableSessionController;
+import it.foodmood.exception.TableSessionException;
 
 public class TableSessionBoundary {
     
@@ -13,7 +14,7 @@ public class TableSessionBoundary {
         this.tableSessionController = new TableSessionController();
     }
 
-    public TableSessionBean enterSession(int tableId){
+    public TableSessionBean enterSession(int tableId) throws TableSessionException{
         UUID sessionId = tableSessionController.enterSession(tableId);
 
         TableSessionBean response = new TableSessionBean();

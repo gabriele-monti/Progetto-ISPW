@@ -2,10 +2,13 @@ package it.foodmood.view.ui.cli.manager;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import it.foodmood.bean.DishBean;
+import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.IngredientPortionBean;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
@@ -13,6 +16,7 @@ import it.foodmood.domain.value.DishState;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.DishException;
+import it.foodmood.exception.IngredientException;
 import it.foodmood.utils.UnitUtils;
 import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
@@ -74,8 +78,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
             CourseType courseType = askCourseType();
             dishBean.setCourseType(courseType);
 
-            DietCategory dietCategory = askDietCategory();
-            dishBean.setDietCategory(dietCategory);
+            dishBean.setDietCategories(askDietCategories());
 
             BigDecimal price = askBigDecimal("Prezzo: ");
             dishBean.setPrice(price);
@@ -127,7 +130,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
     private void showIngredientList(List<IngredientPortionBean> selected){
         for(int i = 0; i < selected.size(); i++){
-            var ingredient = selected.get(i);
+            IngredientPortionBean ingredient = selected.get(i);
             String unitLabel = ingredient.getUnit().equals("GRAM") ? "g" : "ml";
             showInfo((i + 1) + ". " + ingredient.getIngredient().getName() + " - " + String.format("%.2f %s", ingredient.getQuantity(), unitLabel));
         }
@@ -173,26 +176,24 @@ public class CliDishMenuView extends ProtectedConsoleView {
     }
 
     private void addIngredientToDish(DishBean dishBean){
-        var ingredients = ingredientBoundary.getAllIngredients();
-
-        if(ingredients == null || ingredients.isEmpty()){
-            showWarning("Nessun ingrediente disponibile. Aggiungi prima degli ingredienti.");
-            waitForEnter(null);
-            return;
-        }
+        final List<IngredientBean> ingredients;
+        int index;
 
         clearScreen();
         showTitle("Seleziona un ingrediente da aggiungere");
 
         tableIngredients();
-
         showInfo("0. Annulla");
 
         String input = askInput("\nInserisci il numero dell'ingrediente da aggiungere: ");
 
-        int index;
         try {
+            ingredients = ingredientBoundary.getAllIngredients();
             index = Integer.parseInt(input);
+        } catch (IngredientException e) {
+            showError(e.getMessage());
+            waitForEnter(null);
+            return;
         } catch (NumberFormatException _) {
             showError("Inserisci un numero valido.");
             waitForEnter(input);
@@ -207,7 +208,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
             return;
         }
 
-        var selected = ingredients.get(index - 1);
+        IngredientBean selected = ingredients.get(index - 1);
 
         Unit unit = selected.getUnit();
 
@@ -227,8 +228,20 @@ public class CliDishMenuView extends ProtectedConsoleView {
     }
 
     private void tableIngredients(){
-        var ingredients = ingredientBoundary.getAllIngredients();
-        showIngredientTable(ingredients);
+        try {
+
+            List<IngredientBean> ingredients = ingredientBoundary.getAllIngredients();
+            if(ingredients == null || ingredients.isEmpty()){
+                showWarning("Nessun ingrediente disponibile. Aggiungi prima degli ingredienti.");
+                waitForEnter(null);
+                return;
+            }
+
+            showIngredientTable(ingredients);
+        } catch (IngredientException e) {
+            showError(e.getMessage());
+            waitForEnter(null);
+        }
     }
 
     private DishState askDishState() {
@@ -293,6 +306,23 @@ public class CliDishMenuView extends ProtectedConsoleView {
         }
     }
 
+    private Set<DietCategory> askDietCategories(){
+        EnumSet<DietCategory> categories = EnumSet.noneOf(DietCategory.class);
+        while (true) {
+            DietCategory selected = askDietCategory();
+            categories.add(selected);
+
+            boolean again = askConfirmation("Vuoi aggiungere un'altra categoria?");
+            if(!again){
+                if(categories.isEmpty()){
+                    showWarning("Devi selezionare almeno una categoria");
+                    continue;
+                }
+                return categories;
+            }
+        }
+    }
+
     private void readAllDishes() {
         clearScreen();
         showTitle("Lista Piatti");
@@ -322,7 +352,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
     }
 
     private boolean deleteSingleDish() throws BackRequestedException, DishException{
-        var dishes = dishBoundary.getAllDishes();
+        List<DishBean> dishes = dishBoundary.getAllDishes();
         clearScreen();
         showTitle("Elimina Piatto");
 
@@ -342,14 +372,14 @@ public class CliDishMenuView extends ProtectedConsoleView {
             return false;
         }
 
-        var selected = dishes.get(index - 1);
+        DishBean selected = dishes.get(index - 1);
         String dishId = selected.getId();
         String dishName = selected.getName();
         dishBoundary.deleteDish(dishId);
             
         showSuccess("Piatto '" + dishName + "' eliminato con successo.");
 
-        var anotherElimination = dishBoundary.getAllDishes();
+        List<DishBean> anotherElimination = dishBoundary.getAllDishes();
 
         boolean again = anotherElimination != null && !anotherElimination.isEmpty() && askConfirmation("Vuoi eliminare un'altro piatto?");
 
@@ -361,30 +391,34 @@ public class CliDishMenuView extends ProtectedConsoleView {
     }
 
     private void tableDishes(){
-        var dishes = dishBoundary.getAllDishes();
+        try {
+            List<DishBean> dishes = dishBoundary.getAllDishes();
 
-        if(dishes == null || dishes.isEmpty()){
-            showWarning("Nessun piatto presente.");
-            return;
+            if(dishes == null || dishes.isEmpty()){
+                showWarning("Nessun piatto presente.");
+                return;
+            }
+
+            List<String> headers = List.of("N°", "Nome", "Prezzo", "Stato", "Tipologia");
+
+            List<List<String>> rows = IntStream.range(0, dishes.size()).mapToObj( i -> {
+                DishBean dish = dishes.get(i);
+
+                String index = String.valueOf(i + 1);
+                String name = dish.getName();
+                String price = String.format("%.2f", dish.getPrice());
+                String state = dish.getState().description();
+                String courseType = dish.getCourseType().description();
+
+                return List.of(index, name, price, state, courseType);
+            }).toList();
+
+            List<Integer> columnWidths = List.of(2,25,7,15,15);
+
+            displayTable(headers, rows, columnWidths);
+
+        } catch (DishException e) {
+            showWarning(e.getMessage());
         }
-
-        List<String> headers = List.of("N°", "Nome", "Prezzo", "Stato", "Tipologia", "Categoria");
-
-        List<List<String>> rows = IntStream.range(0, dishes.size()).mapToObj( i -> {
-            var dish = dishes.get(i);
-
-            String index = String.valueOf(i + 1);
-            String name = dish.getName();
-            String price = String.format("%.2f", dish.getPrice());
-            String state = dish.getState().description();
-            String courseType = dish.getCourseTypes().description();
-            String dietCategory = dish.getDietCategory().description();
-
-            return List.of(index, name, price, state, courseType, dietCategory);
-        }).toList();
-
-        List<Integer> columnWidths = List.of(2,25,7,15,15,15);
-
-        displayTable(headers, rows, columnWidths);
     }
 }

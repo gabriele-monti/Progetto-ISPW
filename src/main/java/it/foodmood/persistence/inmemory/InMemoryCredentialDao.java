@@ -23,7 +23,7 @@ public class InMemoryCredentialDao implements CredentialDao {
 
     @Override
     public void saveCredential(Credential credential){
-        storage.put(credential.getUserId(), credential);
+        storage.put(credential.userId(), credential);
     }
 
     @Override

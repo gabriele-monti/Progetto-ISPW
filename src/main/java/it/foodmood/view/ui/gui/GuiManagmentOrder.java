@@ -87,7 +87,6 @@ public class GuiManagmentOrder extends RoomController {
         clock.play();
 
         initMenuFilters();
-        loadMenuDishes();
     }
 
     
@@ -110,7 +109,7 @@ public class GuiManagmentOrder extends RoomController {
 
     private final RestaurantRoomBoundary roomBoundary = new RestaurantRoomBoundary();
 
-    private final DishBoundary dishBoundary = new DishBoundary();
+    private DishBoundary dishBoundary;
 
     private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -118,6 +117,11 @@ public class GuiManagmentOrder extends RoomController {
 
     public void setRouter(GuiRouter router){
         this.router = router;
+    }
+
+    public void setDishBoundary(DishBoundary dishBoundary){
+        this.dishBoundary = dishBoundary;
+        loadMenuDishes();
     }
 
     private void updateDateTimeLabel(){
@@ -161,7 +165,7 @@ public class GuiManagmentOrder extends RoomController {
         CourseType selectedType = categoryFilter.getValue();
 
         List<DishBean> filtered = allDishes.stream()
-            .filter(d -> selectedType == null || d.getCourseTypes() == selectedType)
+            .filter(d -> selectedType == null || d.getCourseType() == selectedType)
             .filter(d -> {
                 if(search.isEmpty()) return true;
                 String name = d.getName() != null ? d.getName() : "" ;
@@ -180,6 +184,9 @@ public class GuiManagmentOrder extends RoomController {
                 );
 
                 AnchorPane cardNode = loader.load();
+                double scale = 0.92;
+                cardNode.setScaleX(scale);
+                cardNode.setScaleY(scale);
 
                 GuiCard cardController = loader.getController();
                 cardController.setData(dish);

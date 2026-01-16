@@ -1,6 +1,8 @@
 package it.foodmood.view.ui.cli.manager;
 
 
+import java.util.List;
+
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
 import it.foodmood.domain.value.Unit;
@@ -62,7 +64,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
     }
 
     private boolean deletionIteration() throws BackRequestedException, IngredientException {
-        var ingredients = boundary.getAllIngredients();
+        List<IngredientBean> ingredients = boundary.getAllIngredients();
         clearScreen();
         showTitle("Elimina Ingrediente");
         tableIngredients();
@@ -73,7 +75,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
             return false;
         }
 
-        var selected = ingredients.get(index - 1);
+        IngredientBean selected = ingredients.get(index - 1);
         String ingredientName = selected.getName().toUpperCase();
         boundary.deleteIngredient(ingredientName);
             
@@ -170,7 +172,18 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
     } 
 
     private void tableIngredients(){
-        var ingredients = boundary.getAllIngredients();
-        showIngredientTable(ingredients);
+        try {
+            List<IngredientBean> ingredients = boundary.getAllIngredients();
+            if(ingredients == null || ingredients.isEmpty()){
+                showWarning("Nessun ingrediente disponibile. Aggiungi prima degli ingredienti.");
+                waitForEnter(null);
+                return;
+            }
+            showIngredientTable(ingredients);
+        } catch (IngredientException e) {
+            showError(e.getMessage());
+            waitForEnter(null);
+        }
     }
+
 }

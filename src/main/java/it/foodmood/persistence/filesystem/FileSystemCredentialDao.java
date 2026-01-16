@@ -35,7 +35,7 @@ public class FileSystemCredentialDao extends AbstractCsvDao implements Credentia
         List<String> lines = readAllLines();
         for(String line : lines){
             Credential credential = fromCsv(line);
-            if(credential.getUserId().equals(userId)){
+            if(credential.userId().equals(userId)){
                 return credential;
             }
         }
@@ -44,14 +44,14 @@ public class FileSystemCredentialDao extends AbstractCsvDao implements Credentia
 
 
     private String toCsv(Credential credential){
-        return credential.getUserId().toString() + SEPARATOR + 
-               credential.getPasswordHash();
+        return credential.userId().toString() + SEPARATOR +
+               credential.passwordHash();
     }
 
     private Credential fromCsv(String line){
         String[] token = line.split(SEPARATOR);
         if(token.length != 2){
-            throw new PersistenceException("Riga credenzili malformata: " + line);
+            throw new PersistenceException("Riga credenziali malformata: " + line);
         }
         UUID userId = UUID.fromString(token[0]);
         String passwordHash = token[1];

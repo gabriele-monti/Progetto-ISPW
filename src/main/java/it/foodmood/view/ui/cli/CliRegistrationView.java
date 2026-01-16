@@ -39,9 +39,11 @@ public class CliRegistrationView extends ConsoleView {
             showSuccess("Registrazione effettuata con successo!");
             waitForEnter(null);
             return true;
-        } catch (BackRequestedException | RegistrationException e) {
+        } catch (RegistrationException e) {
             showError(e.getMessage());
             waitForEnter(null);
+            return false;
+        } catch (BackRequestedException e){
             return true;
         }
     }
@@ -62,23 +64,15 @@ public class CliRegistrationView extends ConsoleView {
     }
 
     private void askAndSetPassword(RegistrationBean registrationBean) {
-        boolean validPassword = false;
-
-        while(!validPassword){
+        while(true){
             String password = askInputOrBack("Password");
             String confirmPassword = askInputOrBack("Conferma password");
-
-            if(!password.equals(confirmPassword)){
-                clearScreen();
-                showError("Le password non coincidono. Riprova.");
-                continue;
-            }
 
             try {
                 registrationBean.setPassword(password.toCharArray());
                 registrationBean.setConfirmPassword(confirmPassword.toCharArray());
-                validPassword = true;
-            } catch (Exception e) {
+                return;
+            } catch (IllegalArgumentException e) {
                 showError(e.getMessage());
             }
         }
@@ -90,7 +84,7 @@ public class CliRegistrationView extends ConsoleView {
             try {
                 registrationBean.setEmail(email);
                 break;
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 showError(e.getMessage());
             }
         }

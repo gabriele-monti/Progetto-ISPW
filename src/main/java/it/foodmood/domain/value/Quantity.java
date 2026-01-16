@@ -26,7 +26,7 @@ public record Quantity (double amount, Unit unit) implements Comparable<Quantity
         return new Quantity(this.amount + other.amount, this.unit);
     }
 
-    // Metodo usato per sottrare le quantità dell stessa unità
+    // Metodo usato per sottrarre le quantità dell stessa unità
     public Quantity minus(Quantity other){
         requireSameUnit(other);
         double result = this.amount - other.amount;

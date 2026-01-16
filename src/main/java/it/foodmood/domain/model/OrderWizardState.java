@@ -44,7 +44,7 @@ public class OrderWizardState {
         return new HashSet<>(dietCategories);
     }
 
-    public Set<CourseType> getCourseTypes(){
+    public Set<CourseType> getCourseType(){
         return new HashSet<>(courseTypes);
     }
 

@@ -20,8 +20,8 @@ public final class ConsoleOutputWriter implements OutputWriter {
         String text = title.toUpperCase();
         int padding = (WIDTH - text.length()) / 2;
 
-        String leftpaces = " ".repeat(Math.max(padding, 0));
-        String titleRow = String.format("║%s%s%s║", leftpaces,text, " ".repeat(WIDTH - leftpaces.length() - text.length()));
+        String space = " ".repeat(Math.max(padding, 0));
+        String titleRow = String.format("║%s%s%s║", space,text, " ".repeat(WIDTH - space.length() - text.length()));
 
         String topBorder = "╔" + "═".repeat(WIDTH) + "╗";
         String bottomBorder = "╚" + "═".repeat(WIDTH) + "╝";

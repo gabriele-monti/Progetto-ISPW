@@ -27,8 +27,8 @@ class UserTest {
         assertEquals("nome.cognome@email.it", user.getEmail().email());
         assertEquals(Role.CUSTOMER, user.getRole());
 
-        assertTrue(hasher.verify(password, credential.getPasswordHash()));
-        assertFalse(hasher.verify("password".toCharArray(), credential.getPasswordHash()));
+        assertTrue(hasher.verify(password, credential.passwordHash()));
+        assertFalse(hasher.verify("password".toCharArray(), credential.passwordHash()));
     }
 
         
@@ -47,8 +47,8 @@ class UserTest {
         assertEquals("lucabianchi@foodmood.it", user.getEmail().email());
         assertEquals(Role.WAITER, user.getRole());
 
-        assertTrue(hasher.verify(password, credential.getPasswordHash()));
-        assertFalse(hasher.verify("password".toCharArray(), credential.getPasswordHash()));
+        assertTrue(hasher.verify(password, credential.passwordHash()));
+        assertFalse(hasher.verify("password".toCharArray(), credential.passwordHash()));
     }
 
     @Test
@@ -66,7 +66,7 @@ class UserTest {
         assertEquals("giuliagialli@foodmood.it", user.getEmail().email());
         assertEquals(Role.MANAGER, user.getRole());
 
-        assertTrue(hasher.verify(password, credential.getPasswordHash()));
-        assertFalse(hasher.verify("password".toCharArray(), credential.getPasswordHash()));
+        assertTrue(hasher.verify(password, credential.passwordHash()));
+        assertFalse(hasher.verify("password".toCharArray(), credential.passwordHash()));
     }
 }

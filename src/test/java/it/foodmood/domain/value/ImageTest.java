@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class ImageTest {
     @Test
     void of_createImageFromLocalResource() throws Exception{
-        var url = Objects.requireNonNull(getClass().getResource("/img/test/test.png"), "Risorsa '/img/test/test.png' non trovata nel percorso");
+        URL url = Objects.requireNonNull(getClass().getResource("/img/test/test.png"), "Risorsa '/img/test/test.png' non trovata nel percorso");
 
         URI uri = url.toURI();
         Image img = new Image(uri);

@@ -4,6 +4,7 @@ package it.foodmood.view.ui.gui;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -30,9 +31,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -64,7 +67,17 @@ public class GuiManagmentDish extends BaseGui {
 
     @FXML private Button btnUpdateDish;
 
-    @FXML private ComboBox<DietCategory> cbCategory;
+    @FXML private MenuButton mbDietCategories;
+
+    @FXML private CheckMenuItem miTraditional;
+
+    @FXML private CheckMenuItem miVegetarian;
+
+    @FXML private CheckMenuItem miVegan;
+
+    @FXML private CheckMenuItem miGlutenFree;
+
+    @FXML private CheckMenuItem miLactoseFree;
 
     @FXML private ComboBox<CourseType> cbProductType;
 
@@ -128,8 +141,8 @@ public class GuiManagmentDish extends BaseGui {
 
     @FXML private TextField tfResarchDish;
 
-    private final IngredientBoundary ingredientBoundary = new IngredientBoundary();
-    private final DishBoundary dishBoundary = new DishBoundary();
+    private IngredientBoundary ingredientBoundary;
+    private DishBoundary dishBoundary;
 
     private final ObservableList<DishBean> allDishes = FXCollections.observableArrayList();
     private final ObservableList<IngredientBean> ingredientItems = FXCollections.observableArrayList();
@@ -144,12 +157,23 @@ public class GuiManagmentDish extends BaseGui {
         this.router = router;
     }
 
+    public void setIngredientBoundary(IngredientBoundary ingredientBoundary){
+        this.ingredientBoundary = ingredientBoundary;
+        loadIngredients();
+    }
+
+    public void setDishBoundary(DishBoundary dishBoundary){
+        this.dishBoundary = dishBoundary;
+        loadDishes();
+    }
+
     @FXML
     void btnChangeQuantity(ActionEvent event) {
         IngredientPortionBean selected = listDishIngredients.getSelectionModel().getSelectedItem();
 
         if(selected == null){
             showError("Seleziona un ingrediente del piatto dalla lista per modificare la quantità");
+            return;
         }
 
         Double newQuantity = askQuantity(selected.getIngredient(), selected.getQuantity());
@@ -170,7 +194,7 @@ public class GuiManagmentDish extends BaseGui {
         setupColumn(colName, d -> d.getName());
         setupColumn(colPrice, d -> d.getPrice() != null ? d.getPrice().toString() : null);
         setupColumn(colState, d -> d.getState() != null ? d.getState().description() : null);
-        setupColumn(colType, d -> d.getCourseTypes() != null ? d.getCourseTypes().description() : null);
+        setupColumn(colType, d -> d.getCourseType() != null ? d.getCourseType().description() : null);
     }
 
     private Double askQuantity(IngredientBean ingredient, Double defaultValue) {
@@ -201,6 +225,18 @@ public class GuiManagmentDish extends BaseGui {
             showError(e.getMessage());
             return null;
         }
+    }
+
+    private EnumSet<DietCategory> selectedDietCategories(){
+        EnumSet<DietCategory> set = EnumSet.noneOf(DietCategory.class);
+
+        if(miTraditional.isSelected()) set.add(DietCategory.TRADITIONAL);
+        if(miVegetarian.isSelected()) set.add(DietCategory.VEGETARIAN);
+        if(miVegan.isSelected()) set.add(DietCategory.VEGAN);
+        if(miGlutenFree.isSelected()) set.add(DietCategory.GLUTEN_FREE);
+        if(miLactoseFree.isSelected()) set.add(DietCategory.LACTOSE_FREE);
+
+        return set;
     }
 
     @FXML
@@ -407,6 +443,7 @@ public class GuiManagmentDish extends BaseGui {
 
         if(selected == null){
             showError("Seleziona un ingrediente dal piatto da rimuovere");
+            return;
         }
 
         dishIngredients.remove(selected);
@@ -431,8 +468,8 @@ public class GuiManagmentDish extends BaseGui {
             CourseType courseType = cbProductType.getValue(); 
             dishBean.setCourseType(courseType);
 
-            DietCategory dietCategory = cbCategory.getValue();
-            dishBean.setDietCategory(dietCategory);
+            EnumSet<DietCategory> categories = selectedDietCategories();
+            dishBean.setDietCategories(categories);
 
             DishState dishState = cbStateForm.getValue();
             dishBean.setState(dishState);
@@ -470,9 +507,7 @@ public class GuiManagmentDish extends BaseGui {
         initComboBox();
         initTable();
         initDishIngredientsList();
-        loadIngredients();
         initSearchIngredientForm();
-        loadDishes();
         showListView();
     }
 
@@ -487,7 +522,6 @@ public class GuiManagmentDish extends BaseGui {
     }
 
     protected void initComboBox(){
-        setupComboBox(cbCategory, DietCategory.values(), DietCategory::description);
         setupComboBox(cbProductType, CourseType.values(), CourseType::description);
         setupComboBox(cbType, CourseType.values(), CourseType::description);
         setupComboBox(cbStateForm, DishState.values(), DishState::description);
@@ -558,7 +592,6 @@ public class GuiManagmentDish extends BaseGui {
         taDishDescriptionForm.clear();
 
         cbProductType.getSelectionModel().clearSelection();
-        cbCategory.getSelectionModel().clearSelection();
         cbStateForm.getSelectionModel().clearSelection();
         listDishIngredients.getSelectionModel().clearSelection();
         tableIngredientsForm.getSelectionModel().clearSelection();
@@ -578,5 +611,11 @@ public class GuiManagmentDish extends BaseGui {
         tfDishName.clear();
         tfPrice.clear();
         tfResarchDish.clear();
+
+        miTraditional.setSelected(false);
+        miVegetarian.setSelected(false);
+        miVegan.setSelected(false);
+        miGlutenFree.setSelected(false);
+        miLactoseFree.setSelected(false);
     }
 }

@@ -2,6 +2,7 @@ package it.foodmood.view.ui.cli.customer;
 
 import it.foodmood.bean.TableSessionBean;
 import it.foodmood.exception.TableException;
+import it.foodmood.exception.TableSessionException;
 import it.foodmood.view.boundary.TableSessionBoundary;
 import it.foodmood.view.ui.cli.ConsoleView;
 
@@ -28,6 +29,8 @@ public class CliTableSessionView extends ConsoleView {
                 clearScreen();
                 showError(e.getMessage());
                 showInfo("Riprova\n");
+            } catch (TableSessionException e){
+                showError(e.getMessage());
             }
         }
     }

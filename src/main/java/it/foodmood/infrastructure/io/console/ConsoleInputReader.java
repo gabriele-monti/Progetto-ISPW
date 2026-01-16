@@ -41,7 +41,4 @@ public final class ConsoleInputReader implements InputReader {
         closed = true;
     }
 
-    public boolean isClosed(){
-        return closed;
-    }
 }

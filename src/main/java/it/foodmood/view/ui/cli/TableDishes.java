@@ -16,12 +16,12 @@ public final class TableDishes {
     }
 
     public static List<Integer> dishColumnWidths(){
-        return List.of(3, 30, 7);
+        return List.of(3, 40, 7);
     }
 
     public static List<List<String>> dishRows(List<DishBean> dishes){
         return IntStream.range(0, dishes.size()).mapToObj(i -> {
-            var dish = dishes.get(i);
+            DishBean dish = dishes.get(i);
             String index = String.valueOf(i + 1);
             String name = dish.getName();
             String price = dish.getPrice().toString();

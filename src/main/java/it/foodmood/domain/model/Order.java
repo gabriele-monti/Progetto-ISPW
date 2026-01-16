@@ -5,16 +5,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import it.foodmood.domain.value.Money;
 import it.foodmood.domain.value.OrderStatus;
-import it.foodmood.exception.OrderException;
 
 public class Order {
     
     private final UUID id;
     private final UUID userId;
     private final UUID tableSessionId;
-    private OrderStatus status;
+    private final OrderStatus status;
     private final List<OrderLine> orderLines;
 
     public Order(UUID userId, UUID tableSessionId, List<OrderLine> lines){
@@ -23,7 +21,7 @@ public class Order {
         this.tableSessionId = Objects.requireNonNull(tableSessionId, "L'ID della sessione del tavolo non può essere nullo");
         this.status = OrderStatus.OPEN; 
         if(lines == null || lines.isEmpty()){
-            throw new OrderException("Ordine vuoto");
+            throw new IllegalStateException("L'ordine non può essere vuoto");
         }
         this.orderLines = new ArrayList<>(lines);
     }
@@ -34,7 +32,7 @@ public class Order {
         this.tableSessionId = Objects.requireNonNull(tableSessionId, "L'ID della sessione del tavolo non può essere nullo");
         this.status = status;
         if(lines == null || lines.isEmpty()){
-            throw new OrderException("Dettagli ordine mancanti");
+            throw new IllegalStateException("Dettagli ordine mancanti");
         }
         this.orderLines = new ArrayList<>(lines);
     }
@@ -59,11 +57,4 @@ public class Order {
         return List.copyOf(orderLines);
     }
 
-    public Money total(){
-        Money total = Money.zero();
-        for(OrderLine line : orderLines){
-            total = total.add(line.getSubtotal());
-        }
-        return total;
-    }
 }

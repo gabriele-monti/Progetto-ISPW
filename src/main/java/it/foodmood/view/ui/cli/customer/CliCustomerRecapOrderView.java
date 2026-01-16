@@ -6,6 +6,7 @@ import java.util.List;
 import it.foodmood.bean.OrderBean;
 import it.foodmood.bean.OrderLineBean;
 import it.foodmood.bean.TableSessionBean;
+import it.foodmood.exception.CartException;
 import it.foodmood.exception.OrderException;
 import it.foodmood.view.boundary.CartBoundary;
 import it.foodmood.view.boundary.CustomerOrderBoundary;
@@ -52,35 +53,47 @@ public class CliCustomerRecapOrderView extends ProtectedConsoleView {
 
     private void confirmOrder(TableSessionBean tableSessionBean){
         boolean choice = askConfirmation("Vuoi confermare il tuo ordine?");
-
         if(!choice) return;
 
-        OrderBean orderBean = new OrderBean();
-
-        String tableSessionId = tableSessionBean.getTableSessionId().toString();
-        orderBean.setTableSessionId(tableSessionId);
-
-        List<OrderLineBean> orderLines = cartBoundary.getCartItems();
-        orderBean.setOrderLines(orderLines);
-
         try {
+            List<OrderLineBean> orderLines = cartBoundary.getCartItems();
+
+            if(orderLines.isEmpty()){
+                showWarning("Il carrello è vuoto");
+                return;
+            }
+
+            OrderBean orderBean = new OrderBean();
+            String tableSessionId = tableSessionBean.getTableSessionId().toString();
+            orderBean.setTableSessionId(tableSessionId);
+            orderBean.setOrderLines(orderLines);
+
             String orderId = orderBoundary.createOrder(orderBean);
             showSuccess("Ordine creato con successo!\nID: " + orderId);
             cartBoundary.clearCart();
+
+        } catch (CartException e) {
+            showError(e.getMessage());
         } catch (OrderException e) {
             showError(e.getMessage());
         }
     }
 
     private boolean showRecapOrder(){
-        List<OrderLineBean> items = cartBoundary.getCartItems();
-        if(items.isEmpty()){
+        try {
+            List<OrderLineBean> items = cartBoundary.getCartItems();
+            if(items.isEmpty()){
+                return false;
+            }
+            BigDecimal total = cartBoundary.getTotal();
+
+            showRecapOrderTable(items);
+            showBold("Totale: " + total + "€\n");
+            return true;
+            
+        } catch (CartException e) {
+            showWarning(e.getMessage());
             return false;
         }
-        BigDecimal total = cartBoundary.getTotal();
-
-        showRecapOrderTable(items);
-        showBold("Totale: " + total + "€\n");
-        return true;
     }
 }

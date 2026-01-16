@@ -50,7 +50,7 @@ public final class Main{
 
             // 3) Inizializzazione della persistenza
             PersistenceSettings settings = null;
-            PersistenceConfig persistenceConfig = null;
+            PersistenceConfig persistenceConfig;
 
             switch(persistenceMode){
                 case FULL -> {
@@ -75,13 +75,11 @@ public final class Main{
 
                 case FILESYSTEM -> {
                     settings = new PersistenceSettings(PersistenceMode.FILESYSTEM, null, null, null);
-                    persistenceConfig = new PersistenceConfig(settings);
-                    out.println(theme.success("Modalità filesystem inizializzata correttamente.\nPeristenza su file CSV.\n\n"));
+                    out.println(theme.success("Modalità filesystem inizializzata correttamente.\nPersistenza su file CSV.\n\n"));
                 }
 
                 case DEMO -> {
                     settings = new PersistenceSettings(PersistenceMode.DEMO, null, null, null);
-                    persistenceConfig = new PersistenceConfig(settings);
                     out.println(theme.success("Modalità demo inizializzata correttamente.\nApplicazione in memoria volatile.\n\n"));
                 }
             }     

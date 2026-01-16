@@ -2,8 +2,10 @@ package it.foodmood.bean;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.math.RoundingMode;
 
 import it.foodmood.domain.value.CourseType;
@@ -16,7 +18,7 @@ public class DishBean {
     private String name;
     private String description;
     private CourseType courseType;
-    private DietCategory dietCategory;
+    private Set<DietCategory> dietCategories;
     private BigDecimal price;
     private Double kcal;
     private String imageUri;
@@ -26,6 +28,7 @@ public class DishBean {
     // Costruttore
     public DishBean(){
         this.ingredients = new ArrayList<>();
+        this.dietCategories = EnumSet.noneOf(DietCategory.class);
     }
 
     // Getter
@@ -35,9 +38,11 @@ public class DishBean {
 
     public String getDescription(){ return description;}
 
-    public CourseType getCourseTypes(){ return courseType;}
+    public CourseType getCourseType(){ return courseType;}
 
-    public DietCategory getDietCategory(){ return dietCategory;}
+    public Set<DietCategory> getDietCategories(){ 
+        return EnumSet.copyOf(dietCategories);
+    }
 
     public BigDecimal getPrice(){ return price;}
 
@@ -77,11 +82,11 @@ public class DishBean {
         this.courseType = courseType;
     }
 
-    public void setDietCategory(DietCategory dietCategory){
-        if(dietCategory == null){
-            throw new IllegalArgumentException("Categoria dietetica non valida");
+    public void setDietCategories(Set<DietCategory> dietCategories){
+        if(dietCategories == null || dietCategories.isEmpty()){
+            throw new IllegalArgumentException("Deve esserci almeno una categoria dietetica");
         }
-        this.dietCategory = dietCategory;
+        this.dietCategories = EnumSet.copyOf(dietCategories);
     }
 
     public void setPrice(BigDecimal price){

@@ -10,6 +10,8 @@ import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.Order;
 import it.foodmood.domain.model.OrderLine;
 import it.foodmood.exception.OrderException;
+import it.foodmood.exception.PersistenceException;
+import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
 import it.foodmood.persistence.dao.OrderDao;
@@ -67,12 +69,18 @@ public class CustomerOrderController {
 
             return order.getId().toString();
 
-        } catch (IllegalArgumentException | NullPointerException e){
-            throw new OrderException("Errore durante l'inserimento dell'ordine: " + e.getMessage());
+        } catch (IllegalArgumentException e){
+            throw new OrderException("Dati ordine non validi");
+        } catch (PersistenceException e){
+            throw new OrderException("Errore tecnico nell'inserimento dell'ordine. Riprova più tardi", e);
         }
     }
 
-    public void ensureActiveSession(){
-        sessionManager.requireActiveSession();
+    private void ensureActiveSession() throws OrderException{
+        try {
+            sessionManager.requireActiveSession();
+        } catch (SessionExpiredException e) {
+            throw new OrderException(e.getMessage(), e);
+        }
     }
 }

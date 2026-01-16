@@ -23,6 +23,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
     
     private final CustomerOrderCustomizationBoundary orderCustomizationBoundary;
     private final CartBoundary cartBoundary;
+    
     private static final String TITLE = "Ordina su misura per te";
     private static final String OPTION = "\nSeleziona un'opzione: "; 
     private static final String INVALID_OPTION = "Seleziona un'opzione valida"; 
@@ -354,7 +355,10 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             return;
         }
 
-        addItems(dishes);
+        boolean again = true;
+        while (again) {
+            again = addItems(dishes);
+        }
     }
 
     private boolean addItems(List<DishBean> dishes){
@@ -378,7 +382,6 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
         }
 
         return askConfirmation("Vuoi aggiungere un altro articolo?");
-
     }
 
 

@@ -5,7 +5,9 @@ import it.foodmood.domain.model.Manager;
 import it.foodmood.domain.model.Waiter;
 import it.foodmood.domain.value.Email;
 import it.foodmood.domain.value.Person;
+import it.foodmood.persistence.dao.CredentialDao;
 import it.foodmood.persistence.dao.DaoFactory;
+import it.foodmood.persistence.dao.UserDao;
 import it.foodmood.utils.security.PasswordHasher;
 
 public final class DemoBootstrap {
@@ -14,8 +16,8 @@ public final class DemoBootstrap {
     }
 
     public static void initDemo(){
-        var userDao = DaoFactory.getInstance().getUserDao();
-        var credentialDao = DaoFactory.getInstance().getCredentialDao();
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        CredentialDao credentialDao = DaoFactory.getInstance().getCredentialDao();
         PasswordHasher hasher = new PasswordHasher();
 
         Manager manager = new Manager(new Person("Mario", "Rossi"), new Email("mariorossi@email.com"));

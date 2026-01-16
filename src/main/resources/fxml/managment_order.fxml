@@ -121,9 +121,9 @@
                                     <ComboBox fx:id="categoryFilter" prefWidth="150" />
                                  </children>
                               </HBox>
-                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxWidth="770.0" minWidth="770.0" prefWidth="770.0" VBox.vgrow="ALWAYS">
                                  <content>
-                                    <GridPane fx:id="menuGridPane" hgap="10.0" styleClass="menu-grid" vgap="10.0">
+                                    <GridPane fx:id="menuGridPane" hgap="10.0" maxWidth="700.0" minWidth="700.0" prefWidth="700.0" styleClass="menu-grid" vgap="10.0">
                                        <padding>
                                           <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>

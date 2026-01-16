@@ -3,6 +3,7 @@ package it.foodmood.controller.application;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import it.foodmood.bean.DishBean;
@@ -50,8 +51,8 @@ public class DishController {
             String name = dishBean.getName();
             String description = dishBean.getDescription();
             BigDecimal priceValue = dishBean.getPrice();
-            CourseType courseType = dishBean.getCourseTypes();
-            DietCategory dietCategory = dishBean.getDietCategory();
+            CourseType courseType = dishBean.getCourseType();
+            Set<DietCategory> dietCategories = dishBean.getDietCategories();
             String imageUri = dishBean.getImageUri();
             DishState dishState = dishBean.getState();
 
@@ -79,7 +80,7 @@ public class DishController {
                 name,
                 description,
                 courseType,
-                dietCategory,
+                dietCategories,
                 ingredientPortions,
                 dishState,
                 image,
@@ -95,18 +96,26 @@ public class DishController {
         } catch (IllegalArgumentException e){
             throw new DishException("Errore durante l'inserimento del piatto: " + e.getMessage(), e);
         } catch (PersistenceException e){
-            throw new DishException("Errore tecnico durante l'inserimento del piatto. ", e);
+            throw new DishException("Spiacenti si è verificato un errore tecnico durante l'inserimento del piatto, riprovare in seguito.", e);
         }
     }
 
-    public List<DishBean> getAllDishes(){
+    public List<DishBean> getAllDishes() throws DishException{
         ensureActiveSession();
-        return dishDao.findAll().stream().map(this::toBean).toList();
+        try {
+            return dishDao.findAll().stream().map(this::toBean).toList();
+        } catch (PersistenceException e) {
+            throw new DishException("Spiacenti si è verificato un errore tecnico durante il recupero dei piatti, riprovare in seguito.", e);
+        }
     }
 
-    public List<DishBean> getDishesByCourseType(CourseType courseType){
+    public List<DishBean> getDishesByCourseType(CourseType courseType) throws DishException{
         ensureActiveSession();
-        return dishDao.findByCourseType(courseType).stream().map(this::toBean).toList();
+        try {
+            return dishDao.findByCourseType(courseType).stream().map(this::toBean).toList();
+        } catch (PersistenceException e) {
+            throw new DishException("Spiacenti si è verificato un errore tecnico, riprovare in seguito.", e);
+        }
     }
 
     private IngredientPortion toDomainIngredientPortion(IngredientPortionBean ingredientPortionBean){
@@ -144,20 +153,21 @@ public class DishController {
         if(id == null || id.isBlank()){
             throw new DishException("L'id del piatto non può essere vuoto.");
         }
-
-        UUID dishId;
         
         try {
-            dishId = UUID.fromString(id);
+            UUID dishId = UUID.fromString(id);
+
+            if(dishDao.findById(dishId).isEmpty()){
+                throw new DishException("Nessun piatto trovato con id: " + id);
+            }
+
+            dishDao.deleteById(dishId);
+
         } catch (IllegalArgumentException e) {
             throw new DishException("Formato id non valido: " + id, e);
+        } catch (PersistenceException e){
+            throw new DishException("Errore tecnico durante l'eliminazione del piatto. Riprova più tardi");
         }
-
-        if(dishDao.findById(dishId).isEmpty()){
-            throw new DishException("Nessun piatto trovato con id: " + id);
-        }
-
-        dishDao.deleteById(dishId);
     }
 
     private DishBean toBean(Dish dish){
@@ -165,8 +175,8 @@ public class DishController {
         dishBean.setId(dish.getId().toString());
         dishBean.setName(dish.getName());
         dishBean.setDescription(dish.getDescription());
-        dishBean.setCourseType(dish.getCourseTypes());
-        dishBean.setDietCategory(dish.getDietCategory());
+        dishBean.setCourseType(dish.getCourseType());
+        dishBean.setDietCategories(dish.getDietCategories());
 
         Money price = dish.getPrice();
         dishBean.setPrice(price.getAmount());

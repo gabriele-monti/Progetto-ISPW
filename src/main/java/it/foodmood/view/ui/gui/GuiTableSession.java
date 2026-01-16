@@ -3,6 +3,7 @@ package it.foodmood.view.ui.gui;
 import it.foodmood.bean.EnterTableSessionBean;
 import it.foodmood.bean.TableSessionBean;
 import it.foodmood.exception.TableException;
+import it.foodmood.exception.TableSessionException;
 import it.foodmood.view.boundary.TableSessionBoundary;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,6 +45,8 @@ public class GuiTableSession extends BaseGui{
         } catch (IllegalArgumentException e){
             errorMessageLabel.setText(e.getMessage());
         } catch (TableException e){
+            errorMessageLabel.setText(e.getMessage());
+        } catch (TableSessionException e){
             errorMessageLabel.setText(e.getMessage());
         }
     }

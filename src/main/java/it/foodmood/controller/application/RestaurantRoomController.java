@@ -8,6 +8,7 @@ import it.foodmood.bean.TableBean;
 import it.foodmood.domain.model.RestaurantRoom;
 import it.foodmood.domain.model.Table;
 import it.foodmood.domain.value.TablePosition;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.exception.RestaurantRoomException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.RestaurantRoomDao;
@@ -35,22 +36,30 @@ public class RestaurantRoomController {
 
         } catch (IllegalArgumentException e) {
             throw new RestaurantRoomException("Errore durante la creazione della sala: " + e.getMessage());
+        } catch (PersistenceException _){
+            throw new RestaurantRoomException("Errore tecnico durante il salvataggio della sala.");
         }
     }
 
-    public RestaurantRoomBean loadRestaurantRoom(){
+    public RestaurantRoomBean loadRestaurantRoom() throws RestaurantRoomException{
         ensureActiveSession();
-        Optional<RestaurantRoom> opt = restaurantRoomDao.load();
+        try {
+            Optional<RestaurantRoom> opt = restaurantRoomDao.load();
 
-        RestaurantRoom restaurantRoom;
-        if(opt.isEmpty()){
-            restaurantRoom = new RestaurantRoom(7, 5);
-            restaurantRoomDao.save(restaurantRoom);
-        } else {
-            restaurantRoom = opt.get();
+            RestaurantRoom restaurantRoom;
+            if(opt.isEmpty()){
+                restaurantRoom = new RestaurantRoom(7, 5);
+                restaurantRoomDao.save(restaurantRoom);
+            } else {
+                restaurantRoom = opt.get();
+            }
+
+            return toBean(restaurantRoom);
+
+        } catch (PersistenceException _) {
+            throw new RestaurantRoomException("Errore tecnico durante il recupero della sala.");
         }
-        
-        return toBean(restaurantRoom);
+
     }
 
     public RestaurantRoom getRestaurantRoom() throws RestaurantRoomException{

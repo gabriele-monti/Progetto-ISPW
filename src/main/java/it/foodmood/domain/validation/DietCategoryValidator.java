@@ -14,14 +14,16 @@ public final class DietCategoryValidator {
     }
 
     public static void validate(Dish dish) throws DishException{
-        DietCategory category = dish.getDietCategory();
+        Set<DietCategory> categories = dish.getDietCategories();
 
-        switch (category) {
-            case VEGAN -> validateVegan(dish);
-            case GLUTEN_FREE -> validateGlutenFree(dish);
-            case LACTOSE_FREE -> validateLactoseFree(dish);
-            case VEGETARIAN -> validateVegetarian(dish);
-            case TRADITIONAL -> { /* nessuna validazione */}
+        for(DietCategory category : categories){
+            switch (category) {
+                case VEGAN -> validateVegan(dish);
+                case GLUTEN_FREE -> validateGlutenFree(dish);
+                case LACTOSE_FREE -> validateLactoseFree(dish);
+                case VEGETARIAN -> validateVegetarian(dish);
+                case TRADITIONAL -> { /* nessuna validazione */}
+            }
         }
     }
 

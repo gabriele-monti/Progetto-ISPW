@@ -3,8 +3,10 @@ package it.foodmood.persistence.filesystem;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import it.foodmood.domain.model.Dish;
@@ -98,7 +100,7 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
             return List.of();
         }
 
-        return findAll().stream().filter(d -> d.getCourseTypes() == courseType).toList();
+        return findAll().stream().filter(d -> d.getCourseType() == courseType).toList();
     }
 
     @Override
@@ -107,7 +109,13 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
             return List.of();
         }
 
-        return findAll().stream().filter(d -> d.getDietCategory() == dietCategory).toList();
+        return findAll().stream().filter(d -> d.getDietCategories().contains(dietCategory)).toList();
+    }
+
+    private String dietCategoriesToString(Set<DietCategory> categories){
+        List<String> names = categories.stream().map(Enum::name).sorted().toList();
+
+        return String.join(",", names);
     }
 
     private String toCsv(Dish dish){
@@ -115,8 +123,8 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
         String id = dish.getId().toString();
         String name = dish.getName();
         String description = dish.getDescription() == null ? "" : dish.getDescription();
-        String courseType = dish.getCourseTypes().name();
-        String dietCategory = dish.getDietCategory().name();
+        String courseType = dish.getCourseType().name();
+        String dietCategories = dietCategoriesToString(dish.getDietCategories());
         String imageUri = dish.getImage() == null ? "" : dish.getImage().getUri().toString();
         String state = dish.getState().name();
         String price = dish.getPrice().getAmount().toString();
@@ -124,7 +132,7 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
         String ingredients = ingredientPortionsToString(dish.getIngredients());
         
         return id + SEPARATOR + name + SEPARATOR + description + SEPARATOR +
-               courseType + SEPARATOR + dietCategory + SEPARATOR +
+               courseType + SEPARATOR + dietCategories + SEPARATOR +
                imageUri + SEPARATOR + state + SEPARATOR + price + SEPARATOR + ingredients;
     }
 
@@ -141,7 +149,7 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
             String description = token[2];
 
             CourseType courseType = parseCourseType(token[3]);
-            DietCategory dietCategory = parseDietCategory(token[4]);
+            Set<DietCategory> dietCategories = parseDietCategory(token[4]);
             Image image = parseImage(token[5]);
             DishState state = parseDishState(token[6]);
             Money price = parseMoney(token[7]);
@@ -152,7 +160,7 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
                 name,
                 description,
                 courseType,
-                dietCategory,
+                dietCategories,
                 ingredients,
                 state,
                 image,
@@ -170,8 +178,17 @@ public class FileSystemDishDao extends AbstractCsvDao implements DishDao {
         return CourseType.valueOf(value);
     }
     
-    private DietCategory parseDietCategory(String value){
-        return DietCategory.valueOf(value);
+    private Set<DietCategory> parseDietCategory(String value){
+
+        EnumSet<DietCategory> set = EnumSet.noneOf(DietCategory.class);
+
+        for(String category : value.split(",", -1)) {
+            String trimmed = category.trim();
+            if(trimmed.isEmpty()) continue;
+            set.add(DietCategory.valueOf(trimmed));
+        }
+
+        return set;
     }
 
     private DishState parseDishState(String value){

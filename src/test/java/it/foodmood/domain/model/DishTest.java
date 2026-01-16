@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,12 +47,14 @@ class DishTest {
 
         Money price = new Money(9);
 
-        DishParams params = new DishParams("Carbonara", "Carbonara romana", CourseType.FIRST_COURSE, DietCategory.TRADITIONAL, ingredients, DishState.AVAILABLE, null, price);
+        EnumSet<DietCategory> categories = EnumSet.of(DietCategory.TRADITIONAL);
+
+        DishParams params = new DishParams("Carbonara", "Carbonara romana", CourseType.FIRST_COURSE, categories, ingredients, DishState.AVAILABLE, null, price);
 
         Dish carbonara = Dish.create(params);
 
         assertEquals("Carbonara", carbonara.getName());
-        assertEquals(CourseType.FIRST_COURSE, carbonara.getCourseTypes());
+        assertEquals(CourseType.FIRST_COURSE, carbonara.getCourseType());
         assertTrue(carbonara.isAllergenic());
         assertTrue(carbonara.allergens().contains(Allergen.GLUTEN));
         assertTrue(carbonara.containsAllergen(Allergen.EGGS));

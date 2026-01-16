@@ -41,13 +41,13 @@ public class FileSystemOrderDao extends AbstractCsvDao implements OrderDao {
 
     @Override
     public List<Order> findAll(){
-        // Funzionalità non implememntata
+        // Funzionalità non implementata
         return List.of();
     }
 
     @Override
     public void deleteById(UUID id){
-        // Funzionalità non implememntata
+        // Funzionalità non implementata
     }
 
     private String toCsv(Order order){

@@ -15,6 +15,7 @@ import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
 import it.foodmood.domain.value.StepType;
 import it.foodmood.exception.OrderException;
+import it.foodmood.view.boundary.CartBoundary;
 import it.foodmood.view.boundary.DishBoundary;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -105,17 +106,18 @@ public class GuiCustomerOrder extends BaseGui {
     private static final String EURO = " €)";
 
     private final OrderCustomizationController orderController;
-    private Cart cart;
+    
+    private CartBoundary cartBoundary;
     private GuiRouter router;
     private ToggleGroup dietGroup;    
     private ToggleGroup kcalGroup;
     private ToggleGroup budgetGroup;
-    private final DishBoundary dishBoundary = new DishBoundary();
+    private DishBoundary dishBoundary;
     private ActorBean actor;
     private final EnumMap<Allergen, ToggleButton> allergenButtons = new EnumMap<>(Allergen.class);
 
-    public void setCart(Cart cart){
-        this.cart = cart;
+    public void setCart(CartBoundary cartBoundary){
+        this.cartBoundary = cartBoundary;
     }
 
     public GuiCustomerOrder(){
@@ -124,6 +126,10 @@ public class GuiCustomerOrder extends BaseGui {
 
     public void setRouter(GuiRouter router){
         this.router = router;
+    }
+
+    public void setDishBoundary(DishBoundary dishBoundary){
+        this.dishBoundary = dishBoundary;
     }
 
     public void setUser(ActorBean actor){
@@ -556,7 +562,7 @@ public class GuiCustomerOrder extends BaseGui {
 
         if(dishes == null || dishes.isEmpty()){
             showInfo("Nessun piatto trovato con i criteri selezionati");
-            return;
+            router.showHomeCustumerView();
         }
 
         proposedDishes.setAll(dishes);
@@ -617,7 +623,8 @@ public class GuiCustomerOrder extends BaseGui {
 
     private void addToOrder(DishBean dishBean){
         try {
-            cart.addItem(dishBean, 1);
+            String dishId = dishBean.getId();
+            cartBoundary.addProduct(dishId, 1);
             showInfo(dishBean.getName() + " aggiunto all'ordine.");
         } catch (Exception e) {
             showError("Errore durante l'aggiunta all'ordine: " + e.getMessage());

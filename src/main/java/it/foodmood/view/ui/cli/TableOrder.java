@@ -16,12 +16,12 @@ public final class TableOrder {
     }
 
     public static List<Integer> orderColumnWidths(){
-        return List.of(3, 30, 7, 9, 7);
+        return List.of(3, 30, 7, 9, 9);
     }
 
     public static List<List<String>> orderRows(List<OrderLineBean> orderLines){
         return IntStream.range(0, orderLines.size()).mapToObj(i -> {
-            var orderLine = orderLines.get(i);
+            OrderLineBean orderLine = orderLines.get(i);
             String index = String.valueOf(i + 1);
             String name = orderLine.getProductName();
             String price = orderLine.getUnitPrice().toString();

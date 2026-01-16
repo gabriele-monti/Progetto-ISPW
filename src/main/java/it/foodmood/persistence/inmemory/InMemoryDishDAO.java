@@ -42,7 +42,7 @@ public class InMemoryDishDao extends AbstractInMemoryCrudDao<Dish, UUID> impleme
         if(courseType == null){
             return List.of();
         }
-        return storage.values().stream().filter(d -> d.getCourseTypes() == courseType).toList();
+        return storage.values().stream().filter(d -> d.getCourseType() == courseType).toList();
     }
 
     @Override
@@ -50,6 +50,6 @@ public class InMemoryDishDao extends AbstractInMemoryCrudDao<Dish, UUID> impleme
         if(dietCategory == null){
             return List.of();
         }
-        return storage.values().stream().filter(d -> d.getDietCategory() == dietCategory).toList();
+        return storage.values().stream().filter(d -> d.getDietCategories().contains(dietCategory)).toList();
     }
 }

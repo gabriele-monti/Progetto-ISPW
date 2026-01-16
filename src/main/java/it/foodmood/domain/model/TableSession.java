@@ -7,7 +7,7 @@ public class TableSession {
     
     private final UUID id; // ID sessione
     private final int tableId; // Numero del tavolo
-    private boolean open = true; // Stato della sessione
+    private boolean open; // Stato della sessione
 
     // Creo la sessione assegnando un UUID randomico, il numero del tavolo, stato Aperto
     public static TableSession create(int tableId){

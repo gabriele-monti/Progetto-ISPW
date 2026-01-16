@@ -19,7 +19,7 @@ public class IngredientBoundary {
         controller.createIngredient(ingredientBean);
     }
 
-    public List<IngredientBean> getAllIngredients() {
+    public List<IngredientBean> getAllIngredients() throws IngredientException {
         return controller.getAllIngredients();
     }    
     
@@ -27,7 +27,7 @@ public class IngredientBoundary {
         controller.deleteIngredient(name);
     }    
     
-    public Optional<IngredientBean> findIngredientByName(String name) {
+    public Optional<IngredientBean> findIngredientByName(String name) throws IngredientException{
         return controller.findIngredientByName(name);
     }
 

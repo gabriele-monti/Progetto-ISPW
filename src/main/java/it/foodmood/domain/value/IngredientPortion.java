@@ -8,7 +8,7 @@ import it.foodmood.domain.model.Ingredient;
  * Rappresenta la porzione di un ingrediente
  */
 
-public record IngredientPortion (Ingredient ingredient, Quantity quantity) {
+public record IngredientPortion(Ingredient ingredient, Quantity quantity) {
 
     public IngredientPortion {
         ingredient = Objects.requireNonNull(ingredient, "Ingrediente non può essere nullo.");

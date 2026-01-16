@@ -5,7 +5,6 @@ import java.util.List;
 
 import it.foodmood.bean.OrderLineBean;
 import it.foodmood.controller.application.CartController;
-import it.foodmood.domain.model.OrderLine;
 import it.foodmood.exception.CartException;
 
 public class CartBoundary {
@@ -19,12 +18,12 @@ public class CartBoundary {
         controller.addToCart(dishId, quantity);
     }
 
-    public List<OrderLineBean> getCartItems(){
+    public List<OrderLineBean> getCartItems() throws CartException{
         return controller.getCartItems();
     }
 
-    public List<OrderLine> getOrderLines() throws CartException{
-        return controller.getOrderLines();
+    public void removeItem(String dishId) throws CartException{
+        controller.removeFromCart(dishId);
     }
 
     public BigDecimal getTotal(){

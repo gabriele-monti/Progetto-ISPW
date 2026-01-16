@@ -17,7 +17,7 @@ public class Dish {
     private String name;
     private String description;
     private CourseType courseType;
-    private DietCategory dietCategory;
+    private EnumSet<DietCategory> dietCategories;
     private List<IngredientPortion> ingredients;
     private DishState state;
     private Image image;
@@ -25,19 +25,25 @@ public class Dish {
 
     private Dish(UUID id, DishParams params) {
         this.id = Objects.requireNonNull(id);
+
         this.name = Objects.requireNonNull(params.name(), "Il nome non può essere nullo").trim();
         if(this.name.isEmpty()) throw new IllegalArgumentException("Il nome non può essere vuoto");
+        
         this.description = params.description(); // opzionale
         this.courseType = Objects.requireNonNull(params.courseType(), "Il tipo della portata non può essere nullo");
-        this.dietCategory = Objects.requireNonNull(params.dietCategory(),"La categoria dietetica non può essere nulla.");
+
+        this.dietCategories = normalizeDietCategories(params.dietCategories());
+
         this.ingredients = new ArrayList<>();
         if(params.ingredients() != null){
             for(IngredientPortion portion : params.ingredients()){
                 this.ingredients.add(Objects.requireNonNull(portion, "La porzione dell'ingrediente non può essere nulla"));
             }
         }
+
         this.state = Objects.requireNonNull(params.state(), "Lo stato non può essere nullo");
         this.image = params.image(); // opzionale
+
         this.price = Objects.requireNonNull(params.price(), "Il prezzo non può essere nullo");
         if(!this.price.isPositive()) throw new IllegalArgumentException("Il prezzo deve essere maggiore di 0");
     }
@@ -62,12 +68,12 @@ public class Dish {
         return description;
     }
 
-    public CourseType getCourseTypes() {
+    public CourseType getCourseType() {
         return courseType;
     }
 
-    public DietCategory getDietCategory() {
-        return dietCategory;
+    public Set<DietCategory> getDietCategories() {
+        return Collections.unmodifiableSet(dietCategories);
     }
 
     public List<IngredientPortion> getIngredients() {
@@ -96,6 +102,22 @@ public class Dish {
         this.ingredients = copy;
     }
 
+    private static EnumSet<DietCategory> normalizeDietCategories(Set<DietCategory> dietCategory){
+        Objects.requireNonNull(dietCategory,"La categoria dietetica non può essere nulla.");
+        if(dietCategory.isEmpty()){
+            throw new IllegalArgumentException("Il piatto deve avere almeno una categoria dietetica");
+        }
+
+        EnumSet<DietCategory> normalized = EnumSet.copyOf(dietCategory);
+
+        if(normalized.contains(DietCategory.VEGAN)){
+            normalized.add(DietCategory.VEGETARIAN);
+            normalized.add(DietCategory.LACTOSE_FREE);
+        }
+
+        return normalized;
+    }
+
     // Metodi
     public void addIngredient(IngredientPortion portion){
         Objects.requireNonNull(portion, "L'ingrediente non può essere nullo");
@@ -105,6 +127,34 @@ public class Dish {
     public void removeIngredient(IngredientPortion portion){
         if(portion == null) return;
         this.ingredients.remove(portion);
+    }
+
+    public void addDietCategory(DietCategory category){
+        Objects.requireNonNull(category, "La categoria non può essere nulla");
+        this.dietCategories.add(category);
+
+        if(category == DietCategory.VEGAN){
+            dietCategories.add(DietCategory.VEGETARIAN);
+            dietCategories.add(DietCategory.LACTOSE_FREE);
+        }
+    }
+
+    public void removeDietCategory(DietCategory category){
+        Objects.requireNonNull(category, "La categoria non può essere nulla");
+
+        if(category == DietCategory.VEGETARIAN && dietCategories.contains(DietCategory.VEGAN)){
+            throw new IllegalStateException("Un piatto vegano è sempre vegetariano");
+        }
+
+        if(category == DietCategory.LACTOSE_FREE && dietCategories.contains(DietCategory.VEGAN)){
+            throw new IllegalStateException("Un piatto vegano è sempre senza lattosio");
+        }
+
+        this.dietCategories.remove(category);
+
+        if(this.dietCategories.isEmpty()){
+            throw new IllegalStateException("Il piatto deve avere almeno una categoria dietetica");
+        }
     }
 
     public Macronutrients totalMacronutrients(){
@@ -139,8 +189,8 @@ public class Dish {
         this.description = newDescription;
     }
 
-    public void changeDietCategory(DietCategory newCategory){
-        this.dietCategory = Objects.requireNonNull(newCategory, "La nuova categoria dietetica non può essere nulla");
+    public void changeDietCategories(Set<DietCategory> newCategories){
+        this.dietCategories = normalizeDietCategories(newCategories);
     }
 
     public void changeCourseType(CourseType newCourseType){

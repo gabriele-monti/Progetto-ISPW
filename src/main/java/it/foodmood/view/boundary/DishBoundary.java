@@ -19,11 +19,11 @@ public class DishBoundary {
         controller.createDish(dishBean);
     }
 
-    public List<DishBean> getAllDishes(){
+    public List<DishBean> getAllDishes() throws DishException{
         return controller.getAllDishes();
     }
 
-    public List<DishBean> getDishesByCourseType(CourseType courseType){
+    public List<DishBean> getDishesByCourseType(CourseType courseType) throws DishException{
         return controller.getDishesByCourseType(courseType);
     }
 

@@ -7,5 +7,5 @@ package it.foodmood.domain.value;
 
 public enum Unit {
     GRAM,           // grammi (g)
-    MILLILITER;     // millilitri (ml)
+    MILLILITER     // millilitri (ml)
 }

@@ -55,12 +55,6 @@ public class GuiLoginView {
 
     private boolean startOnLogin = false;
 
-    private ActorBean actor;
-
-    public void setUser(ActorBean actor){
-        this.actor = actor;
-    }
-
     public GuiLoginView(){
         // costruttore vuoto richiesto da fxmlloader
     }
@@ -144,12 +138,14 @@ public class GuiLoginView {
             loginBean.setEmail(email);
             loginBean.setPassword(password.toCharArray());
 
-            boundary.login(loginBean);
+            ActorBean actor = boundary.login(loginBean);
             
             if(userMode != UserMode.CUSTOMER){
+                router.setActor(actor);
                 router.showHomeView();
             } else {
-                actor.setGuest(false);
+                router.setActor(actor);
+                // actor.setGuest(false);
                 router.showSessionTableView();
             }
 
@@ -172,8 +168,9 @@ public class GuiLoginView {
 
     @FXML
     void onRequireTableNumber(ActionEvent event) {
-        guestAccessBoundary.enterAsGuest();
-        actor.setGuest(true);
+        ActorBean actorBean = guestAccessBoundary.enterAsGuest();
+        actorBean.setName("");
+        router.setActor(actorBean);
         router.showSessionTableView();
     }
 

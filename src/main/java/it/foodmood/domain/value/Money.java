@@ -40,20 +40,12 @@ public final class Money {
         return new Money(result);
     }
 
-    public static Money euro(double amount){
-        return new Money(amount);
-    }
-
     public boolean isZero(){
         return amount.compareTo(BigDecimal.ZERO) == 0;
     }
 
     public boolean isPositive(){
         return amount.compareTo(BigDecimal.ZERO) > 0;
-    }
-
-    public boolean isNegative(){
-        return amount.compareTo(BigDecimal.ZERO) < 0;
     }
 
     public static Money zero(){
