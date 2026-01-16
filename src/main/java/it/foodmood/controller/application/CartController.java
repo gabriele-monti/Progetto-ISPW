@@ -67,7 +67,7 @@ public class CartController {
         try {
             UUID id = UUID.fromString(dishId);
             cart.removeLine(id);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             throw new CartException("Errore tecnico: impossibile rimuovere l'articolo dal carrello.");
         }
     }

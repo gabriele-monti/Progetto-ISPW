@@ -43,7 +43,7 @@ public class CliRegistrationView extends ConsoleView {
             showError(e.getMessage());
             waitForEnter(null);
             return false;
-        } catch (BackRequestedException e){
+        } catch (BackRequestedException _){
             return true;
         }
     }

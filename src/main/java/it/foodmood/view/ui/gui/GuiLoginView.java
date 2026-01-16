@@ -145,7 +145,6 @@ public class GuiLoginView {
                 router.showHomeView();
             } else {
                 router.setActor(actor);
-                // actor.setGuest(false);
                 router.showSessionTableView();
             }
 

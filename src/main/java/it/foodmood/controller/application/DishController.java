@@ -166,8 +166,8 @@ public class DishController {
 
         } catch (IllegalArgumentException e) {
             throw new DishException("Formato id non valido: " + id, e);
-        } catch (PersistenceException e){
-            throw new DishException("Errore tecnico durante l'eliminazione del piatto. Riprova più tardi");
+        } catch (PersistenceException _){
+            throw new DishException("Errore tecnico durante l'eliminazione del piatto. Riprova più tardi.");
         }
     }
 

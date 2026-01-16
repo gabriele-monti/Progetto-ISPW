@@ -177,7 +177,7 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
         try {
             lblTotalOrder.setText(currency.format(cartBoundary.getTotal()));
-        } catch (Exception e) {
+        } catch (Exception _) {
             lblTotalOrder.setText(currency.format(0));
         }
     }

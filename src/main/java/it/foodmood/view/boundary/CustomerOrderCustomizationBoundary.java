@@ -13,7 +13,7 @@ public class CustomerOrderCustomizationBoundary {
         this.controller = new OrderCustomizationController();
     }
 
-    public ResponseBean start() throws OrderException{
+    public ResponseBean start(){
         return controller.start();
     }
 

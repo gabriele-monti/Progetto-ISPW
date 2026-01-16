@@ -105,7 +105,7 @@ public class IngredientController {
         ensureActiveSession();
         try {
             return ingredientDao.findById(name).map(IngredientMapper::toBean);
-        } catch (PersistenceException e){
+        } catch (PersistenceException _){
             throw new IngredientException("Errore tecnico durante il recuperòo dell'ingrediente. Riprova più tardi");
         }
     }
