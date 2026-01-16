@@ -2,7 +2,7 @@ package it.foodmood.domain.value;
 
 import java.util.Objects;
 
-public record Quantity (double amount, Unit unit) implements Comparable<Quantity>{
+public record Quantity(double amount, Unit unit) implements Comparable<Quantity>{
 
     public static final int BASE_AMOUNT = Macronutrients.BASE_AMOUNT;
 
@@ -10,6 +10,7 @@ public record Quantity (double amount, Unit unit) implements Comparable<Quantity
         if(!Double.isFinite(amount) || amount <= 0.0){
             throw new IllegalArgumentException("La quantità deve essere maggiore di 0.");
         }
+        Objects.requireNonNull(unit, "L'unità non può essere nulla");
     }
 
     // Metodo per moltiplicare la quantità per un fattore (es. dimezza, raddoppia, ...)
@@ -49,7 +50,7 @@ public record Quantity (double amount, Unit unit) implements Comparable<Quantity
     private void requireSameUnit(Quantity other){
         Objects.requireNonNull(other, "La quantità da confrontare non può essere nulla");
         if(this.unit != other.unit){
-            throw new IllegalArgumentException("Unità incompatibili: " + this.unit + "vs" + other.unit);
+            throw new IllegalArgumentException("Unità incompatibili: " + this.unit + " vs " + other.unit);
         }
     }
 

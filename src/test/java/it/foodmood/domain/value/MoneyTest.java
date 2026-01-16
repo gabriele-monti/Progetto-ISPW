@@ -15,7 +15,6 @@ class MoneyTest {
 
     @Test
     void of_invalidAmount(){
-        assertThrows(IllegalArgumentException.class, () -> new Money(0));
         assertThrows(IllegalArgumentException.class, () -> new Money(-1));
     }
 

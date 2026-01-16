@@ -8,4 +8,5 @@ module it.foodmood {
     requires java.sql;
     
     opens it.foodmood.view.ui.gui to javafx.fxml;
+    opens it.foodmood to javafx.graphics;
 }

@@ -99,8 +99,8 @@ public final class Main{
             BootstrapFactory bootstrapFactory = new BootstrapFactory();
             ApplicationBootstrap bootstrap = bootstrapFactory.create(uiMode);
             bootstrap.start(environment);
-        } catch (Exception _){
-            System.err.println(theme.error("Errore durante l'avvio dell'applicazione."));
+        } catch (Exception e){
+            System.err.println(theme.error("Errore durante l'avvio dell'applicazione: " + e.getMessage()));
             System.exit(1);
         }
     }

@@ -9,6 +9,9 @@ public final class Money {
 
     public Money(BigDecimal amount){
         Objects.requireNonNull(amount, "L'importo non può essere nullo");
+        if(amount.compareTo(BigDecimal.ZERO) < 0){
+            throw new IllegalArgumentException("L'importo non può essere negativo");
+        }
         this.amount = amount.setScale(2, RoundingMode.HALF_UP);
     }
 
