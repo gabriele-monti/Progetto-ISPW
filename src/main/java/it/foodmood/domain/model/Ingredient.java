@@ -7,18 +7,13 @@ import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.domain.value.Quantity;
 import it.foodmood.domain.value.Unit;
 
-public final class Ingredient {
-    private final String name;
-    private final Macronutrients macro;  // Riferiti a 100 g / ml
-    private final Set<Allergen> allergens;
-    private final Unit unit;
+public record Ingredient(String name, Macronutrients macro, Unit unit, Set<Allergen> allergens) {
 
-    public Ingredient(String name, Macronutrients macro, Unit unit, Set<Allergen> allergens){
+    public Ingredient {
         if (name == null || name.isBlank()) throw new IllegalArgumentException("Il nome non può essere vuoto.");
-        this.name = name;
-        this.macro = macro;
-        this.unit = unit;
-        this.allergens = (allergens == null) ? Set.of() : Set.copyOf(allergens);
+        Objects.requireNonNull(macro, "I macronutrienti non possono essere nulli.");
+        Objects.requireNonNull(unit, "L'unità non può essere nulla.");
+        allergens = (allergens == null) ? Set.of() : Set.copyOf(allergens);
     }
 
     public String getName() {return name;}
