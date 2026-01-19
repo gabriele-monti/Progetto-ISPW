@@ -1,4 +1,4 @@
-package it.foodmood.controller.application;
+package it.foodmood.controller;
 
 import it.foodmood.bean.ActorBean;
 import it.foodmood.domain.model.Guest;

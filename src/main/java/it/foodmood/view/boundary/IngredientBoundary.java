@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import it.foodmood.bean.IngredientBean;
-import it.foodmood.controller.application.IngredientController;
+import it.foodmood.controller.IngredientController;
 import it.foodmood.exception.IngredientException;
 
 public class IngredientBoundary {

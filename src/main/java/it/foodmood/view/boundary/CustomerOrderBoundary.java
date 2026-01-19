@@ -1,7 +1,7 @@
 package it.foodmood.view.boundary;
 
 import it.foodmood.bean.OrderBean;
-import it.foodmood.controller.application.CustomerOrderController;
+import it.foodmood.controller.CustomerOrderController;
 import it.foodmood.exception.OrderException;
 
 public class CustomerOrderBoundary {

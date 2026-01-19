@@ -3,7 +3,7 @@ package it.foodmood.view.boundary;
 import java.util.UUID;
 
 import it.foodmood.bean.TableSessionBean;
-import it.foodmood.controller.application.TableSessionController;
+import it.foodmood.controller.TableSessionController;
 import it.foodmood.exception.TableSessionException;
 
 public class TableSessionBoundary {

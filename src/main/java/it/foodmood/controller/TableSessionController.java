@@ -1,4 +1,4 @@
-package it.foodmood.controller.application;
+package it.foodmood.controller;
 
 import java.util.Optional;
 import java.util.UUID;

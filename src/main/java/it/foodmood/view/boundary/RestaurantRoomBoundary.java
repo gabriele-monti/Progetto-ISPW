@@ -2,7 +2,7 @@ package it.foodmood.view.boundary;
 
 import it.foodmood.bean.RestaurantRoomBean;
 import it.foodmood.bean.TableBean;
-import it.foodmood.controller.application.RestaurantRoomController;
+import it.foodmood.controller.RestaurantRoomController;
 import it.foodmood.exception.RestaurantRoomException;
 
 public class RestaurantRoomBoundary {

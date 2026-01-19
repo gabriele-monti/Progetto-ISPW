@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import it.foodmood.bean.OrderLineBean;
-import it.foodmood.controller.application.CartController;
+import it.foodmood.controller.CartController;
 import it.foodmood.exception.CartException;
 
 public class CartBoundary {

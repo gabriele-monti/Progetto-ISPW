@@ -3,7 +3,7 @@ package it.foodmood.view.boundary;
 import java.util.List;
 
 import it.foodmood.bean.DishBean;
-import it.foodmood.controller.application.DishController;
+import it.foodmood.controller.DishController;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.exception.DishException;
 

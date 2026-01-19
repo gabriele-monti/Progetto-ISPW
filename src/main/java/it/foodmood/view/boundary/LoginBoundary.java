@@ -3,7 +3,7 @@ package it.foodmood.view.boundary;
 import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.config.UserMode;
-import it.foodmood.controller.application.LoginController;
+import it.foodmood.controller.LoginController;
 import it.foodmood.exception.AuthenticationException;
 
 public class LoginBoundary {

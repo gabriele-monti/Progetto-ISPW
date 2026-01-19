@@ -12,9 +12,9 @@ public enum CourseType {
     MAIN_COURSE("Secondo"), 
     SIDE_DISH("Contorno"), 
     PIZZA("Pizza"), 
-    DESSERT("Dolce"),
+    BEVERAGE("Bevanda"),
     FRUIT("Frutta"), 
-    BEVERAGE("Bevanda");
+    DESSERT("Dolce");
 
     private final String description;
 

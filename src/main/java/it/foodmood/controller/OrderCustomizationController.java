@@ -1,4 +1,4 @@
-package it.foodmood.controller.application;
+package it.foodmood.controller;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import it.foodmood.bean.AnswerBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.ResponseBean;
+import it.foodmood.controller.mapper.DishMapper;
 import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.OrderWizardState;
 import it.foodmood.domain.policy.AllergenFilterPolicy;
@@ -27,7 +28,6 @@ import it.foodmood.utils.SessionManager;
 /*
   Application Controller per la gestione del wizard di raccolta preferenze per l'ordine
 */
-
 public class OrderCustomizationController {
 
     private final SessionManager sessionManager; 
@@ -184,7 +184,7 @@ public class OrderCustomizationController {
     private void ensureActiveSession() throws OrderException{
         try {
             sessionManager.requireActiveSession();
-        } catch (SessionExpiredException e) {
+        } catch (SessionExpiredException _) {
             throw new OrderException("Sessione scaduta.");
         }
     }

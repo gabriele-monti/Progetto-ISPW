@@ -1,4 +1,4 @@
-package it.foodmood.controller.application;
+package it.foodmood.controller;
 
 import java.util.List;
 import java.util.Optional;

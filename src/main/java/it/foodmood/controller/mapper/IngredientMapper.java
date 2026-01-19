@@ -1,4 +1,4 @@
-package it.foodmood.controller.application;
+package it.foodmood.controller.mapper;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;

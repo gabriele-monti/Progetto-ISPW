@@ -1,4 +1,4 @@
-package it.foodmood.controller.application;
+package it.foodmood.controller;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -9,6 +9,7 @@ import java.util.UUID;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.IngredientPortionBean;
+import it.foodmood.controller.mapper.IngredientMapper;
 import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.Ingredient;
 import it.foodmood.domain.validation.DietCategoryValidator;

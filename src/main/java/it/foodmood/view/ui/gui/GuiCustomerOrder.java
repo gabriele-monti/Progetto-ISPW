@@ -9,7 +9,7 @@ import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.AnswerBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.ResponseBean;
-import it.foodmood.controller.application.OrderCustomizationController;
+import it.foodmood.controller.OrderCustomizationController;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;

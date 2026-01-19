@@ -1,7 +1,7 @@
 package it.foodmood.view.boundary;
 
 import it.foodmood.bean.ActorBean;
-import it.foodmood.controller.application.GuestAccessController;
+import it.foodmood.controller.GuestAccessController;
 
 public class GuestAccessBoundary {
     private final GuestAccessController guestAccessController;

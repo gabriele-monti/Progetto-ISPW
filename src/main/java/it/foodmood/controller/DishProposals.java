@@ -1,4 +1,4 @@
-package it.foodmood.controller.application;
+package it.foodmood.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +13,7 @@ import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
 import it.foodmood.exception.OrderException;
+import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
 
@@ -29,30 +30,36 @@ public class DishProposals {
     }
 
     public List<Dish> generate(OrderWizardState state) throws OrderException {
-        Set<CourseType> selectedCourses = state.getCourseType();
-        if(selectedCourses == null || selectedCourses.isEmpty()){
-            throw new OrderException("Nessuna portata selezionata");
+        try {
+
+            Set<CourseType> selectedCourses = state.getCourseType();
+            if(selectedCourses == null || selectedCourses.isEmpty()){
+                throw new OrderException("Nessuna portata selezionata");
+            }
+
+            List<Dish> allFilteredDishes = new ArrayList<>();
+
+            // Per ogni portata selezionata, recupera e filtra i piatti
+            for(CourseType courseType : selectedCourses){
+                List<Dish> dishesForCourse = dishDao.findByCourseType(courseType).stream()
+                    .filter(Dish::isAvailable)
+                    .filter(dish -> matchesDietPreferences(dish, state))
+                    .filter(dish -> isSafeForAllergens(dish, state))
+                    .filter(dish -> isWithinKcalLimit(dish, courseType, state))
+                    .filter(dish -> isWithinBudgetLimit(dish, courseType, state))
+                    .toList();
+
+                allFilteredDishes.addAll(dishesForCourse);
+            }
+
+            return allFilteredDishes;
+            
+        } catch (PersistenceException e) {
+            throw new OrderException("Problema durante il recupero dei piatti. Riprova più tardi.", e);
         }
-
-        List<Dish> allFilteredDishes = new ArrayList<>();
-
-        // Per ogni portata selezionata, recupera e filtra i piatti
-        for(CourseType courseType : selectedCourses){
-            List<Dish> dishesForCourse = dishDao.findByCourseType(courseType).stream()
-                .filter(Dish::isAvailable)
-                .filter(dish -> matchesDietCategory(dish, state))
-                .filter(dish -> isSafeForAllergens(dish, state))
-                .filter(dish -> isWithinKcalLimit(dish, courseType, state))
-                .filter(dish -> isWithinBudgetLimit(dish, courseType, state))
-                .toList();
-
-            allFilteredDishes.addAll(dishesForCourse);
-        }
-
-        return allFilteredDishes;
     }
 
-    private boolean matchesDietCategory(Dish dish, OrderWizardState state){
+    private boolean matchesDietPreferences(Dish dish, OrderWizardState state){
         Set<DietCategory> dietPreferences = state.getDietCategories();
         if(dietPreferences == null || dietPreferences.isEmpty()){
             return true;

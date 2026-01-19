@@ -1,4 +1,4 @@
-package it.foodmood.infrastructure.util;
+package it.foodmood.utils;
 
 import java.sql.Connection;
 import java.sql.SQLException;

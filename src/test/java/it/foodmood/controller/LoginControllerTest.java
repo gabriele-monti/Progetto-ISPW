@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.config.PersistenceMode;
 import it.foodmood.config.UserMode;
-import it.foodmood.controller.application.LoginController;
 import it.foodmood.exception.AuthenticationException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.utils.SessionManager;

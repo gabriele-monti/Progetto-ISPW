@@ -1,4 +1,4 @@
-package it.foodmood.controller.application;
+package it.foodmood.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
+import it.foodmood.controller.mapper.IngredientMapper;
 import it.foodmood.domain.model.Ingredient;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.Unit;

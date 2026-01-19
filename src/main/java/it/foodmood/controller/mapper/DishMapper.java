@@ -1,4 +1,4 @@
-package it.foodmood.controller.application;
+package it.foodmood.controller.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
