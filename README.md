@@ -1,97 +1,186 @@
-# Progetto ISPW - FoodMood
+# FoodMood - Progetto ISPW
 
-## Compilazione ed Esecuzione
+FoodMood è un'applicazione sviluppata per il progetto di Ingegneria del Software e Progettazione Web, eseguibile sia in modalità **GUI** che in **CLI**.
 
-Il progetto può essere eseguito in quattro modalità:
+L'idea è quella di assistere il cliente al ristorante nell'ordinazione, aiutandolo a scegliere i piatti in base ai suoi gusti, preferenze alimentari, budget, intolleranze, allergie, stile alimentare e apporto calorico desiderato. Il sistema pone domande mirate all'utente e suggerisce i prodotti più adatti tra quelli disponibili nel menù del ristorante.
 
-* ```gui demo```
-* ```gui full```
-* ```cli demo```
-* ```cli demo```
+---
 
-## Con Maven
+## Avvio e configurazione iniziale (menu interattivo)
 
-### Compilazione
+All'avvio, FoodMood guida l'utente tramite un menù testuale per selezionare:
 
-```bash
-mvn clean compile
-```
+1. **Interfaccia**
+   - CLI → interfaccia a riga di comando
+   - GUI → interfaccia grafica (JavaFX)
 
-### Esecuzione
+2. **Modalità di persistenza**
+   - DEMO       → Nessun salvataggio, dati in memoria volatile
+   - FILESYSTEM → Salvataggio su file CSV in `data/csv/`
+   - FULL       → Salvataggio completo tramite database MySQL
 
-Avviare il software in modalità GUI e persistenza MYSQL
+## Modalità di esecuzione disponibili
 
-```bash
-mvn clean compile exec:java -Dexec.args="gui full"
-```
+Il progetto può essere avviato in **sei modalità**:
 
-Avviare il software in modalità CLI e persistenza MYSQL
+- `cli demo`
+- `cli filesystem`
+- `cli full`
 
-```bash
-mvn clean compile exec:java -Dexec.args="cli full"
-```
+- `gui demo`
+- `gui filesystem`
+- `gui full`
 
-Avviare il software e scegliere manualmente interfaccia grafica e modalità di persistenza
+---
+
+## Requisiti
+
+- **Java JDK** 17 o superiore
+- **Apache Maven** 3.6+
+- **MySQL** 8.0+ *(solo per modalità FULL)*
+- **JavaFX SDK** *(gestito automaticamente da Maven)*
+
+---
+
+## Esecuzione con Maven
+
+### Avvio con menu interattivo
 
 ```bash
 mvn compile exec:java -Dexec.mainClass="it.foodmood.Main"
 ```
 
+oppure
+
 ```bash
 mvn javafx:run
 ```
 
-Altri esempi
+### Avvio diretto con parametri
+
+#### Modalità GUI + Database completo
+
+```bash
+mvn clean compile exec:java -Dexec.args="gui full"
+```
+
+#### Modalità CLI + Database completo
+
+```bash
+mvn clean compile exec:java -Dexec.args="cli full"
+```
+
+#### Modalità GUI + Filesystem
+
+```bash
+mvn clean compile exec:java -Dexec.args="gui filesystem"
+```
+
+#### Altre combinazioni
 
 ```bash
 mvn clean compile exec:java -Dexec.args="gui demo"
-mvn clean compile exec:java -Dexec.args="cli full"
 mvn clean compile exec:java -Dexec.args="cli demo"
+mvn clean compile exec:java -Dexec.args="cli filesystem"
 ```
+
+---
+
+## Configurazione
+
+### Selezione del ruolo utente
+
+In `src/main/resources/application.properties` è possibile scegliere quale ruolo esegue il sistema:
+
+```properties
+# Gestione della modalità di esecuzione
+user.mode = customer
+# user.mode = waiter
+# user.mode = manager
+```
+
+**Ruoli disponibili:**
+
+- `customer` → Cliente del ristorante
+- `waiter`   → Cameriere
+- `manager`  → Titolare/gestore
+
+### Configurazione Database (modalità FULL)
+
+Modificare `src/main/resources/application.properties`:
+
+```properties
+db.url=jdbc:mysql://localhost:3306/foodmood
+db.user=tuo_utente
+db.password=tua_password
+```
+
+---
+
+## Funzionalità per ruolo
+
+### Cliente
+
+#### GUI e CLI
+
+- Login
+- Accesso come ospite 
+- Ordinazione tramite menù digitale classico
+- Ordinazione tramite FoodMood (raccomandazioni personalizzate basate su preferenze, allergie, budget, calorie)
+
+### Cameriere
+
+#### GUI (parziale) e CLI (non implementato)
+
+- Visualizzazione sala
+- Consultazione menù digitale
+- *(Altri use case non ancora implementati)*
+
+### Titolare
+
+#### GUI e CLI 
+
+- CRUD per la gestione di ingredienti con allergeni e macronutrienti
+- CRUD per la gestione di piatti 
+- Gestione sala: aggiunta e spostamento tavoli (implementata solo in GUI)
+
+---
 
 ## Pulizia della compilazione
 
-Per eliminare i file generati dalla compilazione precedente ed effettuare una compilazione pulita, esegui:
+Per eliminare i file generati ed effettuare una compilazione pulita:
 
 ```bash
 mvn clean
 ```
 
-Questo comando rimuove la cartella `target` e tutti i file compilati.
+---
+
+## Struttura dati
+
+### Modalità DEMO
+
+I dati rimangono in memoria volatile e vengono persi alla chiusura dell'applicazione.
+
+### Modalità FILESYSTEM
+
+I dati vengono salvati in file CSV nella cartella `data/csv/`:
+
+- `ingredients.csv`
+- `dishes.csv`
+- `orders.csv`
+
+### Modalità FULL
+
+I dati vengono salvati in modo persistente nel database MySQL.
 
 ---
 
-## Avvio tramite JAR
-### Generazione del JAR
+## Note tecniche
 
-```bash
-mvn clean package
-```
-
-### Esecuzione
-
-```bash
-java -jar target/foodmood.jar gui full
-```
-
-# Requisiti
-
-## Configurazione Database
-   ```properties
-   db.url=jdbc:mysql://localhost:3306/foodmood
-   db.user=tuo_utente
-   db.password=tua_password
-   ```
+- Pattern architetturale: **MVC** (Model-View-Controller)
+- Gestione persistenza: **DAO Pattern**
+- Interfaccia grafica: **JavaFX** con file FXML
+- Database: **MySQL** con JDBC
 
 ---
-
-# SonarQube
-
-[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
-
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
-
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
-
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=gabriele-monti_Progetto-ISPW&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=gabriele-monti_Progetto-ISPW)
-

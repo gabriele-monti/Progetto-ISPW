@@ -215,7 +215,7 @@ public class DishController {
         return bean;
     }
 
-    public void ensureActiveSession() throws DishException{
+    private void ensureActiveSession() throws DishException{
         try {
             sessionManager.requireActiveSession();
         } catch (SessionExpiredException e) {

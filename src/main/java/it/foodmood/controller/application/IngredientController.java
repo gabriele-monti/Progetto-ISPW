@@ -114,7 +114,7 @@ public class IngredientController {
         return value == null ? 0.0 : value;
     }
 
-    public void ensureActiveSession() throws IngredientException{
+    private void ensureActiveSession() throws IngredientException{
         try {
             sessionManager.requireActiveSession();
         } catch (SessionExpiredException e) {

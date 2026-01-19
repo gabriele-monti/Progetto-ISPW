@@ -146,7 +146,7 @@ public class RestaurantRoomController {
         return tableBean;
     }
 
-    public void ensureActiveSession(){
+    private void ensureActiveSession(){
         sessionManager.requireActiveSession();
     }
 }

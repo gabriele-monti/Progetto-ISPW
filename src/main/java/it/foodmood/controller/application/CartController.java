@@ -90,7 +90,7 @@ public class CartController {
         return orderLineBean;
     }
 
-    public void ensureActiveSession() throws CartException{
+    private void ensureActiveSession() throws CartException{
         try {
             sessionManager.requireActiveSession();
         } catch (SessionExpiredException e) {

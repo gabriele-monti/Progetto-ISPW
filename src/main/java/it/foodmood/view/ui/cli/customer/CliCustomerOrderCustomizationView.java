@@ -48,7 +48,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
         try {
             ResponseBean response = orderCustomizationBoundary.start();
             handleResponse(response);
-        } catch (Exception e) {
+        } catch (OrderException e) {
             showError(e.getMessage());
         }
     }
