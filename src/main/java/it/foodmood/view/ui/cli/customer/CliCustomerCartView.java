@@ -3,8 +3,7 @@ package it.foodmood.view.ui.cli.customer;
 import java.math.BigDecimal;
 import java.util.List;
 
-import it.foodmood.bean.OrderBean;
-import it.foodmood.bean.OrderLineBean;
+import it.foodmood.bean.CartItemBean;
 import it.foodmood.bean.TableSessionBean;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.OrderException;
@@ -12,12 +11,12 @@ import it.foodmood.view.boundary.CartBoundary;
 import it.foodmood.view.boundary.CustomerOrderBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
-public class CliCustomerRecapOrderView extends ProtectedConsoleView {
+public class CliCustomerCartView extends ProtectedConsoleView {
     
     private final CartBoundary cartBoundary;
     private final CustomerOrderBoundary orderBoundary;
     
-    public CliCustomerRecapOrderView(CartBoundary cartBoundary, CustomerOrderBoundary orderBoundary){
+    public CliCustomerCartView(CartBoundary cartBoundary, CustomerOrderBoundary orderBoundary){
         super();
         this.cartBoundary = cartBoundary;
         this.orderBoundary = orderBoundary;
@@ -29,8 +28,7 @@ public class CliCustomerRecapOrderView extends ProtectedConsoleView {
         while(!back){
             showTitle("Il tuo ordine");
 
-            // Da correggere
-            if(!showRecapOrder()){
+            if(!showOrderRecap()){
                 showWarning("Nessun articolo nell'ordine");
                 waitForEnter(null);
                 return;
@@ -56,38 +54,26 @@ public class CliCustomerRecapOrderView extends ProtectedConsoleView {
         if(!choice) return;
 
         try {
-            List<OrderLineBean> orderLines = cartBoundary.getCartItems();
-
-            if(orderLines.isEmpty()){
-                showWarning("Il carrello è vuoto");
-                return;
-            }
-
-            OrderBean orderBean = new OrderBean();
             String tableSessionId = tableSessionBean.getTableSessionId().toString();
-            orderBean.setTableSessionId(tableSessionId);
-            orderBean.setOrderLines(orderLines);
 
-            String orderId = orderBoundary.createOrder(orderBean);
+            String orderId = orderBoundary.confirmOrder(tableSessionId);
+            
             showSuccess("Ordine creato con successo!\nID: " + orderId);
-            cartBoundary.clearCart();
 
-        } catch (CartException e) {
-            showError(e.getMessage());
         } catch (OrderException e) {
             showError(e.getMessage());
         }
     }
 
-    private boolean showRecapOrder(){
+    private boolean showOrderRecap(){
         try {
-            List<OrderLineBean> items = cartBoundary.getCartItems();
+            List<CartItemBean> items = cartBoundary.getCartItems();
             if(items.isEmpty()){
                 return false;
             }
             BigDecimal total = cartBoundary.getTotal();
 
-            showRecapOrderTable(items);
+            showOrderRecapTable(items);
             showBold("Totale: " + total + "€\n");
             return true;
             

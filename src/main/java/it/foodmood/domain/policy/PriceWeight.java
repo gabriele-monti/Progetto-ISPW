@@ -11,11 +11,11 @@ public class PriceWeight {
             case APPETIZER -> 0.15;
             case FIRST_COURSE -> 0.30;
             case MAIN_COURSE -> 0.40;
-            case PIZZA -> 0.27;
-            case DESSERT -> 0.17;
-            case FRUIT -> 0.10;
-            case BEVERAGE -> 0.8;
-            case SIDE_DISH -> 0.15;
+            case PIZZA -> 0.30;
+            case DESSERT -> 0.13;
+            case FRUIT -> 0.06;
+            case BEVERAGE -> 0.08;
+            case SIDE_DISH -> 0.13;
         };
     }
 

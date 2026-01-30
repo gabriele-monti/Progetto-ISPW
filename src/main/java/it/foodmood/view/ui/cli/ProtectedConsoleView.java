@@ -2,9 +2,9 @@ package it.foodmood.view.ui.cli;
 
 import java.util.List;
 
+import it.foodmood.bean.CartItemBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.IngredientBean;
-import it.foodmood.bean.OrderLineBean;
 import it.foodmood.utils.SessionManager;
 
 public abstract class ProtectedConsoleView extends ConsoleView{
@@ -53,7 +53,7 @@ public abstract class ProtectedConsoleView extends ConsoleView{
         displayTable(headers, rows, columnWidths);
     }
 
-    protected void showRecapOrderTable(List<OrderLineBean> lines){
+    protected void showOrderRecapTable(List<CartItemBean> lines){
         if(lines == null || lines.isEmpty()){
             showWarning("Nessun articolo presente.");
             waitForEnter(null);

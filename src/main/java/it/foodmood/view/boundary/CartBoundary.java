@@ -3,7 +3,7 @@ package it.foodmood.view.boundary;
 import java.math.BigDecimal;
 import java.util.List;
 
-import it.foodmood.bean.OrderLineBean;
+import it.foodmood.bean.CartItemBean;
 import it.foodmood.controller.CartController;
 import it.foodmood.exception.CartException;
 
@@ -18,7 +18,7 @@ public class CartBoundary {
         controller.addToCart(dishId, quantity);
     }
 
-    public List<OrderLineBean> getCartItems() throws CartException{
+    public List<CartItemBean> getCartItems() throws CartException{
         return controller.getCartItems();
     }
 
@@ -26,11 +26,7 @@ public class CartBoundary {
         controller.removeFromCart(dishId);
     }
 
-    public BigDecimal getTotal(){
+    public BigDecimal getTotal() throws CartException{
         return controller.getTotal();
-    }
-
-    public void clearCart(){
-        controller.clearCart();
     }
 }

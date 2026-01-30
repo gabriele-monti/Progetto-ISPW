@@ -9,12 +9,10 @@ import java.util.UUID;
 import it.foodmood.domain.value.Money;
 
 public class Cart {
-    private final UUID id;
-    private final List<OrderLine> lines;
+    private final List<CartItem> items;
 
     public Cart(){
-        this.id = UUID.randomUUID();
-        this.lines = new ArrayList<>();
+        this.items = new ArrayList<>();
     }
 
     public void addLine(UUID dishId, String productName, Money unitPrice, int quantity){
@@ -26,42 +24,38 @@ public class Cart {
             throw new IllegalArgumentException("La quantità deve essere maggiore di zero");
         }
 
-        for(int i = 0; i < lines.size(); i++){
-            OrderLine existing = lines.get(i);
+        for(int i = 0; i < items.size(); i++){
+            CartItem existing = items.get(i);
             if(existing.getDishId().equals(dishId)){
                 int newQuantity = existing.getQuantity() + quantity;
-                lines.set(i, new OrderLine(dishId, productName, unitPrice, newQuantity));
+                items.set(i, new CartItem(dishId, productName, unitPrice, newQuantity));
                 return;
             }
         }
         
-        lines.add(new OrderLine(dishId, productName, unitPrice, quantity));
+        items.add(new CartItem(dishId, productName, unitPrice, quantity));
     }
 
     public void removeLine(UUID dishId){
-        lines.removeIf(line -> line.getDishId().equals(dishId));
+        items.removeIf(line -> line.getDishId().equals(dishId));
     }
 
-    public List<OrderLine> getLines(){
-        return List.copyOf(lines);
-    }
-
-    public UUID getId(){
-        return id;
+    public List<CartItem> getItems(){
+        return List.copyOf(items);
     }
 
     public boolean isEmpty(){
-        return lines.isEmpty();
+        return items.isEmpty();
     }
 
     public void clear(){
-        lines.clear();
+        items.clear();
     }
 
     public BigDecimal getTotal(){
         Money total = Money.zero();
-        for(OrderLine line : lines){
-            total = total.add(line.getSubtotal());
+        for(CartItem item : items){
+            total = total.add(item.getSubtotal());
         }
         return total.getAmount();
     }

@@ -105,7 +105,7 @@
                               <Separator prefWidth="200.0" />
                            </children>
                         </HBox>
-                        <Button fx:id="btnGuest" maxWidth="1.7976931348623157E308" minHeight="50.0" onAction="#onRequireTableNumber" prefHeight="50.0" styleClass="guestBtn" text="Continua come ospite" textAlignment="CENTER">
+                        <Button fx:id="btnGuest" maxWidth="1.7976931348623157E308" minHeight="50.0" onAction="#onEnterAsGuest" prefHeight="50.0" styleClass="guestBtn" text="Continua come ospite" textAlignment="CENTER">
                            <font>
                               <Font name="Arial Bold" size="20.0" />
                            </font>
@@ -234,7 +234,7 @@
                         </VBox>
                         <VBox alignment="CENTER" spacing="15.0" styleClass="vbox" VBox.vgrow="NEVER">
                            <children>
-                              <Button fx:id="btnLogin" maxWidth="1.7976931348623157E308" minHeight="50.0" onAction="#onLoginClicked" prefHeight="50.0" styleClass="loginBtn" stylesheets="@../css/login.css" text="Accedi" textAlignment="CENTER">
+                              <Button fx:id="btnLogin" maxWidth="1.7976931348623157E308" minHeight="50.0" onAction="#onLogin" prefHeight="50.0" styleClass="loginBtn" stylesheets="@../css/login.css" text="Accedi" textAlignment="CENTER">
                                  <font>
                                     <Font name="Arial Bold" size="20.0" />
                                  </font>

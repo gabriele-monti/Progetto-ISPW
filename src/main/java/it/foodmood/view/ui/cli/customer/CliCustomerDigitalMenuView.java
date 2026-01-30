@@ -7,18 +7,17 @@ import it.foodmood.domain.value.CourseType;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.DishException;
 import it.foodmood.view.boundary.CartBoundary;
-import it.foodmood.view.boundary.DishBoundary;
-
+import it.foodmood.view.boundary.MenuBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
 
-    private final DishBoundary dishBoundary;
+    private final MenuBoundary menuBoundary;
     private final CartBoundary cartBoundary;
     
-    public CliCustomerDigitalMenuView(DishBoundary dishBoundary, CartBoundary cartBoundary){
+    public CliCustomerDigitalMenuView(MenuBoundary menuBoundary, CartBoundary cartBoundary){
         super();
-        this.dishBoundary = dishBoundary;
+        this.menuBoundary = menuBoundary;
         this.cartBoundary = cartBoundary;
     }
 
@@ -42,14 +41,14 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
 
             try {
                 switch(choice){
-                    case "1" -> proposeDishesByCourseType(CourseType.APPETIZER, "Antipasti");
-                    case "2" -> proposeDishesByCourseType(CourseType.FIRST_COURSE, "Primi");
-                    case "3" -> proposeDishesByCourseType(CourseType.MAIN_COURSE, "Secondi");
-                    case "4" -> proposeDishesByCourseType(CourseType.PIZZA, "Pizze");
-                    case "5" -> proposeDishesByCourseType(CourseType.SIDE_DISH, "Contorni");
-                    case "6" -> proposeDishesByCourseType(CourseType.DESSERT, "Dolci");
-                    case "7" -> proposeDishesByCourseType(CourseType.FRUIT, "Frutta");
-                    case "8" -> proposeDishesByCourseType(CourseType.BEVERAGE, "Bevande");
+                    case "1" -> showDishesByCourseType(CourseType.APPETIZER, "Antipasti");
+                    case "2" -> showDishesByCourseType(CourseType.FIRST_COURSE, "Primi");
+                    case "3" -> showDishesByCourseType(CourseType.MAIN_COURSE, "Secondi");
+                    case "4" -> showDishesByCourseType(CourseType.PIZZA, "Pizze");
+                    case "5" -> showDishesByCourseType(CourseType.SIDE_DISH, "Contorni");
+                    case "6" -> showDishesByCourseType(CourseType.DESSERT, "Dolci");
+                    case "7" -> showDishesByCourseType(CourseType.FRUIT, "Frutta");
+                    case "8" -> showDishesByCourseType(CourseType.BEVERAGE, "Bevande");
                     case "0" -> back = true;
                     default  -> showError("Scelta non valida, riprova.");
                 }
@@ -60,11 +59,11 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
         }
     }
 
-    private void proposeDishesByCourseType(CourseType courseType, String title) throws DishException{
+    private void showDishesByCourseType(CourseType courseType, String title) throws DishException{
         clearScreen();
         showTitle(title);
 
-        List<DishBean> dishes = dishBoundary.getDishesByCourseType(courseType);
+        List<DishBean> dishes = menuBoundary.filterDishesByCourseType(courseType);
 
         if(dishes.isEmpty()){
             showWarning("Nessun piatto disponibile");
@@ -78,10 +77,10 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
             return;
         }
 
-        addItems(dishes);
+        addItemsToCart(dishes);
     }
 
-    private void addItems(List<DishBean> dishes){
+    private void addItemsToCart(List<DishBean> dishes){
         while(true){
             String input = askInputOrBack("Inserisci il numero dell'articolo");
             Integer index = parseInteger(input, dishes.size());

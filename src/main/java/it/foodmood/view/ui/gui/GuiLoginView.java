@@ -121,7 +121,7 @@ public class GuiLoginView {
     }
 
     @FXML
-    private void onLoginClicked(){
+    private void onLogin(){
         errorMessageLabel.setText("");
 
         String email = tfEmail.getText();
@@ -166,7 +166,7 @@ public class GuiLoginView {
     }
 
     @FXML
-    void onRequireTableNumber(ActionEvent event) {
+    void onEnterAsGuest(ActionEvent event) {
         ActorBean actorBean = guestAccessBoundary.enterAsGuest();
         actorBean.setName("");
         router.setActor(actorBean);

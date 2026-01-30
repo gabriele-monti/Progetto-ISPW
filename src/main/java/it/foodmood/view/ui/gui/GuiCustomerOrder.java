@@ -583,7 +583,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     private void loadMenuDishes(){
         try {
-            List<DishBean> dishes = dishBoundary.getAllDishes();
+            List<DishBean> dishes = dishBoundary.getDishes();
             proposedDishes.setAll(dishes);
             refreshMenuGrid();
         } catch (Exception e) {

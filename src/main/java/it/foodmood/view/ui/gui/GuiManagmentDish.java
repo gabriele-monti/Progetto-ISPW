@@ -513,7 +513,7 @@ public class GuiManagmentDish extends BaseGui {
 
     private void loadDishes(){
         try {
-            List<DishBean> dishes = dishBoundary.getAllDishes();
+            List<DishBean> dishes = dishBoundary.getDishes();
             allDishes.setAll(dishes);
             tableDishes.setItems(allDishes);
         } catch (Exception e) {

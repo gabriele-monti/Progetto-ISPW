@@ -10,6 +10,7 @@ import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.GuestAccessBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.boundary.LoginBoundary;
+import it.foodmood.view.boundary.MenuBoundary;
 import it.foodmood.view.boundary.RegistrationBoundary;
 import it.foodmood.view.boundary.TableSessionBoundary;
 import it.foodmood.view.ui.CustomerUi;
@@ -20,7 +21,7 @@ import it.foodmood.view.ui.cli.customer.CliCustomerDigitalMenuView;
 import it.foodmood.view.ui.cli.customer.CliCustomerHomeView;
 import it.foodmood.view.ui.cli.customer.CliCustomerMenuView;
 import it.foodmood.view.ui.cli.customer.CliCustomerOrderCustomizationView;
-import it.foodmood.view.ui.cli.customer.CliCustomerRecapOrderView;
+import it.foodmood.view.ui.cli.customer.CliCustomerCartView;
 import it.foodmood.view.ui.cli.customer.CliGuestView;
 import it.foodmood.view.ui.cli.customer.CliTableSessionView;
 import it.foodmood.view.ui.cli.manager.CliIngredientMenuView;
@@ -36,6 +37,7 @@ public final class CliFactory implements CustomerUi, ManagerUi, WaiterUi{
     private final RegistrationBoundary registrationBoundary;
     private final IngredientBoundary ingredientBoundary;
     private final DishBoundary dishBoundary;
+    private final MenuBoundary menuBoundary;
     private final CartBoundary cartBoundary;
     private final CustomerOrderCustomizationBoundary orderCustomizationBoundary;
     private final CustomerOrderBoundary customerOrderBoundary;
@@ -47,6 +49,7 @@ public final class CliFactory implements CustomerUi, ManagerUi, WaiterUi{
         this.registrationBoundary = new RegistrationBoundary();
         this.ingredientBoundary = new IngredientBoundary();
         this.dishBoundary = new DishBoundary();
+        this.menuBoundary = new MenuBoundary();
         this.cartBoundary = new CartBoundary();
         this.orderCustomizationBoundary = new CustomerOrderCustomizationBoundary();
         this.customerOrderBoundary = new CustomerOrderBoundary();
@@ -118,13 +121,13 @@ public final class CliFactory implements CustomerUi, ManagerUi, WaiterUi{
 
     @Override
     public void showDigitalMenuCustumerView(){
-        CliCustomerDigitalMenuView view = new CliCustomerDigitalMenuView(dishBoundary, cartBoundary);
+        CliCustomerDigitalMenuView view = new CliCustomerDigitalMenuView(menuBoundary, cartBoundary);
         view.displayPage();
     }
 
     @Override
     public void showCustumerRecapOrderView(TableSessionBean tableSessionBean){
-        CliCustomerRecapOrderView view = new CliCustomerRecapOrderView(cartBoundary, customerOrderBoundary);
+        CliCustomerCartView view = new CliCustomerCartView(cartBoundary, customerOrderBoundary);
         view.displayPage(tableSessionBean);
     }
     

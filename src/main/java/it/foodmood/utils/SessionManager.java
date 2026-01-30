@@ -2,6 +2,7 @@ package it.foodmood.utils;
 
 import java.util.UUID;
 
+import it.foodmood.domain.model.Cart;
 import it.foodmood.domain.model.Guest;
 import it.foodmood.domain.model.User;
 import it.foodmood.exception.SessionExpiredException;
@@ -111,5 +112,9 @@ public final class SessionManager {
     private void clear(){
         currentUser = null;
         currentGuest = null;
+    }
+
+    public Cart getCart(){
+        return requireActiveSession().getCart();
     }
 }

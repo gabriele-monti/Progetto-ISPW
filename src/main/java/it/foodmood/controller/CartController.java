@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import it.foodmood.bean.OrderLineBean;
+import it.foodmood.bean.CartItemBean;
 import it.foodmood.domain.model.Cart;
+import it.foodmood.domain.model.CartItem;
 import it.foodmood.domain.model.Dish;
-import it.foodmood.domain.model.OrderLine;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.PersistenceException;
 import it.foodmood.exception.SessionExpiredException;
@@ -16,19 +16,23 @@ import it.foodmood.persistence.dao.DishDao;
 import it.foodmood.utils.SessionManager;
 
 public class CartController {
-    private final Cart cart;
     private final DishDao dishDao;
     private final SessionManager sessionManager;
 
+    private Cart cart() throws CartException{
+        try {
+            return sessionManager.getCart();
+        } catch (SessionExpiredException e) {
+            throw new CartException(e.getMessage());
+        }
+    }
+
     public CartController(){
-        this.cart = new Cart();
         this.dishDao = DaoFactory.getInstance().getDishDao();
         this.sessionManager = SessionManager.getInstance();
     }
 
     public void addToCart(String dishId, int quantity) throws CartException{
-        ensureActiveSession();
-
         if(dishId == null || dishId.isBlank()){
             throw new CartException("ID articolo non valido");
         }
@@ -42,7 +46,7 @@ public class CartController {
 
             Dish dish = dishDao.findById(id).orElseThrow(() -> new CartException("Articolo non disponibile"));
 
-            cart.addLine(dish.getId(), dish.getName(), dish.getPrice(), quantity);
+            cart().addLine(dish.getId(), dish.getName(), dish.getPrice(), quantity);
         } catch (IllegalArgumentException _){
             throw new CartException("ID articolo non valido");
         } catch (PersistenceException e) {
@@ -50,51 +54,34 @@ public class CartController {
         }
     }
 
-    public List<OrderLineBean> getCartItems() throws CartException{
-        ensureActiveSession();
-
-        return cart.getLines().stream().map(this::toLineBean).toList();
+    public List<CartItemBean> getCartItems() throws CartException{
+        return cart().getItems().stream().map(this::toItemBean).toList();
     }
 
 
     public void removeFromCart(String dishId) throws CartException{
-        ensureActiveSession();
-
         if(dishId == null || dishId.isBlank()){
             throw new CartException("ID articolo non valido");
         }
 
         try {
             UUID id = UUID.fromString(dishId);
-            cart.removeLine(id);
+            cart().removeLine(id);
         } catch (IllegalArgumentException _) {
             throw new CartException("Errore tecnico: impossibile rimuovere l'articolo dal carrello.");
         }
     }
 
-
-    public void clearCart(){
-        cart.clear();
+    public BigDecimal getTotal() throws CartException{
+        return cart().getTotal();
     }
 
-    public BigDecimal getTotal(){
-        return cart.getTotal();
-    }
-
-    private OrderLineBean toLineBean(OrderLine orderLine){
-        OrderLineBean orderLineBean = new OrderLineBean();
-        orderLineBean.setDishId(orderLine.getDishId().toString());
-        orderLineBean.setProductName(orderLine.getProductName());
-        orderLineBean.setUnitPrice(orderLine.getUnitPrice().getAmount());
-        orderLineBean.setQuantity(orderLine.getQuantity());
-        return orderLineBean;
-    }
-
-    private void ensureActiveSession() throws CartException{
-        try {
-            sessionManager.requireActiveSession();
-        } catch (SessionExpiredException e) {
-            throw new CartException(e.getMessage(), e);
-        }
+    private CartItemBean toItemBean(CartItem cartItem){
+        CartItemBean cartItemBean = new CartItemBean();
+        cartItemBean.setDishId(cartItem.getDishId().toString());
+        cartItemBean.setProductName(cartItem.getProductName());
+        cartItemBean.setUnitPrice(cartItem.getUnitPrice().getAmount());
+        cartItemBean.setQuantity(cartItem.getQuantity());
+        return cartItemBean;
     }
 }

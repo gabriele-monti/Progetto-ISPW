@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import it.foodmood.bean.ActorBean;
-import it.foodmood.bean.OrderBean;
-import it.foodmood.bean.OrderLineBean;
+import it.foodmood.bean.CartItemBean;
 import it.foodmood.bean.TableSessionBean;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.OrderException;
@@ -24,19 +23,19 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
-public class GuiCustomerRecapOrder extends BaseGui {
+public class GuiCustomerCart extends BaseGui {
     
     @FXML private Label lblTotalOrder;
 
-    @FXML private TableView<OrderLineBean> tblOrder;
+    @FXML private TableView<CartItemBean> tblOrder;
 
-    @FXML private TableColumn<OrderLineBean, String> colProduct;
+    @FXML private TableColumn<CartItemBean, String> colProduct;
 
-    @FXML private TableColumn<OrderLineBean, Integer> colQty;
+    @FXML private TableColumn<CartItemBean, Integer> colQty;
 
-    @FXML private TableColumn<OrderLineBean, Void> colDelete;
+    @FXML private TableColumn<CartItemBean, Void> colDelete;
 
-    @FXML private TableColumn<OrderLineBean, String> colPrice;
+    @FXML private TableColumn<CartItemBean, String> colPrice;
 
     @FXML private Button btnAccount;
 
@@ -53,16 +52,16 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     private CartBoundary cartBoundary;
     private TableSessionBean tableSessionBean;
-    private ObservableList<OrderLineBean> observableItems = FXCollections.observableArrayList();
+    private ObservableList<CartItemBean> observableItems = FXCollections.observableArrayList();
 
     public void setCart(CartBoundary cartBoundary){
         this.cartBoundary = cartBoundary;
-        loadCart();
+        showOrderRecap();
     }
 
-    private void loadCart(){
+    private void showOrderRecap(){
         try {
-            List<OrderLineBean> items = cartBoundary.getCartItems();
+            List<CartItemBean> items = cartBoundary.getCartItems();
             observableItems.setAll(items);
             updateTotal();
         } catch (CartException e) {
@@ -94,7 +93,7 @@ public class GuiCustomerRecapOrder extends BaseGui {
 
     @FXML
     void onCartClicked(ActionEvent event) {
-        loadCart();
+        showOrderRecap();
     }
 
     @FXML
@@ -102,26 +101,14 @@ public class GuiCustomerRecapOrder extends BaseGui {
         if(!ensureAuthenticated(router)) return;
        
         try {
-            List<OrderLineBean> orderLines = cartBoundary.getCartItems();
-            
-            if(orderLines.isEmpty()){
-                showInfo("Il carello è vuoto");
-                return;
-            }
-
-            OrderBean orderBean = new OrderBean();
             String tableSessionId = tableSessionBean.getTableSessionId().toString();
-            orderBean.setTableSessionId(tableSessionId);
-            orderBean.setOrderLines(orderLines);
 
-            String orderId = orderBoundary.createOrder(orderBean);
+            orderBoundary.confirmOrder(tableSessionId);
 
-            showInfo("Ordine creato correttamente: " + orderId);
+            showInfo("Ordine creato correttamente");
 
-            cartBoundary.clearCart();
-            loadCart();
-        } catch (CartException e) {
-            showError(e.getMessage());
+            showOrderRecap();
+
         } catch (OrderException e){
             showError(e.getMessage());
         }
@@ -166,7 +153,7 @@ public class GuiCustomerRecapOrder extends BaseGui {
     private void removeItem(String dishId){
         try {
             cartBoundary.removeItem(dishId);
-            loadCart();
+            showOrderRecap();
         } catch (CartException e) {
             showError(e.getMessage());
         }

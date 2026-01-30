@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import it.foodmood.bean.OrderBean;
-import it.foodmood.bean.OrderLineBean;
+import it.foodmood.domain.model.Cart;
+import it.foodmood.domain.model.CartItem;
 import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.model.Order;
 import it.foodmood.domain.model.OrderLine;
+import it.foodmood.domain.model.TableSession;
 import it.foodmood.exception.OrderException;
 import it.foodmood.exception.PersistenceException;
 import it.foodmood.exception.SessionExpiredException;
@@ -33,39 +34,44 @@ public class CustomerOrderController {
         this.tableSessionDao = factory.getTableSessionDao();
     }
 
-    public String createOrder(OrderBean orderBean) throws OrderException{
-        ensureActiveSession();
-
-        if(orderBean == null) {
-            throw new OrderException("L'ordine non può essere nullo.");
+    public String createOrder(String sessionId) throws OrderException{
+        if(sessionId == null || sessionId.isBlank()) {
+            throw new OrderException("Sessione tavolo non valida");
         }
 
         try {
             UUID actorId = sessionManager.getCurrentActor();
-            UUID tableSessionId = UUID.fromString(orderBean.getTableSessionId());
+            UUID tableSessionId = UUID.fromString(sessionId);
 
-            tableSessionDao.findById(tableSessionId).orElseThrow(() -> new OrderException("Sessione tavolo non valida"));
+            TableSession tableSession = tableSessionDao.findById(tableSessionId).orElseThrow(() -> new OrderException("Sessione tavolo non valida"));
 
-            List<OrderLineBean> orderLineBeans = orderBean.getOrderLines();
+            if(!tableSession.isOpen()){
+                throw new OrderException("Sessione tavolo chiusa, non è possibile effettuare l'ordine.");
+            }
+
+            Cart cart = getCart();
+
+            if(cart.isEmpty()){
+                throw new OrderException("Il carrello è vuoto");
+            }
 
             List<OrderLine> orderLines = new ArrayList<>();
 
-            for(OrderLineBean lineBean: orderLineBeans){
-                if(lineBean == null){
+            for(CartItem line: cart.getItems()){
+                if(line == null){
                     throw new OrderException("Riga ordine nulla");
                 }
-
-                UUID dishId = UUID.fromString(lineBean.getDishId());
-                int quantity = lineBean.getQuantity();
                 
-                Dish dish = dishDao.findById(dishId).orElseThrow(() -> new OrderException("Piatto non trovato"));
+                Dish dish = dishDao.findById(line.getDishId()).orElseThrow(() -> new OrderException("Piatto non trovato"));
 
-                orderLines.add(new OrderLine(dish.getId(), dish.getName(), dish.getPrice(), quantity));
+                orderLines.add(new OrderLine(dish.getId(), dish.getName(), dish.getPrice(), line.getQuantity()));
             }
 
             Order order = new Order(actorId, tableSessionId, orderLines);
 
             orderDao.insert(order);
+            
+            cart.clear();
 
             return order.getId().toString();
 
@@ -73,14 +79,16 @@ public class CustomerOrderController {
             throw new OrderException("Dati ordine non validi");
         } catch (PersistenceException e){
             throw new OrderException("Errore tecnico nell'inserimento dell'ordine. Riprova più tardi", e);
+        } catch (SessionExpiredException e){
+            throw new OrderException(e.getMessage());
         }
     }
 
-    private void ensureActiveSession() throws OrderException{
+    private Cart getCart() throws OrderException{
         try {
-            sessionManager.requireActiveSession();
+            return sessionManager.getCart();
         } catch (SessionExpiredException e) {
-            throw new OrderException(e.getMessage(), e);
+            throw new OrderException(e.getMessage());
         }
     }
 }

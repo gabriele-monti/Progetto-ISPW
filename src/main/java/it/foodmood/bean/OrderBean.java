@@ -45,6 +45,5 @@ public class OrderBean {
     public void setOrderLines(List<OrderLineBean> orderLines){
         this.orderLines = orderLines;
     }
-
 }
 

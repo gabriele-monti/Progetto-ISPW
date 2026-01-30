@@ -148,7 +148,7 @@ public class GuiManagmentOrder extends RoomController {
 
     private void loadMenuDishes(){
         try {
-            List<DishBean> dishes = dishBoundary.getAllDishes();
+            List<DishBean> dishes = dishBoundary.getDishes();
             allDishes.setAll(dishes);
             refreshMenuGrid();
         } catch (Exception e) {

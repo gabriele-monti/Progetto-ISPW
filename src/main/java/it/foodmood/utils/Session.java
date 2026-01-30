@@ -5,10 +5,13 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
+import it.foodmood.domain.model.Cart;
+
 public class Session {
 
     private final UUID userId; 
     private Instant expiryTime;
+    private Cart cart;
 
     private static final Duration DURATION = Duration.ofMinutes(50);
 
@@ -31,5 +34,18 @@ public class Session {
 
     public void refresh(){
         this.expiryTime = Instant.now().plus(DURATION);
+    }
+
+    public Cart getCart(){
+        if(cart == null){
+            cart = new Cart();
+        }
+        return cart;
+    }
+
+    public void clearCart(){
+        if(cart != null){
+            cart.clear();
+        }
     }
 }

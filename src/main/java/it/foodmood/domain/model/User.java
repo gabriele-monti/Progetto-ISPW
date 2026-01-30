@@ -50,11 +50,6 @@ public abstract class User {
         return this.role.equals(role);
     }
 
-    // metodi di aggiornamento
-    public void changePerson(Person newPerson){
-        this.person = Objects.requireNonNull(newPerson);
-    }
-
     public void changeEmail(Email newEmail){
         this.email = Objects.requireNonNull(newEmail);
     }

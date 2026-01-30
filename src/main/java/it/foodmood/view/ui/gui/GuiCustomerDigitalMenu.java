@@ -6,7 +6,7 @@ import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.view.boundary.CartBoundary;
-import it.foodmood.view.boundary.DishBoundary;
+import it.foodmood.view.boundary.MenuBoundary;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -50,7 +50,7 @@ public class GuiCustomerDigitalMenu extends BaseGui{
     @FXML private GridPane menuGridPane;
 
     private final ObservableList<DishBean> allDishes = FXCollections.observableArrayList();
-    private DishBoundary dishBoundary;
+    private MenuBoundary menuBoundary;
     private CartBoundary cartBoundary;
     private CourseType selectedType = null;
 
@@ -63,8 +63,8 @@ public class GuiCustomerDigitalMenu extends BaseGui{
         this.cartBoundary = cartBoundary;
     }
 
-    public void setDishBoundary(DishBoundary dishBoundary){
-        this.dishBoundary = dishBoundary;
+    public void setMenuBoundary(MenuBoundary menuBoundary){
+        this.menuBoundary = menuBoundary;
         loadMenuDishes();
     }
 
@@ -183,7 +183,7 @@ public class GuiCustomerDigitalMenu extends BaseGui{
 
     private void loadMenuDishes(){
         try {
-            List<DishBean> dishes = dishBoundary.getAllDishes();
+            List<DishBean> dishes = menuBoundary.getDishes();
             allDishes.setAll(dishes);
             refreshMenuGrid();
         } catch (Exception e) {

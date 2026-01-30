@@ -30,8 +30,8 @@ public class DishProposals {
     }
 
     public List<Dish> generate(OrderWizardState state) throws OrderException {
+        
         try {
-
             Set<CourseType> selectedCourses = state.getCourseType();
             if(selectedCourses == null || selectedCourses.isEmpty()){
                 throw new OrderException("Nessuna portata selezionata");

@@ -3,7 +3,7 @@ package it.foodmood.view.ui.cli;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import it.foodmood.bean.OrderLineBean;
+import it.foodmood.bean.CartItemBean;
 
 public final class TableOrder {
     
@@ -19,14 +19,14 @@ public final class TableOrder {
         return List.of(3, 30, 7, 9, 9);
     }
 
-    public static List<List<String>> orderRows(List<OrderLineBean> orderLines){
+    public static List<List<String>> orderRows(List<CartItemBean> orderLines){
         return IntStream.range(0, orderLines.size()).mapToObj(i -> {
-            OrderLineBean orderLine = orderLines.get(i);
+            CartItemBean cartItem = orderLines.get(i);
             String index = String.valueOf(i + 1);
-            String name = orderLine.getProductName();
-            String price = orderLine.getUnitPrice().toString();
-            int quantity = orderLine.getQuantity();
-            String subtotale = orderLine.getSubTotal().toString();
+            String name = cartItem.getProductName();
+            String price = cartItem.getUnitPrice().toString();
+            int quantity = cartItem.getQuantity();
+            String subtotale = cartItem.getSubTotal().toString();
 
             String quantityStr = String.valueOf(quantity);
 

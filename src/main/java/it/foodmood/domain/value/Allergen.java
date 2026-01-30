@@ -1,11 +1,8 @@
 package it.foodmood.domain.value;
 
 /*
- * Elenco ufficiale dei 14 allergeni da dichiarare secondo (Reg. UE 1169/2011 + D.Lgs. 231/2017)
- * 
- * -Value Object: rappresenta un valore immutabile del dominio
- * -Usato da: Ingredient, Dish, ProductCommercial
- * -GRASP: Information Expert -> la logica degli allergeni vive qui e non altrove.
+ * Elenco ufficiale dei 14 allergeni da dichiarare
+ * -GRASP: Information Expert -
  */
 
 public enum Allergen {

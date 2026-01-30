@@ -352,7 +352,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
     }
 
     private boolean deleteSingleDish() throws BackRequestedException, DishException{
-        List<DishBean> dishes = dishBoundary.getAllDishes();
+        List<DishBean> dishes = dishBoundary.getDishes();
         clearScreen();
         showTitle("Elimina Piatto");
 
@@ -379,7 +379,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
             
         showSuccess("Piatto '" + dishName + "' eliminato con successo.");
 
-        List<DishBean> anotherElimination = dishBoundary.getAllDishes();
+        List<DishBean> anotherElimination = dishBoundary.getDishes();
 
         boolean again = anotherElimination != null && !anotherElimination.isEmpty() && askConfirmation("Vuoi eliminare un'altro piatto?");
 
@@ -392,7 +392,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
     private void tableDishes(){
         try {
-            List<DishBean> dishes = dishBoundary.getAllDishes();
+            List<DishBean> dishes = dishBoundary.getDishes();
 
             if(dishes == null || dishes.isEmpty()){
                 showWarning("Nessun piatto presente.");

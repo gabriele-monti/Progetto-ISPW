@@ -1,6 +1,5 @@
 package it.foodmood.view.boundary;
 
-import it.foodmood.bean.OrderBean;
 import it.foodmood.controller.CustomerOrderController;
 import it.foodmood.exception.OrderException;
 
@@ -11,7 +10,7 @@ public class CustomerOrderBoundary {
         this.controller = new CustomerOrderController();
     }
 
-    public String createOrder(OrderBean orderBean) throws OrderException{
-        return controller.createOrder(orderBean);
+    public String confirmOrder(String tableSessionId) throws OrderException{
+        return controller.createOrder(tableSessionId);
     }
 }

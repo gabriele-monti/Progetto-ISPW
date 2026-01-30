@@ -2,21 +2,21 @@ package it.foodmood.view.ui.gui;
 
 import java.util.function.Consumer;
 
-import it.foodmood.bean.OrderLineBean;
+import it.foodmood.bean.CartItemBean;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public final class ButtonDelete extends TableCell<OrderLineBean, Void> {
+public final class ButtonDelete extends TableCell<CartItemBean, Void> {
                 
     private final Button btn = new Button();
     private final ImageView icon;
-    private final Consumer<OrderLineBean> onDelete;
+    private final Consumer<CartItemBean> onDelete;
     private static final String TRASH = "/icons/trash.png";
 
-    public ButtonDelete(Consumer<OrderLineBean> onDelete){
+    public ButtonDelete(Consumer<CartItemBean> onDelete){
         this.onDelete = onDelete;
 
         String path = TRASH;
@@ -32,12 +32,12 @@ public final class ButtonDelete extends TableCell<OrderLineBean, Void> {
         btn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
 
         btn.setOnAction(e -> {
-            OrderLineBean line = getCurrentLine();
+            CartItemBean line = getCurrentLine();
             if(line != null) this.onDelete.accept(line);
         });
     }
     
-    private OrderLineBean getCurrentLine(){
+    private CartItemBean getCurrentLine(){
         int index = getIndex();
         if(index < 0 || getTableView() == null || index >= getTableView().getItems().size()) return null;
         return getTableView().getItems().get(index);

@@ -357,11 +357,11 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
 
         boolean again = true;
         while (again) {
-            again = addItems(dishes);
+            again = addItemsToCart(dishes);
         }
     }
 
-    private boolean addItems(List<DishBean> dishes){
+    private boolean addItemsToCart(List<DishBean> dishes){
 
         String input = askInputOrBack("Inserisci il numero dell'articolo");
         Integer index = parseInteger(input, dishes.size());

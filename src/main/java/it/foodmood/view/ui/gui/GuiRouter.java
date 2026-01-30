@@ -7,6 +7,7 @@ import it.foodmood.view.boundary.CartBoundary;
 import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.boundary.LoginBoundary;
+import it.foodmood.view.boundary.MenuBoundary;
 import it.foodmood.view.boundary.RegistrationBoundary;
 import javafx.scene.Scene;
 
@@ -18,6 +19,7 @@ public final class GuiRouter{
     private final RegistrationBoundary registrationBoundary;
     private final CartBoundary cartBoundary;
     private final DishBoundary dishBoundary;
+    private final MenuBoundary menuBoundary;
     private final IngredientBoundary ingredientBoundary;
     private TableSessionBean currentTableSession;
     
@@ -31,6 +33,7 @@ public final class GuiRouter{
         this.cartBoundary = new CartBoundary();
         this.ingredientBoundary = new IngredientBoundary();
         this.dishBoundary = new DishBoundary();
+        this.menuBoundary = new MenuBoundary();
         this.actorBean = new ActorBean();
     }
 
@@ -109,7 +112,7 @@ public final class GuiRouter{
         GuiCustomerDigitalMenu controller = navigator.goTo(GuiPages.CUSTOMER_DIGITAL_MENU);
         controller.setRouter(this);
         controller.setCart(cartBoundary);
-        controller.setDishBoundary(dishBoundary);
+        controller.setMenuBoundary(menuBoundary);
         controller.setUser(actorBean);
     }
 
@@ -122,7 +125,7 @@ public final class GuiRouter{
     }
 
     public void showCustomerRecapOrder(){
-        GuiCustomerRecapOrder controller = navigator.goTo(GuiPages.CUSTOMER_RECAP_ORDER);
+        GuiCustomerCart controller = navigator.goTo(GuiPages.CUSTOMER_RECAP_ORDER);
         controller.setRouter(this);
         controller.setCart(cartBoundary);
         controller.setTableSession(currentTableSession);
