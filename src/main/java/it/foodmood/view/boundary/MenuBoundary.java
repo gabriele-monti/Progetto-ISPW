@@ -16,11 +16,11 @@ public class MenuBoundary {
     }
 
     public List<DishBean> getDishes() throws DishException{
-        return controller.getAllDishes();
+        return controller.loadAllDishes();
     }
 
     public List<DishBean> filterDishesByCourseType(CourseType courseType) throws DishException{
-        return controller.getDishesByCourseType(courseType);
+        return controller.loadDishesByCourseType(courseType);
     }
 
 }
