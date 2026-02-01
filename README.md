@@ -2,7 +2,9 @@
 
 FoodMood è un'applicazione sviluppata per il progetto di Ingegneria del Software e Progettazione Web, eseguibile sia in modalità **GUI** che in **CLI**.
 
-L'idea è quella di assistere il cliente al ristorante nell'ordinazione, aiutandolo a scegliere i piatti in base ai suoi gusti, preferenze alimentari, budget, intolleranze, allergie, stile alimentare e apporto calorico desiderato. Il sistema pone domande mirate all'utente e suggerisce i prodotti più adatti tra quelli disponibili nel menù del ristorante.
+L'idea è quella di assistere il cliente al ristorante nell'ordinazione, aiutandolo a scegliere i piatti in base ai suoi gusti, preferenze alimentari, budget, intolleranze, allergie e apporto calorico desiderato. Il sistema pone domande mirate all'utente e suggerisce i prodotti più adatti tra quelli disponibili nel menù del ristorante.
+
+**Video YouTube:** https://youtu.be/Xwf9RPsDWK8 
 
 ---
 

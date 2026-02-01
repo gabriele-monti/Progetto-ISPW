@@ -544,6 +544,17 @@ public class GuiManagmentDish extends BaseGui {
             return UnitUtils.toLabel(unit);
         });
 
+        setupColumn(colMacrosForm, ingredient -> {
+            MacronutrientsBean macro = ingredient.getMacronutrients();
+            if(macro == null){
+                return ("-");
+            }
+            double protein = macro.getProtein();
+            double carbo = macro.getCarbohydrates();
+            double fat = macro.getFat();
+            return String.format("%.1f/ %.1f/ %.1f", carbo, protein, fat);
+        });
+
         setupColumn(colKcalForm, ingredient -> {
             MacronutrientsBean macro = ingredient.getMacronutrients();
             if(macro == null){

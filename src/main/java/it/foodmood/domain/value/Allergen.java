@@ -2,7 +2,7 @@ package it.foodmood.domain.value;
 
 /*
  * Elenco ufficiale dei 14 allergeni da dichiarare
- * -GRASP: Information Expert -
+ * -GRASP: Information Expert
  */
 
 public enum Allergen {

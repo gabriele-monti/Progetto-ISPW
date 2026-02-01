@@ -146,9 +146,9 @@
                               </Label>
                            </children>
                         </VBox>
-                        <Button fx:id="btnOrder" alignment="CENTER" contentDisplay="CENTER" maxWidth="550.0" minHeight="90.0" mnemonicParsing="false" onAction="#onOrderClicked" prefWidth="550.0" styleClass="btnOrder" stylesheets="@../css/customer.css" text="INIZIA ORA" textAlignment="CENTER">
+                        <Button fx:id="btnOrder" alignment="CENTER" contentDisplay="CENTER" maxWidth="550.0" minHeight="90.0" mnemonicParsing="false" onAction="#onOrderClicked" prefWidth="550.0" styleClass="btnOrder" stylesheets="@../css/customer.css" text="ORDINA CON SUGGERIMENTI" textAlignment="CENTER">
                            <font>
-                              <Font name="Arial Bold" size="40.0" />
+                              <Font name="Arial Bold" size="30.0" />
                            </font>
                            <cursor>
                               <Cursor fx:constant="HAND" />

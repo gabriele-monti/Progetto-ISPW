@@ -1,7 +1,7 @@
 package it.foodmood.domain.value;
 
 /*
- * Categoria dietetica del piatto o del prodotto commerciale
+ * Categoria dietetica del piatto
 */
 
 public enum DietCategory {

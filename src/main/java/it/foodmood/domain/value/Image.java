@@ -5,7 +5,7 @@ import java.util.Objects;
 
 /*
  * Rappresenta il riferimento a un'immagine associata al piatto o al prodotto
- * Contiene solamente il percorso dell'immagine (URI), non i byte associati
+ * Contiene solamente il percorso dell'immagine (URI)
 */
 
 public final class Image{
