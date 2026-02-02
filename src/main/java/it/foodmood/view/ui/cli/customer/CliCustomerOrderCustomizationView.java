@@ -387,7 +387,9 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
 
     private void submitAnswer(StepType stepType, Set<String> answers){
         try {
-            AnswerBean answerBean = new AnswerBean(stepType, answers);
+            AnswerBean answerBean = new AnswerBean();
+            answerBean.setStepType(stepType);
+            answerBean.setAnswers(answers);
             ResponseBean responseBean = orderCustomizationBoundary.submit(answerBean);
             handleResponse(responseBean);
         } catch (OrderException e) {
@@ -398,7 +400,9 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
 
     private void submitIntegerAnswer(StepType stepType, Integer value){
         try {
-            AnswerBean answerBean = new AnswerBean(stepType, value);
+            AnswerBean answerBean = new AnswerBean();
+            answerBean.setStepType(stepType);
+            answerBean.setValue(value);
             ResponseBean responseBean = orderCustomizationBoundary.submit(answerBean);
             handleResponse(responseBean);
         } catch (OrderException e) {

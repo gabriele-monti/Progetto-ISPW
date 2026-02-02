@@ -7,46 +7,44 @@ import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.StepType;
 
 public class ResponseBean {
-    private final StepType nextStep;
+    private StepType nextStep;
     private Set<Allergen> allergens;
     private List<Integer> values;
     private List<DishBean> dishes;
 
-    public ResponseBean(StepType nextStep){
-        this.nextStep = nextStep;
-    }
-
-    public static ResponseBean forAllergens(StepType nextStep, Set<Allergen> allergens){
-        ResponseBean responseBean = new ResponseBean(nextStep);
-        responseBean.allergens = allergens;
-        return responseBean;
-    }
-
-    public static ResponseBean forValues(StepType nextStep, List<Integer> values){
-        ResponseBean responseBean = new ResponseBean(nextStep);
-        responseBean.values = values;
-        return responseBean;
-    }
-
-    public static ResponseBean forProposals(StepType nextStep, List<DishBean> dishes){
-        ResponseBean responseBean = new ResponseBean(nextStep);
-        responseBean.dishes = dishes;
-        return responseBean;
+    public ResponseBean(){
+        // Costruttore vuoto
     }
 
     public StepType getNextStep(){
         return nextStep;
     }
 
+    public void setNextStep(StepType nextStep){
+        this.nextStep = nextStep;
+    }
+
     public Set<Allergen> getAllergens(){
         return allergens;
+    }
+
+    public void setAllergens(Set<Allergen> allergens){
+        this.allergens = allergens;
     }
 
     public List<Integer> getValues(){
         return values;
     }
 
+    public void setValues(List<Integer> values){
+        this.values = values;
+    }
+
     public List<DishBean> getDishes(){
         return dishes;
+    }
+
+    public void setDishes(List<DishBean> dishes){
+        this.dishes = dishes;
     }
 }

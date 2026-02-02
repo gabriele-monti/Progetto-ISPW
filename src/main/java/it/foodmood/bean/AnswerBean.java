@@ -6,20 +6,13 @@ import java.util.Set;
 import it.foodmood.domain.value.StepType;
 
 public class AnswerBean {
-    private final StepType stepType;
-    private final Set<String> answers;
+    private StepType stepType;
+    private Set<String> answers;
     private Integer value;
 
-    public AnswerBean(StepType stepType, Set<String> answers){
-        this.stepType = stepType;
-        this.answers = answers != null ? new HashSet<>(answers) : new HashSet<>();
-        this.value = null;
-    }
-
-    public AnswerBean(StepType stepType, Integer value){
-        this.stepType = stepType;
+    // Costruttore vuoto
+    public AnswerBean(){
         this.answers = new HashSet<>();
-        this.value = value;
     }
 
     public StepType getStepType(){
@@ -32,6 +25,14 @@ public class AnswerBean {
 
     public Integer getValue(){
         return value;
+    }
+
+    public void setStepType(StepType stepType){
+        this.stepType = stepType;
+    }
+
+    public void setAnswers(Set<String> answers){
+        this.answers = answers != null ? new HashSet<>(answers) : new HashSet<>();
     }
 
     public void setValue(Integer value){

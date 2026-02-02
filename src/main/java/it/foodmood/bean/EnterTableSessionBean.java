@@ -3,6 +3,10 @@ package it.foodmood.bean;
 public class EnterTableSessionBean {
     private String tableNumber;
 
+    public EnterTableSessionBean(){
+        // Costruttore vuoto
+    }
+
     public void setTableNumber(String tableNumber){
         this.tableNumber = tableNumber == null ? "" : tableNumber.trim();
     }

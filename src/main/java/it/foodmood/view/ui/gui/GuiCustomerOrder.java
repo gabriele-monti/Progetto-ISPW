@@ -302,8 +302,11 @@ public class GuiCustomerOrder extends BaseGui {
         if(tbVegetarian.isSelected()) answers.add(DietCategory.VEGETARIAN.name());
         if(tbGlutenFree.isSelected()) answers.add(DietCategory.GLUTEN_FREE.name());
         if(tbLactoseFree.isSelected()) answers.add(DietCategory.LACTOSE_FREE.name());
-        
-        return new AnswerBean(StepType.DIET, answers);
+
+        AnswerBean answerBean = new AnswerBean();
+        answerBean.setStepType(StepType.DIET);
+        answerBean.setAnswers(answers);
+        return answerBean;
     }
 
     @FXML
@@ -335,7 +338,10 @@ public class GuiCustomerOrder extends BaseGui {
         if(tbDessert.isSelected()) answers.add(CourseType.DESSERT.name());
         if(tbBeverage.isSelected()) answers.add(CourseType.BEVERAGE.name());
         
-        return new AnswerBean(StepType.COURSE, answers);
+        AnswerBean answerBean = new AnswerBean();
+        answerBean.setStepType(StepType.COURSE);
+        answerBean.setAnswers(answers);
+        return answerBean;
     }
 
     @FXML
@@ -421,7 +427,10 @@ public class GuiCustomerOrder extends BaseGui {
             selectedValue = null;
         }
         
-        return new AnswerBean(StepType.KCAL, selectedValue);
+        AnswerBean answerBean = new AnswerBean();
+        answerBean.setStepType(StepType.KCAL);
+        answerBean.setValue(selectedValue);
+        return answerBean;
     }
 
     private AnswerBean budgetAnswers(){
@@ -438,7 +447,10 @@ public class GuiCustomerOrder extends BaseGui {
             selectedValue = null;
         }
         
-        return new AnswerBean(StepType.BUDGET, selectedValue);
+        AnswerBean answerBean = new AnswerBean();
+        answerBean.setStepType(StepType.BUDGET);
+        answerBean.setValue(selectedValue);
+        return answerBean;    
     }
 
     private Integer extractIntFromLabel(String text){
@@ -471,7 +483,10 @@ public class GuiCustomerOrder extends BaseGui {
         if(tbSoy.isSelected()) answers.add(Allergen.SOY.name());
         if(tbSulphites.isSelected()) answers.add(Allergen.SULPHITES.name());
         
-        return new AnswerBean(StepType.ALLERGENS, answers);
+        AnswerBean answerBean = new AnswerBean();
+        answerBean.setStepType(StepType.ALLERGENS);
+        answerBean.setAnswers(answers);
+        return answerBean;
     }
 
     @FXML

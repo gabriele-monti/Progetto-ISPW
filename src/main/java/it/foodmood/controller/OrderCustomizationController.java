@@ -62,7 +62,10 @@ public class OrderCustomizationController {
     public ResponseBean start() throws OrderException{
         ensureActiveSession();
         initializeWizardState();
-        return new ResponseBean(StepType.COURSE);
+
+        ResponseBean response = new ResponseBean();
+        response.setNextStep(StepType.COURSE);
+        return response;
     }
     
     // Processo la risposta dell'utente e determino il prossimo step
@@ -116,26 +119,33 @@ public class OrderCustomizationController {
     }
 
     private ResponseBean buildStepResponse(StepType nextType){
+        ResponseBean response = new ResponseBean();
+        response.setNextStep(nextType);
+
         if(nextType == StepType.ALLERGENS && currentComplexity == OrderComplexity.MODERATE){
             Set<Allergen> relevant = allergenFilterPolicy.getAllergens(wizardState.getCourseType());
-            return ResponseBean.forAllergens(nextType, relevant);
+            response.setAllergens(relevant);
+            return response;
         }
 
         if(nextType == StepType.ALLERGENS && currentComplexity == OrderComplexity.COMPLETE){
-            return ResponseBean.forAllergens(nextType, EnumSet.allOf(Allergen.class));
+            response.setAllergens(EnumSet.allOf(Allergen.class));
+            return response;
         }
 
         if(nextType == StepType.BUDGET && currentComplexity == OrderComplexity.COMPLETE){
             List<Integer> values = pricePolicy.budgetOption(wizardState.getCourseType().size());
-            return ResponseBean.forValues(nextType, values);
+            response.setValues(values);
+            return response;
         }
 
         if(nextType == StepType.KCAL && currentComplexity == OrderComplexity.COMPLETE){
             List<Integer> values = kcalPolicy.kcalOptions(wizardState.getCourseType().size());
-            return ResponseBean.forValues(nextType, values);
+            response.setValues(values);
+            return response;
         }
 
-        return new ResponseBean(nextType);
+        return response;
     }
 
     private ResponseBean generateProposals() throws OrderException{
@@ -150,7 +160,10 @@ public class OrderCustomizationController {
         // Converto in bean
         List<DishBean> dishBeans = dishMapper.toBeans(allFilteredDishes);
 
-        return ResponseBean.forProposals(StepType.GENERATE, dishBeans);
+        ResponseBean responseBean = new ResponseBean();
+        responseBean.setNextStep(StepType.GENERATE);
+        responseBean.setDishes(dishBeans);
+        return responseBean;
     }
 
     private void updatePreferences(StepType step, AnswerBean preference){
