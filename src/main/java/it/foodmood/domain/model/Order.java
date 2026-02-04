@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import it.foodmood.domain.value.Money;
 import it.foodmood.domain.value.OrderStatus;
 
 public class Order {
@@ -57,4 +58,11 @@ public class Order {
         return List.copyOf(orderLines);
     }
 
+    public Money getTotal(){
+        Money total = Money.zero();
+        for(OrderLine line : orderLines){
+            total = total.add(line.getSubtotal());
+        }
+        return total;
+    }
 }

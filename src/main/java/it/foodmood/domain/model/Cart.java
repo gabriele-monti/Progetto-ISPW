@@ -20,10 +20,6 @@ public class Cart {
         Objects.requireNonNull(productName);
         Objects.requireNonNull(unitPrice);
 
-        if(quantity <= 0){
-            throw new IllegalArgumentException("La quantità deve essere maggiore di zero");
-        }
-
         for(int i = 0; i < items.size(); i++){
             CartItem existing = items.get(i);
             if(existing.getDishId().equals(dishId)){

@@ -45,5 +45,4 @@ public class CartItem {
     public Money getSubtotal(){
         return unitPrice.multiply(quantity);
     }
-
 }
