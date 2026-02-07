@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="810.0" prefWidth="1140.0" stylesheets="@../css/restaurantRoom.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.GuiManagmentRestaurantRoom">
+<BorderPane prefHeight="810.0" prefWidth="1140.0" stylesheets="@../css/restaurantRoom.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.manager.GuiManagmentRestaurantRoom">
    <center>
       <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
          <content>

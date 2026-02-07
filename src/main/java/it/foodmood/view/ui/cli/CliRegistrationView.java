@@ -1,18 +1,16 @@
 package it.foodmood.view.ui.cli;
 
 import it.foodmood.bean.RegistrationBean;
+import it.foodmood.controller.CustomerRegistrationController;
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.RegistrationException;
-import it.foodmood.view.boundary.RegistrationBoundary;
 
 public class CliRegistrationView extends ConsoleView {
     
     private static final String TITLE = "REGISTRAZIONE";
 
-    private final RegistrationBoundary boundary;
-
-    public CliRegistrationView(RegistrationBoundary boundary){
-        this.boundary = boundary;
+    public CliRegistrationView(){
+        //
     }
 
     public void displayPage(){
@@ -35,7 +33,8 @@ public class CliRegistrationView extends ConsoleView {
 
     private boolean submitRegistration(RegistrationBean registrationBean) {
         try {
-            boundary.registration(registrationBean);
+            CustomerRegistrationController controller = new CustomerRegistrationController();
+            controller.registration(registrationBean);
             showSuccess("Registrazione effettuata con successo!");
             waitForEnter(null);
             return true;

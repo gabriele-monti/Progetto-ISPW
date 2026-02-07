@@ -5,8 +5,8 @@ import it.foodmood.config.UserMode;
 import it.foodmood.infrastructure.io.OutputWriter;
 import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import it.foodmood.view.ui.cli.CliFactory;
-import it.foodmood.view.ui.cli.CliNavigator;
-import it.foodmood.view.ui.cli.CliNavigatorFactory;
+import it.foodmood.view.ui.cli.navigator.CliNavigator;
+import it.foodmood.view.ui.cli.navigator.CliNavigatorFactory;
 
 public class CliInterface implements InterfaceBase{
 

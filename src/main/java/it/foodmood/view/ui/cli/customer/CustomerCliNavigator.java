@@ -4,10 +4,10 @@ import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.TableSessionBean;
 import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.view.ui.CustomerUi;
-import it.foodmood.view.ui.cli.CliNavigator;
-import it.foodmood.view.ui.cli.HomeCustomerPages;
-import it.foodmood.view.ui.cli.MenuCustomerPages;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.navigator.CliNavigator;
+import it.foodmood.view.ui.cli.pages.HomeCustomerPages;
+import it.foodmood.view.ui.cli.pages.MenuCustomerPages;
 
 public class CustomerCliNavigator extends ProtectedConsoleView implements CliNavigator {
 

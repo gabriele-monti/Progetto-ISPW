@@ -1,7 +1,7 @@
 package it.foodmood.view.ui.cli.waiter;
 
 import it.foodmood.view.ui.WaiterUi;
-import it.foodmood.view.ui.cli.CliNavigator;
+import it.foodmood.view.ui.cli.navigator.CliNavigator;
 
 public class WaiterCliNavigator implements CliNavigator {
 

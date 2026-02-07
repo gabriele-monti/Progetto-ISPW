@@ -2,8 +2,8 @@ package it.foodmood.view.ui;
 
 import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.TableSessionBean;
-import it.foodmood.view.ui.cli.HomeCustomerPages;
-import it.foodmood.view.ui.cli.MenuCustomerPages;
+import it.foodmood.view.ui.cli.pages.HomeCustomerPages;
+import it.foodmood.view.ui.cli.pages.MenuCustomerPages;
 
 public interface CustomerUi extends BaseUi {
     ActorBean showGuestView();

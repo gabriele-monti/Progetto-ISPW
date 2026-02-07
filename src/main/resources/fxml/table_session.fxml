@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="0.0" minHeight="810.0" minWidth="1440.0" prefHeight="810.0" prefWidth="1440.0" vgap="0.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.GuiTableSession">
+<GridPane alignment="CENTER" hgap="0.0" minHeight="810.0" minWidth="1440.0" prefHeight="810.0" prefWidth="1440.0" vgap="0.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.customer.GuiTableSession">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" percentWidth="44.0" />
       <ColumnConstraints hgrow="ALWAYS" percentWidth="56.0" />

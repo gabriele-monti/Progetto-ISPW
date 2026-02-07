@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane minHeight="810.0" minWidth="1440.0" styleClass="background-home" stylesheets="@../css/customer.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.GuiHomeCustomer">
+<GridPane minHeight="810.0" minWidth="1440.0" styleClass="background-home" stylesheets="@../css/customer.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.customer.GuiHomeCustomer">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" minWidth="1440.0" percentWidth="100.0" />
    </columnConstraints>

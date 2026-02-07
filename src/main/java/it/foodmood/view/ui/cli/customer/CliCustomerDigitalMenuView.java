@@ -2,23 +2,19 @@ package it.foodmood.view.ui.cli.customer;
 
 import java.util.List;
 
+import it.foodmood.bean.CartItemBean;
 import it.foodmood.bean.DishBean;
+import it.foodmood.controller.CartController;
+import it.foodmood.controller.MenuController;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.DishException;
-import it.foodmood.view.boundary.CartBoundary;
-import it.foodmood.view.boundary.MenuBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
-
-    private final MenuBoundary menuBoundary;
-    private final CartBoundary cartBoundary;
     
-    public CliCustomerDigitalMenuView(MenuBoundary menuBoundary, CartBoundary cartBoundary){
+    public CliCustomerDigitalMenuView(){
         super();
-        this.menuBoundary = menuBoundary;
-        this.cartBoundary = cartBoundary;
     }
 
     public void displayPage(){
@@ -62,8 +58,9 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
     private void showDishesByCourseType(CourseType courseType, String title) throws DishException{
         clearScreen();
         showTitle(title);
-
-        List<DishBean> dishes = menuBoundary.filterDishesByCourseType(courseType);
+        
+        MenuController menuController = new MenuController();
+        List<DishBean> dishes = menuController.loadDishesByCourseType(courseType);
 
         if(dishes.isEmpty()){
             showWarning("Nessun piatto disponibile");
@@ -81,6 +78,8 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
     }
 
     private void addItemsToCart(List<DishBean> dishes){
+        CartController cartController = new CartController();
+
         while(true){
             String input = askInputOrBack("Inserisci il numero dell'articolo");
             Integer index = parseInteger(input, dishes.size());
@@ -92,9 +91,12 @@ public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
             int quantity = askPositiveInt("Quantità: ");
 
             DishBean selected = dishes.get(index - 1);
+            CartItemBean itemBean = new CartItemBean();
+            itemBean.setDishId(selected.getId());
+            itemBean.setQuantity(quantity);
 
             try {
-                cartBoundary.addProduct(selected.getId(), quantity);
+                cartController.addToCart(itemBean);
                 showSuccess("Articolo '" + selected.getName() + "' aggiunto con successo.");
 
             } catch (CartException e) {

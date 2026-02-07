@@ -1,8 +1,8 @@
 package it.foodmood.view.ui.cli.manager;
 
-import it.foodmood.view.ui.cli.ManagerPages;
 import it.foodmood.bean.ActorBean;
 import it.foodmood.view.ui.cli.ConsoleView;
+import it.foodmood.view.ui.cli.pages.ManagerPages;
 
 public class CliManagerMenuView extends ConsoleView {
 

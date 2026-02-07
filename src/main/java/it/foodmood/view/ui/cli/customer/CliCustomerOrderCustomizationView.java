@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import it.foodmood.bean.AnswerBean;
+import it.foodmood.bean.CartItemBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.ResponseBean;
+import it.foodmood.controller.CartController;
+import it.foodmood.controller.OrderProposalsController;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.Budget;
 import it.foodmood.domain.value.CourseType;
@@ -15,14 +18,12 @@ import it.foodmood.domain.value.Kcal;
 import it.foodmood.domain.value.StepType;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.OrderException;
-import it.foodmood.view.boundary.CartBoundary;
-import it.foodmood.view.boundary.OrderProposalsBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
     
-    private final OrderProposalsBoundary orderCustomizationBoundary;
-    private final CartBoundary cartBoundary;
+    private final OrderProposalsController orderController;
+    private final CartController cartController;
     
     private static final String TITLE = "Ordina su misura per te";
     private static final String OPTION = "\nSeleziona un'opzione: "; 
@@ -34,19 +35,18 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
     private static final String KCAL = " Kcal)";
     private static final String EURO = " €)";
 
-
     private static final Set<String> BASE_CATEGORIES = Set.of(DietCategory.TRADITIONAL.name(), DietCategory.VEGAN.name(), DietCategory.VEGETARIAN.name());
     
-    public CliCustomerOrderCustomizationView(OrderProposalsBoundary orderCustomizationBoundary, CartBoundary cartBoundary){
+    public CliCustomerOrderCustomizationView(){
         super();
-        this.orderCustomizationBoundary = orderCustomizationBoundary;
-        this.cartBoundary = cartBoundary;
+        this.orderController = new OrderProposalsController();
+        this.cartController = new CartController();
     }
 
     public void displayPage(){
         clearScreen();
         try {
-            ResponseBean response = orderCustomizationBoundary.start();
+            ResponseBean response = orderController.start();
             handleResponse(response);
         } catch (OrderException e) {
             showError(e.getMessage());
@@ -374,8 +374,12 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
         int quantity = askPositiveInt("Quantità: ");
         DishBean selected = dishes.get(index - 1);
 
+        CartItemBean itemBean = new CartItemBean();
+        itemBean.setDishId(selected.getId());
+        itemBean.setQuantity(quantity);
+
         try {
-            cartBoundary.addProduct(selected.getId(), quantity);
+            cartController.addToCart(itemBean);
             showSuccess("Articolo '" + selected.getName() + "' aggiunto con successo.");
         } catch (CartException e) {
             showWarning(e.getMessage());
@@ -390,7 +394,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             AnswerBean answerBean = new AnswerBean();
             answerBean.setStepType(stepType);
             answerBean.setAnswers(answers);
-            ResponseBean responseBean = orderCustomizationBoundary.submit(answerBean);
+            ResponseBean responseBean = orderController.submit(answerBean);
             handleResponse(responseBean);
         } catch (OrderException e) {
             showWarning(e.getMessage());
@@ -403,7 +407,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             AnswerBean answerBean = new AnswerBean();
             answerBean.setStepType(stepType);
             answerBean.setValue(value);
-            ResponseBean responseBean = orderCustomizationBoundary.submit(answerBean);
+            ResponseBean responseBean = orderController.submit(answerBean);
             handleResponse(responseBean);
         } catch (OrderException e) {
             showWarning(e.getMessage());

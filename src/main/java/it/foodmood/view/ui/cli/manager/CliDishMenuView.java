@@ -10,6 +10,8 @@ import java.util.stream.IntStream;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.IngredientPortionBean;
+import it.foodmood.controller.DishController;
+import it.foodmood.controller.IngredientController;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
 import it.foodmood.domain.value.DishState;
@@ -18,19 +20,17 @@ import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.DishException;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.utils.UnitUtils;
-import it.foodmood.view.boundary.DishBoundary;
-import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliDishMenuView extends ProtectedConsoleView {
-    private final DishBoundary dishBoundary;
-    private final IngredientBoundary ingredientBoundary;
+    private final DishController dishController = new DishController();
+    private final IngredientController IngredientController = new IngredientController();
+    
     private static final String INVALID_CHOICE = "Scelta non valida, riprova";
     private static final String BACK = "Premi INVIO per tornare indietro";
 
-    public CliDishMenuView(DishBoundary dishBoundary, IngredientBoundary ingredientBoundary){
-        this.dishBoundary = dishBoundary;
-        this.ingredientBoundary = ingredientBoundary;
+    public CliDishMenuView(){
+        // vuoto
     }
 
     public void displayPage(){
@@ -90,7 +90,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
             requireIngredients(dishBean);
 
-            dishBoundary.createDish(dishBean);
+            dishController.createDish(dishBean);
 
             showSuccess("Piatto inserito correttamente.");
             waitForEnter(null);
@@ -188,7 +188,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
         String input = askInput("\nInserisci il numero dell'ingrediente da aggiungere: ");
 
         try {
-            ingredients = ingredientBoundary.getAllIngredients();
+            ingredients = IngredientController.getAllIngredients();
             index = Integer.parseInt(input);
         } catch (IngredientException e) {
             showError(e.getMessage());
@@ -230,7 +230,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
     private void tableIngredients(){
         try {
 
-            List<IngredientBean> ingredients = ingredientBoundary.getAllIngredients();
+            List<IngredientBean> ingredients = IngredientController.getAllIngredients();
             if(ingredients == null || ingredients.isEmpty()){
                 showWarning("Nessun ingrediente disponibile. Aggiungi prima degli ingredienti.");
                 waitForEnter(null);
@@ -352,7 +352,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
     }
 
     private boolean deleteSingleDish() throws BackRequestedException, DishException{
-        List<DishBean> dishes = dishBoundary.getDishes();
+        List<DishBean> dishes = dishController.getAllDishes();
         clearScreen();
         showTitle("Elimina Piatto");
 
@@ -375,11 +375,11 @@ public class CliDishMenuView extends ProtectedConsoleView {
         DishBean selected = dishes.get(index - 1);
         String dishId = selected.getId();
         String dishName = selected.getName();
-        dishBoundary.deleteDish(dishId);
+        dishController.deleteDish(dishId);
             
         showSuccess("Piatto '" + dishName + "' eliminato con successo.");
 
-        List<DishBean> anotherElimination = dishBoundary.getDishes();
+        List<DishBean> anotherElimination = dishController.getAllDishes();
 
         boolean again = anotherElimination != null && !anotherElimination.isEmpty() && askConfirmation("Vuoi eliminare un'altro piatto?");
 
@@ -392,7 +392,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
     private void tableDishes(){
         try {
-            List<DishBean> dishes = dishBoundary.getDishes();
+            List<DishBean> dishes = dishController.getAllDishes();
 
             if(dishes == null || dishes.isEmpty()){
                 showWarning("Nessun piatto presente.");

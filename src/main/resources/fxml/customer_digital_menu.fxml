@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="810.0" maxWidth="1440.0" minHeight="810.0" minWidth="1440.0" prefHeight="810.0" prefWidth="1440.0" styleClass="background-menu" stylesheets="@../css/customer.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.GuiCustomerDigitalMenu">
+<GridPane maxHeight="810.0" maxWidth="1440.0" minHeight="810.0" minWidth="1440.0" prefHeight="810.0" prefWidth="1440.0" styleClass="background-menu" stylesheets="@../css/customer.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.foodmood.view.ui.gui.customer.GuiCustomerDigitalMenu">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" minWidth="1440.0" percentWidth="100.0" />
    </columnConstraints>

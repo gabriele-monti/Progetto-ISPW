@@ -32,7 +32,11 @@ public class CartController {
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public void addToCart(String dishId, int quantity) throws CartException{
+    public void addToCart(CartItemBean cartItem) throws CartException{
+
+        String dishId = cartItem.getDishId();
+        int quantity = cartItem.getQuantity();
+
         if(dishId == null || dishId.isBlank()){
             throw new CartException("ID articolo non valido");
         }

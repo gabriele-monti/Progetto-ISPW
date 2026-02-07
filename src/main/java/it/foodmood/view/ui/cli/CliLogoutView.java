@@ -1,20 +1,20 @@
 package it.foodmood.view.ui.cli;
 
-import it.foodmood.view.boundary.LoginBoundary;
+import it.foodmood.controller.LoginController;
 
 public class CliLogoutView extends ConsoleView {
 
-    private final LoginBoundary boundary;
+    private final LoginController loginController;
 
-    public CliLogoutView(LoginBoundary boundary){
+    public CliLogoutView(){
         super();
-        this.boundary = boundary;
+        this.loginController = new LoginController();
     }
 
     public boolean displayPage(){
         boolean choiche = askConfirmation("Vuoi uscire dal tuo account?");
         if(choiche){
-            boundary.logout();
+            loginController.logout();
             clearScreen();
             showSuccess("Logout completato\n");
             waitForEnter(null);

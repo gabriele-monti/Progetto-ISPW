@@ -3,9 +3,10 @@ package it.foodmood.view.ui.gui;
 import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.config.UserMode;
+import it.foodmood.controller.GuestAccessController;
+import it.foodmood.controller.LoginController;
 import it.foodmood.exception.AuthenticationException;
-import it.foodmood.view.boundary.GuestAccessBoundary;
-import it.foodmood.view.boundary.LoginBoundary;
+import it.foodmood.view.ui.gui.utils.PasswordToggleController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,10 +45,6 @@ public class GuiLoginView {
     @FXML private VBox registrationBox;
 
     private UserMode userMode;
-
-    private LoginBoundary boundary;
-
-    private GuestAccessBoundary guestAccessBoundary = new GuestAccessBoundary();
     
     private GuiRouter router;
 
@@ -57,10 +54,6 @@ public class GuiLoginView {
 
     public GuiLoginView(){
         // costruttore vuoto richiesto da fxmlloader
-    }
-
-    public void setBoundary(LoginBoundary boundary){
-        this.boundary = boundary;
     }
 
     public void setRouter(GuiRouter router){
@@ -138,7 +131,9 @@ public class GuiLoginView {
             loginBean.setEmail(email);
             loginBean.setPassword(password.toCharArray());
 
-            ActorBean actor = boundary.login(loginBean);
+            LoginController loginController = new LoginController();
+
+            ActorBean actor = loginController.login(loginBean, userMode);
             
             if(userMode != UserMode.CUSTOMER){
                 router.setActor(actor);
@@ -167,7 +162,8 @@ public class GuiLoginView {
 
     @FXML
     void onEnterAsGuest(ActionEvent event) {
-        ActorBean actorBean = guestAccessBoundary.enterAsGuest();
+        GuestAccessController guestAccessController = new GuestAccessController();
+        ActorBean actorBean = guestAccessController.enterAsGuest();
         actorBean.setName("");
         router.setActor(actorBean);
         router.showSessionTableView();

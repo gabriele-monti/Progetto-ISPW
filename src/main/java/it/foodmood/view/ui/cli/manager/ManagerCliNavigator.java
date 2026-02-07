@@ -3,9 +3,9 @@ package it.foodmood.view.ui.cli.manager;
 import it.foodmood.bean.ActorBean;
 import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.view.ui.ManagerUi;
-import it.foodmood.view.ui.cli.CliNavigator;
-import it.foodmood.view.ui.cli.ManagerPages;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.navigator.CliNavigator;
+import it.foodmood.view.ui.cli.pages.ManagerPages;
 
 public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavigator {
 

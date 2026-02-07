@@ -1,20 +1,19 @@
 package it.foodmood.view.ui.cli.customer;
 
 import it.foodmood.bean.ActorBean;
-import it.foodmood.view.boundary.GuestAccessBoundary;
+import it.foodmood.controller.GuestAccessController;
 import it.foodmood.view.ui.cli.ConsoleView;
 
 public class CliGuestView extends ConsoleView {
     
-    private final GuestAccessBoundary boundary;
+    private final GuestAccessController controller = new GuestAccessController();
 
-    public CliGuestView(GuestAccessBoundary boundary){
+    public CliGuestView(){
         super();
-        this.boundary = boundary;
     }
 
     public ActorBean displayPage(){
         clearScreen();
-        return boundary.enterAsGuest();
+        return controller.enterAsGuest();
     }
 }

@@ -3,6 +3,7 @@ package it.foodmood.controller;
 import java.util.Optional;
 import java.util.UUID;
 
+import it.foodmood.bean.TableSessionBean;
 import it.foodmood.domain.model.Table;
 import it.foodmood.domain.model.TableSession;
 import it.foodmood.exception.PersistenceException;
@@ -23,7 +24,7 @@ public class TableSessionController {
         this.restaurantRoomDao = factory.getRestaurantRoomDao();
     }
 
-    public UUID enterSession(int tableId) throws TableSessionException{
+    public TableSessionBean enterSession(int tableId) throws TableSessionException{
         try {
             if(tableId <= 0) throw new IllegalArgumentException("Il numero del tavolo deve essere maggiore di zero");
 
@@ -34,7 +35,12 @@ public class TableSessionController {
             }
 
             TableSession tableSession = TableSession.create(tableId);
-            return tableSessionDao.enterSession(tableSession);
+            UUID sessionId = tableSessionDao.enterSession(tableSession);
+
+            TableSessionBean response = new TableSessionBean();
+            response.setTableId(tableId);
+            response.setTableSessionId(sessionId);
+            return response;
 
         } catch (IllegalArgumentException e) {
             throw new TableSessionException("Errore durante l'ingresso in sessione: " + e.getMessage(), e);

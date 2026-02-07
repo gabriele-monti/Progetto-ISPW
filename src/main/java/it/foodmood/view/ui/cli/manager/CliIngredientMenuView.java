@@ -5,21 +5,17 @@ import java.util.List;
 
 import it.foodmood.bean.IngredientBean;
 import it.foodmood.bean.MacronutrientsBean;
+import it.foodmood.controller.IngredientController;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.exception.SessionExpiredException;
-import it.foodmood.view.boundary.IngredientBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliIngredientMenuView extends ProtectedConsoleView {
 
-    private final IngredientBoundary boundary;
+    private final IngredientController ingredientController = new IngredientController();
     private static final String TRY_AGAIN = "Premi INVIO per riprovare";
-
-    public CliIngredientMenuView(IngredientBoundary boundary){
-        this.boundary = boundary;
-    }
 
     public void displayPage(){
         boolean back = false;
@@ -64,7 +60,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
     }
 
     private boolean deletionIteration() throws BackRequestedException, IngredientException {
-        List<IngredientBean> ingredients = boundary.getAllIngredients();
+        List<IngredientBean> ingredients = ingredientController.getAllIngredients();
         clearScreen();
         showTitle("Elimina Ingrediente");
         tableIngredients();
@@ -77,7 +73,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
 
         IngredientBean selected = ingredients.get(index - 1);
         String ingredientName = selected.getName().toUpperCase();
-        boundary.deleteIngredient(ingredientName);
+        ingredientController.deleteIngredient(ingredientName);
             
         showSuccess("Ingrediente '" + ingredientName + "' eliminato con successo.");
         boolean choice = askConfirmation("Vuoi eliminare un'altro ingrediente?");
@@ -159,7 +155,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
 
             ingredientBean.setMacronutrients(macronutrientsBean);
 
-            boundary.createIngredient(ingredientBean);
+            ingredientController.createIngredient(ingredientBean);
 
             showSuccess("Ingrediente inseristo correttamente.");
             waitForEnter(null);
@@ -173,7 +169,7 @@ public class CliIngredientMenuView extends ProtectedConsoleView {
 
     private void tableIngredients(){
         try {
-            List<IngredientBean> ingredients = boundary.getAllIngredients();
+            List<IngredientBean> ingredients = ingredientController.getAllIngredients();
             if(ingredients == null || ingredients.isEmpty()){
                 showWarning("Nessun ingrediente disponibile. Aggiungi prima degli ingredienti.");
                 waitForEnter(null);

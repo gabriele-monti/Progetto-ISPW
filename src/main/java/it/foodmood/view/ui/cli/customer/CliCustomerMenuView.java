@@ -1,7 +1,7 @@
 package it.foodmood.view.ui.cli.customer;
 
-import it.foodmood.view.ui.cli.MenuCustomerPages;
 import it.foodmood.view.ui.cli.ConsoleView;
+import it.foodmood.view.ui.cli.pages.MenuCustomerPages;
 
 public class CliCustomerMenuView extends ConsoleView {
 

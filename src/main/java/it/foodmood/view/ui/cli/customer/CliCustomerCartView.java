@@ -5,21 +5,16 @@ import java.util.List;
 
 import it.foodmood.bean.CartItemBean;
 import it.foodmood.bean.TableSessionBean;
+import it.foodmood.controller.CartController;
+import it.foodmood.controller.CustomerOrderController;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.OrderException;
-import it.foodmood.view.boundary.CartBoundary;
-import it.foodmood.view.boundary.CustomerOrderBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliCustomerCartView extends ProtectedConsoleView {
     
-    private final CartBoundary cartBoundary;
-    private final CustomerOrderBoundary orderBoundary;
-    
-    public CliCustomerCartView(CartBoundary cartBoundary, CustomerOrderBoundary orderBoundary){
+    public CliCustomerCartView(){
         super();
-        this.cartBoundary = cartBoundary;
-        this.orderBoundary = orderBoundary;
     }
 
     public void displayPage(TableSessionBean tableSession){
@@ -56,7 +51,9 @@ public class CliCustomerCartView extends ProtectedConsoleView {
         try {
             String tableSessionId = tableSessionBean.getTableSessionId().toString();
 
-            String orderId = orderBoundary.confirmOrder(tableSessionId);
+            CustomerOrderController orderController = new CustomerOrderController();
+
+            String orderId = orderController.createOrder(tableSessionId);
             
             showSuccess("Ordine creato con successo!\nID: " + orderId);
 
@@ -66,12 +63,13 @@ public class CliCustomerCartView extends ProtectedConsoleView {
     }
 
     private boolean showOrderRecap(){
+        CartController cartController = new CartController();
         try {
-            List<CartItemBean> items = cartBoundary.getCartItems();
+            List<CartItemBean> items = cartController.getCartItems();
             if(items.isEmpty()){
                 return false;
             }
-            BigDecimal total = cartBoundary.getTotal();
+            BigDecimal total = cartController.getTotal();
 
             showOrderRecapTable(items);
             showBold("Totale: " + total + "€\n");

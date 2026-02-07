@@ -2,18 +2,19 @@ package it.foodmood.view.ui.cli;
 
 import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.LoginBean;
+import it.foodmood.config.UserMode;
+import it.foodmood.controller.LoginController;
 import it.foodmood.exception.AuthenticationException;
-import it.foodmood.view.boundary.LoginBoundary;
 
 public class CliLoginView extends ConsoleView {
 
     private static final String TITLE = "LOGIN";
 
-    private final LoginBoundary boundary;
+    private final UserMode userMode;
 
-    public CliLoginView(LoginBoundary boundary){
+    public CliLoginView(UserMode userMode){
         super();
-        this.boundary = boundary;
+        this.userMode = userMode;
     }
 
     public ActorBean displayPage(){
@@ -40,8 +41,12 @@ public class CliLoginView extends ConsoleView {
                     showError(e.getMessage());
                 }
             }
+
+
+
             try {
-                ActorBean actor = boundary.login(loginBean);
+                LoginController loginController = new LoginController();
+                ActorBean actor = loginController.login(loginBean, userMode);
                 showSuccess("Login effettuato con successo");
                 waitForEnter(null);
                 return actor;
