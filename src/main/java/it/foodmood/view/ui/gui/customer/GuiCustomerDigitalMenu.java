@@ -8,9 +8,9 @@ import it.foodmood.bean.DishBean;
 import it.foodmood.controller.CartController;
 import it.foodmood.controller.MenuController;
 import it.foodmood.domain.value.CourseType;
-import it.foodmood.view.ui.gui.GuiRouter;
 import it.foodmood.view.ui.gui.utils.BaseGui;
 import it.foodmood.view.ui.gui.utils.GuiCard;
+import it.foodmood.view.ui.gui.GuiRouter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -63,7 +63,6 @@ public class GuiCustomerDigitalMenu extends BaseGui{
     private final ToggleGroup courseGroup = new ToggleGroup();
 
     private GuiRouter router;
-    private ActorBean actor;
 
     @FXML
     private void initialize(){
@@ -84,11 +83,6 @@ public class GuiCustomerDigitalMenu extends BaseGui{
         });
 
         loadMenuDishes();
-    }
-
-    public void setUser(ActorBean actor){
-        this.actor = actor;
-        updateLabel();
     }
 
     private void setCourseFilter(CourseType type){
@@ -145,9 +139,9 @@ public class GuiCustomerDigitalMenu extends BaseGui{
     }
 
     private void updateLabel(){
-        if(actor == null) return;
+        if(router == null) return;
 
-        String initials = getUserInitials(actor);
+        String initials = getUserInitials(router.getActor());
 
         if(lblUserInitials != null){
             lblUserInitials.setText(initials);
@@ -156,11 +150,13 @@ public class GuiCustomerDigitalMenu extends BaseGui{
 
     public void setRouter(GuiRouter router){
         this.router = router;
+        updateLabel();
     }
 
     @FXML
     void onAccountClicked(ActionEvent event) {
         if(!ensureAuthenticated(router)) return;
+        ActorBean actor = router.getActor();
         if(!actor.isGuest()){
             router.showCustomerAccountView();       
         } else {

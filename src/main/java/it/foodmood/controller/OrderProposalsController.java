@@ -10,12 +10,12 @@ import it.foodmood.bean.DishBean;
 import it.foodmood.bean.ResponseBean;
 import it.foodmood.controller.mapper.DishMapper;
 import it.foodmood.domain.model.Dish;
-import it.foodmood.domain.model.OrderWizardState;
+import it.foodmood.domain.model.OrderFlowState;
 import it.foodmood.domain.policy.AllergenFilterPolicy;
 import it.foodmood.domain.policy.KcalPolicy;
 import it.foodmood.domain.policy.OrderComplexityEvaluator;
 import it.foodmood.domain.policy.PricePolicy;
-import it.foodmood.domain.policy.WizardFlowPolicy;
+import it.foodmood.domain.policy.FlowPolicy;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
@@ -26,8 +26,9 @@ import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.utils.SessionManager;
 
 /*
-  Application Controller per la gestione del wizard di raccolta preferenze per l'ordine
+  Application Controller per la gestione del flusso di raccolta preferenze per l'ordine
 */
+
 public class OrderProposalsController {
 
     private final SessionManager sessionManager; 
@@ -35,13 +36,13 @@ public class OrderProposalsController {
     private final AllergenFilterPolicy allergenFilterPolicy;
     private final KcalPolicy kcalPolicy;
     private final PricePolicy pricePolicy;
-    private final WizardFlowPolicy wizardFlowPolicy;
+    private final FlowPolicy flowPolicy;
     private final OrderComplexityEvaluator complexityEvaluator;
     private final DishMapper dishMapper;
 
     private final DishProposals dishProposals;
 
-    private OrderWizardState wizardState;
+    private OrderFlowState flowState;
     private OrderComplexity currentComplexity;
 
     public OrderProposalsController(){
@@ -53,15 +54,14 @@ public class OrderProposalsController {
 
         this.dishProposals = new DishProposals();
 
-        this.wizardFlowPolicy = new WizardFlowPolicy();
+        this.flowPolicy = new FlowPolicy();
         this.complexityEvaluator = new OrderComplexityEvaluator();
         this.dishMapper = new DishMapper();
     }
-
     
     public ResponseBean start() throws OrderException{
         ensureActiveSession();
-        initializeWizardState();
+        initializeFlow();
 
         ResponseBean response = new ResponseBean();
         response.setNextStep(StepType.COURSE);
@@ -82,12 +82,12 @@ public class OrderProposalsController {
 
             // Se ho selezionato le portate, valuto la complessità della richiesta
             if(currentStep == StepType.COURSE){
-                Set<CourseType> courses = wizardState.getCourseType();
+                Set<CourseType> courses = flowState.getCourseType();
                 this.currentComplexity = complexityEvaluator.evaluate(courses);
             }
 
             // Determino il prossimo step in base alle complessità
-            StepType nextStep = wizardFlowPolicy.nextStep(currentStep, currentComplexity);
+            StepType nextStep = flowPolicy.nextStep(currentStep, currentComplexity);
 
             // Vedo se è il momento di generare le proposte
             if(nextStep == StepType.GENERATE){
@@ -104,8 +104,8 @@ public class OrderProposalsController {
         }
     }
 
-    private void initializeWizardState(){
-        this.wizardState = new OrderWizardState();
+    private void initializeFlow(){
+        this.flowState = new OrderFlowState();
         this.currentComplexity = null;
     }
 
@@ -123,7 +123,7 @@ public class OrderProposalsController {
         response.setNextStep(nextType);
 
         if(nextType == StepType.ALLERGENS && currentComplexity == OrderComplexity.MODERATE){
-            Set<Allergen> relevant = allergenFilterPolicy.getAllergens(wizardState.getCourseType());
+            Set<Allergen> relevant = allergenFilterPolicy.getAllergens(flowState.getCourseType());
             response.setAllergens(relevant);
             return response;
         }
@@ -134,13 +134,13 @@ public class OrderProposalsController {
         }
 
         if(nextType == StepType.BUDGET && currentComplexity == OrderComplexity.COMPLETE){
-            List<Integer> values = pricePolicy.budgetOption(wizardState.getCourseType().size());
+            List<Integer> values = pricePolicy.budgetOption(flowState.getCourseType().size());
             response.setValues(values);
             return response;
         }
 
         if(nextType == StepType.KCAL && currentComplexity == OrderComplexity.COMPLETE){
-            List<Integer> values = kcalPolicy.kcalOptions(wizardState.getCourseType().size());
+            List<Integer> values = kcalPolicy.kcalOptions(flowState.getCourseType().size());
             response.setValues(values);
             return response;
         }
@@ -149,13 +149,13 @@ public class OrderProposalsController {
     }
 
     private ResponseBean generateProposals() throws OrderException{
-        Set<CourseType> selectedCourses = wizardState.getCourseType();
+        Set<CourseType> selectedCourses = flowState.getCourseType();
 
         if(selectedCourses == null || selectedCourses.isEmpty()){
             throw new OrderException("Nessuna portata selezionata");
         }
 
-        List<Dish> allFilteredDishes = dishProposals.generate(wizardState);
+        List<Dish> allFilteredDishes = dishProposals.generate(flowState);
 
         // Converto in bean
         List<DishBean> dishBeans = dishMapper.toBeans(allFilteredDishes);
@@ -171,24 +171,24 @@ public class OrderProposalsController {
         switch(step){
             case COURSE -> { 
                 Set<CourseType> courses = preference.getAnswers().stream().map(CourseType::fromName).collect(Collectors.toSet());
-                wizardState.setCourseType(courses); 
+                flowState.setCourseType(courses); 
             }
             case DIET -> { 
                 Set<DietCategory> diet = preference.getAnswers().stream().map(DietCategory::fromName).collect(Collectors.toSet());
-                wizardState.setDietCategory(diet); 
+                flowState.setDietCategory(diet); 
 
             }
             case ALLERGENS -> { 
                 Set<Allergen> allergens = preference.getAnswers().stream().map(Allergen::fromName).collect(Collectors.toSet());
-                wizardState.setAllergens(allergens);
+                flowState.setAllergens(allergens);
             }
             case BUDGET -> { 
                 Integer budget = preference.getValue();
-                wizardState.setBudgetPreference(budget);
+                flowState.setBudgetPreference(budget);
             }
             case KCAL -> { 
                 Integer kcal = preference.getValue();
-                wizardState.setKcalPreference(kcal);
+                flowState.setKcalPreference(kcal);
             }
             default -> throw new IllegalStateException("Stato non valido: " + step);
         }

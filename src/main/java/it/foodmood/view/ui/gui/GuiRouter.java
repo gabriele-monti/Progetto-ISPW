@@ -19,21 +19,12 @@ public final class GuiRouter{
     private final UserMode userMode;
     private final GuiNavigator navigator;
     private TableSessionBean currentTableSession;
-    
     private ActorBean actorBean;
 
     public GuiRouter(Scene scene, UserMode userMode){
         this.navigator = new GuiNavigator(scene);
         this.userMode = userMode;
         this.actorBean = new ActorBean();
-    }
-
-    public void setActor(ActorBean actorBean){
-        this.actorBean = actorBean;
-    }
-
-    public ActorBean getActor(){
-        return actorBean;
     }
 
     public void showHomeView(){
@@ -68,50 +59,57 @@ public final class GuiRouter{
     public void showHomeCustumerView(){
         GuiHomeCustomer controller = navigator.goTo(GuiPages.HOME_CUSTOMER);
         controller.setRouter(this);
-        controller.setUser(actorBean);
-        controller.setTableId(currentTableSession.getTableId());
     }
 
     public void showHomeManagerView(){
         GuiHomeManager controller = navigator.goTo(GuiPages.HOME_MANAGER);
         controller.setRouter(this);
-        controller.setManager(actorBean);
         controller.openDefaultPage();
     }
 
     public void showHomeWaiterView() {
         GuiHomeWaiter controller = navigator.goTo(GuiPages.HOME_WAITER);
         controller.setRouter(this);
-        controller.setWaiter(actorBean);
     }
 
     public void showCustomerAccountView(){
         GuiCustomerAccount controller = navigator.goTo(GuiPages.CUSTOMER_ACCOUNT);
         controller.setRouter(this);
-        controller.setUser(actorBean);
     }
 
     public void showCustomerDigitalMenu(){
         GuiCustomerDigitalMenu controller = navigator.goTo(GuiPages.CUSTOMER_DIGITAL_MENU);
         controller.setRouter(this);
-        controller.setUser(actorBean);
     }
 
     public void showCustomerOrderView(){
         GuiCustomerOrder controller = navigator.goTo(GuiPages.CUSTOMER_ORDER);
         controller.setRouter(this);
-        controller.setUser(actorBean);
     }
 
     public void showCustomerRecapOrder(){
         GuiCustomerCart controller = navigator.goTo(GuiPages.CUSTOMER_RECAP_ORDER);
         controller.setRouter(this);
-        controller.setTableSession(currentTableSession);
-        controller.setUser(actorBean);
     }
 
     public void showSessionTableView(){
         GuiTableSession controller = navigator.goTo(GuiPages.TABLE_SESSION);
         controller.setRouter(this);
+    }
+
+    public void setActor(ActorBean actorBean){
+        this.actorBean = actorBean;
+    }
+
+    public ActorBean getActor(){
+        return actorBean;
+    }
+
+    public int getTableNumber(){
+        return currentTableSession.getTableId();
+    }
+
+    public TableSessionBean getTableSession(){
+        return currentTableSession;
     }
 }

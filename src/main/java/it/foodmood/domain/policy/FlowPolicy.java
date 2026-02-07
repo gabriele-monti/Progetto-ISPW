@@ -5,7 +5,7 @@ import java.util.Objects;
 import it.foodmood.domain.value.OrderComplexity;
 import it.foodmood.domain.value.StepType;
 
-public class WizardFlowPolicy {
+public class FlowPolicy {
 
     public StepType nextStep(StepType currentStep, OrderComplexity complexity){
 

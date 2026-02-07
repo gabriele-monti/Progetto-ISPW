@@ -7,14 +7,14 @@ import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
 
-public class OrderWizardState {
+public class OrderFlowState {
     private Set<DietCategory> dietCategories;
     private Set<CourseType> courseTypes;
     private Set<Allergen> allergens;
     private Integer kcalPreference;
     private Integer budgetPreference;
 
-    public OrderWizardState(){
+    public OrderFlowState(){
         this.dietCategories = new HashSet<>();
         this.courseTypes = new HashSet<>();
         this.allergens = new HashSet<>();

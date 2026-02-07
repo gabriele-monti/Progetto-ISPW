@@ -1,6 +1,5 @@
 package it.foodmood.view.ui.gui.manager;
 
-import it.foodmood.bean.ActorBean;
 import it.foodmood.controller.DishController;
 import it.foodmood.controller.IngredientController;
 import it.foodmood.controller.LoginController;
@@ -69,20 +68,14 @@ public class GuiHomeManager extends BaseGui {
 
     private DishController dishController = new DishController();
 
-    private ActorBean actor;
-
     public void setRouter(GuiRouter router){
         this.router = router;
-    }
-
-    public void setManager(ActorBean actor){
-        this.actor = actor;
         updateLabel();
     }
 
     private void updateLabel(){
-        if(lblManager != null && actor != null){
-            lblManager.setText(getUserFullName(actor));
+        if(lblManager != null && router != null){
+            lblManager.setText(getUserFullName(router.getActor()));
         }
     }
 
@@ -96,7 +89,6 @@ public class GuiHomeManager extends BaseGui {
     @FXML
     private void initialize(){
         paneNavigator = new PaneNavigator(contentArea);
-        updateLabel();
     }
 
     public void openDefaultPage(){

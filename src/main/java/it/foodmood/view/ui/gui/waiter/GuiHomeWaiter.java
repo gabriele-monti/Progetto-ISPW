@@ -1,6 +1,5 @@
 package it.foodmood.view.ui.gui.waiter;
 
-import it.foodmood.bean.ActorBean;
 import it.foodmood.controller.LoginController;
 import it.foodmood.controller.MenuController;
 import it.foodmood.view.ui.gui.GuiPages;
@@ -55,20 +54,15 @@ public class GuiHomeWaiter extends BaseGui {
 
     private GuiRouter router;
     private PaneNavigator paneNavigator;
-    private ActorBean actor;
 
     public void setRouter(GuiRouter router){
         this.router = router;
-    }
-
-    public void setWaiter(ActorBean actor){
-        this.actor = actor;
         updateLabel();
     }
 
     private void updateLabel(){
-        if(lblWaiter != null && actor != null){
-            lblWaiter.setText(getUserFullName(actor));
+        if(lblWaiter != null && router != null){
+            lblWaiter.setText(getUserFullName(router.getActor()));
         }
     }
 

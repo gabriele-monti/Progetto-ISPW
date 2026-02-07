@@ -54,7 +54,6 @@ public class GuiCustomerCart extends BaseGui {
 
     private final CartController cartController = new CartController();
 
-    private TableSessionBean tableSessionBean;
     private ObservableList<CartItemBean> observableItems = FXCollections.observableArrayList();
 
     private void showOrderRecap(){
@@ -69,13 +68,10 @@ public class GuiCustomerCart extends BaseGui {
         }
     }
 
-    public void setTableSession(TableSessionBean tableSessionBean){
-        this.tableSessionBean = tableSessionBean;
-    }
-
     @FXML
     void onAccountClicked(ActionEvent event) {
         if(!ensureAuthenticated(router)) return;
+        ActorBean actor = router.getActor();
         if(!actor.isGuest()){
             router.showCustomerAccountView();
         } else {
@@ -99,6 +95,7 @@ public class GuiCustomerCart extends BaseGui {
         if(!ensureAuthenticated(router)) return;
        
         try {
+            TableSessionBean tableSessionBean = router.getTableSession();
             String tableSessionId = tableSessionBean.getTableSessionId().toString();
             
             CustomerOrderController orderController = new CustomerOrderController();
@@ -130,21 +127,16 @@ public class GuiCustomerCart extends BaseGui {
     }
 
     private GuiRouter router;
-    private ActorBean actor;
 
     public void setRouter(GuiRouter router){
         this.router = router;
-    }
-
-    public void setUser(ActorBean actor){
-        this.actor = actor;
         updateLabel();
     }
 
     private void updateLabel(){
-        if(actor == null) return;
+        if(router == null) return;
 
-        String initials = getUserInitials(actor);
+        String initials = getUserInitials(router.getActor());
 
         if(lblUserInitials != null){
             lblUserInitials.setText(initials);

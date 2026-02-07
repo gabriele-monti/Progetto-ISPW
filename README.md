@@ -128,7 +128,7 @@ db.password=tua_password
 - Login
 - Accesso come ospite 
 - Ordinazione tramite menù digitale classico
-- Ordinazione tramite FoodMood (raccomandazioni personalizzate basate su preferenze, allergie, budget, calorie)
+- Ordinazione tramite suggerimenti (raccomandazioni personalizzate basate su preferenze, allergie, budget, calorie)
 
 ### Cameriere
 

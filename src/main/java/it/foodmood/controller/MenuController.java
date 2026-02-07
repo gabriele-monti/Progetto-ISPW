@@ -19,13 +19,11 @@ public class MenuController {
     private final SessionManager sessionManager = SessionManager.getInstance();
     private final DishMapper dishMapper;
 
-
     public MenuController(){
         DaoFactory factory = DaoFactory.getInstance();
         this.dishDao = factory.getDishDao();
         this.dishMapper = new DishMapper();
     }
-
 
     public List<DishBean> loadAllDishes() throws DishException{
         ensureActiveSession();

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import it.foodmood.domain.model.Dish;
-import it.foodmood.domain.model.OrderWizardState;
+import it.foodmood.domain.model.OrderFlowState;
 import it.foodmood.domain.policy.KcalWeight;
 import it.foodmood.domain.policy.PriceWeight;
 import it.foodmood.domain.value.Allergen;
@@ -29,7 +29,7 @@ public class DishProposals {
         this.priceWeight = new PriceWeight();
     }
 
-    public List<Dish> generate(OrderWizardState state) throws OrderException {
+    public List<Dish> generate(OrderFlowState state) throws OrderException {
         
         try {
             Set<CourseType> selectedCourses = state.getCourseType();
@@ -59,7 +59,7 @@ public class DishProposals {
         }
     }
 
-    private boolean matchesDietPreferences(Dish dish, OrderWizardState state){
+    private boolean matchesDietPreferences(Dish dish, OrderFlowState state){
         Set<DietCategory> dietPreferences = state.getDietCategories();
         if(dietPreferences == null || dietPreferences.isEmpty()){
             return true;
@@ -83,7 +83,7 @@ public class DishProposals {
         return true;
     }
 
-    private boolean isSafeForAllergens(Dish dish, OrderWizardState state){
+    private boolean isSafeForAllergens(Dish dish, OrderFlowState state){
         Set<Allergen> userAllergens = state.getAllergens();
         if(userAllergens == null || userAllergens.isEmpty()){
             return true;
@@ -94,7 +94,7 @@ public class DishProposals {
         return Collections.disjoint(dishAllergens, userAllergens);
     }
 
-    private boolean isWithinBudgetLimit(Dish dish, CourseType courseType, OrderWizardState state){
+    private boolean isWithinBudgetLimit(Dish dish, CourseType courseType, OrderFlowState state){
         Integer totalBudget = state.getBudgetPreference();
         if(totalBudget == null || totalBudget <= 0){
             return true;
@@ -107,7 +107,7 @@ public class DishProposals {
         return dish.getPrice().toDouble() <= maxPriceForThisCourse;
     }
 
-    private boolean isWithinKcalLimit(Dish dish, CourseType courseType, OrderWizardState state){
+    private boolean isWithinKcalLimit(Dish dish, CourseType courseType, OrderFlowState state){
         Integer totalKcal = state.getKcalPreference();
         if(totalKcal == null || totalKcal <= 0){
             return true;

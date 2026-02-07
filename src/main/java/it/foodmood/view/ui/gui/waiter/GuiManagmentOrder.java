@@ -192,6 +192,7 @@ public class GuiManagmentOrder extends RoomController {
                 cardNode.setScaleY(scale);
 
                 GuiCard cardController = loader.getController();
+                
                 cardController.setData(dish);
 
                 menuGridPane.add(cardNode, col, row);

@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import it.foodmood.bean.DishBean;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -27,8 +26,6 @@ public class GuiCard {
 
     @FXML private Label productPrice;
 
-    private DishBean dishBean;
-
     private Consumer<DishBean> onAddToOrder;
 
     public void setOnAddToOrder(Consumer<DishBean> onAddToOrder){
@@ -36,7 +33,6 @@ public class GuiCard {
     }
     
     public void setData(DishBean dishBean){
-        this.dishBean = dishBean;
 
         productName.setText(dishBean.getName());
 
@@ -56,17 +52,11 @@ public class GuiCard {
         }
 
         productAddBtn.setDisable(false);
-    } 
 
-    @FXML
-    void onAddProduct(ActionEvent event) {
-        if(dishBean == null) return;
-        if(onAddToOrder != null){
-            onAddToOrder.accept(dishBean);
-        }
-    }
-
-    public DishBean getDish(){
-        return dishBean;
+        productAddBtn.setOnAction(e -> {
+            if(onAddToOrder != null) {
+                onAddToOrder.accept(dishBean);
+            }
+        });
     }
 }

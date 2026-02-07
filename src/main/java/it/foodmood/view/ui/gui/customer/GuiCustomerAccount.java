@@ -18,75 +18,40 @@ import javafx.scene.layout.BorderPane;
 public class GuiCustomerAccount extends BaseGui {
 
     @FXML private BorderPane accountPane;
-
     @FXML private BorderPane preferencesPane;
-
     @FXML private BorderPane cardPane;
-
     @FXML private BorderPane passwordPane;
-
     @FXML private Button btnAccount;
-
     @FXML private Button btnCart;
-
     @FXML private Button btnBack;
-
     @FXML private Button btnBackToHome;
-
     @FXML private Button btnLogout;
-
     @FXML private Button btnChangePassword;
-
     @FXML private Button btnFoodPreferences;
-
     @FXML private Button btnFidelityCard;
-
     @FXML private Button btnPersonalDetails;
-
     @FXML private Button btnSavePersonalDetails;
-
     @FXML private Button btnSavePreferences;
-
     @FXML private Label lblFullNameCard;
-
     @FXML private Label lblFullNameAccount;
-
     @FXML private Label lblUserInitials;
-
     @FXML private BorderPane personalDetailsPane;
-
     @FXML private TextField tfName;
-
     @FXML private TextField tfSurname;
-
     @FXML private Label errorMessageLabel;
-
     @FXML private CheckBox cbCelery;
-
     @FXML private CheckBox cbCrustaceans;
-
     @FXML private CheckBox cbEggs;
-
     @FXML private CheckBox cbFish;
-
     @FXML private CheckBox cbGluten;
-
     @FXML private CheckBox cbLupin;
-
     @FXML private CheckBox cbMilk;
-
     @FXML private CheckBox cbMolluscs;
-
     @FXML private CheckBox cbMustard;
-
     @FXML private CheckBox cbNuts;
-
     @FXML private CheckBox cbPeanuts;
-
     @FXML private CheckBox cbSesame;
-
     @FXML private CheckBox cbSoy;
-
     @FXML private CheckBox cbSulphites;
 
     @FXML private ComboBox<Allergen> cbType;
@@ -133,16 +98,13 @@ public class GuiCustomerAccount extends BaseGui {
 
     public void setRouter(GuiRouter router){
         this.router = router;
-    }
-    private ActorBean actor;
-
-    public void setUser(ActorBean actor){
-        this.actor = actor;
         updateLabel();
     }
 
     private void updateLabel(){
-        if(actor == null) return;
+        if(router == null) return;
+
+        ActorBean actor = router.getActor();
 
         String fullName = getUserFullName(actor);
         String initials = getUserInitials(actor);
@@ -210,6 +172,7 @@ public class GuiCustomerAccount extends BaseGui {
     @FXML
     void onAccountClicked(ActionEvent event) {
         if(!ensureAuthenticated(router)) return;
+        ActorBean actor = router.getActor();
         if(!actor.isGuest()){
             showAccountPage();
         } else {

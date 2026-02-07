@@ -27,6 +27,7 @@ public class GuiHomeCustomer extends BaseGui {
     @FXML
     void onAccountClicked(ActionEvent event) {
         if(!ensureAuthenticated(router)) return;
+        ActorBean actor = router.getActor();
         if(!actor.isGuest()){
             router.showCustomerAccountView();
         } else {
@@ -67,41 +68,28 @@ public class GuiHomeCustomer extends BaseGui {
         showInfo("Funzionalità non ancora implementata");
     }
 
-    private Integer tableId;
-
-    public void setTableId(int tableId){
-        this.tableId = tableId;
-        updateLabel();
-    }
-
     private GuiRouter router;
 
     public void setRouter(GuiRouter router){
         this.router = router;
+        updateLabel();
     }
 
     public GuiHomeCustomer(){
         // costruttore vuooto
     }
 
-    private ActorBean actor;
-
-    public void setUser(ActorBean actor){
-        this.actor = actor;
-        updateLabel();
-    }
-
     private void updateLabel(){
-        if(lblUserInitials != null && actor != null){
-            lblUserInitials.setText(getUserInitials(actor));
+        if(lblUserInitials != null && router != null){
+            lblUserInitials.setText(getUserInitials(router.getActor()));
         }
         if(lblTableId != null){
-            lblTableId.setText(String.valueOf("Tavolo " + tableId));
+            lblTableId.setText(String.valueOf("Tavolo " + router.getTableNumber()));
         }
     }
 
     @FXML
     private void initialize(){
-        updateLabel();
+        // vuoto
     }
 }

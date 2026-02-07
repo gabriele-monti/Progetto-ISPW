@@ -117,11 +117,7 @@ public class GuiCustomerOrder extends BaseGui {
     private ToggleGroup dietGroup;    
     private ToggleGroup kcalGroup;
     private ToggleGroup budgetGroup;
-
-    private ActorBean actor;
-
     private final EnumMap<Allergen, ToggleButton> allergenButtons = new EnumMap<>(Allergen.class);
-
 
     public GuiCustomerOrder(){
         // vuoto
@@ -129,10 +125,6 @@ public class GuiCustomerOrder extends BaseGui {
 
     public void setRouter(GuiRouter router){
         this.router = router;
-    }
-
-    public void setUser(ActorBean actor){
-        this.actor = actor;
         updateLabel();
     }
 
@@ -177,12 +169,12 @@ public class GuiCustomerOrder extends BaseGui {
         updateLabel();
         setupToggleGroups();
         initAllergenButtons();
-        initializeWizard();
+        initializeFlow();
     }
 
     private void updateLabel(){
-        if(lblUserInitials != null && actor != null){
-            lblUserInitials.setText(getUserInitials(actor));
+        if(lblUserInitials != null && router != null){
+            lblUserInitials.setText(getUserInitials(router.getActor()));
         }
     }
 
@@ -269,6 +261,7 @@ public class GuiCustomerOrder extends BaseGui {
     @FXML
     void onAccountClicked(ActionEvent event) {
         if(!ensureAuthenticated(router)) return;
+        ActorBean actor = router.getActor();
         if(!actor.isGuest()){
             router.showCustomerAccountView();
         } else {
@@ -284,7 +277,7 @@ public class GuiCustomerOrder extends BaseGui {
         budgetGroup = singleChoice(List.of(tbBudgetNoLimit, tbBudgetEconomic, tbBudgetBalanced, tbBudgetPremium));
     }
 
-    private void initializeWizard(){
+    private void initializeFlow(){
         try {
             ResponseBean responseBean = orderController.start();
             handleResponse(responseBean);
@@ -618,6 +611,7 @@ public class GuiCustomerOrder extends BaseGui {
                 AnchorPane cardNode = loader.load();
 
                 GuiCard cardController = loader.getController();
+                
                 cardController.setData(dish);
                 cardController.setOnAddToOrder(this::addToOrder);
 
