@@ -5,8 +5,8 @@ import it.foodmood.config.ApplicationEnvironment;
 import it.foodmood.config.PersistenceConfig;
 import it.foodmood.config.StartupConfigurator;
 import it.foodmood.config.StartupEnvironment;
-import it.foodmood.infrastructure.bootstrap.ApplicationBootstrap;
-import it.foodmood.infrastructure.bootstrap.BootstrapFactory;
+import it.foodmood.infrastructure.bootstrap.InterfaceBase;
+import it.foodmood.infrastructure.bootstrap.InterfaceFactory;
 import it.foodmood.infrastructure.bootstrap.DemoBootstrap;
 import it.foodmood.infrastructure.bootstrap.InteractiveSetup;
 import it.foodmood.infrastructure.bootstrap.UiMode;
@@ -95,10 +95,10 @@ public final class Main{
             // 5) Costruzione dell'ambiente dell'applicazione
             ApplicationEnvironment environment = new ApplicationEnvironment(fileConfig, daoFactory);
 
-            // 6) Bootstrap e avvio
-            BootstrapFactory bootstrapFactory = new BootstrapFactory();
-            ApplicationBootstrap bootstrap = bootstrapFactory.create(uiMode);
-            bootstrap.start(environment);
+            // 6) Creazione dell'interfaccia e avvio
+            InterfaceFactory interfaceFactory = new InterfaceFactory();
+            InterfaceBase interfaceBase = interfaceFactory.create(uiMode);
+            interfaceBase.start(environment);
         } catch (Exception e){
             System.err.println(theme.error("Errore durante l'avvio dell'applicazione: " + e.getMessage()));
             System.exit(1);

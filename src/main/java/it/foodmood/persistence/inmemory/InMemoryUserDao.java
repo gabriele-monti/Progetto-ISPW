@@ -13,7 +13,9 @@ public class InMemoryUserDao extends AbstractInMemoryCrudDao<User, UUID> impleme
     
     private static InMemoryUserDao instance;
 
-    private InMemoryUserDao() {}
+    private InMemoryUserDao() {
+        // costruttore privato per singleton
+    }
 
     public static synchronized InMemoryUserDao getInstance(){
         if(instance == null){

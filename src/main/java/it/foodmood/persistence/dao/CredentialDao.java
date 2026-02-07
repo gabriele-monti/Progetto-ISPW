@@ -11,5 +11,4 @@ public interface CredentialDao {
 
     // recupero le credenziali associate ad un utente
     Credential findByUserId(UUID userId);
-
 }

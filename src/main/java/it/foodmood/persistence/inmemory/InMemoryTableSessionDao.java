@@ -15,7 +15,7 @@ public class InMemoryTableSessionDao implements TableSessionDao {
     private final Map<Integer, UUID> tableToSession = new HashMap<>();
 
     private InMemoryTableSessionDao(){
-        // costruttore per il singleton
+        // costruttore privato per il singleton
     }
 
     public static synchronized InMemoryTableSessionDao getInstance(){

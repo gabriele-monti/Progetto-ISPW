@@ -16,7 +16,7 @@ public final class SessionManager {
     private Guest currentGuest;
 
     private SessionManager(){
-        // costruttore vuoto
+        // costruttore privato per singleton
     }
 
     public static synchronized SessionManager getInstance(){

@@ -16,12 +16,12 @@ import it.foodmood.domain.value.StepType;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.OrderException;
 import it.foodmood.view.boundary.CartBoundary;
-import it.foodmood.view.boundary.CustomerOrderCustomizationBoundary;
+import it.foodmood.view.boundary.OrderProposalsBoundary;
 import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
     
-    private final CustomerOrderCustomizationBoundary orderCustomizationBoundary;
+    private final OrderProposalsBoundary orderCustomizationBoundary;
     private final CartBoundary cartBoundary;
     
     private static final String TITLE = "Ordina su misura per te";
@@ -37,7 +37,7 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
 
     private static final Set<String> BASE_CATEGORIES = Set.of(DietCategory.TRADITIONAL.name(), DietCategory.VEGAN.name(), DietCategory.VEGETARIAN.name());
     
-    public CliCustomerOrderCustomizationView(CustomerOrderCustomizationBoundary orderCustomizationBoundary, CartBoundary cartBoundary){
+    public CliCustomerOrderCustomizationView(OrderProposalsBoundary orderCustomizationBoundary, CartBoundary cartBoundary){
         super();
         this.orderCustomizationBoundary = orderCustomizationBoundary;
         this.cartBoundary = cartBoundary;

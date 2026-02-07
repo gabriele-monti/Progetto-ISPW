@@ -14,7 +14,7 @@ public class InMemoryDishDao extends AbstractInMemoryCrudDao<Dish, UUID> impleme
     private static InMemoryDishDao instance;
 
     private InMemoryDishDao(){
-        // costruttore per il singleton
+        // costruttore privato per il singleton
     }
 
     public static synchronized InMemoryDishDao getInstance(){

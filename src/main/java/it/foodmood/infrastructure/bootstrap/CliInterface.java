@@ -8,11 +8,11 @@ import it.foodmood.view.ui.cli.CliFactory;
 import it.foodmood.view.ui.cli.CliNavigator;
 import it.foodmood.view.ui.cli.CliNavigatorFactory;
 
-public class CliBootstrap implements ApplicationBootstrap{
+public class CliInterface implements InterfaceBase{
 
     private final OutputWriter out;
 
-    public CliBootstrap(){
+    public CliInterface(){
         this.out = new ConsoleOutputWriter();
     }
     

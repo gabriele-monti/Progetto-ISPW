@@ -8,9 +8,16 @@ import it.foodmood.persistence.filesystem.FileSystemTableSessionDao;
 import it.foodmood.persistence.filesystem.FileSystemUserDao;
 import it.foodmood.persistence.filesystem.FileSystemCredentialDao;
 
-
+/*
+ * Implementazione concreta della factory per la persistenza su file system
+ */
 
 public final class FileSystemDaoFactory extends DaoFactory {
+
+    protected FileSystemDaoFactory(){
+        // costruttore protected
+    }
+
     @Override
     public DishDao getDishDao(){ 
         return FileSystemDishDao.getInstance();

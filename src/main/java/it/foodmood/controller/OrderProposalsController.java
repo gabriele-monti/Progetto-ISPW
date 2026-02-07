@@ -28,7 +28,7 @@ import it.foodmood.utils.SessionManager;
 /*
   Application Controller per la gestione del wizard di raccolta preferenze per l'ordine
 */
-public class OrderCustomizationController {
+public class OrderProposalsController {
 
     private final SessionManager sessionManager; 
     
@@ -44,7 +44,7 @@ public class OrderCustomizationController {
     private OrderWizardState wizardState;
     private OrderComplexity currentComplexity;
 
-    public OrderCustomizationController(){
+    public OrderProposalsController(){
         this.sessionManager = SessionManager.getInstance();
 
         this.allergenFilterPolicy = new AllergenFilterPolicy();

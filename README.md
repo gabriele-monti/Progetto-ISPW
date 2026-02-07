@@ -177,12 +177,3 @@ I dati vengono salvati in file CSV nella cartella `data/csv/`:
 I dati vengono salvati in modo persistente nel database MySQL.
 
 ---
-
-## Note tecniche
-
-- Pattern architetturale: **MVC** (Model-View-Controller)
-- Gestione persistenza: **DAO Pattern**
-- Interfaccia grafica: **JavaFX** con file FXML
-- Database: **MySQL** con JDBC
-
----

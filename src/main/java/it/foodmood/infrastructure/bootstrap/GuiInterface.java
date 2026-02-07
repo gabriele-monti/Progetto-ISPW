@@ -6,7 +6,7 @@ import it.foodmood.infrastructure.io.OutputWriter;
 import it.foodmood.infrastructure.io.console.ConsoleOutputWriter;
 import javafx.application.Application;
 
-public class GuiBootstrap implements ApplicationBootstrap {
+public class GuiInterface implements InterfaceBase {
 
     OutputWriter out = new ConsoleOutputWriter();
 

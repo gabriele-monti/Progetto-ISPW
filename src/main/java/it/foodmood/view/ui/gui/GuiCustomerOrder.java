@@ -9,7 +9,6 @@ import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.AnswerBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.ResponseBean;
-import it.foodmood.controller.OrderCustomizationController;
 import it.foodmood.domain.value.Allergen;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.domain.value.DietCategory;
@@ -17,6 +16,7 @@ import it.foodmood.domain.value.StepType;
 import it.foodmood.exception.OrderException;
 import it.foodmood.view.boundary.CartBoundary;
 import it.foodmood.view.boundary.DishBoundary;
+import it.foodmood.view.boundary.OrderProposalsBoundary;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -105,7 +105,7 @@ public class GuiCustomerOrder extends BaseGui {
     private static final String WITHIN = " (entro i ";
     private static final String EURO = " €)";
 
-    private final OrderCustomizationController orderController;
+    private final OrderProposalsBoundary orderBoundary;
     
     private CartBoundary cartBoundary;
     private GuiRouter router;
@@ -121,7 +121,7 @@ public class GuiCustomerOrder extends BaseGui {
     }
 
     public GuiCustomerOrder(){
-        this.orderController = new OrderCustomizationController();
+        this.orderBoundary = new OrderProposalsBoundary();
     }
 
     public void setRouter(GuiRouter router){
@@ -287,7 +287,7 @@ public class GuiCustomerOrder extends BaseGui {
 
     private void initializeWizard(){
         try {
-            ResponseBean responseBean = orderController.start();
+            ResponseBean responseBean = orderBoundary.start();
             handleResponse(responseBean);
         } catch (Exception e) {
             showError("Errore nell'inizializzazione: " + e.getMessage());
@@ -318,7 +318,7 @@ public class GuiCustomerOrder extends BaseGui {
                 return;
             }
 
-            ResponseBean responseBean = orderController.submit(answerBean);
+            ResponseBean responseBean = orderBoundary.submit(answerBean);
 
             handleResponse(responseBean);
         } catch (OrderException ex) {
@@ -349,7 +349,7 @@ public class GuiCustomerOrder extends BaseGui {
         if(!ensureAuthenticated(router)) return;
         try {
             AnswerBean answerBean = allergenAnswers();
-            ResponseBean responseBean = orderController.submit(answerBean);
+            ResponseBean responseBean = orderBoundary.submit(answerBean);
             handleResponse(responseBean);
 
         } catch (OrderException ex) {
@@ -368,7 +368,7 @@ public class GuiCustomerOrder extends BaseGui {
                 return;
             }
 
-            ResponseBean responseBean = orderController.submit(answerBean);
+            ResponseBean responseBean = orderBoundary.submit(answerBean);
 
             handleResponse(responseBean);
         } catch (OrderException ex) {
@@ -387,7 +387,7 @@ public class GuiCustomerOrder extends BaseGui {
                 return;
             }
 
-            ResponseBean responseBean = orderController.submit(answerBean);
+            ResponseBean responseBean = orderBoundary.submit(answerBean);
 
             handleResponse(responseBean);
         } catch (OrderException ex) {
@@ -405,7 +405,7 @@ public class GuiCustomerOrder extends BaseGui {
                 showInfo("Seleziona almeno una portata per continuare");
             }
 
-            ResponseBean responseBean = orderController.submit(answerBean);
+            ResponseBean responseBean = orderBoundary.submit(answerBean);
 
             handleResponse(responseBean);
         } catch (OrderException ex) {

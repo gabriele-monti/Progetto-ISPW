@@ -5,7 +5,7 @@ import it.foodmood.bean.TableSessionBean;
 import it.foodmood.config.UserMode;
 import it.foodmood.view.boundary.CartBoundary;
 import it.foodmood.view.boundary.CustomerOrderBoundary;
-import it.foodmood.view.boundary.CustomerOrderCustomizationBoundary;
+import it.foodmood.view.boundary.OrderProposalsBoundary;
 import it.foodmood.view.boundary.DishBoundary;
 import it.foodmood.view.boundary.GuestAccessBoundary;
 import it.foodmood.view.boundary.IngredientBoundary;
@@ -39,7 +39,7 @@ public final class CliFactory implements CustomerUi, ManagerUi, WaiterUi{
     private final DishBoundary dishBoundary;
     private final MenuBoundary menuBoundary;
     private final CartBoundary cartBoundary;
-    private final CustomerOrderCustomizationBoundary orderCustomizationBoundary;
+    private final OrderProposalsBoundary orderCustomizationBoundary;
     private final CustomerOrderBoundary customerOrderBoundary;
 
     public CliFactory(UserMode userMode){
@@ -51,7 +51,7 @@ public final class CliFactory implements CustomerUi, ManagerUi, WaiterUi{
         this.dishBoundary = new DishBoundary();
         this.menuBoundary = new MenuBoundary();
         this.cartBoundary = new CartBoundary();
-        this.orderCustomizationBoundary = new CustomerOrderCustomizationBoundary();
+        this.orderCustomizationBoundary = new OrderProposalsBoundary();
         this.customerOrderBoundary = new CustomerOrderBoundary();
     }
 

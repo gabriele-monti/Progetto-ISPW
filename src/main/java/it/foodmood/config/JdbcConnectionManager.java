@@ -16,7 +16,8 @@ public final class JdbcConnectionManager implements ConnectionProvider{
     private final String url;
     private final String user;
     private final String password;
-
+    
+    // Costruttore privato per singleton
     private JdbcConnectionManager(String url, String user, String password){
         this.url = Objects.requireNonNull(url, "L'url non può essere nullo.");
         this.user = Objects.requireNonNull(user, "L'user non può essere nullo.");

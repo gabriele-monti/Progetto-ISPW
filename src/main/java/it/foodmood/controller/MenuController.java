@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.foodmood.bean.DishBean;
 import it.foodmood.controller.mapper.DishMapper;
+import it.foodmood.domain.model.Dish;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.exception.DishException;
 import it.foodmood.exception.PersistenceException;
@@ -29,7 +30,8 @@ public class MenuController {
     public List<DishBean> loadAllDishes() throws DishException{
         ensureActiveSession();
         try {
-            return dishMapper.toBeans(dishDao.findAll());
+            List<Dish> available = dishDao.findAll().stream().filter(Dish::isAvailable).toList();
+            return dishMapper.toBeans(available);
         } catch (PersistenceException e) {
             throw new DishException("Spiacenti si è verificato un errore tecnico durante il recupero dei piatti, riprovare in seguito.", e);
         }
@@ -38,7 +40,8 @@ public class MenuController {
     public List<DishBean> loadDishesByCourseType(CourseType courseType) throws DishException{
         ensureActiveSession();
         try {
-            return dishMapper.toBeans(dishDao.findByCourseType(courseType));
+            List<Dish> available = dishDao.findByCourseType(courseType).stream().filter(Dish::isAvailable).toList();
+            return dishMapper.toBeans(available);
         } catch (PersistenceException e) {
             throw new DishException("Spiacenti si è verificato un errore tecnico, riprovare in seguito.", e);
         }

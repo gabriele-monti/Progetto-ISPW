@@ -27,6 +27,10 @@ public class JdbcOrderDao implements OrderDao {
     // Unica istanza di dao del Order che usa jdbc
     private static JdbcOrderDao instance;
 
+    private JdbcOrderDao(){
+        // costruttore privato per singleton
+    }
+
     public static synchronized JdbcOrderDao getInstance(){
         if(instance == null){
             instance = new JdbcOrderDao();

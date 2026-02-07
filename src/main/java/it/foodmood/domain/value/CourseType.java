@@ -3,7 +3,7 @@ package it.foodmood.domain.value;
 /*
  * Tipologia della portata nel menù
  * Usato da: Dish (per classificare la tipologia del piatto)
- * GRASP: Information Expert -> l'elenco delle portate vive qui
+ * GRASP: Information Expert 
  */
 
 public enum CourseType {

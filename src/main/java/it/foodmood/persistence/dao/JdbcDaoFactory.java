@@ -14,6 +14,10 @@ import it.foodmood.persistence.mysql.JdbcCredentialDao;
 
 public final class JdbcDaoFactory extends DaoFactory {
 
+    protected JdbcDaoFactory(){
+        // costruttore protected
+    }
+
     @Override
     public DishDao getDishDao(){ 
         return JdbcDishDao.getInstance();

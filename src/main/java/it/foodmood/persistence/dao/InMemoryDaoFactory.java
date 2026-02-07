@@ -8,7 +8,15 @@ import it.foodmood.persistence.inmemory.InMemoryTableSessionDao;
 import it.foodmood.persistence.inmemory.InMemoryUserDao;
 import it.foodmood.persistence.inmemory.InMemoryCredentialDao;
 
+/*
+ * Implementazione concreta della factory per la persistenza in memoria volatile
+ */
+
 public final class InMemoryDaoFactory extends DaoFactory {
+
+    protected InMemoryDaoFactory(){
+        // costruttore protected
+    }
 
     @Override
     public DishDao getDishDao(){

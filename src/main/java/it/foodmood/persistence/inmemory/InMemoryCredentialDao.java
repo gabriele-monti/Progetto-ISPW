@@ -12,7 +12,9 @@ public class InMemoryCredentialDao implements CredentialDao {
 
     private final Map<UUID, Credential> storage = new HashMap<>();
 
-    private InMemoryCredentialDao(){}
+    private InMemoryCredentialDao(){
+        // costruttore privato per il singleton
+    }
 
     public static synchronized InMemoryCredentialDao getInstance(){
         if(instance == null){
