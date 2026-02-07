@@ -5,18 +5,12 @@ import java.util.List;
 import it.foodmood.bean.CartItemBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.IngredientBean;
-import it.foodmood.utils.SessionManager;
 import it.foodmood.view.ui.cli.tables.TableDishes;
 import it.foodmood.view.ui.cli.tables.TableIngredients;
 import it.foodmood.view.ui.cli.tables.TableOrder;
 import it.foodmood.view.ui.cli.tables.TablePropose;
 
 public abstract class ProtectedConsoleView extends ConsoleView{
-    private final SessionManager sessionManager = SessionManager.getInstance();
-
-    protected void ensureActiveSession(){
-        sessionManager.requireActiveSession();
-    }
 
     protected void showIngredientTable(List<IngredientBean> ingredients){
 

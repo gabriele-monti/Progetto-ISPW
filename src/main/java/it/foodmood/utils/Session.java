@@ -6,12 +6,16 @@ import java.util.Objects;
 import java.util.UUID;
 
 import it.foodmood.domain.model.Cart;
+import it.foodmood.domain.model.OrderFlowState;
+import it.foodmood.domain.value.OrderComplexity;
 
 public class Session {
 
     private final UUID userId; 
     private Instant expiryTime;
     private Cart cart;
+    private OrderFlowState orderFlowState;
+    private OrderComplexity orderComplexity;
 
     private static final Duration DURATION = Duration.ofMinutes(50);
 
@@ -47,5 +51,21 @@ public class Session {
         if(cart != null){
             cart.clear();
         }
+    }
+
+    public OrderFlowState getOrderFlowState(){
+        return orderFlowState;
+    }
+
+    public void setOrderFlowState(OrderFlowState orderFlowState){
+        this.orderFlowState = orderFlowState;
+    }
+
+    public OrderComplexity getOrderComplexity(){
+        return orderComplexity;
+    }
+
+    public void setOrderComplexity(OrderComplexity orderComplexity){
+        this.orderComplexity = orderComplexity;
     }
 }

@@ -40,8 +40,6 @@ public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavi
                 CliManagerMenuView menuView = new CliManagerMenuView();
                 ManagerPages page = menuView.displayPage(actor);
 
-                ensureActiveSession();
-
                 switch(page){
                     case MANAGMENT_INGREDIENTS -> ui.showIngredientManagmentView();
                     case MANAGMENT_DISH -> ui.showDishManagmentView();

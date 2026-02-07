@@ -23,28 +23,22 @@ import it.foodmood.domain.value.Quantity;
 import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.DishException;
 import it.foodmood.exception.PersistenceException;
-import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
 import it.foodmood.persistence.dao.IngredientDao;
-import it.foodmood.utils.SessionManager;
 
 public class DishController {
 
     private final DishDao dishDao;
     private final IngredientDao ingredientDao;
-    private final SessionManager sessionManager = SessionManager.getInstance();
-    private final DishMapper dishMapper;
 
     public DishController(){
         DaoFactory factory = DaoFactory.getInstance();
         this.dishDao = factory.getDishDao();
         this.ingredientDao = factory.getIngredientDao();
-        this.dishMapper = new DishMapper();
     }
 
     public void createDish(DishBean dishBean) throws DishException{
-        ensureActiveSession();
 
         if(dishBean == null) {
             throw new DishException("Il piatto non può essere nullo.");
@@ -103,8 +97,8 @@ public class DishController {
     }
 
     public List<DishBean> getAllDishes() throws DishException{
-        ensureActiveSession();
         try {
+            DishMapper dishMapper = new DishMapper();
             return dishMapper.toBeans(dishDao.findAll());
         } catch (PersistenceException e) {
             throw new DishException("Spiacenti si è verificato un errore tecnico durante il recupero dei piatti, riprovare in seguito.", e);
@@ -112,8 +106,8 @@ public class DishController {
     }
 
     public List<DishBean> getDishesByCourseType(CourseType courseType) throws DishException{
-        ensureActiveSession();
         try {
+            DishMapper dishMapper = new DishMapper();
             return dishMapper.toBeans(dishDao.findByCourseType(courseType));
         } catch (PersistenceException e) {
             throw new DishException("Spiacenti si è verificato un errore tecnico, riprovare in seguito.", e);
@@ -151,7 +145,6 @@ public class DishController {
     }
 
     public void deleteDish(String id) throws DishException{
-        ensureActiveSession();
         if(id == null || id.isBlank()){
             throw new DishException("L'id del piatto non può essere vuoto.");
         }
@@ -169,14 +162,6 @@ public class DishController {
             throw new DishException("Formato id non valido: " + id, e);
         } catch (PersistenceException _){
             throw new DishException("Errore tecnico durante l'eliminazione del piatto. Riprova più tardi.");
-        }
-    }
-
-    private void ensureActiveSession() throws DishException{
-        try {
-            sessionManager.requireActiveSession();
-        } catch (SessionExpiredException e) {
-            throw new DishException(e.getMessage());
         }
     }
 }

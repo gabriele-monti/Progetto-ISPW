@@ -38,8 +38,6 @@ public class CliDishMenuView extends ProtectedConsoleView {
 
         while(!back){
 
-            ensureActiveSession();
-
             clearScreen();
             showTitle("Gestisci Piatti");
             showInfo("0. Indietro");

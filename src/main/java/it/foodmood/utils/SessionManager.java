@@ -4,7 +4,9 @@ import java.util.UUID;
 
 import it.foodmood.domain.model.Cart;
 import it.foodmood.domain.model.Guest;
+import it.foodmood.domain.model.OrderFlowState;
 import it.foodmood.domain.model.User;
+import it.foodmood.domain.value.OrderComplexity;
 import it.foodmood.exception.SessionExpiredException;
 
 public final class SessionManager {
@@ -116,5 +118,21 @@ public final class SessionManager {
 
     public Cart getCart(){
         return requireActiveSession().getCart();
+    }
+
+    public OrderFlowState getOrderFlowState(){
+        return requireActiveSession().getOrderFlowState();
+    }
+
+    public void setOrderFlowState(OrderFlowState orderFlowState){
+        requireActiveSession().setOrderFlowState(orderFlowState);
+    }
+
+    public OrderComplexity getOrderComplexity(){
+        return requireActiveSession().getOrderComplexity();
+    }
+
+    public void setOrderComplexity(OrderComplexity complexity){
+        requireActiveSession().setOrderComplexity(complexity);
     }
 }

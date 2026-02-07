@@ -22,45 +22,21 @@ import it.foodmood.domain.value.DietCategory;
 import it.foodmood.domain.value.OrderComplexity;
 import it.foodmood.domain.value.StepType;
 import it.foodmood.exception.OrderException;
-import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.utils.SessionManager;
 
 /*
-  Application Controller per la gestione del flusso di raccolta preferenze per l'ordine
+  Application Controller per la gestione del flusso di raccolta preferenze dell'utente
 */
 
 public class OrderProposalsController {
 
     private final SessionManager sessionManager; 
-    
-    private final AllergenFilterPolicy allergenFilterPolicy;
-    private final KcalPolicy kcalPolicy;
-    private final PricePolicy pricePolicy;
-    private final FlowPolicy flowPolicy;
-    private final OrderComplexityEvaluator complexityEvaluator;
-    private final DishMapper dishMapper;
-
-    private final DishProposals dishProposals;
-
-    private OrderFlowState flowState;
-    private OrderComplexity currentComplexity;
 
     public OrderProposalsController(){
         this.sessionManager = SessionManager.getInstance();
-
-        this.allergenFilterPolicy = new AllergenFilterPolicy();
-        this.kcalPolicy = new KcalPolicy();
-        this.pricePolicy = new PricePolicy();
-
-        this.dishProposals = new DishProposals();
-
-        this.flowPolicy = new FlowPolicy();
-        this.complexityEvaluator = new OrderComplexityEvaluator();
-        this.dishMapper = new DishMapper();
     }
     
     public ResponseBean start() throws OrderException{
-        ensureActiveSession();
         initializeFlow();
 
         ResponseBean response = new ResponseBean();
@@ -70,32 +46,37 @@ public class OrderProposalsController {
     
     // Processo la risposta dell'utente e determino il prossimo step
     public ResponseBean submit(AnswerBean answer) throws OrderException{
-        ensureActiveSession();
 
         validateAnswer(answer);
 
         StepType currentStep = answer.getStepType();
 
         try {
+            OrderFlowState flowState = sessionManager.getOrderFlowState();
+            OrderComplexity currentComplexity = sessionManager.getOrderComplexity();
+
             // Aggiorno le preferenze in base allo step corrente
-            updatePreferences(currentStep, answer);
+            updatePreferences(flowState, currentStep, answer);
 
             // Se ho selezionato le portate, valuto la complessità della richiesta
             if(currentStep == StepType.COURSE){
                 Set<CourseType> courses = flowState.getCourseType();
-                this.currentComplexity = complexityEvaluator.evaluate(courses);
+                OrderComplexityEvaluator evaluator = new OrderComplexityEvaluator();
+                currentComplexity = evaluator.evaluate(courses);
+                sessionManager.setOrderComplexity(currentComplexity);
             }
 
             // Determino il prossimo step in base alle complessità
+            FlowPolicy flowPolicy = new FlowPolicy();
             StepType nextStep = flowPolicy.nextStep(currentStep, currentComplexity);
 
             // Vedo se è il momento di generare le proposte
             if(nextStep == StepType.GENERATE){
-                return generateProposals();
+                return generateProposals(flowState);
             }
 
             // Costruisco la risposta per lo step successivo
-            return buildStepResponse(nextStep);
+            return buildStepResponse(nextStep, flowState, currentComplexity);
             
         } catch (IllegalArgumentException e) {
             throw new OrderException("Risposta non valida: " + e.getMessage(), e);
@@ -105,8 +86,9 @@ public class OrderProposalsController {
     }
 
     private void initializeFlow(){
-        this.flowState = new OrderFlowState();
-        this.currentComplexity = null;
+        OrderFlowState flowState = new OrderFlowState();
+        sessionManager.setOrderFlowState(flowState);
+        sessionManager.setOrderComplexity(null);
     }
 
     private void validateAnswer(AnswerBean answer) throws OrderException{
@@ -118,11 +100,12 @@ public class OrderProposalsController {
         }
     }
 
-    private ResponseBean buildStepResponse(StepType nextType){
+    private ResponseBean buildStepResponse(StepType nextType, OrderFlowState flowState, OrderComplexity currentComplexity){
         ResponseBean response = new ResponseBean();
         response.setNextStep(nextType);
 
         if(nextType == StepType.ALLERGENS && currentComplexity == OrderComplexity.MODERATE){
+            AllergenFilterPolicy allergenFilterPolicy = new AllergenFilterPolicy();
             Set<Allergen> relevant = allergenFilterPolicy.getAllergens(flowState.getCourseType());
             response.setAllergens(relevant);
             return response;
@@ -134,12 +117,14 @@ public class OrderProposalsController {
         }
 
         if(nextType == StepType.BUDGET && currentComplexity == OrderComplexity.COMPLETE){
+            PricePolicy pricePolicy = new PricePolicy();
             List<Integer> values = pricePolicy.budgetOption(flowState.getCourseType().size());
             response.setValues(values);
             return response;
         }
 
         if(nextType == StepType.KCAL && currentComplexity == OrderComplexity.COMPLETE){
+            KcalPolicy kcalPolicy = new KcalPolicy();
             List<Integer> values = kcalPolicy.kcalOptions(flowState.getCourseType().size());
             response.setValues(values);
             return response;
@@ -148,16 +133,18 @@ public class OrderProposalsController {
         return response;
     }
 
-    private ResponseBean generateProposals() throws OrderException{
+    private ResponseBean generateProposals(OrderFlowState flowState) throws OrderException{
         Set<CourseType> selectedCourses = flowState.getCourseType();
 
         if(selectedCourses == null || selectedCourses.isEmpty()){
             throw new OrderException("Nessuna portata selezionata");
         }
 
+        DishProposals dishProposals = new DishProposals();
         List<Dish> allFilteredDishes = dishProposals.generate(flowState);
 
         // Converto in bean
+        DishMapper dishMapper = new DishMapper();
         List<DishBean> dishBeans = dishMapper.toBeans(allFilteredDishes);
 
         ResponseBean responseBean = new ResponseBean();
@@ -166,7 +153,7 @@ public class OrderProposalsController {
         return responseBean;
     }
 
-    private void updatePreferences(StepType step, AnswerBean preference){
+    private void updatePreferences(OrderFlowState flowState, StepType step, AnswerBean preference){
 
         switch(step){
             case COURSE -> { 
@@ -191,14 +178,6 @@ public class OrderProposalsController {
                 flowState.setKcalPreference(kcal);
             }
             default -> throw new IllegalStateException("Stato non valido: " + step);
-        }
-    }
-
-    private void ensureActiveSession() throws OrderException{
-        try {
-            sessionManager.requireActiveSession();
-        } catch (SessionExpiredException _) {
-            throw new OrderException("Sessione scaduta.");
         }
     }
 }

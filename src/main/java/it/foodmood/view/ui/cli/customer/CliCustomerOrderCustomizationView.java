@@ -59,8 +59,6 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
             return;
         }
 
-        ensureActiveSession();
-
         StepType nextStep = response.getNextStep();
 
         switch (nextStep) {

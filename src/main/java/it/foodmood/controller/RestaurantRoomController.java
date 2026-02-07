@@ -12,12 +12,10 @@ import it.foodmood.exception.PersistenceException;
 import it.foodmood.exception.RestaurantRoomException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.RestaurantRoomDao;
-import it.foodmood.utils.SessionManager;
 
 public class RestaurantRoomController {
     
     private final RestaurantRoomDao restaurantRoomDao;
-    private final SessionManager sessionManager = SessionManager.getInstance();
 
     public RestaurantRoomController(){
         DaoFactory factory = DaoFactory.getInstance();
@@ -25,7 +23,6 @@ public class RestaurantRoomController {
     }
 
     public void createRestaurantRoom(RestaurantRoomBean restaurantRoomBean) throws RestaurantRoomException {
-        ensureActiveSession();
 
         try {
             int rows = restaurantRoomBean.getRows();
@@ -42,7 +39,6 @@ public class RestaurantRoomController {
     }
 
     public RestaurantRoomBean loadRestaurantRoom() throws RestaurantRoomException{
-        ensureActiveSession();
         try {
             Optional<RestaurantRoom> opt = restaurantRoomDao.load();
 
@@ -63,12 +59,10 @@ public class RestaurantRoomController {
     }
 
     public RestaurantRoom getRestaurantRoom() throws RestaurantRoomException{
-        ensureActiveSession();
         return restaurantRoomDao.load().orElseThrow(() -> new RestaurantRoomException("Nessuna sala presente"));
     }
 
     public TableBean addTable(TableBean tableBean) throws RestaurantRoomException {
-        ensureActiveSession();
 
         try {
             RestaurantRoom restaurantRoom = getRestaurantRoom();
@@ -90,7 +84,6 @@ public class RestaurantRoomController {
     }
 
     public void moveTable(int tableId, int newRow, int newCol) throws RestaurantRoomException{
-        ensureActiveSession();
 
         try{
             RestaurantRoom restaurantRoom = getRestaurantRoom();
@@ -104,16 +97,12 @@ public class RestaurantRoomController {
     }
 
     public void removeTable(int tableId) throws RestaurantRoomException {
-        ensureActiveSession();
-
         RestaurantRoom restaurantRoom = getRestaurantRoom();
         restaurantRoom.removeTable(tableId);
         restaurantRoomDao.save(restaurantRoom);
     }
 
     public void removeAllTables() throws RestaurantRoomException {
-        ensureActiveSession();
-
         RestaurantRoom restaurantRoom = getRestaurantRoom();
         restaurantRoom.removeAllTables();
         restaurantRoomDao.save(restaurantRoom);
@@ -144,9 +133,5 @@ public class RestaurantRoomController {
         tableBean.setCol(position.col());
 
         return tableBean;
-    }
-
-    private void ensureActiveSession(){
-        sessionManager.requireActiveSession();
     }
 }

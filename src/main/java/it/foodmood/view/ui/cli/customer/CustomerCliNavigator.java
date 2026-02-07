@@ -52,9 +52,7 @@ public class CustomerCliNavigator extends ProtectedConsoleView implements CliNav
         while(!exit){
             try {
                 HomeCustomerPages home = ui.showHomeCustumerView(actor, tableSession);
-                
-                ensureActiveSession();
-                
+                                
                 switch (home) {
                     case ORDER_CUSTOMIZATION -> ui.showCustumerOrderCustomizationView();
                     case DIGITAL_MENU -> ui.showDigitalMenuCustumerView();

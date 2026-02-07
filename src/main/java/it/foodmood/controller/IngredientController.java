@@ -14,22 +14,18 @@ import it.foodmood.domain.value.Unit;
 import it.foodmood.domain.value.Macronutrients;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.exception.PersistenceException;
-import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.IngredientDao;
-import it.foodmood.utils.SessionManager;
 
 public class IngredientController {
 
     private final IngredientDao ingredientDao;
-    private final SessionManager sessionManager = SessionManager.getInstance();
 
     public IngredientController(){
         this.ingredientDao = DaoFactory.getInstance().getIngredientDao();
     }
 
     public void createIngredient(IngredientBean ingredientBean) throws IngredientException{
-        ensureActiveSession();
 
         if(ingredientBean == null) {
             throw new IngredientException("L'ingrediente non può essere nullo.");
@@ -77,7 +73,6 @@ public class IngredientController {
     }
 
     public List<IngredientBean> getAllIngredients() throws IngredientException{
-        ensureActiveSession();
         try {
             return ingredientDao.findAll().stream().map(IngredientMapper::toBean).toList();
         } catch (PersistenceException e) {
@@ -86,7 +81,6 @@ public class IngredientController {
     }
 
     public void deleteIngredient(String name) throws IngredientException{
-        ensureActiveSession();
         if(name.isBlank()){
             throw new IngredientException("Il nome dell'ingrediente non può essere vuoto.");
         }
@@ -103,7 +97,6 @@ public class IngredientController {
     }
 
     public Optional<IngredientBean> findIngredientByName(String name) throws IngredientException{
-        ensureActiveSession();
         try {
             return ingredientDao.findById(name).map(IngredientMapper::toBean);
         } catch (PersistenceException _){
@@ -113,13 +106,5 @@ public class IngredientController {
 
     private double normalize(Double value){
         return value == null ? 0.0 : value;
-    }
-
-    private void ensureActiveSession() throws IngredientException{
-        try {
-            sessionManager.requireActiveSession();
-        } catch (SessionExpiredException e) {
-            throw new IngredientException(e.getMessage());
-        }
     }
 }
