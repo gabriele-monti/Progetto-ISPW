@@ -45,17 +45,13 @@ public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
 
     public void displayPage(){
         clearScreen();
-        try {
-            ResponseBean response = orderController.start();
-            handleResponse(response);
-        } catch (OrderException e) {
-            showError(e.getMessage());
-        }
+        ResponseBean response = orderController.start();
+        handleResponse(response);
     }
 
     private void handleResponse(ResponseBean response){
         if(response == null){
-            showError("Errore nel sistema");
+            showError("Errore nella generazione della risposta");
             return;
         }
 

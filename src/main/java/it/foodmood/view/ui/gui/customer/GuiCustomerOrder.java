@@ -278,12 +278,8 @@ public class GuiCustomerOrder extends BaseGui {
     }
 
     private void initializeFlow(){
-        try {
-            ResponseBean responseBean = orderController.start();
-            handleResponse(responseBean);
-        } catch (Exception e) {
-            showError("Errore nell'inizializzazione: " + e.getMessage());
-        }
+        ResponseBean responseBean = orderController.start();
+        handleResponse(responseBean);
     }
 
     private AnswerBean dietAnswers(){

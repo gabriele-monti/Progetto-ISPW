@@ -20,9 +20,9 @@ public class CliCustomerHomeView extends ProtectedConsoleView {
             showInfo("Tavolo: " + tableSessionBean.getTableId());
             showInfo("Utente: " + actorBean.getName() + " " + actorBean.getSurname() + "\n");
 
-            showInfo("1. Ordina con FoodMood");
+            showInfo("1. Ordina con suggerimenti");
             showInfo("2. Menù digitale");
-            showInfo("3. Il tuo ordine");
+            showInfo("3. Carrello");
             showInfo("4. Chiama un cameriere");
             showInfo("5. Richiedi il conto");
             showInfo("6. Account");

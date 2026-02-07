@@ -21,7 +21,7 @@ public class CliCustomerCartView extends ProtectedConsoleView {
         clearScreen();
         boolean back = false;
         while(!back){
-            showTitle("Il tuo ordine");
+            showTitle("Carrello");
 
             if(!showOrderRecap()){
                 showWarning("Nessun articolo nell'ordine");

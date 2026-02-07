@@ -36,7 +36,7 @@ public class OrderProposalsController {
         this.sessionManager = SessionManager.getInstance();
     }
     
-    public ResponseBean start() throws OrderException{
+    public ResponseBean start(){
         initializeFlow();
 
         ResponseBean response = new ResponseBean();
