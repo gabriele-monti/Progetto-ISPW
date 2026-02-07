@@ -24,7 +24,7 @@ import it.foodmood.view.ui.cli.ProtectedConsoleView;
 
 public class CliDishMenuView extends ProtectedConsoleView {
     private final DishController dishController = new DishController();
-    private final IngredientController IngredientController = new IngredientController();
+    private final IngredientController ingredientController = new IngredientController();
     
     private static final String INVALID_CHOICE = "Scelta non valida, riprova";
     private static final String BACK = "Premi INVIO per tornare indietro";
@@ -188,7 +188,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
         String input = askInput("\nInserisci il numero dell'ingrediente da aggiungere: ");
 
         try {
-            ingredients = IngredientController.getAllIngredients();
+            ingredients = ingredientController.getAllIngredients();
             index = Integer.parseInt(input);
         } catch (IngredientException e) {
             showError(e.getMessage());
@@ -230,7 +230,7 @@ public class CliDishMenuView extends ProtectedConsoleView {
     private void tableIngredients(){
         try {
 
-            List<IngredientBean> ingredients = IngredientController.getAllIngredients();
+            List<IngredientBean> ingredients = ingredientController.getAllIngredients();
             if(ingredients == null || ingredients.isEmpty()){
                 showWarning("Nessun ingrediente disponibile. Aggiungi prima degli ingredienti.");
                 waitForEnter(null);
