@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import it.foodmood.application.SessionManager;
 import it.foodmood.bean.AnswerBean;
 import it.foodmood.bean.DishBean;
 import it.foodmood.bean.ResponseBean;
@@ -22,7 +23,6 @@ import it.foodmood.domain.value.DietCategory;
 import it.foodmood.domain.value.OrderComplexity;
 import it.foodmood.domain.value.StepType;
 import it.foodmood.exception.OrderException;
-import it.foodmood.utils.SessionManager;
 
 /*
   Application Controller per la gestione del flusso di raccolta preferenze dell'utente

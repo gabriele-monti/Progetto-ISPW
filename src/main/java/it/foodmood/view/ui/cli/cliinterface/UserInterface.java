@@ -1,4 +1,4 @@
-package it.foodmood.view.ui.core;
+package it.foodmood.view.ui.cli.cliinterface;
 
 public interface UserInterface {
     void showInfo(String message);

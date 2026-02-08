@@ -1,8 +1,8 @@
 package it.foodmood.view.ui.cli.navigator;
 
-import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.TableConsoleView;
 
-public class WaiterCliNavigator extends ProtectedConsoleView implements CliNavigator {
+public class WaiterCliNavigator extends TableConsoleView implements CliNavigator {
 
     @Override
     public void start(){

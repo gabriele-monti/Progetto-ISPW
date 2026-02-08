@@ -27,9 +27,15 @@ public class FileSystemTableSessionDao extends AbstractCsvDao implements TableSe
     }
 
     @Override
-    public UUID enterSession(TableSession session){
+    public synchronized UUID enterOrGetOpenSession(TableSession session){
         if(session == null){
             throw new IllegalArgumentException("La sessione non può essere nulla");
+        }
+
+        Optional<TableSession> open = findAll().stream().filter(s->s.getTableId() == session.getTableId() && s.isOpen()).findFirst();
+
+        if(open.isPresent()){
+            return open.get().getTableSessionId();
         }
 
         String line = toCsv(session);

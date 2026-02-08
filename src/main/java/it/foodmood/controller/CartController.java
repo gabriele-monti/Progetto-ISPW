@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import it.foodmood.application.SessionManager;
 import it.foodmood.bean.CartItemBean;
 import it.foodmood.domain.model.Cart;
 import it.foodmood.domain.model.CartItem;
@@ -13,7 +14,6 @@ import it.foodmood.exception.PersistenceException;
 import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
-import it.foodmood.utils.SessionManager;
 
 public class CartController {
     private final DishDao dishDao;

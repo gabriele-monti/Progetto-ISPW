@@ -18,9 +18,9 @@ import it.foodmood.domain.value.Kcal;
 import it.foodmood.domain.value.StepType;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.OrderException;
-import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.TableConsoleView;
 
-public class CliCustomerOrderCustomizationView extends ProtectedConsoleView {
+public class CliCustomerOrderCustomizationView extends TableConsoleView {
     
     private final OrderProposalsController orderController;
     private final CartController cartController;

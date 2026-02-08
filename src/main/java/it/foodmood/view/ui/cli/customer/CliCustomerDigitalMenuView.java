@@ -9,9 +9,9 @@ import it.foodmood.controller.MenuController;
 import it.foodmood.domain.value.CourseType;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.DishException;
-import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.TableConsoleView;
 
-public class CliCustomerDigitalMenuView extends ProtectedConsoleView{
+public class CliCustomerDigitalMenuView extends TableConsoleView{
     
     public CliCustomerDigitalMenuView(){
         super();

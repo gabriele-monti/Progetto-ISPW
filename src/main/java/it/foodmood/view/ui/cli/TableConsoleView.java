@@ -10,7 +10,7 @@ import it.foodmood.view.ui.cli.tables.TableIngredients;
 import it.foodmood.view.ui.cli.tables.TableOrder;
 import it.foodmood.view.ui.cli.tables.TablePropose;
 
-public abstract class ProtectedConsoleView extends ConsoleView{
+public abstract class TableConsoleView extends ConsoleView{
 
     protected void showIngredientTable(List<IngredientBean> ingredients){
 

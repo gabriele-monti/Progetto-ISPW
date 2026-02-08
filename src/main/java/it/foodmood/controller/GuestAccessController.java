@@ -1,8 +1,8 @@
 package it.foodmood.controller;
 
+import it.foodmood.application.SessionManager;
 import it.foodmood.bean.ActorBean;
 import it.foodmood.domain.model.Guest;
-import it.foodmood.utils.SessionManager;
 
 public class GuestAccessController {
 

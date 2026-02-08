@@ -10,9 +10,9 @@ import it.foodmood.domain.value.Unit;
 import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.exception.SessionExpiredException;
-import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.TableConsoleView;
 
-public class CliIngredientMenuView extends ProtectedConsoleView {
+public class CliIngredientMenuView extends TableConsoleView {
 
     private final IngredientController ingredientController = new IngredientController();
     private static final String TRY_AGAIN = "Premi INVIO per riprovare";

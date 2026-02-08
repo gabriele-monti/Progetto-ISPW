@@ -2,6 +2,7 @@ package it.foodmood.controller;
 
 import java.util.Arrays;
 
+import it.foodmood.application.SessionManager;
 import it.foodmood.bean.ActorBean;
 import it.foodmood.bean.LoginBean;
 import it.foodmood.config.UserMode;
@@ -13,7 +14,6 @@ import it.foodmood.exception.PersistenceException;
 import it.foodmood.persistence.dao.CredentialDao;
 import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.UserDao;
-import it.foodmood.utils.SessionManager;
 import it.foodmood.utils.security.PasswordHasher;
 
 public class LoginController {

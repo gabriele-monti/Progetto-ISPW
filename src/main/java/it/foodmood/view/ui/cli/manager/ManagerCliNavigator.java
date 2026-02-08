@@ -3,11 +3,11 @@ package it.foodmood.view.ui.cli.manager;
 import it.foodmood.bean.ActorBean;
 import it.foodmood.exception.SessionExpiredException;
 import it.foodmood.view.ui.ManagerUi;
-import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.TableConsoleView;
 import it.foodmood.view.ui.cli.navigator.CliNavigator;
 import it.foodmood.view.ui.cli.pages.ManagerPages;
 
-public class ManagerCliNavigator extends ProtectedConsoleView implements CliNavigator {
+public class ManagerCliNavigator extends TableConsoleView implements CliNavigator {
 
     private final ManagerUi ui;
     ActorBean actor;

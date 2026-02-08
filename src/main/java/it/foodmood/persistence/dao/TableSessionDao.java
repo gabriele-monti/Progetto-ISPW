@@ -6,7 +6,7 @@ import java.util.UUID;
 import it.foodmood.domain.model.TableSession;
 
 public interface TableSessionDao {
-    UUID enterSession(TableSession tableSession);
+    UUID enterOrGetOpenSession(TableSession tableSession);
     void closeSession(int tableId);
 
     Optional<TableSession> findById(UUID tableSessionId);

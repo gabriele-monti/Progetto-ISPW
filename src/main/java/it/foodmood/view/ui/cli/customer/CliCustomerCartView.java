@@ -9,9 +9,9 @@ import it.foodmood.controller.CartController;
 import it.foodmood.controller.CustomerOrderController;
 import it.foodmood.exception.CartException;
 import it.foodmood.exception.OrderException;
-import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.TableConsoleView;
 
-public class CliCustomerCartView extends ProtectedConsoleView {
+public class CliCustomerCartView extends TableConsoleView {
     
     public CliCustomerCartView(){
         super();

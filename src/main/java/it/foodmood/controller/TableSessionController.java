@@ -35,7 +35,9 @@ public class TableSessionController {
             }
 
             TableSession tableSession = TableSession.create(tableId);
-            UUID sessionId = tableSessionDao.enterSession(tableSession);
+            UUID sessionId = tableSessionDao.enterOrGetOpenSession(tableSession);
+
+            System.out.println("Sessione numero: " + sessionId);
 
             TableSessionBean response = new TableSessionBean();
             response.setTableId(tableId);

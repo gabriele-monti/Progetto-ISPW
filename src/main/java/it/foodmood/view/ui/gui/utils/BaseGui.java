@@ -3,8 +3,8 @@ package it.foodmood.view.ui.gui.utils;
 import java.util.Optional;
 import java.util.function.Function;
 
+import it.foodmood.application.SessionManager;
 import it.foodmood.bean.ActorBean;
-import it.foodmood.utils.SessionManager;
 import it.foodmood.view.ui.gui.GuiRouter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;

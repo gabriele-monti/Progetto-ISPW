@@ -31,7 +31,7 @@ public class JdbcTableSessionDao implements TableSessionDao {
     }
     
     @Override
-    public UUID enterSession(TableSession tableSession){
+    public UUID enterOrGetOpenSession(TableSession tableSession){
         try{
             Connection conn = JdbcConnectionManager.getInstance().getConnection();
             try(CallableStatement cs = conn.prepareCall(CALL_ENTER_SESSION)){

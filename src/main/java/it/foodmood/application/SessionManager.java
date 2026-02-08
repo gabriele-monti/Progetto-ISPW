@@ -1,4 +1,4 @@
-package it.foodmood.utils;
+package it.foodmood.application;
 
 import java.util.UUID;
 

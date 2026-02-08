@@ -19,14 +19,9 @@ import it.foodmood.persistence.dao.DishDao;
 
 public class DishProposals {
     private final DishDao dishDao;
-    private final PriceWeight priceWeight;
-    private final KcalWeight kcalWeight;
 
     public DishProposals(){
-        DaoFactory factory = DaoFactory.getInstance();
-        this.dishDao = factory.getDishDao();
-        this.kcalWeight = new KcalWeight();
-        this.priceWeight = new PriceWeight();
+        this.dishDao = DaoFactory.getInstance().getDishDao();
     }
 
     public List<Dish> generate(OrderFlowState state) throws OrderException {
@@ -101,6 +96,7 @@ public class DishProposals {
         }
 
         Set<CourseType> selectedCourses = state.getCourseType();
+        PriceWeight priceWeight = new PriceWeight();
         double normalizedWeight = priceWeight.normalized(courseType, selectedCourses);
         double maxPriceForThisCourse = totalBudget * normalizedWeight;
 
@@ -114,6 +110,7 @@ public class DishProposals {
         }
 
         Set<CourseType> selectedCourses = state.getCourseType();
+        KcalWeight kcalWeight = new KcalWeight();
         double normalizedWeight = kcalWeight.normalized(courseType, selectedCourses);
         double maxKcalForThisCourse = totalKcal * normalizedWeight;
 

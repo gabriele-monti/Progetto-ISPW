@@ -1,6 +1,4 @@
-package it.foodmood.view.ui.cli;
-
-import it.foodmood.view.ui.core.UserInterface;
+package it.foodmood.view.ui.cli.cliinterface;
 
 public interface CliUserInterface extends UserInterface {
     void showTitle(String message);

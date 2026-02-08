@@ -20,9 +20,9 @@ import it.foodmood.exception.BackRequestedException;
 import it.foodmood.exception.DishException;
 import it.foodmood.exception.IngredientException;
 import it.foodmood.utils.UnitUtils;
-import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.TableConsoleView;
 
-public class CliDishMenuView extends ProtectedConsoleView {
+public class CliDishMenuView extends TableConsoleView {
     private final DishController dishController = new DishController();
     private final IngredientController ingredientController = new IngredientController();
     

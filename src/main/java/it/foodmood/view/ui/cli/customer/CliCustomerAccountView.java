@@ -1,9 +1,9 @@
 package it.foodmood.view.ui.cli.customer;
 
 import it.foodmood.bean.ActorBean;
-import it.foodmood.view.ui.cli.ProtectedConsoleView;
+import it.foodmood.view.ui.cli.TableConsoleView;
 
-public class CliCustomerAccountView extends ProtectedConsoleView {
+public class CliCustomerAccountView extends TableConsoleView {
 
     public CliCustomerAccountView(){
         super();

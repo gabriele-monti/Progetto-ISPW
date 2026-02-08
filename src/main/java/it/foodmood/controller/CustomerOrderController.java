@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import it.foodmood.application.SessionManager;
 import it.foodmood.domain.model.Cart;
 import it.foodmood.domain.model.CartItem;
 import it.foodmood.domain.model.Dish;
@@ -17,7 +18,6 @@ import it.foodmood.persistence.dao.DaoFactory;
 import it.foodmood.persistence.dao.DishDao;
 import it.foodmood.persistence.dao.OrderDao;
 import it.foodmood.persistence.dao.TableSessionDao;
-import it.foodmood.utils.SessionManager;
 
 public class CustomerOrderController {
     

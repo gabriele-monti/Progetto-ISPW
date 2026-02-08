@@ -26,7 +26,7 @@ public class InMemoryTableSessionDao implements TableSessionDao {
     }
 
     @Override
-    public UUID enterSession(TableSession session){
+    public UUID enterOrGetOpenSession(TableSession session){
         if(session == null){
             throw new IllegalArgumentException("La sessione non può essere nulla");
         }
